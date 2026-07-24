@@ -1,0 +1,125 @@
+// PSX Stock Scraper — Prisma schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SyncStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  PARTIAL
+  FAILED
+}
+
+model Stock {
+  id          String       @id @default(uuid())
+  symbol      String       @unique
+  companyName String?      @map("company_name")
+  sector      String?
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  prices      StockPrice[]
+  dividends   Dividend[]
+  financials  Financial[]
+  ratios      Ratio[]
+  syncLogs    SyncLog[]
+
+  @@index([companyName])
+  @@map("stocks")
+}
+
+model StockPrice {
+  id            String   @id @default(uuid())
+  stockId       String   @map("stock_id")
+  currentPrice  Decimal? @map("current_price") @db.Decimal(18, 4)
+  change        Decimal? @db.Decimal(18, 4)
+  changePercent Decimal? @map("change_percent") @db.Decimal(10, 4)
+  volume        BigInt?
+  high          Decimal? @db.Decimal(18, 4)
+  low           Decimal? @db.Decimal(18, 4)
+  open          Decimal? @db.Decimal(18, 4)
+  close         Decimal? @db.Decimal(18, 4)
+  marketCap     Decimal? @map("market_cap") @db.Decimal(24, 2)
+  lastTradeDate DateTime? @map("last_trade_date")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  stock         Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([stockId, lastTradeDate])
+  @@index([stockId, lastTradeDate(sort: Desc)])
+  @@map("stock_prices")
+}
+
+model Dividend {
+  id               String    @id @default(uuid())
+  stockId          String    @map("stock_id")
+  announcementDate DateTime? @map("announcement_date")
+  bookClosure      DateTime? @map("book_closure")
+  paymentDate      DateTime? @map("payment_date")
+  dividend         Decimal?  @db.Decimal(18, 4)
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  stock            Stock     @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([stockId, announcementDate])
+  @@map("dividends")
+}
+
+model Financial {
+  id              String   @id @default(uuid())
+  stockId         String   @map("stock_id")
+  year            Int
+  quarter         Int?
+  eps             Decimal? @db.Decimal(18, 4)
+  sales           Decimal? @db.Decimal(24, 2)
+  profitAfterTax  Decimal? @map("profit_after_tax") @db.Decimal(24, 2)
+  assets          Decimal? @db.Decimal(24, 2)
+  liabilities     Decimal? @db.Decimal(24, 2)
+  equity          Decimal? @db.Decimal(24, 2)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  stock           Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([stockId, year, quarter])
+  @@map("financials")
+}
+
+model Ratio {
+  id            String   @id @default(uuid())
+  stockId       String   @map("stock_id")
+  peRatio       Decimal? @map("pe_ratio") @db.Decimal(12, 4)
+  pbRatio       Decimal? @map("pb_ratio") @db.Decimal(12, 4)
+  roe           Decimal? @db.Decimal(12, 4)
+  roa           Decimal? @db.Decimal(12, 4)
+  dividendYield Decimal? @map("dividend_yield") @db.Decimal(12, 4)
+  beta          Decimal? @db.Decimal(12, 4)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  stock         Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@index([stockId, createdAt(sort: Desc)])
+  @@map("ratios")
+}
+
+model SyncLog {
+  id           String     @id @default(uuid())
+  stockId      String?    @map("stock_id")
+  symbol       String?
+  status       SyncStatus @default(PENDING)
+  startedAt    DateTime   @default(now()) @map("started_at")
+  completedAt  DateTime?  @map("completed_at")
+  durationMs   Int?       @map("duration_ms")
+  errorMessage String?    @map("error_message")
+
+  stock        Stock?     @relation(fields: [stockId], references: [id], onDelete: SetNull)
+
+  @@index([stockId, startedAt(sort: Desc)])
+  @@index([status, startedAt(sort: Desc)])
+  @@map("sync_logs")
+}

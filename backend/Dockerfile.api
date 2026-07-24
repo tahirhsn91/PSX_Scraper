@@ -1,0 +1,54 @@
+# Self-contained Dockerfile for the API service.
+# Kept separate from Dockerfile.worker (rather than using a `--target` on a shared
+# multi-stage file) because several hosts — notably Render Blueprints — cannot
+# select a build target for multi-stage Dockerfiles. Duplicated build stage is a
+# small price for working identically on Docker Compose, Render, Railway, etc.
+
+# ---- Build stage ----
+FROM node:20-bookworm-slim AS build
+WORKDIR /app
+
+# Puppeteer / Chromium OS dependencies (needed at build time for `prisma generate`
+# and to keep parity with the runtime image; harmless if unused at build time).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium fonts-liberation libnss3 libatk-bridge2.0-0 libatk1.0-0 \
+    libcups2 libdrm2 libgbm1 libasound2 libxcomposite1 libxdamage1 \
+    libxfixes3 libxrandr2 libxkbcommon0 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+COPY backend/package.json ./backend/
+COPY database ./database
+WORKDIR /app/backend
+RUN npm install
+WORKDIR /app
+COPY backend ./backend
+WORKDIR /app/backend
+RUN npx prisma generate --schema=../database/prisma/schema.prisma
+RUN npm run build
+
+# ---- Runtime (API) ----
+FROM node:20-bookworm-slim AS runtime
+WORKDIR /app/backend
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium fonts-liberation libnss3 libatk-bridge2.0-0 libatk1.0-0 \
+    libcups2 libdrm2 libgbm1 libasound2 libxcomposite1 libxdamage1 \
+    libxfixes3 libxrandr2 libxkbcommon0 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV=production
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+COPY --from=build /app/backend/node_modules ./node_modules
+COPY --from=build /app/backend/dist ./dist
+COPY --from=build /app/backend/package.json ./package.json
+COPY --from=build /app/database ../database
+COPY backend/docker-entrypoint-api.sh ./
+RUN chmod +x docker-entrypoint-api.sh \
+    && groupadd -r app && useradd -r -g app app && chown -R app:app /app
+USER app
+EXPOSE 4000
+# Migrations run on container start (idempotent — safe on Docker Compose, Render,
+# Railway, or anywhere else) so no platform-specific start command is needed.
+CMD ["./docker-entrypoint-api.sh"]

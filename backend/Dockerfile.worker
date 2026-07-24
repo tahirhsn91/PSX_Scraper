@@ -1,0 +1,48 @@
+# Self-contained Dockerfile for the background worker (BullMQ + Puppeteer).
+# See Dockerfile.api for why this isn't a `--target` on a shared multi-stage file.
+
+# ---- Build stage ----
+FROM node:20-bookworm-slim AS build
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium fonts-liberation libnss3 libatk-bridge2.0-0 libatk1.0-0 \
+    libcups2 libdrm2 libgbm1 libasound2 libxcomposite1 libxdamage1 \
+    libxfixes3 libxrandr2 libxkbcommon0 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+COPY backend/package.json ./backend/
+COPY database ./database
+WORKDIR /app/backend
+RUN npm install
+WORKDIR /app
+COPY backend ./backend
+WORKDIR /app/backend
+RUN npx prisma generate --schema=../database/prisma/schema.prisma
+RUN npm run build
+
+# ---- Runtime (worker) ----
+FROM node:20-bookworm-slim AS runtime
+WORKDIR /app/backend
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium fonts-liberation libnss3 libatk-bridge2.0-0 libatk1.0-0 \
+    libcups2 libdrm2 libgbm1 libasound2 libxcomposite1 libxdamage1 \
+    libxfixes3 libxrandr2 libxkbcommon0 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV=production
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+COPY --from=build /app/backend/node_modules ./node_modules
+COPY --from=build /app/backend/dist ./dist
+COPY --from=build /app/backend/package.json ./package.json
+COPY --from=build /app/database ../database
+COPY backend/docker-entrypoint-worker.sh ./
+RUN chmod +x docker-entrypoint-worker.sh \
+    && groupadd -r app && useradd -r -g app app && chown -R app:app /app
+USER app
+# Migrations run on container start (idempotent — safe even if the API
+# container is migrating at the same time; Prisma takes an advisory lock).
+CMD ["./docker-entrypoint-worker.sh"]

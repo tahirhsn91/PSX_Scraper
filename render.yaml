@@ -1,0 +1,116 @@
+# Render Blueprint — deploys the API, background worker, a Key Value (Redis)
+# instance, and (optionally) the frontend as a static site — the whole app on
+# one platform. PostgreSQL is NOT defined here: this app uses Neon (see README
+# "Cloud Deployment" section) — set DATABASE_URL below to your Neon connection
+# string when prompted during Blueprint creation.
+#
+# Deploying the frontend elsewhere instead (e.g. Vercel)? Just delete the
+# "Frontend (static site)" service block below — the API/worker/Redis three
+# work identically either way.
+#
+# Usage: https://dashboard.render.com/blueprints -> New Blueprint Instance,
+# point it at this repo. Render finds this file automatically at the repo root.
+
+services:
+  # ---- API (Express) ----
+  - type: web
+    name: psx-scraper-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile.api
+    dockerContext: .
+    plan: starter # 'free' web services spin down after 15 min idle; fine for demos, not for a live scraper API
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false # paste your Neon connection string (with ?sslmode=require) in the Render dashboard
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: psx-redis
+          property: connectionString
+      - key: PORT
+        value: 4000
+      - key: NODE_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGIN
+        sync: false # set to your frontend's real URL once deployed — https://psx-scraper-frontend.onrender.com if using the static site below, or your Vercel URL otherwise (comma-separate multiple origins)
+      - key: SCRAPER_TIMEOUT
+        value: 30000
+      - key: SCRAPER_CONCURRENCY
+        value: 2
+      - key: SCRAPER_DELAY_MS
+        value: 500
+      - key: CRON_EXPRESSION
+        value: 0 * * * *
+      - key: SEARCH_CACHE_TTL
+        value: 45
+      - key: WORKER_CONCURRENCY
+        value: 2
+      - key: TRUST_PROXY
+        value: 1 # Render's edge is one hop; needed so express-rate-limit reads the real client IP
+
+  # ---- Background worker (BullMQ + Puppeteer) ----
+  - type: worker
+    name: psx-scraper-worker
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile.worker
+    dockerContext: .
+    plan: starter # Puppeteer needs real memory headroom; avoid the free instance type for this service
+    region: oregon
+    envVars:
+      - key: DATABASE_URL
+        sync: false # same Neon connection string as the API service
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: psx-redis
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: info
+      - key: SCRAPER_TIMEOUT
+        value: 30000
+      - key: SCRAPER_CONCURRENCY
+        value: 2
+      - key: SCRAPER_DELAY_MS
+        value: 500
+      - key: CRON_EXPRESSION
+        value: 0 * * * *
+      - key: WORKER_CONCURRENCY
+        value: 2
+      - key: BROWSER_LAUNCH_TIMEOUT
+        value: 20000 # ms; prevents a hung Chromium launch from blocking the browser pool forever
+
+  # ---- Redis (BullMQ queues + search cache) ----
+  - type: keyvalue
+    name: psx-redis
+    plan: free # 25MB — plenty for BullMQ job metadata + search cache at this scale; upgrade if job volume grows
+    region: oregon
+    ipAllowList: [] # internal-only: only services in this Render project can reach it
+    maxmemoryPolicy: noeviction # required by BullMQ — eviction under memory pressure silently drops jobs
+
+  # ---- Frontend (static site) ----
+  # Optional: delete this block if you're hosting the frontend on Vercel (or
+  # anywhere else) instead. Render serves static sites over its own CDN for free.
+  - type: web
+    name: psx-scraper-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      # Vite bakes VITE_* vars in at build time, so this must be the API's
+      # real public URL (not a private-network address) — fill in after the
+      # API service above has deployed and you know its onrender.com URL.
+      - key: VITE_API_URL
+        sync: false # e.g. https://psx-scraper-api.onrender.com/api/v1
+    routes:
+      # SPA fallback so direct links like /stocks/FFC don't 404 on refresh —
+      # equivalent to the rewrite in frontend/vercel.json.
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -1,0 +1,35 @@
+# Dev override: bind-mount source + hot reload. Used automatically by `docker compose up`.
+services:
+  backend:
+    build:
+      dockerfile: backend/Dockerfile.api
+      target: build
+    command: sh -c "npx prisma migrate deploy --schema=../database/prisma/schema.prisma && npm --prefix backend run dev"
+    volumes:
+      - ./backend/src:/app/backend/src
+      - ./database:/app/database
+    environment:
+      LOG_LEVEL: debug
+
+  worker:
+    build:
+      dockerfile: backend/Dockerfile.worker
+      target: build
+    command: npm --prefix backend run dev:worker
+    volumes:
+      - ./backend/src:/app/backend/src
+      - ./database:/app/database
+
+  frontend:
+    # !reset removes the base `build:` so this service NEVER rebuilds/retags node:20-alpine.
+    build: !reset null
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host"
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:4001/api/v1}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
