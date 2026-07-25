@@ -59,7 +59,21 @@ export async function findExistingHistoryJob(symbol: string) {
 }
 
 export async function enqueueSync(symbol: string, trigger: SyncJobData['trigger']) {
-  return syncQueue.add('sync', { symbol: symbol.toUpperCase(), trigger }, { jobId: syncJobId(symbol) });
+  const jobId = syncJobId(symbol);
+  // The jobId is deterministic (for de-dupe), so a job that already finished
+  // (completed or failed) still occupies that id — BullMQ's `.add()` would
+  // silently return the old, finished job instead of creating a new one,
+  // making every future sync for that symbol a permanent no-op. Clear it
+  // first so a finished job can actually be re-run. In-flight jobs
+  // (waiting/active/delayed) are left alone — that's the real de-dupe case.
+  const existing = await syncQueue.getJob(jobId);
+  if (existing) {
+    const state = await existing.getState();
+    if (state === 'completed' || state === 'failed') {
+      await existing.remove().catch(() => undefined);
+    }
+  }
+  return syncQueue.add('sync', { symbol: symbol.toUpperCase(), trigger }, { jobId });
 }
 
 export async function enqueueSyncAll(trigger: SyncAllJobData['trigger']) {

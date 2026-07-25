@@ -1,13 +1,28 @@
 node_modules/
 dist/
-build/
-coverage/
+
+# Environment files — never commit. Copy .env.example to .env and fill in real values.
 .env
-.env.local
-*.log
+.env.*
+!.env.example
+*.local
 .DS_Store
-backend/node_modules/
-frontend/node_modules/
-database/node_modules/
-frontend/dist/
-backend/dist/
+logs/
+
+# Media files (audio, screenshots, large files)
+audio/
+audio-simple/
+screenshots/
+screenshots-real/
+media/
+demo_video/
+
+# Database backups
+database/_restore_*/
+db-backups/
+
+# Graphify knowledge-graph output + ClawHub skill sync metadata — local only
+.graphify/
+graphify-out/
+.clawhub/
+uploads/
