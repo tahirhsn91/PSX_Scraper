@@ -41,7 +41,10 @@ COPY --from=build /app/backend/package.json ./package.json
 COPY --from=build /app/database ../database
 COPY backend/docker-entrypoint-worker.sh ./
 RUN chmod +x docker-entrypoint-worker.sh \
-    && groupadd -r app && useradd -r -g app app && chown -R app:app /app
+    && groupadd -r app && useradd -r -g app -m -d /home/app app && chown -R app:app /app /home/app
+# Chrome's crashpad crash-reporter needs a writable $HOME to create its crash
+# database; without one it fails immediately on launch (see browserPool.ts).
+ENV HOME=/home/app
 USER app
 # Migrations run on container start (idempotent — safe even if the API
 # container is migrating at the same time; Prisma takes an advisory lock).

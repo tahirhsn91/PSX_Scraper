@@ -29,6 +29,14 @@ class BrowserPool {
         // constrained instances, at some cost to crash isolation.
         '--single-process',
         '--no-zygote',
+        // Chrome's crash-reporter subprocess (crashpad_handler) needs a
+        // writable $HOME to create its crash database. Running as a non-root
+        // container user without one causes crashpad to fail immediately
+        // ("chrome_crashpad_handler: --database is required" / "Connection
+        // reset by peer"), which kills the whole browser process on launch.
+        // Disabling crash reporting sidesteps the dependency entirely (the
+        // Dockerfile also sets HOME as a second layer of defense).
+        '--disable-crash-reporter',
       ],
     });
 
