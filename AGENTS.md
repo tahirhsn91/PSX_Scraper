@@ -19,9 +19,15 @@ Enforced in three places, so "I didn't know" is not a failure mode:
 
 | Layer | What it does |
 |---|---|
-| GitHub branch protection | Server-side: rejects a push to `main`/`develop` from anyone, admins included. |
+| GitHub repository rulesets (`main`, `develop`) | Server-side, and applies to admins too (no bypass actors). Rejects any direct push with `GH013 … Changes must be made through a pull request`, and separately blocks force-pushes and branch deletion. |
 | `.githooks/pre-commit` | Local: refuses to create a commit while on `main`/`develop`. |
 | `.githooks/pre-push` | Local: refuses any push whose destination ref is `main`/`develop`. |
+
+Consequence of the server-side half being non-negotiable: once a commit has landed on a
+protected branch there is **no way to take it back** from the command line — force-pushing
+it away is itself blocked. Getting history back in line needs an admin to temporarily
+disable the ruleset in repository settings. So the cheap move is to never push there in
+the first place.
 
 ### The workflow to use instead
 
