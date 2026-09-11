@@ -5,20 +5,40 @@
 # A bare `docker compose up` in this directory also loads docker-compose.override.yml
 # (dev bind-mounts + hot reload), which is never what a production host should run.
 #
-# Why this file exists: the base file publishes Postgres (5432) and Redis (6379) on
-# 0.0.0.0. On a host with a public IP and no firewall that puts both datastores on the
-# open internet. Compose *concatenates* list values across files, so `ports` has to be
-# replaced explicitly — `!override` does that (the repo's dev override uses the sibling
-# `!reset` for the same reason). Result: loopback-only publishing. The API/worker
-# containers still reach both over the compose network; an operator can still reach
-# them from this host (`psql`/`redis-cli` on 127.0.0.1) for debugging — nothing
-# off-host can.
+# Two things it changes vs the base file, both because the base file is tuned for a
+# laptop rather than a host with a public IP:
+#
+# 1. Publishing. The base file publishes Postgres (5432) and Redis (6379) on 0.0.0.0,
+#    which with no firewall puts both datastores on the open internet. They are bound to
+#    loopback here: the API/worker containers still reach them over the compose network,
+#    an operator can still reach them from this host (`psql`/`redis-cli` on 127.0.0.1).
+#
+# 2. Storage. The base file uses Compose-managed named volumes (pgdata, redisdata). Here
+#    the stateful services are bind-mounted to ./data/<service> on the host instead, so
+#    the database files sit at a path you can see, size, back up and restore directly:
+#
+#      ./data/postgres   ->  /var/lib/postgresql/data   (the cluster's PGDATA)
+#      ./data/redis      ->  /data                      (AOF file, appendonly yes)
+#
+#    `docker compose down` (with or without -v) never touches bind mounts, so the data
+#    survives teardown/rebuild. The dev stack keeps using the named volumes untouched.
+#
+# Compose *concatenates* list values across files, so both `ports` and `volumes` have to
+# be replaced explicitly — `!override` does that (the dev override uses the sibling
+# `!reset` for the same reason). Two mounts on one container path would be a hard error,
+# not a silent double-mount.
 
 services:
   postgres:
     ports: !override
       - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes: !override
+      # PGDATA for postgres:16-alpine. The image entrypoint chowns it on first boot.
+      - ./data/postgres:/var/lib/postgresql/data
 
   redis:
     ports: !override
       - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes: !override
+      # AOF lives here (base file runs `redis-server --appendonly yes`).
+      - ./data/redis:/data
