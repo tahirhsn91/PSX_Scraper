@@ -5,7 +5,7 @@
 # A bare `docker compose up` in this directory also loads docker-compose.override.yml
 # (dev bind-mounts + hot reload), which is never what a production host should run.
 #
-# Two things it changes vs the base file, both because the base file is tuned for a
+# Three things it changes vs the base file, all because the base file is tuned for a
 # laptop rather than a host with a public IP:
 #
 # 1. Publishing. The base file publishes Postgres (5432) and Redis (6379) on 0.0.0.0,
@@ -23,10 +23,18 @@
 #    `docker compose down` (with or without -v) never touches bind mounts, so the data
 #    survives teardown/rebuild. The dev stack keeps using the named volumes untouched.
 #
-# Compose *concatenates* list values across files, so both `ports` and `volumes` have to
-# be replaced explicitly — `!override` does that (the dev override uses the sibling
-# `!reset` for the same reason). Two mounts on one container path would be a hard error,
-# not a silent double-mount.
+# 3. Frontend port. The base file hardcodes `5173:80`; here it comes from FRONTEND_PORT in
+#    .env, so the public entry point is a config value rather than a compose edit:
+#
+#      http://<host>:${FRONTEND_PORT}    e.g. http://169.58.108.61:5173
+#
+#    Changing it also means updating CORS_ORIGIN and re-building the frontend, because the
+#    origin is baked into the bundle's VITE_API_URL counterpart at build time — see .env.
+#
+# Compose *concatenates* list values across files, so `ports` and `volumes` have to be
+# replaced explicitly — `!override` does that (the dev override uses the sibling `!reset`
+# for the same reason). Two mounts on one container path would be a hard error, not a
+# silent double-mount.
 
 services:
   postgres:
@@ -42,3 +50,8 @@ services:
     volumes: !override
       # AOF lives here (base file runs `redis-server --appendonly yes`).
       - ./data/redis:/data
+
+  frontend:
+    # nginx on 80 inside the container; published on FRONTEND_PORT (0.0.0.0, public).
+    ports: !override
+      - "${FRONTEND_PORT:-5173}:80"
