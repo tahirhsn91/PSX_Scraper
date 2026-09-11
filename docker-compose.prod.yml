@@ -1,0 +1,24 @@
+# Production overlay. Use it WITH the base file and WITHOUT the dev override:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# A bare `docker compose up` in this directory also loads docker-compose.override.yml
+# (dev bind-mounts + hot reload), which is never what a production host should run.
+#
+# Why this file exists: the base file publishes Postgres (5432) and Redis (6379) on
+# 0.0.0.0. On a host with a public IP and no firewall that puts both datastores on the
+# open internet. Compose *concatenates* list values across files, so `ports` has to be
+# replaced explicitly — `!override` does that (the repo's dev override uses the sibling
+# `!reset` for the same reason). Result: loopback-only publishing. The API/worker
+# containers still reach both over the compose network; an operator can still reach
+# them from this host (`psql`/`redis-cli` on 127.0.0.1) for debugging — nothing
+# off-host can.
+
+services:
+  postgres:
+    ports: !override
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+
+  redis:
+    ports: !override
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
