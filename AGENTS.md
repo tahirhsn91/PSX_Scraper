@@ -17,11 +17,11 @@ OpenCode…). Human contributors are expected to follow the same rules.
 
 Enforced in three places, so "I didn't know" is not a failure mode:
 
-| Layer | What it does |
-|---|---|
+| Layer                                          | What it does                                                                                                                                                                                           |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | GitHub repository rulesets (`main`, `develop`) | Server-side, and applies to admins too (no bypass actors). Rejects any direct push with `GH013 … Changes must be made through a pull request`, and separately blocks force-pushes and branch deletion. |
-| `.githooks/pre-commit` | Local: refuses to create a commit while on `main`/`develop`. |
-| `.githooks/pre-push` | Local: refuses any push whose destination ref is `main`/`develop`. |
+| `.githooks/pre-commit`                         | Local: refuses to create a commit while on `main`/`develop`.                                                                                                                                           |
+| `.githooks/pre-push`                           | Local: refuses any push whose destination ref is `main`/`develop`.                                                                                                                                     |
 
 Consequence of the server-side half being non-negotiable: once a commit has landed on a
 protected branch there is **no way to take it back** from the command line — force-pushing
