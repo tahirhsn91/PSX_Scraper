@@ -1,0 +1,24 @@
+#!/bin/sh
+# Blocks direct commits on the protected branches (main, develop) — see AGENTS.md.
+#
+# Emergency override: ALLOW_PROTECTED=1 git commit ...
+#
+# Activated by: git config core.hooksPath .githooks
+
+branch=$(git symbolic-ref --short -q HEAD) || branch=""
+
+case "$branch" in
+  main|develop)
+    if [ "${ALLOW_PROTECTED:-0}" = "1" ]; then
+      echo "[pre-commit] WARNING: committing to protected branch '$branch' (ALLOW_PROTECTED=1)." >&2
+      exit 0
+    fi
+    echo "[pre-commit] BLOCKED: direct commits to '$branch' are not allowed — it is a protected branch." >&2
+    echo "             Start a feature branch instead:" >&2
+    echo "               git switch -c feat/<short-name>" >&2
+    echo "             ...then open a pull request into '$branch'. See AGENTS.md." >&2
+    exit 1
+    ;;
+esac
+
+exit 0
