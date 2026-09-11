@@ -95,6 +95,13 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
   override (source bind mounts, debug logging, published dev ports).
 - The prod overlay binds Postgres and Redis to `127.0.0.1` only; the base file
   publishes them on `0.0.0.0`. Do not "fix" that by editing the base file.
+- Public ports on the production host come from `.env`, not from a compose edit:
+  frontend `${FRONTEND_PORT}` (nginx on 80 in-container) and API `${API_HOST_PORT}`.
+  Postgres and Redis are loopback-only by design.
+- Runtime state lives in `./data/postgres` and `./data/redis` (bind mounts, gitignored).
+  Back it up through the container — `docker compose … exec -T postgres pg_dump …` — not
+  by copying the directory: it is mode `0700`, owned by the postgres uid, so a host-side
+  copy as your own user will fail or come back empty.
 - `prisma migrate deploy` runs from the container entrypoint on start — do not run
   migrations by hand against production, and do not edit an already-applied
   migration under `database/prisma/migrations/`; add a new one.
