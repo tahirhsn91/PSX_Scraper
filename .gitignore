@@ -21,6 +21,10 @@ demo_video/
 database/_restore_*/
 db-backups/
 
+# Bind-mounted runtime state for the production stack — Postgres data directory and
+# Redis AOF. Host paths are defined in docker-compose.prod.yml.
+data/
+
 # Graphify knowledge-graph output + ClawHub skill sync metadata — local only
 .graphify/
 graphify-out/
