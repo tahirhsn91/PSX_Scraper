@@ -27,7 +27,7 @@
 # 3. Frontend port. The base file hardcodes `5173:80`; here it comes from FRONTEND_PORT in
 #    .env, so the public entry point is a config value rather than a compose edit:
 #
-#      http://<host>:${FRONTEND_PORT}    e.g. http://169.58.108.61:5173
+#      http://<host>:${FRONTEND_PORT}    e.g. http://169.58.108.61:5100
 #
 #    Changing it also means updating CORS_ORIGIN and re-building the frontend, because the
 #    origin is baked into the bundle's VITE_API_URL counterpart at build time — see .env.
@@ -55,4 +55,4 @@ services:
   frontend:
     # nginx on 80 inside the container; published on FRONTEND_PORT (0.0.0.0, public).
     ports: !override
-      - "${FRONTEND_PORT:-5173}:80"
+      - "${FRONTEND_PORT:-5100}:80"

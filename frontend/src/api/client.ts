@@ -6,7 +6,7 @@ const baseURL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:40
  * Correlation id sent as `x-request-id` (the API echoes it back in its logs).
  *
  * `crypto.randomUUID()` exists only in a **secure context** — https, or http on localhost.
- * This app is also served over plain http on a host IP (e.g. http://169.58.108.61:5173),
+ * This app is also served over plain http on a host IP (e.g. http://169.58.108.61:5100),
  * where `crypto` exists but `crypto.randomUUID` is `undefined`. Calling it inside the
  * request interceptor threw `TypeError: crypto.randomUUID is not a function` before the
  * request ever reached the network, so *every* API call failed and the dashboard showed
