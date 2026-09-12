@@ -24,13 +24,15 @@
 #    `docker compose down` (with or without -v) never touches bind mounts, so the data
 #    survives teardown/rebuild. The dev stack keeps using the named volumes untouched.
 #
-# 3. Frontend port. The base file hardcodes `5173:80`; here it comes from FRONTEND_PORT in
+# 3. Frontend port. The base file and this overlay both publish ${FRONTEND_PORT}:80 from
 #    .env, so the public entry point is a config value rather than a compose edit:
 #
 #      http://<host>:${FRONTEND_PORT}    e.g. http://169.58.108.61:5100
 #
-#    Changing it also means updating CORS_ORIGIN and re-building the frontend, because the
-#    origin is baked into the bundle's VITE_API_URL counterpart at build time — see .env.
+#    Changing that value also means updating CORS_ORIGIN in .env (the browser origin changes
+#    with the port) and recreating the frontend container. No image rebuild is needed: the
+#    bundle bakes VITE_API_URL — the API's URL — not the frontend's own origin. Verified by
+#    moving 5173 -> 5100 with a plain `up -d`.
 #
 # Compose *concatenates* list values across files, so `ports` and `volumes` have to be
 # replaced explicitly — `!override` does that (the dev override uses the sibling `!reset`
