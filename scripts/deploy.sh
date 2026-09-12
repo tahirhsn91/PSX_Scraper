@@ -64,21 +64,57 @@ if [ -z "$ids" ]; then
   exit 1
 fi
 
-echo "[deploy] container state:"
-problems=""
-while read -r name state health oom restarts; do
-  [ -z "$name" ] && continue
-  name="${name#/}"
-  echo "[deploy]   $name: state=$state health=${health:-none} oom=$oom restarts=$restarts"
-  case "$state" in running) ;; *) problems="$problems $name(state=$state)";; esac
-  case "$health" in healthy|none) ;; *) problems="$problems $name(health=$health)";; esac
-  [ "$oom" = "true" ] && problems="$problems $name(OOMKilled)"
-done < <(docker inspect $ids --format '{{.Name}} {{.State.Status}} {{if .State.Health}}{{.State.Health.Status}}{{end}} {{.State.OOMKilled}} {{.RestartCount}}' 2>/dev/null)
+# A freshly recreated container reports health "starting" for its start_period (40s for the
+# API), so a check that demands "healthy" immediately would fail every good deploy. Wait for
+# the set to settle instead, and fail fast on anything genuinely wrong.
+#
+# `{{else}}none{{end}}` matters: containers without a healthcheck (the worker) would otherwise
+# emit an empty field, shifting OOMKilled/RestartCount into the wrong variables — which is how
+# the first version of this script reported a healthy worker as `health=false`.
+SETTLE_TIMEOUT=120
+echo "[deploy] waiting up to ${SETTLE_TIMEOUT}s for containers to settle"
+settled=false
+for i in $(seq 1 "$SETTLE_TIMEOUT"); do
+  pending=0
+  problems=""
+  # shellcheck disable=SC2086  # $ids is deliberately word-split: one arg per container id
+  while read -r name state health oom restarts; do
+    [ -z "$name" ] && continue
+    name="${name#/}"
+    case "$state" in running) ;; *) problems="$problems $name(state=$state)";; esac
+    case "$health" in
+      healthy|none) ;;
+      starting) pending=$((pending + 1)) ;;
+      *) problems="$problems $name(health=$health)" ;;
+    esac
+    [ "$oom" = "true" ] && problems="$problems $name(OOMKilled)"
+    [ "${restarts:-0}" -gt 0 ] 2>/dev/null && problems="$problems $name(restarts=$restarts)"
+  done < <(docker inspect $ids --format '{{.Name}} {{.State.Status}} {{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}} {{.State.OOMKilled}} {{.RestartCount}}' 2>/dev/null)
 
-if [ -n "$problems" ]; then
-  echo "[deploy] ERROR: unhealthy after deploy:$problems" >&2
+  if [ -n "$problems" ]; then
+    echo "[deploy] ERROR: containers are not well after deploy:$problems" >&2
+    "${COMPOSE[@]}" ps
+    exit 1
+  fi
+  if [ "$pending" -eq 0 ]; then
+    settled=true
+    echo "[deploy] all containers settled after ${i}s"
+    break
+  fi
+  sleep 1
+done
+
+if [ "$settled" != true ]; then
+  echo "[deploy] ERROR: containers still reporting 'starting' after ${SETTLE_TIMEOUT}s" >&2
+  "${COMPOSE[@]}" ps
   exit 1
 fi
+
+echo "[deploy] container state:"
+# shellcheck disable=SC2086
+docker inspect $ids --format '{{.Name}} {{.State.Status}} {{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}} {{.State.OOMKilled}} {{.RestartCount}}' 2>/dev/null | while read -r name state health oom restarts; do
+  echo "[deploy]   ${name#/}: state=$state health=$health oom=$oom restarts=$restarts"
+done
 
 frontend_code="$(curl -s -o /dev/null -w '%{http_code}' -m 10 "$FRONTEND_URL" || echo 000)"
 echo "[deploy] frontend: HTTP $frontend_code ($FRONTEND_URL)"
