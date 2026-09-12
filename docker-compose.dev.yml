@@ -1,4 +1,14 @@
-# Dev override: bind-mount source + hot reload. Used automatically by `docker compose up`.
+# Dev override: bind-mount source + hot reload.
+#
+# NOT auto-loaded — pass it explicitly, alongside the base file:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+#
+# It used to be named docker-compose.override.yml, which Compose loads automatically on
+# a bare `docker compose up`. On the production host that was a live footgun: one
+# accidental bare command would have run production with source bind mounts, dev watch
+# mode and debug logging. The name now matches the base-overlay convention used by
+# docker-compose.prod.yml, so nothing loads by accident in either direction.
 services:
   backend:
     build:

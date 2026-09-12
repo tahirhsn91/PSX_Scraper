@@ -82,17 +82,18 @@ afterwards. Prefer opening the PR and merging it.
 ## 3. Running the app
 
 ```bash
-# Local development (auto-loads docker-compose.override.yml: bind mounts + hot reload)
-docker compose up --build
+# Local development (dev overlay passed explicitly — it is NOT auto-loaded)
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
-# Production (base + prod overlay, dev override NOT loaded)
+# Production (base + prod overlay, dev overlay NOT loaded)
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 
 # No Docker: see "Local development (without Docker)" in README.md
 ```
 
-- Never run a bare `docker compose up` on a production host: it auto-loads the dev
-  override (source bind mounts, debug logging, published dev ports).
+- The dev overlay is `docker-compose.dev.yml`, not `docker-compose.override.yml`, so
+  Compose never picks it up implicitly. A bare `docker compose up` runs the base file —
+  which is the production shape — instead of silently binding dev mounts.
 - The prod overlay binds Postgres and Redis to `127.0.0.1` only; the base file
   publishes them on `0.0.0.0`. Do not "fix" that by editing the base file.
 - Public ports on the production host come from `.env`, not from a compose edit:
