@@ -39,6 +39,18 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
+# Serialise deploys. The workflow's `concurrency` group only orders GitHub-triggered runs — it
+# cannot stop a hand-run deploy colliding with a CI one. That is exactly what broke the first
+# live run: two concurrent `compose up` calls raced and Docker rejected the second with
+# "container name ... is already in use". Take a lock instead of stepping on each other.
+LOCK_FILE="/tmp/psx-deploy.lock"
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+  echo "[deploy] another deploy is already running (lock $LOCK_FILE) — refusing to run concurrently" >&2
+  exit 4
+fi
+echo "[deploy] lock acquired ($LOCK_FILE)"
+
 echo "[deploy] build + start (this recreates changed services; the API blips for ~20s)"
 "${COMPOSE[@]}" up -d --build
 
