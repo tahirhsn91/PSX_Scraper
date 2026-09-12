@@ -107,6 +107,28 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
   migrations by hand against production, and do not edit an already-applied
   migration under `database/prisma/migrations/`; add a new one.
 
+### Deploys are automatic: merging to `main` ships to production
+
+`.github/workflows/deploy.yml` runs on every push to `main`. `main` is a protected branch
+(rulesets reject direct pushes and force-pushes, admins included), so a push to `main` only
+ever means **a PR was merged** — that merge is the deploy trigger. There is no separate
+"release" step; the PR you merge is the release.
+
+What the workflow does: SSHes to this host and runs `/home/deploy/bin/psx-ci-deploy`, which
+resets the production checkout (`/home/deploy/hermes_project/PSX_Scraper_Prod`) to
+`origin/main` and execs the versioned `scripts/deploy.sh`.
+
+- The CI SSH key is bound to a **forced command** in `~/.ssh/authorized_keys`: it cannot open
+  a shell or run arbitrary commands, only cause a deploy of merged code. Don't "fix" that by
+  loosening the key.
+- `scripts/deploy.sh` deploys **the current checkout** and gates on `/health` returning 200 and
+  on every container being running/healthy/not-OOM-killed. A failing deploy fails the workflow
+  instead of going live silently.
+- `docker compose up -d --build` builds all images **before** recreating anything, so a commit
+  that does not compile fails the deploy and leaves the previous version serving.
+- Expect ~20s of API unavailability per deploy while backend/worker/frontend are recreated.
+- Re-run it from the Actions tab (`workflow_dispatch`) if a deploy needs repeating.
+
 ## 4. Before you call a change done
 
 ```bash
