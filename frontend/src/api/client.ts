@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
-const baseURL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:4000/api/v1';
+const baseURL =
+  (import.meta.env.VITE_API_URL as string) || "http://localhost:4000/api/v1";
 
 /**
  * Correlation id sent as `x-request-id` (the API echoes it back in its logs).
@@ -18,7 +19,7 @@ const baseURL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:40
  */
 function newRequestId(): string {
   const cryptoObj: Crypto | undefined = globalThis.crypto;
-  if (cryptoObj && typeof cryptoObj.randomUUID === 'function') {
+  if (cryptoObj && typeof cryptoObj.randomUUID === "function") {
     return cryptoObj.randomUUID();
   }
   return `req-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
@@ -27,7 +28,7 @@ function newRequestId(): string {
 export const api = axios.create({ baseURL, timeout: 20000 });
 
 api.interceptors.request.use((config) => {
-  config.headers['x-request-id'] = newRequestId();
+  config.headers["x-request-id"] = newRequestId();
   return config;
 });
 
