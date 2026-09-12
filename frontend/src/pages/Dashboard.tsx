@@ -72,7 +72,7 @@ export function Dashboard() {
   return (
     <Box>
       <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={2} mb={2}>
-        <Typography variant="h4">Dashboard</Typography>
+        <Typography variant="h4">Dashboard Scrapper</Typography>
         <Stack direction="row" spacing={1}>
           <Button
             variant="outlined"
