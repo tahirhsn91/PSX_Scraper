@@ -4,6 +4,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useColorMode } from '../providers/ColorModeContext';
+import { EnvBanner } from './EnvBanner';
 
 const NAV = [
   { label: 'Dashboard', to: '/' },
@@ -15,23 +16,28 @@ export function Layout({ children }: { children: ReactNode }) {
   const loc = useLocation();
   return (
     <Box sx={{ minHeight: '100vh' }}>
-      <AppBar position="sticky">
-        <Toolbar>
-          <Typography variant="h6" component={RouterLink} to="/" sx={{ flexGrow: 0, mr: 3, color: 'inherit', textDecoration: 'none' }}>
-            PSX Scraper
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>
-            {NAV.map((n) => (
-              <Button key={n.to} component={RouterLink} to={n.to} color="inherit" variant={loc.pathname === n.to ? 'outlined' : 'text'}>
-                {n.label}
-              </Button>
-            ))}
-          </Box>
-          <IconButton color="inherit" onClick={toggle} aria-label="toggle theme">
-            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      {/* Banner + app bar share one sticky wrapper so the dev strip stays pinned
+          above the header without hard-coding the banner's height as an offset. */}
+      <Box sx={{ position: 'sticky', top: 0, zIndex: (theme) => theme.zIndex.appBar }}>
+        <EnvBanner />
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component={RouterLink} to="/" sx={{ flexGrow: 0, mr: 3, color: 'inherit', textDecoration: 'none' }}>
+              PSX Scraper
+            </Typography>
+            <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>
+              {NAV.map((n) => (
+                <Button key={n.to} component={RouterLink} to={n.to} color="inherit" variant={loc.pathname === n.to ? 'outlined' : 'text'}>
+                  {n.label}
+                </Button>
+              ))}
+            </Box>
+            <IconButton color="inherit" onClick={toggle} aria-label="toggle theme">
+              {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <Container maxWidth="lg" sx={{ py: 3 }}>
         {children}
       </Container>
