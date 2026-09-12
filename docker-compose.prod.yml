@@ -2,8 +2,9 @@
 #
 #   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 #
-# A bare `docker compose up` in this directory also loads docker-compose.override.yml
-# (dev bind-mounts + hot reload), which is never what a production host should run.
+# A bare `docker compose up` in this directory runs the base file only — the production
+# shape. The development overlay is `docker-compose.dev.yml` and is never loaded unless
+# you pass it with `-f` (it used to be auto-loaded as docker-compose.override.yml).
 #
 # Three things it changes vs the base file, all because the base file is tuned for a
 # laptop rather than a host with a public IP:
