@@ -1,7 +1,23 @@
+# Base topology — the shape a bare `docker compose up` runs.
+#
+# Dev overlay  : docker-compose.dev.yml   (bind mounts + hot reload — pass with -f, NOT auto-loaded)
+# Prod overlay : docker-compose.prod.yml  (loopback-only datastores, bind-mounted state, port vars)
+#
+# Resource limits: every service is capped with `mem_limit` + `cpus` because this host is a
+# shared 4 vCPU / 8 GB box running three production stacks. These are ceilings, not
+# reservations — idle services use far less. The worker gets the largest share because it
+# runs real Chromium instances (SCRAPER_CONCURRENCY browsers at once); the API's Node heap
+# is capped via NODE_OPTIONS so the GC reclaims memory before the container limit is hit
+# and the kernel OOM-killer steps in. Watch for OOM kills in `docker inspect <ctr>
+# --format '{{.State.OOMKilled}}'` and raise a limit only with evidence.
+
 services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: "1.0"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-psx}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-psx_password}
@@ -19,6 +35,9 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    mem_limit: 256m
+    mem_reservation: 128m
+    cpus: "0.5"
     command: ["redis-server", "--appendonly", "yes"]
     ports:
       - "${REDIS_PORT:-6379}:6379"
@@ -35,11 +54,17 @@ services:
       context: .
       dockerfile: backend/Dockerfile.api
     restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: "1.0"
     env_file: .env
     environment:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
       PORT: ${PORT:-4000}
+      # Keep the V8 heap well under the 512m container limit so GC runs before the
+      # limit is reached (same pattern as the worker).
+      NODE_OPTIONS: "--max-old-space-size=384"
     # No `command:` override — the image's own entrypoint (docker-entrypoint-api.sh)
     # runs migrations then starts the server. Keeps this compose file portable to any host.
     ports:
@@ -49,16 +74,32 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    # /health answers 200 only when Postgres *and* Redis respond, so `docker compose ps`
+    # reports "unhealthy" rather than a cheerful "Up" for a process that is running but
+    # cannot serve a request. start_period covers the migrations the entrypoint applies
+    # before the server binds. Anything health-gated on this service waits for it.
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
 
   worker:
     build:
       context: .
       dockerfile: backend/Dockerfile.worker
     restart: unless-stopped
+    # Largest cap: this process owns the Puppeteer browser pool, so Chromium's memory
+    # lives inside this limit alongside the Node heap.
+    mem_limit: 2g
+    mem_reservation: 512m
+    cpus: "2.0"
     env_file: .env
     environment:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
+      NODE_OPTIONS: "--max-old-space-size=1024"
     depends_on:
       postgres:
         condition: service_healthy
@@ -74,10 +115,22 @@ services:
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:4000/api/v1}
     restart: unless-stopped
+    # Static nginx — light. The dev overlay raises these caps, because the dev frontend is
+    # a Vite dev server (esbuild + HMR) rather than a static file server.
+    mem_limit: 192m
+    mem_reservation: 96m
+    cpus: "0.5"
     ports:
       - "5173:80"
     depends_on:
       - backend
+    # busybox wget ships in nginx:alpine — verified inside the running container.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:80/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   pgdata:
