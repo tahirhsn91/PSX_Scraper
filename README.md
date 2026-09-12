@@ -19,7 +19,7 @@ Production-oriented full-stack application for collecting, scraping, storing, an
 ├── frontend/           React/Vite SPA
 ├── database/           Prisma schema + SQL migrations
 ├── docker-compose.yml          Base topology (prod)
-├── docker-compose.override.yml Dev overrides (hot reload)
+├── docker-compose.dev.yml Dev overlay: bind mounts + hot reload (pass with -f)
 ├── render.yaml          Render Blueprint (API + worker + Redis + optional frontend) — see "Cloud deployment"
 ├── backend/Dockerfile.combined  Free-tier deploy: API + worker merged into one process — see "Cloud deployment" §2c
 ├── .env.example        Copy to .env
@@ -32,8 +32,12 @@ Services: `frontend`, `backend`, `worker`, `postgres`, `redis`.
 
 ```bash
 cp .env.example .env
-docker compose up --build
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
+
+> The dev overlay is **not** auto-loaded (it is `docker-compose.dev.yml`, not
+> `docker-compose.override.yml`), so the `-f` flags above are required for hot reload.
+> A bare `docker compose up` runs the production-shaped stack instead.
 
 - Frontend: http://localhost:5173
 - API: http://localhost:4001/api/v1
