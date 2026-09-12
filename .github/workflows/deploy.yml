@@ -1,0 +1,43 @@
+name: Deploy to Production
+
+# Fires when `main` moves — which, because main is a protected branch (repository rulesets
+# reject direct pushes and force-pushes, admins included), only ever means a pull request
+# was merged. GitHub has no "PR merged" event; a push to main is the canonical equivalent.
+#
+# workflow_dispatch exists so a deploy can be re-run by hand from the Actions tab.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy main to production
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 40
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          timeout: 30s
+          command_timeout: 35m
+          script: |
+            # This text is NOT executed verbatim: the deploy key is bound to a forced
+            # command on the host (~/.ssh/authorized_keys → /home/deploy/bin/psx-ci-deploy),
+            # so whatever is sent here is ignored and the host runs its own fixed sequence —
+            # reset the production checkout to origin/main, then run scripts/deploy.sh.
+            #
+            # That is deliberate: the key cannot obtain a shell or run arbitrary commands,
+            # it can only deploy reviewed, merged code. If the forced command is ever
+            # removed, this line makes the job fail loudly instead of running something
+            # unexpected.
+            deploy main
