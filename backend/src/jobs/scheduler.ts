@@ -1,5 +1,5 @@
-import { env } from '../config';
-import { logger } from '../utils/logger';
+import { env } from "../config";
+import { logger } from "../utils/logger";
 import {
   syncAllQueue,
   indexQueue,
@@ -8,8 +8,8 @@ import {
   QUOTE_POLL_JOB,
   UNIVERSE_PASS_JOB,
   universeQueue,
-} from './queues';
-import { indexRepository } from '../repositories/index.repository';
+} from "./queues";
+import { indexRepository } from "../repositories/index.repository";
 
 /** One cron interval: an index whose last sync is older than this is treated as stale. */
 const INDEX_STALE_MS = 60 * 60 * 1000;
@@ -27,9 +27,10 @@ const INDEX_STALE_MS = 60 * 60 * 1000;
 async function registerQuotePollSchedule(): Promise<void> {
   const existing = await quoteQueue.getRepeatableJobs();
   for (const job of existing) {
-    if (job.name !== QUOTE_POLL_JOB || job.pattern === env.QUOTE_POLL_CRON) continue;
+    if (job.name !== QUOTE_POLL_JOB || job.pattern === env.QUOTE_POLL_CRON)
+      continue;
     await quoteQueue.removeRepeatableByKey(job.key);
-    logger.info('scheduler.quote_poll_pattern_replaced', {
+    logger.info("scheduler.quote_poll_pattern_replaced", {
       was: job.pattern,
       now: env.QUOTE_POLL_CRON,
     });
@@ -37,10 +38,10 @@ async function registerQuotePollSchedule(): Promise<void> {
 
   await quoteQueue.add(
     QUOTE_POLL_JOB,
-    { trigger: 'cron' },
-    { repeat: { pattern: env.QUOTE_POLL_CRON }, jobId: 'scheduled-quote-poll' },
+    { trigger: "cron" },
+    { repeat: { pattern: env.QUOTE_POLL_CRON }, jobId: "scheduled-quote-poll" },
   );
-  logger.info('scheduler.quote_poll_registered', {
+  logger.info("scheduler.quote_poll_registered", {
     cron: env.QUOTE_POLL_CRON,
     marketHoursOnly: env.QUOTE_POLL_MARKET_HOURS_ONLY,
     concurrency: env.QUOTE_POLL_CONCURRENCY,
@@ -75,7 +76,7 @@ async function registerQuotePollSchedule(): Promise<void> {
  */
 async function registerUniversePassSchedule(): Promise<void> {
   if (!env.UNIVERSE_ENABLED) {
-    logger.info('scheduler.universe_pass_disabled');
+    logger.info("scheduler.universe_pass_disabled");
     return;
   }
   // Drop any existing registration first: BullMQ keys a repeatable by pattern, so a job whose
@@ -88,10 +89,13 @@ async function registerUniversePassSchedule(): Promise<void> {
 
   await universeQueue.add(
     UNIVERSE_PASS_JOB,
-    { kind: 'auto' },
-    { repeat: { pattern: env.UNIVERSE_PASS_CRON }, jobId: 'scheduled-universe-pass' },
+    { kind: "auto" },
+    {
+      repeat: { pattern: env.UNIVERSE_PASS_CRON },
+      jobId: "scheduled-universe-pass",
+    },
   );
-  logger.info('scheduler.universe_pass_registered', {
+  logger.info("scheduler.universe_pass_registered", {
     cron: env.UNIVERSE_PASS_CRON,
     pacingMs: env.UNIVERSE_PACING_MS,
     maxQuoteAgeDays: env.UNIVERSE_MAX_QUOTE_AGE_DAYS,
@@ -103,29 +107,35 @@ export async function registerScheduler(): Promise<void> {
   await registerUniversePassSchedule();
 
   await syncAllQueue.add(
-    'scheduled-sync-all',
-    { trigger: 'cron' },
-    { repeat: { pattern: env.CRON_EXPRESSION }, jobId: 'scheduled-sync-all' },
+    "scheduled-sync-all",
+    { trigger: "cron" },
+    { repeat: { pattern: env.CRON_EXPRESSION }, jobId: "scheduled-sync-all" },
   );
-  logger.info('scheduler.registered', { cron: env.CRON_EXPRESSION });
+  logger.info("scheduler.registered", { cron: env.CRON_EXPRESSION });
 
   const indices = await indexRepository.findAll();
   for (const index of indices) {
     await indexQueue.add(
-      'index-sync',
-      { symbol: index.symbol, trigger: 'cron' },
-      { repeat: { pattern: env.CRON_EXPRESSION }, jobId: `scheduled-index-${index.symbol}` },
+      "index-sync",
+      { symbol: index.symbol, trigger: "cron" },
+      {
+        repeat: { pattern: env.CRON_EXPRESSION },
+        jobId: `scheduled-index-${index.symbol}`,
+      },
     );
   }
-  logger.info('scheduler.indices_registered', { count: indices.length });
+  logger.info("scheduler.indices_registered", { count: indices.length });
 
   const stale = indices.filter(
-    (i) => !i.lastSyncedAt || Date.now() - i.lastSyncedAt.getTime() > INDEX_STALE_MS,
+    (i) =>
+      !i.lastSyncedAt || Date.now() - i.lastSyncedAt.getTime() > INDEX_STALE_MS,
   );
   for (const index of stale) {
-    await enqueueIndexSync(index.symbol, 'cron');
+    await enqueueIndexSync(index.symbol, "cron");
   }
   if (stale.length) {
-    logger.info('scheduler.indices_stale_enqueued', { symbols: stale.map((i) => i.symbol) });
+    logger.info("scheduler.indices_stale_enqueued", {
+      symbols: stale.map((i) => i.symbol),
+    });
   }
 }
