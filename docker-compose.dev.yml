@@ -20,6 +20,11 @@ services:
     command: sh -c "npx prisma migrate deploy --schema=../database/prisma/schema.prisma && npm run dev"
     volumes:
       - ./backend/src:/app/backend/src
+      # Unlike src, tests were NOT mounted, so the suite always ran the copy baked
+      # into the image at build time — a test added or edited in the working tree
+      # was invisible to `npx jest` (it just reported "No tests found"). Mounted so
+      # the guard tests actually track the checkout.
+      - ./backend/tests:/app/backend/tests
       - ./database:/app/database
     environment:
       LOG_LEVEL: debug
@@ -31,6 +36,7 @@ services:
     command: npm run dev:worker
     volumes:
       - ./backend/src:/app/backend/src
+      - ./backend/tests:/app/backend/tests
       - ./database:/app/database
 
   frontend:
