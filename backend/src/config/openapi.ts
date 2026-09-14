@@ -46,6 +46,7 @@ export const openapiSpec = {
   tags: [
     { name: 'System', description: 'Service health and liveness.' },
     { name: 'Stocks', description: 'Track, retrieve, and remove PSX stocks.' },
+    { name: 'Indices', description: 'Market indices (KSE-100): latest reading, history and sync.' },
     { name: 'History', description: 'Historical end-of-day price data and range fetches.' },
     { name: 'Search', description: 'Fuzzy search across tracked stocks.' },
     { name: 'Sync', description: 'Trigger and observe scrape jobs.' },
@@ -279,6 +280,156 @@ export const openapiSpec = {
       },
     },
 
+    '/api/v1/indices': {
+      get: {
+        tags: ['Indices'],
+        summary: 'List tracked indices',
+        description:
+          'Tracked market indices with their latest reading. Indices are a separate resource from stocks: ' +
+          'no company profile, sector, ratios or dividends.',
+        parameters: [
+          { $ref: '#/components/parameters/Page' },
+          { $ref: '#/components/parameters/Limit' },
+        ],
+        responses: {
+          '200': {
+            description: 'Paginated list of indices',
+            content: {
+              'application/json': {
+                schema: {
+                  allOf: [
+                    { $ref: '#/components/schemas/Paginated' },
+                    { type: 'object', properties: { items: { type: 'array', items: { $ref: '#/components/schemas/IndexSummary' } } } },
+                  ],
+                },
+              },
+            },
+          },
+          '400': err('Invalid query parameters'),
+        },
+      },
+    },
+
+    '/api/v1/indices/{symbol}': {
+      parameters: [{ $ref: '#/components/parameters/IndexSymbol' }],
+      get: {
+        tags: ['Indices'],
+        summary: 'Index summary',
+        description:
+          'Latest index reading. `value` is the newest intraday reading when a session is open, otherwise the ' +
+          'latest daily close; `previousClose` is the last close before that day, and `change`/`changePercent` ' +
+          'are derived from the two. `high`/`low` are null because the upstream index series carries only ' +
+          'close, open and volume.',
+        responses: {
+          '200': {
+            description: 'Index summary',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/IndexSummary' },
+                example: {
+                  symbol: 'KSE100',
+                  name: 'KSE-100 Index',
+                  value: 167970.65,
+                  change: -2541.2,
+                  changePercent: -1.4903,
+                  open: 169830.1135,
+                  high: null,
+                  low: null,
+                  previousClose: 170511.85,
+                  volume: 232943686,
+                  lastTradeDate: '2026-09-14T11:00:00.000Z',
+                },
+              },
+            },
+          },
+          '404': err('Index not tracked'),
+        },
+      },
+    },
+
+    '/api/v1/indices/{symbol}/history': {
+      parameters: [{ $ref: '#/components/parameters/IndexSymbol' }],
+      get: {
+        tags: ['Indices'],
+        summary: 'Index history (daily closes)',
+        description:
+          'Persisted daily index values, newest first, in the same envelope and row shape as the stock history ' +
+          'endpoint so consumers reuse one mapper. A `range` preset takes precedence over an explicit `from`.',
+        parameters: [
+          { $ref: '#/components/parameters/Range' },
+          { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' }, description: 'Lower bound (ignored if `range` is set).' },
+          { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' }, description: 'Upper bound.' },
+          { $ref: '#/components/parameters/Page' },
+          { name: 'limit', in: 'query', required: false, schema: { type: 'integer', default: 252, maximum: 5000 } },
+        ],
+        responses: {
+          '200': {
+            description: 'Paginated index rows (newest first)',
+            content: {
+              'application/json': {
+                schema: {
+                  allOf: [
+                    { $ref: '#/components/schemas/Paginated' },
+                    { type: 'object', properties: { items: { type: 'array', items: { $ref: '#/components/schemas/PriceRow' } } } },
+                  ],
+                },
+              },
+            },
+          },
+          '400': err('Invalid query parameters'),
+          '404': err('Index not tracked'),
+        },
+      },
+    },
+
+    '/api/v1/indices/{symbol}/sync': {
+      parameters: [{ $ref: '#/components/parameters/IndexSymbol' }],
+      post: {
+        tags: ['Indices'],
+        summary: 'Sync an index (on-demand)',
+        description:
+          'Enqueues an index sync (DPS time series → persisted daily values + newest intraday reading). ' +
+          'De-duplicated per symbol while a job is queued or active.',
+        responses: {
+          '202': {
+            description: 'Sync enqueued (or existing job reused)',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/JobRef' },
+                example: { jobId: 'index-KSE100', symbol: 'KSE100', reused: false, state: 'waiting' },
+              },
+            },
+          },
+          '404': err('Index not tracked'),
+          '429': err('Rate limit exceeded'),
+        },
+      },
+    },
+
+    '/api/v1/indices/{symbol}/sync/status': {
+      parameters: [{ $ref: '#/components/parameters/IndexSymbol' }],
+      get: {
+        tags: ['Indices'],
+        summary: 'Index sync job progress',
+        description: 'Live state and progress percentage of the index’s sync job.',
+        responses: {
+          '200': {
+            description: 'Job state and progress',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/HistoryJobStatus' },
+                example: {
+                  jobId: 'index-KSE100', state: 'active',
+                  progress: { percent: 60, note: 'persisting' },
+                  returnValue: null, failedReason: null,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
     '/api/v1/search': {
       get: {
         tags: ['Search'],
@@ -385,6 +536,11 @@ export const openapiSpec = {
         schema: { type: 'string', pattern: '^[A-Za-z0-9]{1,12}$' },
         example: 'FFC', description: 'PSX ticker symbol (alphanumeric, case-insensitive).',
       },
+      IndexSymbol: {
+        name: 'symbol', in: 'path', required: true,
+        schema: { type: 'string', pattern: '^[A-Za-z0-9]{1,12}$' },
+        example: 'KSE100', description: 'Market index code (alphanumeric, case-insensitive) — e.g. KSE100.',
+      },
       Page: { name: 'page', in: 'query', required: false, schema: { type: 'integer', minimum: 1, default: 1 } },
       Limit: { name: 'limit', in: 'query', required: false, schema: { type: 'integer', minimum: 1, maximum: 200, default: 20 } },
       Range: {
@@ -445,6 +601,26 @@ export const openapiSpec = {
           companyName: { type: 'string', nullable: true },
           currentPrice: { type: 'number', nullable: true },
           lastSyncedAt: { type: 'string', format: 'date-time', nullable: true },
+          lastTradeDate: { type: 'string', format: 'date-time', nullable: true },
+        },
+      },
+      IndexSummary: {
+        type: 'object',
+        description:
+          'Latest index reading. `high`/`low` are always null: the DPS index series provides close, open and ' +
+          'volume per day only. `lastTradeDate` is the intraday timestamp when the value comes from a live ' +
+          'reading, otherwise the daily trade date.',
+        properties: {
+          symbol: { type: 'string', example: 'KSE100' },
+          name: { type: 'string', example: 'KSE-100 Index' },
+          value: { type: 'number', nullable: true, example: 167970.65 },
+          change: { type: 'number', nullable: true, example: -2541.2, description: 'value − previousClose.' },
+          changePercent: { type: 'number', nullable: true, example: -1.4903 },
+          open: { type: 'number', nullable: true, example: 169830.1135 },
+          high: { type: 'number', nullable: true, description: 'Always null for indices.' },
+          low: { type: 'number', nullable: true, description: 'Always null for indices.' },
+          previousClose: { type: 'number', nullable: true, example: 170511.85 },
+          volume: { type: 'number', nullable: true, example: 232943686 },
           lastTradeDate: { type: 'string', format: 'date-time', nullable: true },
         },
       },
