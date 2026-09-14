@@ -1,10 +1,19 @@
-import { Page } from 'puppeteer';
-import { browserPool } from './browserPool';
-import { toNumber, toIsoDate, parseWeek52Range, sessionStamp } from './parse.utils';
-import { logger } from '../utils/logger';
-import { IStockScraper } from '../types/scraper';
-import { ScrapeResult, FinancialDTO, DividendDTO } from '../types/dto';
-import { InvalidSymbolError, NavigationTimeoutError, SiteUnavailableError } from '../types/errors';
+import { Page } from "puppeteer";
+import { browserPool } from "./browserPool";
+import {
+  toNumber,
+  toIsoDate,
+  parseWeek52Range,
+  sessionStamp,
+} from "./parse.utils";
+import { logger } from "../utils/logger";
+import { IStockScraper } from "../types/scraper";
+import { ScrapeResult, FinancialDTO, DividendDTO } from "../types/dto";
+import {
+  InvalidSymbolError,
+  NavigationTimeoutError,
+  SiteUnavailableError,
+} from "../types/errors";
 
 /** Raw strings read off the Sarmaaya stock page, before parsing. */
 export interface SarmaayaPageData {
@@ -49,10 +58,14 @@ export function extractSarmaayaPageData(): SarmaayaPageData {
       return document.querySelector(sel)?.textContent?.trim() ?? null;
     },
     byLabel(label: string): string | null {
-      const nodes = Array.from(document.querySelectorAll('tr, .stat, .metric, li'));
-      const hit = nodes.find((n) => n.textContent?.toLowerCase().includes(label.toLowerCase()));
+      const nodes = Array.from(
+        document.querySelectorAll("tr, .stat, .metric, li"),
+      );
+      const hit = nodes.find((n) =>
+        n.textContent?.toLowerCase().includes(label.toLowerCase()),
+      );
       if (!hit) return null;
-      const val = hit.querySelector('td:last-child, .value, span:last-child');
+      const val = hit.querySelector("td:last-child, .value, span:last-child");
       return (val?.textContent ?? hit.textContent)?.trim() ?? null;
     },
     /**
@@ -65,13 +78,13 @@ export function extractSarmaayaPageData(): SarmaayaPageData {
      * so the first hit with two numbers wins. Returns null when nothing numeric is found.
      */
     labelledPair(pattern: RegExp): { low: string; high: string } | null {
-      const labels = Array.from(document.querySelectorAll('p'));
-      const hits = labels.filter((p) => pattern.test(p.textContent ?? ''));
+      const labels = Array.from(document.querySelectorAll("p"));
+      const hits = labels.filter((p) => pattern.test(p.textContent ?? ""));
       for (const hit of hits) {
         const box = hit.parentElement;
         if (!box) continue;
-        const nums = Array.from(box.querySelectorAll('span'))
-          .map((s) => (s.textContent ?? '').trim())
+        const nums = Array.from(box.querySelectorAll("span"))
+          .map((s) => (s.textContent ?? "").trim())
           .filter((t) => /^[\d,]+(\.\d+)?$/.test(t));
         if (nums.length >= 2) {
           return { low: nums[nums.length - 2]!, high: nums[nums.length - 1]! };
@@ -90,12 +103,12 @@ export function extractSarmaayaPageData(): SarmaayaPageData {
      * and a shape change degrades to null rather than to a wrong number.
      */
     embeddedQuote(): Record<string, unknown> | null {
-      const blob = Array.from(document.querySelectorAll('script'))
-        .map((s) => s.textContent ?? '')
-        .join('\n');
+      const blob = Array.from(document.querySelectorAll("script"))
+        .map((s) => s.textContent ?? "")
+        .join("\n");
       const hit = blob
         .replace(/\\"/g, '"')
-        .replace(/\\\\/g, '\\')
+        .replace(/\\\\/g, "\\")
         .match(/\{[^{}]*"high52"[^{}]*\}/);
       if (!hit) return null;
       try {
@@ -106,14 +119,17 @@ export function extractSarmaayaPageData(): SarmaayaPageData {
     },
     /** Numbers/strings off the embedded quote as text, so the worker does the parsing. */
     asText(value: unknown): string | null {
-      if (typeof value === 'number' && Number.isFinite(value)) return String(value);
-      if (typeof value === 'string' && value.trim() !== '') return value.trim();
+      if (typeof value === "number" && Number.isFinite(value))
+        return String(value);
+      if (typeof value === "string" && value.trim() !== "") return value.trim();
       return null;
     },
     /** Sector name from the page's own meta description ("… under the FERTILIZER sector"). */
     metaSector(): string | null {
       const content =
-        document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
+        document
+          .querySelector('meta[name="description"]')
+          ?.getAttribute("content") ?? "";
       return content.match(/under the (.+?) sector/i)?.[1]?.trim() ?? null;
     },
   };
@@ -124,26 +140,26 @@ export function extractSarmaayaPageData(): SarmaayaPageData {
   // Missing fields => null (never fabricated). The embedded quote carries everything the
   // quote block needs; `labelledPair` stays as the fallback for the 52-week pair only.
   return {
-    company: H.asText(q?.name) ?? H.text('h1'),
+    company: H.asText(q?.name) ?? H.text("h1"),
     sector: H.metaSector(),
     week52Low: H.asText(q?.low52) ?? week52?.low ?? null,
     week52High: H.asText(q?.high52) ?? week52?.high ?? null,
     quoteDate: H.asText(q?.date),
-    price: H.asText(q?.close) ?? H.byLabel('current price') ?? H.text('.price'),
-    change: H.asText(q?.change) ?? H.byLabel('change'),
-    changePercent: H.asText(q?.change_percentage) ?? H.byLabel('change %'),
-    volume: H.asText(q?.volume) ?? H.byLabel('volume'),
-    high: H.asText(q?.high) ?? H.byLabel('day high'),
-    low: H.asText(q?.low) ?? H.byLabel('day low'),
-    open: H.asText(q?.open) ?? H.byLabel('open'),
-    marketCap: H.asText(q?.market_cap) ?? H.byLabel('market cap'),
-    pe: H.byLabel('p/e') ?? H.byLabel('pe ratio'),
-    pb: H.byLabel('p/b') ?? H.byLabel('pb ratio'),
-    roe: H.byLabel('roe'),
-    roa: H.byLabel('roa'),
-    dividendYield: H.byLabel('dividend yield'),
-    beta: H.byLabel('beta'),
-    eps: H.byLabel('eps'),
+    price: H.asText(q?.close) ?? H.byLabel("current price") ?? H.text(".price"),
+    change: H.asText(q?.change) ?? H.byLabel("change"),
+    changePercent: H.asText(q?.change_percentage) ?? H.byLabel("change %"),
+    volume: H.asText(q?.volume) ?? H.byLabel("volume"),
+    high: H.asText(q?.high) ?? H.byLabel("day high"),
+    low: H.asText(q?.low) ?? H.byLabel("day low"),
+    open: H.asText(q?.open) ?? H.byLabel("open"),
+    marketCap: H.asText(q?.market_cap) ?? H.byLabel("market cap"),
+    pe: H.byLabel("p/e") ?? H.byLabel("pe ratio"),
+    pb: H.byLabel("p/b") ?? H.byLabel("pb ratio"),
+    roe: H.byLabel("roe"),
+    roa: H.byLabel("roa"),
+    dividendYield: H.byLabel("dividend yield"),
+    beta: H.byLabel("beta"),
+    eps: H.byLabel("eps"),
   };
 }
 
@@ -152,9 +168,9 @@ export function extractSarmaayaPageData(): SarmaayaPageData {
  * Provides richer ratios / financials / dividends than the PSX DPS page.
  */
 export class SarmaayaScraper implements IStockScraper {
-  readonly source = 'sarmaaya';
+  readonly source = "sarmaaya";
 
-  private readonly baseUrl = 'https://sarmaaya.pk/stocks';
+  private readonly baseUrl = "https://sarmaaya.pk/stocks";
 
   async scrape(symbol: string): Promise<ScrapeResult> {
     const sym = symbol.toUpperCase();
@@ -164,13 +180,19 @@ export class SarmaayaScraper implements IStockScraper {
   private async run(page: Page, symbol: string): Promise<ScrapeResult> {
     const url = `${this.baseUrl}/${symbol}`;
     try {
-      const resp = await page.goto(url, { waitUntil: 'domcontentloaded' });
+      const resp = await page.goto(url, { waitUntil: "domcontentloaded" });
       if (resp && resp.status() === 404) throw new InvalidSymbolError(symbol);
-      if (resp && resp.status() >= 500) throw new SiteUnavailableError(this.source);
+      if (resp && resp.status() >= 500)
+        throw new SiteUnavailableError(this.source);
     } catch (err) {
-      if (err instanceof InvalidSymbolError || err instanceof SiteUnavailableError) throw err;
+      if (
+        err instanceof InvalidSymbolError ||
+        err instanceof SiteUnavailableError
+      )
+        throw err;
       const msg = err instanceof Error ? err.message : String(err);
-      if (msg.toLowerCase().includes('timeout')) throw new NavigationTimeoutError(this.source, { url });
+      if (msg.toLowerCase().includes("timeout"))
+        throw new NavigationTimeoutError(this.source, { url });
       throw new SiteUnavailableError(this.source, { message: msg });
     }
 
@@ -219,7 +241,8 @@ export class SarmaayaScraper implements IStockScraper {
         // whichever writer holds the freshest reading is the one on screen. Stamping the read
         // instant instead appended a row per sync (FFC had six rows inside one session) and let
         // a nine-minute-old reading shadow a fresh volume.
-        lastTradeDate: sessionStamp(data.quoteDate) ?? toIsoDate(new Date().toISOString()),
+        lastTradeDate:
+          sessionStamp(data.quoteDate) ?? toIsoDate(new Date().toISOString()),
       },
       dividends,
       financials,
@@ -232,7 +255,7 @@ export class SarmaayaScraper implements IStockScraper {
         beta: toNumber(data.beta),
       },
     };
-    logger.debug('sarmaaya.scraped', { symbol, hasRatios: !!result.ratios });
+    logger.debug("sarmaaya.scraped", { symbol, hasRatios: !!result.ratios });
     return result;
   }
 }

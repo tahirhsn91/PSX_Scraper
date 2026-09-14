@@ -1,12 +1,14 @@
-import { Page } from 'puppeteer';
-import { browserPool } from './browserPool';
-import { toNumber, toIsoDate, parseWeek52Range } from './parse.utils';
-import { logger } from '../utils/logger';
+import { Page } from "puppeteer";
+import { browserPool } from "./browserPool";
+import { toNumber, toIsoDate, parseWeek52Range } from "./parse.utils";
+import { logger } from "../utils/logger";
+import { IStockScraper } from "../types/scraper";
+import { ScrapeResult } from "../types/dto";
 import {
-  IStockScraper,
-} from '../types/scraper';
-import { ScrapeResult } from '../types/dto';
-import { InvalidSymbolError, NavigationTimeoutError, SiteUnavailableError } from '../types/errors';
+  InvalidSymbolError,
+  NavigationTimeoutError,
+  SiteUnavailableError,
+} from "../types/errors";
 
 /** Raw strings read off the DPS company page, before parsing. */
 export interface PsxPageData {
@@ -53,9 +55,13 @@ export function extractPsxPageData(): PsxPageData {
     },
     byLabel(label: string): string | null {
       const nodes = Array.from(
-        document.querySelectorAll('.stats_item, .quote__item, .company__title, td, div'),
+        document.querySelectorAll(
+          ".stats_item, .quote__item, .company__title, td, div",
+        ),
       );
-      const hit = nodes.find((n) => n.textContent?.toLowerCase().includes(label.toLowerCase()));
+      const hit = nodes.find((n) =>
+        n.textContent?.toLowerCase().includes(label.toLowerCase()),
+      );
       return hit?.textContent?.trim() ?? null;
     },
     /**
@@ -68,19 +74,24 @@ export function extractPsxPageData(): PsxPageData {
      * concatenated stats block (#21). Null when the page has no such item — a missing range
      * must stay missing instead of borrowing a number from a neighbouring box.
      */
-    labelledRange(pattern: RegExp): { low: string | null; high: string | null } | null {
-      const items = Array.from(document.querySelectorAll('.stats_item'));
+    labelledRange(
+      pattern: RegExp,
+    ): { low: string | null; high: string | null } | null {
+      const items = Array.from(document.querySelectorAll(".stats_item"));
       const hit = items.find((item) =>
-        pattern.test(item.querySelector('.stats_label')?.textContent ?? ''),
+        pattern.test(item.querySelector(".stats_label")?.textContent ?? ""),
       );
       if (!hit) return null;
 
-      const num = hit.querySelector('.numRange');
-      const attrLow = num?.getAttribute('data-low') ?? null;
-      const attrHigh = num?.getAttribute('data-high') ?? null;
-      if (attrLow !== null || attrHigh !== null) return { low: attrLow, high: attrHigh };
+      const num = hit.querySelector(".numRange");
+      const attrLow = num?.getAttribute("data-low") ?? null;
+      const attrHigh = num?.getAttribute("data-high") ?? null;
+      if (attrLow !== null || attrHigh !== null)
+        return { low: attrLow, high: attrHigh };
 
-      const parts = (hit.querySelector('.stats_value')?.textContent ?? '').split(/[—–]/);
+      const parts = (
+        hit.querySelector(".stats_value")?.textContent ?? ""
+      ).split(/[—–]/);
       return { low: parts[0]?.trim() || null, high: parts[1]?.trim() || null };
     },
   };
@@ -89,18 +100,20 @@ export function extractPsxPageData(): PsxPageData {
 
   // Missing fields => null (never fabricated).
   return {
-    company: H.text('.quote__name') ?? H.text('h1') ?? H.text('.company__title'),
-    sector: H.text('.quote__sector') ?? H.byLabel('sector'),
+    company:
+      H.text(".quote__name") ?? H.text("h1") ?? H.text(".company__title"),
+    sector: H.text(".quote__sector") ?? H.byLabel("sector"),
     week52Low: week52?.low ?? null,
     week52High: week52?.high ?? null,
-    price: H.text('.quote__close') ?? H.text('[data-field="price"]'),
-    change: H.text('.quote__change'),
-    changePercent: H.text('.quote__change_percent') ?? H.text('.change__percent'),
-    volume: H.byLabel('volume'),
-    high: H.byLabel('high'),
-    low: H.byLabel('low'),
-    open: H.byLabel('open'),
-    marketCap: H.byLabel('market cap'),
+    price: H.text(".quote__close") ?? H.text('[data-field="price"]'),
+    change: H.text(".quote__change"),
+    changePercent:
+      H.text(".quote__change_percent") ?? H.text(".change__percent"),
+    volume: H.byLabel("volume"),
+    high: H.byLabel("high"),
+    low: H.byLabel("low"),
+    open: H.byLabel("open"),
+    marketCap: H.byLabel("market cap"),
   };
 }
 
@@ -109,9 +122,9 @@ export function extractPsxPageData(): PsxPageData {
  * Selectors are centralized so markup drift is a config change, not a code change.
  */
 export class PSXScraper implements IStockScraper {
-  readonly source = 'psx';
+  readonly source = "psx";
 
-  private readonly baseUrl = 'https://dps.psx.com.pk/company';
+  private readonly baseUrl = "https://dps.psx.com.pk/company";
 
   async scrape(symbol: string): Promise<ScrapeResult> {
     const sym = symbol.toUpperCase();
@@ -121,13 +134,19 @@ export class PSXScraper implements IStockScraper {
   private async run(page: Page, symbol: string): Promise<ScrapeResult> {
     const url = `${this.baseUrl}/${symbol}`;
     try {
-      const resp = await page.goto(url, { waitUntil: 'domcontentloaded' });
+      const resp = await page.goto(url, { waitUntil: "domcontentloaded" });
       if (resp && resp.status() === 404) throw new InvalidSymbolError(symbol);
-      if (resp && resp.status() >= 500) throw new SiteUnavailableError(this.source);
+      if (resp && resp.status() >= 500)
+        throw new SiteUnavailableError(this.source);
     } catch (err) {
-      if (err instanceof InvalidSymbolError || err instanceof SiteUnavailableError) throw err;
+      if (
+        err instanceof InvalidSymbolError ||
+        err instanceof SiteUnavailableError
+      )
+        throw err;
       const msg = err instanceof Error ? err.message : String(err);
-      if (msg.toLowerCase().includes('timeout')) throw new NavigationTimeoutError(this.source, { url });
+      if (msg.toLowerCase().includes("timeout"))
+        throw new NavigationTimeoutError(this.source, { url });
       throw new SiteUnavailableError(this.source, { message: msg });
     }
 
@@ -157,7 +176,7 @@ export class PSXScraper implements IStockScraper {
       financials: [],
       ratios: null,
     };
-    logger.debug('psx.scraped', { symbol, hasCompany: !!result.companyName });
+    logger.debug("psx.scraped", { symbol, hasCompany: !!result.companyName });
     return result;
   }
 }
