@@ -1,10 +1,11 @@
 import { Worker } from 'bullmq';
 import { createRedisConnection } from '../jobs/connection';
-import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE } from '../jobs/queues';
+import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE, INDEX_QUEUE } from '../jobs/queues';
 import { registerScheduler } from '../jobs/scheduler';
 import { processSyncJob } from './syncProcessor';
 import { processSyncAllJob } from './syncAllProcessor';
 import { processHistoryJob } from './historyProcessor';
+import { processIndexJob } from './indexProcessor';
 import { env } from '../config';
 import { logger } from '../utils/logger';
 import { browserPool } from '../scrapers/browserPool';
@@ -25,8 +26,13 @@ async function main() {
     connection,
     concurrency: env.WORKER_CONCURRENCY,
   });
+  // Serial: index syncs are browser-bound and share the same page pool as stocks.
+  const indexWorker = new Worker(INDEX_QUEUE, processIndexJob, {
+    connection,
+    concurrency: 1,
+  });
 
-  for (const w of [syncWorker, syncAllWorker, historyWorker]) {
+  for (const w of [syncWorker, syncAllWorker, historyWorker, indexWorker]) {
     w.on('completed', (job) => logger.info('job.completed', { queue: w.name, id: job.id }));
     w.on('failed', (job, err) =>
       logger.error('job.failed', { queue: w.name, id: job?.id, error: err.message }),
@@ -39,7 +45,12 @@ async function main() {
 
   const shutdown = async (sig: string) => {
     logger.info('worker.shutdown', { sig });
-    await Promise.allSettled([syncWorker.close(), syncAllWorker.close(), historyWorker.close()]);
+    await Promise.allSettled([
+      syncWorker.close(),
+      syncAllWorker.close(),
+      historyWorker.close(),
+      indexWorker.close(),
+    ]);
     await browserPool.close();
     await disconnectPrisma();
     process.exit(0);
