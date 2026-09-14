@@ -1,5 +1,5 @@
-import { Worker } from 'bullmq';
-import { createRedisConnection } from '../jobs/connection';
+import { Worker } from "bullmq";
+import { createRedisConnection } from "../jobs/connection";
 import {
   SYNC_QUEUE,
   SYNC_ALL_QUEUE,
@@ -7,18 +7,18 @@ import {
   INDEX_QUEUE,
   QUOTE_QUEUE,
   UNIVERSE_QUEUE,
-} from '../jobs/queues';
-import { registerScheduler } from '../jobs/scheduler';
-import { processSyncJob } from './syncProcessor';
-import { processSyncAllJob } from './syncAllProcessor';
-import { processHistoryJob } from './historyProcessor';
-import { processIndexJob } from './indexProcessor';
-import { processQuotePollJob } from './quoteProcessor';
-import { processUniverseJob } from './universeProcessor';
-import { env } from '../config';
-import { logger } from '../utils/logger';
-import { browserPool } from '../scrapers/browserPool';
-import { disconnectPrisma } from '../database/prisma';
+} from "../jobs/queues";
+import { registerScheduler } from "../jobs/scheduler";
+import { processSyncJob } from "./syncProcessor";
+import { processSyncAllJob } from "./syncAllProcessor";
+import { processHistoryJob } from "./historyProcessor";
+import { processIndexJob } from "./indexProcessor";
+import { processQuotePollJob } from "./quoteProcessor";
+import { processUniverseJob } from "./universeProcessor";
+import { env } from "../config";
+import { logger } from "../utils/logger";
+import { browserPool } from "../scrapers/browserPool";
+import { disconnectPrisma } from "../database/prisma";
 
 async function main() {
   const connection = createRedisConnection();
@@ -53,19 +53,32 @@ async function main() {
     concurrency: 1,
   });
 
-  for (const w of [syncWorker, syncAllWorker, historyWorker, indexWorker, quoteWorker, universeWorker]) {
-    w.on('completed', (job) => logger.info('job.completed', { queue: w.name, id: job.id }));
-    w.on('failed', (job, err) =>
-      logger.error('job.failed', { queue: w.name, id: job?.id, error: err.message }),
+  for (const w of [
+    syncWorker,
+    syncAllWorker,
+    historyWorker,
+    indexWorker,
+    quoteWorker,
+    universeWorker,
+  ]) {
+    w.on("completed", (job) =>
+      logger.info("job.completed", { queue: w.name, id: job.id }),
     );
-    w.on('stalled', (id) => logger.warn('job.stalled', { queue: w.name, id }));
+    w.on("failed", (job, err) =>
+      logger.error("job.failed", {
+        queue: w.name,
+        id: job?.id,
+        error: err.message,
+      }),
+    );
+    w.on("stalled", (id) => logger.warn("job.stalled", { queue: w.name, id }));
   }
 
   await registerScheduler();
-  logger.info('worker.started', { concurrency: env.WORKER_CONCURRENCY });
+  logger.info("worker.started", { concurrency: env.WORKER_CONCURRENCY });
 
   const shutdown = async (sig: string) => {
-    logger.info('worker.shutdown', { sig });
+    logger.info("worker.shutdown", { sig });
     await Promise.allSettled([
       syncWorker.close(),
       syncAllWorker.close(),
@@ -78,11 +91,13 @@ async function main() {
     await disconnectPrisma();
     process.exit(0);
   };
-  process.on('SIGTERM', () => void shutdown('SIGTERM'));
-  process.on('SIGINT', () => void shutdown('SIGINT'));
+  process.on("SIGTERM", () => void shutdown("SIGTERM"));
+  process.on("SIGINT", () => void shutdown("SIGINT"));
 }
 
 main().catch((err) => {
-  logger.error('worker.fatal', { error: err instanceof Error ? err.message : String(err) });
+  logger.error("worker.fatal", {
+    error: err instanceof Error ? err.message : String(err),
+  });
   process.exit(1);
 });
