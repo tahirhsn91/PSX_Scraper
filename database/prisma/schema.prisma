@@ -107,6 +107,41 @@ model Ratio {
   @@map("ratios")
 }
 
+model IndexValue {
+  id        String   @id @default(uuid())
+  indexId   String   @map("index_id")
+  tradeDate DateTime @map("trade_date")
+  value     Decimal  @db.Decimal(18, 4)
+  open      Decimal? @db.Decimal(18, 4)
+  volume    BigInt?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  index     MarketIndex @relation(fields: [indexId], references: [id], onDelete: Cascade)
+
+  @@unique([indexId, tradeDate])
+  @@index([indexId, tradeDate(sort: Desc)])
+  @@map("index_values")
+}
+
+/// A market index (KSE100, …). Deliberately separate from `stocks`: an index has no
+/// company page, sector, ratios or dividends, and its upstream is the DPS time-series
+/// endpoint rather than a company page. `liveValue`/`liveAt` hold the newest intraday
+/// reading, which the summary prefers over the last daily close while a session is open.
+model MarketIndex {
+  id          String       @id @default(uuid())
+  symbol      String       @unique
+  name        String
+  liveValue   Decimal?     @map("live_value") @db.Decimal(18, 4)
+  liveAt      DateTime?    @map("live_at")
+  lastSyncedAt DateTime?   @map("last_synced_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  values      IndexValue[]
+
+  @@map("market_indices")
+}
+
 model SyncLog {
   id           String     @id @default(uuid())
   stockId      String?    @map("stock_id")
