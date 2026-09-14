@@ -5,10 +5,12 @@ import type { HistoryRange } from '../utils/range';
 export const SYNC_QUEUE = 'stock-sync';
 export const SYNC_ALL_QUEUE = 'stock-sync-all';
 export const HISTORY_QUEUE = 'stock-history-sync';
+export const INDEX_QUEUE = 'index-sync';
 
 export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add' }
 export interface SyncAllJobData { trigger: 'manual' | 'cron' }
 export interface HistoryJobData { symbol: string; range: HistoryRange }
+export interface IndexSyncJobData { symbol: string; trigger: 'manual' | 'cron' }
 
 const connection = createRedisConnection();
 
@@ -41,6 +43,16 @@ export const historyQueue = new Queue<HistoryJobData>(HISTORY_QUEUE, {
   },
 });
 
+export const indexQueue = new Queue<IndexSyncJobData>(INDEX_QUEUE, {
+  connection,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: { type: 'exponential', delay: 5000 },
+    removeOnComplete: { age: 3600, count: 200 },
+    removeOnFail: { age: 86400, count: 200 },
+  },
+});
+
 /** Deterministic jobId → de-duplicates concurrent syncs for the same symbol.
  *  NOTE: BullMQ forbids ':' in custom job ids, so use '-'. */
 export const syncJobId = (symbol: string): string => `sync-${symbol.toUpperCase()}`;
@@ -56,6 +68,27 @@ export async function enqueueHistorySync(symbol: string, range: HistoryRange) {
 
 export async function findExistingHistoryJob(symbol: string) {
   return historyQueue.getJob(historyJobId(symbol));
+}
+
+/** Deterministic index job id, so a queued/active index sync is de-duplicated. */
+export const indexJobId = (symbol: string): string => `index-${symbol.toUpperCase()}`;
+
+export async function enqueueIndexSync(symbol: string, trigger: IndexSyncJobData['trigger']) {
+  const jobId = indexJobId(symbol);
+  // Same reasoning as enqueueSync: a finished job keeps its id and would silently
+  // absorb the next request, so clear it before re-adding.
+  const existing = await indexQueue.getJob(jobId);
+  if (existing) {
+    const state = await existing.getState();
+    if (state === 'completed' || state === 'failed') {
+      await existing.remove().catch(() => undefined);
+    }
+  }
+  return indexQueue.add('index-sync', { symbol: symbol.toUpperCase(), trigger }, { jobId });
+}
+
+export async function findExistingIndexJob(symbol: string) {
+  return indexQueue.getJob(indexJobId(symbol));
 }
 
 export async function enqueueSync(symbol: string, trigger: SyncJobData['trigger']) {
