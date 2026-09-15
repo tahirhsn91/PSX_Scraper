@@ -2,7 +2,7 @@
 export function toNumber(raw: string | null | undefined): number | null {
   if (raw === null || raw === undefined) return null;
   // Extract the first numeric token (handles "Rs. 1,234.50", "-3.1%", "45").
-  const match = raw.replace(/,/g, '').match(/-?\d+(\.\d+)?/);
+  const match = raw.replace(/,/g, "").match(/-?\d+(\.\d+)?/);
   if (!match) return null;
   const n = Number(match[0]);
   return Number.isFinite(n) ? n : null;
@@ -35,7 +35,11 @@ export function sessionStamp(raw: string | null | undefined): string | null {
   if (!iso) return null;
   const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
   const pkt = new Date(new Date(iso).getTime() + PKT_OFFSET_MS);
-  const midnightUtc = Date.UTC(pkt.getUTCFullYear(), pkt.getUTCMonth(), pkt.getUTCDate());
+  const midnightUtc = Date.UTC(
+    pkt.getUTCFullYear(),
+    pkt.getUTCMonth(),
+    pkt.getUTCDate(),
+  );
   return new Date(midnightUtc + 11 * 60 * 60 * 1000).toISOString(); // 16:00 PKT
 }
 
@@ -57,7 +61,8 @@ export function parseWeek52Range(
   // A price of zero is a placeholder, not an endpoint: Sarmaaya prints "0.0 — 0.0" for a
   // symbol it has no range for (ENGRO does exactly this), and storing that would put a
   // meaningless 0 in a column that promises "unknown shows as a dash".
-  const positive = (v: number | null): number | null => (v === null || v <= 0 ? null : v);
+  const positive = (v: number | null): number | null =>
+    v === null || v <= 0 ? null : v;
 
   const a = positive(toNumber(lowRaw));
   const b = positive(toNumber(highRaw));
