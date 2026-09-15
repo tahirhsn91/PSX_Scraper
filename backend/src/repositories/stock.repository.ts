@@ -1,5 +1,5 @@
-import { Prisma, Stock } from '@prisma/client';
-import { prisma } from '../database/prisma';
+import { Prisma, Stock } from "@prisma/client";
+import { prisma } from "../database/prisma";
 
 export interface StockListItem {
   id: string;
@@ -22,21 +22,24 @@ export class StockRepository {
     return prisma.stock.findUnique({ where: { symbol: symbol.toUpperCase() } });
   }
 
-  async list(limit: number, offset: number): Promise<{ items: StockListItem[]; total: number }> {
+  async list(
+    limit: number,
+    offset: number,
+  ): Promise<{ items: StockListItem[]; total: number }> {
     const [rows, total] = await Promise.all([
       prisma.stock.findMany({
         skip: offset,
         take: limit,
-        orderBy: { symbol: 'asc' },
+        orderBy: { symbol: "asc" },
         include: {
           // Skip price rows with no price: a bad tick used to be able to blank a symbol by
           // being the newest row.
           prices: {
             where: { currentPrice: { not: null } },
-            orderBy: { lastTradeDate: 'desc' },
+            orderBy: { lastTradeDate: "desc" },
             take: 1,
           },
-          syncLogs: { orderBy: { startedAt: 'desc' }, take: 1 },
+          syncLogs: { orderBy: { startedAt: "desc" }, take: 1 },
         },
       }),
       prisma.stock.count(),
@@ -46,13 +49,19 @@ export class StockRepository {
       symbol: s.symbol,
       companyName: s.companyName,
       sector: s.sector,
-      currentPrice: s.prices[0]?.currentPrice ? Number(s.prices[0].currentPrice) : null,
-      changePercent: s.prices[0]?.changePercent ? Number(s.prices[0].changePercent) : null,
+      currentPrice: s.prices[0]?.currentPrice
+        ? Number(s.prices[0].currentPrice)
+        : null,
+      changePercent: s.prices[0]?.changePercent
+        ? Number(s.prices[0].changePercent)
+        : null,
       // BigInt in the column, number on the wire (values here are far below 2^53). Tested with
       // `!= null` rather than for truthiness: volume 0 means "nothing traded" — a reading — and
       // rendering it as absent would misreport a real session.
       volume: s.prices[0]?.volume != null ? Number(s.prices[0].volume) : null,
-      week52High: s.prices[0]?.week52High ? Number(s.prices[0].week52High) : null,
+      week52High: s.prices[0]?.week52High
+        ? Number(s.prices[0].week52High)
+        : null,
       week52Low: s.prices[0]?.week52Low ? Number(s.prices[0].week52Low) : null,
       lastTradeDate: s.prices[0]?.lastTradeDate ?? null,
       lastSyncedAt: s.syncLogs[0]?.completedAt ?? null,
@@ -106,8 +115,8 @@ export class StockRepository {
         WHERE stock_id = s.id AND status IN ('SUCCESS','PARTIAL')
         ORDER BY started_at DESC LIMIT 1
       ) sl ON true
-      WHERE s.symbol ILIKE ${'%' + term + '%'}
-         OR s.company_name ILIKE ${'%' + term + '%'}
+      WHERE s.symbol ILIKE ${"%" + term + "%"}
+         OR s.company_name ILIKE ${"%" + term + "%"}
          OR similarity(s.symbol, ${term}) > 0.2
          OR similarity(coalesce(s.company_name,''), ${term}) > 0.2
       ORDER BY (s.symbol = ${term.toUpperCase()}) DESC,
