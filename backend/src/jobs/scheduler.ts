@@ -1,6 +1,6 @@
 import { env } from '../config';
 import { logger } from '../utils/logger';
-import { syncAllQueue, indexQueue, enqueueIndexSync } from './queues';
+import { syncAllQueue, indexQueue, quoteQueue, enqueueIndexSync } from './queues';
 import { indexRepository } from '../repositories/index.repository';
 
 /** One cron interval: an index whose last sync is older than this is treated as stale. */
@@ -8,8 +8,14 @@ const INDEX_STALE_MS = 60 * 60 * 1000;
 
 /**
  * Register repeatable jobs:
+ *  - `scheduled-quote-poll` — live price / change% for every tracked symbol, on
+ *    QUOTE_POLL_CRON (default: every minute). Plain HTTP, no browser.
  *  - `scheduled-sync-all` — full stock sync on CRON_EXPRESSION.
  *  - `scheduled-index-<SYMBOL>` — one per tracked index, on the same expression.
+ *
+ * The quote poll is deliberately independent of CRON_EXPRESSION: prices move by the minute
+ * while ratios, dividends and financials do not, and running the full company-page scrape
+ * that often is both unnecessary and hostile to the source.
  *
  * BullMQ dedupes repeatable jobs by key, so multiple workers won't duplicate them.
  *
@@ -19,6 +25,17 @@ const INDEX_STALE_MS = 60 * 60 * 1000;
  * likely to be called.
  */
 export async function registerScheduler(): Promise<void> {
+  await quoteQueue.add(
+    'quote-poll',
+    { trigger: 'cron' },
+    { repeat: { pattern: env.QUOTE_POLL_CRON }, jobId: 'scheduled-quote-poll' },
+  );
+  logger.info('scheduler.quote_poll_registered', {
+    cron: env.QUOTE_POLL_CRON,
+    marketHoursOnly: env.QUOTE_POLL_MARKET_HOURS_ONLY,
+    concurrency: env.QUOTE_POLL_CONCURRENCY,
+  });
+
   await syncAllQueue.add(
     'scheduled-sync-all',
     { trigger: 'cron' },

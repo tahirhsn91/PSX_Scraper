@@ -6,11 +6,13 @@ export const SYNC_QUEUE = 'stock-sync';
 export const SYNC_ALL_QUEUE = 'stock-sync-all';
 export const HISTORY_QUEUE = 'stock-history-sync';
 export const INDEX_QUEUE = 'index-sync';
+export const QUOTE_QUEUE = 'quote-sync';
 
 export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add' }
 export interface SyncAllJobData { trigger: 'manual' | 'cron' }
 export interface HistoryJobData { symbol: string; range: HistoryRange }
 export interface IndexSyncJobData { symbol: string; trigger: 'manual' | 'cron' }
+export interface QuotePollJobData { trigger: 'manual' | 'cron' }
 
 const connection = createRedisConnection();
 
@@ -50,6 +52,23 @@ export const indexQueue = new Queue<IndexSyncJobData>(INDEX_QUEUE, {
     backoff: { type: 'exponential', delay: 5000 },
     removeOnComplete: { age: 3600, count: 200 },
     removeOnFail: { age: 86400, count: 200 },
+  },
+});
+
+/**
+ * Live-quote poll — one job per tick that refreshes every tracked symbol, so there is no
+ * per-symbol fan-out and no child job to de-dupe.
+ *
+ * `attempts: 1`: this runs every minute (see QUOTE_POLL_CRON) and the next tick is only 60s
+ * away, so retrying a failed tick just competes with the fresh one. A symbol that fails
+ * inside a tick is simply carried by the next tick.
+ */
+export const quoteQueue = new Queue<QuotePollJobData>(QUOTE_QUEUE, {
+  connection,
+  defaultJobOptions: {
+    attempts: 1,
+    removeOnComplete: { age: 3600, count: 100 },
+    removeOnFail: { age: 86400, count: 100 },
   },
 });
 
@@ -111,6 +130,14 @@ export async function enqueueSync(symbol: string, trigger: SyncJobData['trigger'
 
 export async function enqueueSyncAll(trigger: SyncAllJobData['trigger']) {
   return syncAllQueue.add('sync-all', { trigger }, { jobId: `sync-all-${Date.now()}` });
+}
+
+/**
+ * Queue one quote-poll tick. The id is timestamped rather than fixed: a tick that is still
+ * running should not swallow the next one, and stale finish-state can't block a re-add.
+ */
+export async function enqueueQuotePoll(trigger: QuotePollJobData['trigger']) {
+  return quoteQueue.add('quote-poll', { trigger }, { jobId: `quote-poll-${Date.now()}` });
 }
 
 /** Return an existing queued/active job for a symbol, if any. */
