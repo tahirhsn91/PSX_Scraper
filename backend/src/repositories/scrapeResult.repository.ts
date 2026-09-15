@@ -44,6 +44,10 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
           open: dec(result.price.open),
           close: dec(result.price.close),
           marketCap: dec(result.price.marketCap),
+          // 52-week range (#25). `?? undefined` leaves the stored value alone when this run
+          // had no such block: a partial page parse must not blank a dashboard column.
+          week52High: dec(result.price.week52High) ?? undefined,
+          week52Low: dec(result.price.week52Low) ?? undefined,
         },
         create: {
           stockId: stock.id,
@@ -56,6 +60,8 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
           open: dec(result.price.open),
           close: dec(result.price.close),
           marketCap: dec(result.price.marketCap),
+          week52High: dec(result.price.week52High),
+          week52Low: dec(result.price.week52Low),
           lastTradeDate: new Date(result.price.lastTradeDate),
         },
       });

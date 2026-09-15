@@ -136,6 +136,10 @@ export class SarmaayaScraper implements IStockScraper {
         open: toNumber(data.open),
         close: toNumber(data.price),
         marketCap: toNumber(data.marketCap),
+        // Sarmaaya publishes no 52-week range, so the field is honestly absent (#25):
+        // the merge keeps PSX's pair and reports null when PSX itself had none.
+        week52High: null,
+        week52Low: null,
         lastTradeDate: toIsoDate(new Date().toISOString()),
       },
       dividends,
