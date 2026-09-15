@@ -122,6 +122,8 @@ export function Dashboard() {
               <TableCell>Symbol</TableCell>
               <TableCell>Company</TableCell>
               <TableCell align="right">Price</TableCell>
+              <TableCell align="right">52W Low</TableCell>
+              <TableCell align="right">52W High</TableCell>
               <TableCell align="right">Change %</TableCell>
               <TableCell>Last synced</TableCell>
             </TableRow>
@@ -129,16 +131,20 @@ export function Dashboard() {
           <TableBody>
             {isLoading &&
               Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i}><TableCell colSpan={5}><Skeleton /></TableCell></TableRow>
+                <TableRow key={i}><TableCell colSpan={7}><Skeleton /></TableCell></TableRow>
               ))}
             {data?.items.length === 0 && !isLoading && (
-              <TableRow><TableCell colSpan={5} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
+              <TableRow><TableCell colSpan={7} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
             )}
             {data?.items.map((s) => (
               <TableRow key={s.id} hover sx={{ cursor: 'pointer' }} onClick={() => navigate(`/stocks/${s.symbol}`)}>
                 <TableCell><strong>{s.symbol}</strong></TableCell>
                 <TableCell>{s.companyName ?? '—'}</TableCell>
                 <TableCell align="right">{s.currentPrice ?? '—'}</TableCell>
+                {/* Null means "the page had no 52-week block", so it reads as a dash rather
+                    than a zero — the API never substitutes a value here. */}
+                <TableCell align="right">{s.week52Low ?? '—'}</TableCell>
+                <TableCell align="right">{s.week52High ?? '—'}</TableCell>
                 <TableCell align="right">
                   {s.changePercent != null ? (
                     <Chip size="small" color={s.changePercent >= 0 ? 'success' : 'error'} label={`${s.changePercent.toFixed(2)}%`} />

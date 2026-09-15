@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import { browserPool } from './browserPool';
-import { toNumber, toIsoDate } from './parse.utils';
+import { toNumber, toIsoDate, parseWeek52Range } from './parse.utils';
 import { logger } from '../utils/logger';
 import {
   IStockScraper,
@@ -12,6 +12,8 @@ import { InvalidSymbolError, NavigationTimeoutError, SiteUnavailableError } from
 export interface PsxPageData {
   company: string | null;
   sector: string | null;
+  week52Low: string | null;
+  week52High: string | null;
   price: string | null;
   change: string | null;
   changePercent: string | null;
@@ -56,12 +58,41 @@ export function extractPsxPageData(): PsxPageData {
       const hit = nodes.find((n) => n.textContent?.toLowerCase().includes(label.toLowerCase()));
       return hit?.textContent?.trim() ?? null;
     },
+    /**
+     * The low/high pair from the stats item whose label matches `pattern` — the
+     * "52-WEEK RANGE" box. Reads the machine-readable data-low/data-high attributes of the
+     * inner `.numRange` node, falling back to splitting the displayed "441.70 — 685.00".
+     *
+     * Scoped to the labelled item on purpose: `byLabel()` above matches the first node whose
+     * text merely *contains* a word, which is how the day high/low currently pick up a whole
+     * concatenated stats block (#21). Null when the page has no such item — a missing range
+     * must stay missing instead of borrowing a number from a neighbouring box.
+     */
+    labelledRange(pattern: RegExp): { low: string | null; high: string | null } | null {
+      const items = Array.from(document.querySelectorAll('.stats_item'));
+      const hit = items.find((item) =>
+        pattern.test(item.querySelector('.stats_label')?.textContent ?? ''),
+      );
+      if (!hit) return null;
+
+      const num = hit.querySelector('.numRange');
+      const attrLow = num?.getAttribute('data-low') ?? null;
+      const attrHigh = num?.getAttribute('data-high') ?? null;
+      if (attrLow !== null || attrHigh !== null) return { low: attrLow, high: attrHigh };
+
+      const parts = (hit.querySelector('.stats_value')?.textContent ?? '').split(/[—–]/);
+      return { low: parts[0]?.trim() || null, high: parts[1]?.trim() || null };
+    },
   };
+
+  const week52 = H.labelledRange(/52-?week/i);
 
   // Missing fields => null (never fabricated).
   return {
     company: H.text('.quote__name') ?? H.text('h1') ?? H.text('.company__title'),
     sector: H.text('.quote__sector') ?? H.byLabel('sector'),
+    week52Low: week52?.low ?? null,
+    week52High: week52?.high ?? null,
     price: H.text('.quote__close') ?? H.text('[data-field="price"]'),
     change: H.text('.quote__change'),
     changePercent: H.text('.quote__change_percent') ?? H.text('.change__percent'),
@@ -102,6 +133,7 @@ export class PSXScraper implements IStockScraper {
 
     // Passed by reference (never as an inline arrow) — see extractPsxPageData.
     const data = await page.evaluate(extractPsxPageData);
+    const week52 = parseWeek52Range(data.week52Low, data.week52High);
 
     const result: ScrapeResult = {
       symbol,
@@ -117,6 +149,8 @@ export class PSXScraper implements IStockScraper {
         open: toNumber(data.open),
         close: toNumber(data.price),
         marketCap: toNumber(data.marketCap),
+        week52High: week52.high,
+        week52Low: week52.low,
         lastTradeDate: toIsoDate(new Date().toISOString()),
       },
       dividends: [],
