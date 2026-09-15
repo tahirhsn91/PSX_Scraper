@@ -35,6 +35,8 @@ export const stockService = {
             open: num(price.open),
             close: num(price.close),
             marketCap: num(price.marketCap),
+            week52High: num(price.week52High),
+            week52Low: num(price.week52Low),
             lastTradeDate: price.lastTradeDate,
           }
         : null,

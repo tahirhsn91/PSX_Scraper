@@ -46,6 +46,10 @@ model StockPrice {
   open          Decimal? @db.Decimal(18, 4)
   close         Decimal? @db.Decimal(18, 4)
   marketCap     Decimal? @map("market_cap") @db.Decimal(24, 2)
+  // 52-week range as PSX publishes it on the company page ("52-WEEK RANGE"). Written by the
+  // company-page sync; the per-minute quote poll never touches it (it has no such field).
+  week52High    Decimal? @map("week52_high") @db.Decimal(18, 4)
+  week52Low     Decimal? @map("week52_low") @db.Decimal(18, 4)
   lastTradeDate DateTime? @map("last_trade_date")
   createdAt     DateTime @default(now()) @map("created_at")
 

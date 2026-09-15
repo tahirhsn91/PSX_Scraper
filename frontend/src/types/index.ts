@@ -5,6 +5,9 @@ export interface StockListItem {
   sector: string | null;
   currentPrice: number | null;
   changePercent: number | null;
+  /** 52-week range (issue #25); null until the company page has been scraped. */
+  week52High: number | null;
+  week52Low: number | null;
   lastTradeDate: string | null;
   lastSyncedAt: string | null;
 }
@@ -33,7 +36,9 @@ export interface StockDetail {
   price: {
     currentPrice: number | null; change: number | null; changePercent: number | null;
     volume: number | null; high: number | null; low: number | null; open: number | null;
-    close: number | null; marketCap: number | null; lastTradeDate: string | null;
+    close: number | null; marketCap: number | null;
+    week52High: number | null; week52Low: number | null;
+    lastTradeDate: string | null;
   } | null;
   ratios: {
     peRatio: number | null; pbRatio: number | null; roe: number | null;

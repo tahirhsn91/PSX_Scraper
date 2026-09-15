@@ -9,6 +9,9 @@ export interface PriceDTO {
   open: number | null;
   close: number | null;
   marketCap: number | null;
+  /** 52-week range as PSX publishes it; null when the page carries no such block (#25). */
+  week52High: number | null;
+  week52Low: number | null;
   lastTradeDate: string | null; // ISO
 }
 
