@@ -601,6 +601,13 @@ export const openapiSpec = {
         properties: {
           symbol: { type: 'string', example: 'FFC' },
           companyName: { type: 'string', nullable: true },
+          sector: {
+            type: 'string',
+            nullable: true,
+            example: 'FERTILIZER',
+            description:
+              "The scraped sector, in PSX's own casing. Null when the symbol has never been scraped.",
+          },
           currentPrice: { type: 'number', nullable: true },
           lastSyncedAt: { type: 'string', format: 'date-time', nullable: true },
           lastTradeDate: { type: 'string', format: 'date-time', nullable: true },
