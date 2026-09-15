@@ -9,6 +9,19 @@ const envSchema = z.object({
   SCRAPER_CONCURRENCY: z.coerce.number().int().positive().default(2),
   SCRAPER_DELAY_MS: z.coerce.number().int().nonnegative().default(500),
   CRON_EXPRESSION: z.string().default('0 * * * *'),
+  // Live-quote poll: refreshes price / change% for every tracked symbol over plain HTTP
+  // (no Chromium), independent of the heavy CRON_EXPRESSION sync. See jobs/scheduler.ts
+  // and workers/quoteProcessor.ts.
+  QUOTE_POLL_CRON: z.string().default('* * * * *'),
+  QUOTE_POLL_CONCURRENCY: z.coerce.number().int().positive().default(5),
+  QUOTE_POLL_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
+  // Outside the PSX session the series returns the values it already returned, so polling
+  // there is load for no new data. `false` polls around the clock.
+  // NOTE: not z.coerce.boolean() — that maps the string "false" to true.
+  QUOTE_POLL_MARKET_HOURS_ONLY: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((v) => v === 'true'),
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'http', 'debug']).default('info'),
   CORS_ORIGIN: z.string().default('*'),
   SEARCH_CACHE_TTL: z.coerce.number().int().nonnegative().default(45),
