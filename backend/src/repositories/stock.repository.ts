@@ -27,7 +27,13 @@ export class StockRepository {
         take: limit,
         orderBy: { symbol: 'asc' },
         include: {
-          prices: { orderBy: { lastTradeDate: 'desc' }, take: 1 },
+          // Skip price rows with no price: a bad tick used to be able to blank a symbol by
+          // being the newest row.
+          prices: {
+            where: { currentPrice: { not: null } },
+            orderBy: { lastTradeDate: 'desc' },
+            take: 1,
+          },
           syncLogs: { orderBy: { startedAt: 'desc' }, take: 1 },
         },
       }),
@@ -84,7 +90,7 @@ export class StockRepository {
       FROM stocks s
       LEFT JOIN LATERAL (
         SELECT current_price, change_percent, week52_high, week52_low, last_trade_date
-        FROM stock_prices WHERE stock_id = s.id
+        FROM stock_prices WHERE stock_id = s.id AND current_price IS NOT NULL
         ORDER BY last_trade_date DESC NULLS LAST LIMIT 1
       ) p ON true
       LEFT JOIN LATERAL (

@@ -25,11 +25,12 @@ import { env } from './config';
 import { logger } from './utils/logger';
 import { disconnectPrisma } from './database/prisma';
 import { createRedisConnection } from './jobs/connection';
-import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE } from './jobs/queues';
+import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE, QUOTE_QUEUE } from './jobs/queues';
 import { registerScheduler } from './jobs/scheduler';
 import { processSyncJob } from './workers/syncProcessor';
 import { processSyncAllJob } from './workers/syncAllProcessor';
 import { processHistoryJob } from './workers/historyProcessor';
+import { processQuotePollJob } from './workers/quoteProcessor';
 import { browserPool } from './scrapers/browserPool';
 
 async function main() {
@@ -53,8 +54,14 @@ async function main() {
     connection,
     concurrency: env.WORKER_CONCURRENCY,
   });
+  // The quote poll runs here too: it needs no browser, so it is cheap enough to share this
+  // single small instance (the whole reason this combined entrypoint exists is Render free).
+  const quoteWorker = new Worker(QUOTE_QUEUE, processQuotePollJob, {
+    connection,
+    concurrency: 1,
+  });
 
-  for (const w of [syncWorker, syncAllWorker, historyWorker]) {
+  for (const w of [syncWorker, syncAllWorker, historyWorker, quoteWorker]) {
     w.on('completed', (job) => logger.info('job.completed', { queue: w.name, id: job.id }));
     w.on('failed', (job, err) =>
       logger.error('job.failed', { queue: w.name, id: job?.id, error: err.message }),
@@ -68,7 +75,12 @@ async function main() {
   const shutdown = async (sig: string) => {
     logger.info('combined.shutdown', { sig });
     server.close();
-    await Promise.allSettled([syncWorker.close(), syncAllWorker.close(), historyWorker.close()]);
+    await Promise.allSettled([
+      syncWorker.close(),
+      syncAllWorker.close(),
+      historyWorker.close(),
+      quoteWorker.close(),
+    ]);
     await browserPool.close();
     await disconnectPrisma();
     process.exit(0);

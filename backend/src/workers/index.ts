@@ -1,11 +1,12 @@
 import { Worker } from 'bullmq';
 import { createRedisConnection } from '../jobs/connection';
-import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE, INDEX_QUEUE } from '../jobs/queues';
+import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE, INDEX_QUEUE, QUOTE_QUEUE } from '../jobs/queues';
 import { registerScheduler } from '../jobs/scheduler';
 import { processSyncJob } from './syncProcessor';
 import { processSyncAllJob } from './syncAllProcessor';
 import { processHistoryJob } from './historyProcessor';
 import { processIndexJob } from './indexProcessor';
+import { processQuotePollJob } from './quoteProcessor';
 import { env } from '../config';
 import { logger } from '../utils/logger';
 import { browserPool } from '../scrapers/browserPool';
@@ -31,8 +32,14 @@ async function main() {
     connection,
     concurrency: 1,
   });
+  // Serial: the poll is one job that already fans out with its own bounded concurrency,
+  // and it must never compete with the browser-bound workers for memory.
+  const quoteWorker = new Worker(QUOTE_QUEUE, processQuotePollJob, {
+    connection,
+    concurrency: 1,
+  });
 
-  for (const w of [syncWorker, syncAllWorker, historyWorker, indexWorker]) {
+  for (const w of [syncWorker, syncAllWorker, historyWorker, indexWorker, quoteWorker]) {
     w.on('completed', (job) => logger.info('job.completed', { queue: w.name, id: job.id }));
     w.on('failed', (job, err) =>
       logger.error('job.failed', { queue: w.name, id: job?.id, error: err.message }),
@@ -50,6 +57,7 @@ async function main() {
       syncAllWorker.close(),
       historyWorker.close(),
       indexWorker.close(),
+      quoteWorker.close(),
     ]);
     await browserPool.close();
     await disconnectPrisma();
