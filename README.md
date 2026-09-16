@@ -39,7 +39,7 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 > `docker-compose.override.yml`), so the `-f` flags above are required for hot reload.
 > A bare `docker compose up` runs the production-shaped stack instead.
 
-- Frontend: http://localhost:5173
+- Frontend: http://localhost:5100
 - API: http://localhost:4001/api/v1
 - Swagger UI (interactive API docs): http://localhost:4001/api/docs
 - OpenAPI JSON: http://localhost:4001/api/docs.json

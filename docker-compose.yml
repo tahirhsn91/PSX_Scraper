@@ -121,7 +121,9 @@ services:
     mem_reservation: 96m
     cpus: "0.5"
     ports:
-      - "5173:80"
+      # Host port comes from FRONTEND_PORT so the public entry point is a .env value, not a
+      # compose constant — the production overlay sets the same mapping.
+      - "${FRONTEND_PORT:-5100}:80"
     depends_on:
       - backend
     # busybox wget ships in nginx:alpine — verified inside the running container.
