@@ -52,5 +52,19 @@ describe('parse.utils', () => {
     it('never invents a number from junk', () => {
       expect(parseWeek52Range('N/A', '—')).toEqual({ low: null, high: null });
     });
+
+    it("treats Sarmaaya's 0.0/0.0 placeholder as no reading, not as a range of zero", () => {
+      // ENGRO on sarmaaya.pk/stocks/ENGRO really does print "0.0" for both endpoints.
+      expect(parseWeek52Range('0.0', '0.0')).toEqual({ low: null, high: null });
+    });
+
+    it('drops a single non-positive endpoint and keeps the other', () => {
+      expect(parseWeek52Range('0', '685')).toEqual({ low: null, high: 685 });
+      expect(parseWeek52Range('441.7', '0')).toEqual({ low: 441.7, high: null });
+    });
+
+    it('rejects negatives the same way', () => {
+      expect(parseWeek52Range('-5', '-1')).toEqual({ low: null, high: null });
+    });
   });
 });

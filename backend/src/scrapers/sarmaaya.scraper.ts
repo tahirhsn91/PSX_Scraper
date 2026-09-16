@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import { browserPool } from './browserPool';
-import { toNumber, toIsoDate } from './parse.utils';
+import { toNumber, toIsoDate, parseWeek52Range } from './parse.utils';
 import { logger } from '../utils/logger';
 import { IStockScraper } from '../types/scraper';
 import { ScrapeResult, FinancialDTO, DividendDTO } from '../types/dto';
@@ -10,6 +10,8 @@ import { InvalidSymbolError, NavigationTimeoutError, SiteUnavailableError } from
 export interface SarmaayaPageData {
   company: string | null;
   sector: string | null;
+  week52Low: string | null;
+  week52High: string | null;
   price: string | null;
   change: string | null;
   changePercent: string | null;
@@ -52,12 +54,40 @@ export function extractSarmaayaPageData(): SarmaayaPageData {
       const val = hit.querySelector('td:last-child, .value, span:last-child');
       return (val?.textContent ?? hit.textContent)?.trim() ?? null;
     },
+    /**
+     * The low/high pair printed under a label such as "52 week range": the page renders
+     * `<p>52 week range</p>` followed by a range bar whose two numeric `<span>`s are the
+     * endpoints. Reads the spans of the label's own parent, so a neighbouring block's
+     * numbers can never be picked up (the failure mode that produced #21 on the PSX page).
+     *
+     * Sarmaaya renders the block twice (responsive duplicate) — both carry the same values,
+     * so the first hit with two numbers wins. Returns null when nothing numeric is found.
+     */
+    labelledPair(pattern: RegExp): { low: string; high: string } | null {
+      const labels = Array.from(document.querySelectorAll('p'));
+      const hits = labels.filter((p) => pattern.test(p.textContent ?? ''));
+      for (const hit of hits) {
+        const box = hit.parentElement;
+        if (!box) continue;
+        const nums = Array.from(box.querySelectorAll('span'))
+          .map((s) => (s.textContent ?? '').trim())
+          .filter((t) => /^[\d,]+(\.\d+)?$/.test(t));
+        if (nums.length >= 2) {
+          return { low: nums[nums.length - 2]!, high: nums[nums.length - 1]! };
+        }
+      }
+      return null;
+    },
   };
+
+  const week52 = H.labelledPair(/52\s*week\s*range/i);
 
   // Missing fields => null (never fabricated).
   return {
     company: H.text('h1') ?? H.text('.company-name'),
     sector: H.byLabel('sector'),
+    week52Low: week52?.low ?? null,
+    week52High: week52?.high ?? null,
     price: H.byLabel('current price') ?? H.byLabel('last price') ?? H.text('.price'),
     change: H.byLabel('change'),
     changePercent: H.byLabel('change %') ?? H.byLabel('percent'),
@@ -122,6 +152,8 @@ export class SarmaayaScraper implements IStockScraper {
     }
     const dividends: DividendDTO[] = [];
 
+    const week52 = parseWeek52Range(data.week52Low, data.week52High);
+
     const result: ScrapeResult = {
       symbol,
       companyName: data.company,
@@ -136,10 +168,11 @@ export class SarmaayaScraper implements IStockScraper {
         open: toNumber(data.open),
         close: toNumber(data.price),
         marketCap: toNumber(data.marketCap),
-        // Sarmaaya publishes no 52-week range, so the field is honestly absent (#25):
-        // the merge keeps PSX's pair and reports null when PSX itself had none.
-        week52High: null,
-        week52Low: null,
+        // Sarmaaya does publish the 52-week range (it was wrongly assumed absent in #25):
+        // same pair PSX reports for the same symbol, so it doubles as the fallback source
+        // when PSX refuses us. Its 0.0/0.0 placeholders become null in parseWeek52Range.
+        week52High: week52.high,
+        week52Low: week52.low,
         lastTradeDate: toIsoDate(new Date().toISOString()),
       },
       dividends,
