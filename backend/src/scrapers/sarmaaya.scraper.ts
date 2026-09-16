@@ -12,6 +12,7 @@ export interface SarmaayaPageData {
   sector: string | null;
   week52Low: string | null;
   week52High: string | null;
+  quoteDate: string | null;
   price: string | null;
   change: string | null;
   changePercent: string | null;
@@ -78,24 +79,64 @@ export function extractSarmaayaPageData(): SarmaayaPageData {
       }
       return null;
     },
+    /**
+     * The quote object Sarmaaya embeds in its own Next.js payload — the authoritative
+     * source for this page, and the reason the old selector sweep found nothing after the
+     * site was rewritten (#29): the values are not in `tr`/`.stat`/`.metric` markup any
+     * more, they are in a `<script>` as `{"symbol":…,"close":…,"high52":…}`.
+     *
+     * The payload sits inside a JS string, so quotes arrive escaped (`\"close\"`); it is
+     * unescaped before matching. The object itself is flat, so a flat `{…}` match is exact —
+     * and a shape change degrades to null rather than to a wrong number.
+     */
+    embeddedQuote(): Record<string, unknown> | null {
+      const blob = Array.from(document.querySelectorAll('script'))
+        .map((s) => s.textContent ?? '')
+        .join('\n');
+      const hit = blob
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\')
+        .match(/\{[^{}]*"high52"[^{}]*\}/);
+      if (!hit) return null;
+      try {
+        return JSON.parse(hit[0]) as Record<string, unknown>;
+      } catch {
+        return null;
+      }
+    },
+    /** Numbers/strings off the embedded quote as text, so the worker does the parsing. */
+    asText(value: unknown): string | null {
+      if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+      if (typeof value === 'string' && value.trim() !== '') return value.trim();
+      return null;
+    },
+    /** Sector name from the page's own meta description ("… under the FERTILIZER sector"). */
+    metaSector(): string | null {
+      const content =
+        document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
+      return content.match(/under the (.+?) sector/i)?.[1]?.trim() ?? null;
+    },
   };
 
+  const q = H.embeddedQuote();
   const week52 = H.labelledPair(/52\s*week\s*range/i);
 
-  // Missing fields => null (never fabricated).
+  // Missing fields => null (never fabricated). The embedded quote carries everything the
+  // quote block needs; `labelledPair` stays as the fallback for the 52-week pair only.
   return {
-    company: H.text('h1') ?? H.text('.company-name'),
-    sector: H.byLabel('sector'),
-    week52Low: week52?.low ?? null,
-    week52High: week52?.high ?? null,
-    price: H.byLabel('current price') ?? H.byLabel('last price') ?? H.text('.price'),
-    change: H.byLabel('change'),
-    changePercent: H.byLabel('change %') ?? H.byLabel('percent'),
-    volume: H.byLabel('volume'),
-    high: H.byLabel('day high') ?? H.byLabel('high'),
-    low: H.byLabel('day low') ?? H.byLabel('low'),
-    open: H.byLabel('open'),
-    marketCap: H.byLabel('market cap'),
+    company: H.asText(q?.name) ?? H.text('h1'),
+    sector: H.metaSector(),
+    week52Low: H.asText(q?.low52) ?? week52?.low ?? null,
+    week52High: H.asText(q?.high52) ?? week52?.high ?? null,
+    quoteDate: H.asText(q?.date),
+    price: H.asText(q?.close) ?? H.byLabel('current price') ?? H.text('.price'),
+    change: H.asText(q?.change) ?? H.byLabel('change'),
+    changePercent: H.asText(q?.change_percentage) ?? H.byLabel('change %'),
+    volume: H.asText(q?.volume) ?? H.byLabel('volume'),
+    high: H.asText(q?.high) ?? H.byLabel('day high'),
+    low: H.asText(q?.low) ?? H.byLabel('day low'),
+    open: H.asText(q?.open) ?? H.byLabel('open'),
+    marketCap: H.asText(q?.market_cap) ?? H.byLabel('market cap'),
     pe: H.byLabel('p/e') ?? H.byLabel('pe ratio'),
     pb: H.byLabel('p/b') ?? H.byLabel('pb ratio'),
     roe: H.byLabel('roe'),
@@ -173,7 +214,10 @@ export class SarmaayaScraper implements IStockScraper {
         // when PSX refuses us. Its 0.0/0.0 placeholders become null in parseWeek52Range.
         week52High: week52.high,
         week52Low: week52.low,
-        lastTradeDate: toIsoDate(new Date().toISOString()),
+        // The page carries its own quote timestamp ("16 Sep 02:14 PM" rendered, ISO in the
+        // payload) — prefer it over `now()`, so a row says when the exchange printed the
+        // price rather than when we happened to fetch it.
+        lastTradeDate: toIsoDate(data.quoteDate) ?? toIsoDate(new Date().toISOString()),
       },
       dividends,
       financials,
