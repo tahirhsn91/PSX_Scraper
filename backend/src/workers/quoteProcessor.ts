@@ -25,7 +25,7 @@ export interface QuotePollSummary {
  * over plain HTTP instead — measured at 1.3s for 12 symbols in parallel, ~40KB each — so a
  * one-minute cadence costs seconds per tick.
  *
- * No `sync_logs` row is written per tick on purpose: 1,440/day would drown the real per-symbol
+ * No `sync_logs` row is written per tick on purpose: 288/day would drown the real per-symbol
  * sync history the UI reads. The summary goes to the log stream, and the persisted row's
  * `lastTradeDate` is the proof the tick ran.
  */
