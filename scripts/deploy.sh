@@ -21,7 +21,6 @@ cd "$REPO_DIR"
 
 COMPOSE=(docker compose -f docker-compose.yml -f docker-compose.prod.yml)
 HEALTH_URL="http://127.0.0.1:4000/health"
-FRONTEND_URL="http://127.0.0.1:5173/"
 HEALTH_TIMEOUT=120
 
 COMMIT="$(git rev-parse --short HEAD)"
@@ -38,6 +37,13 @@ if [ ! -f .env ]; then
   echo "[deploy] ERROR: .env is missing — production configuration lives there (see .env.example)" >&2
   exit 1
 fi
+
+# Derive the health-check target from .env instead of hardcoding it: the frontend port is a
+# config value (FRONTEND_PORT). A deploy that probed a stale port would fail while the site is
+# fine, or pass while the real entry point is broken — both worse than reading the value.
+FRONTEND_PORT="$(grep -E '^FRONTEND_PORT=' .env | tail -1 | cut -d= -f2 | tr -d '[:space:]' || true)"
+FRONTEND_URL="http://127.0.0.1:${FRONTEND_PORT:-5100}/"
+echo "[deploy] frontend target: $FRONTEND_URL (from .env FRONTEND_PORT)"
 
 # Serialise deploys. The workflow's `concurrency` group only orders GitHub-triggered runs — it
 # cannot stop a hand-run deploy colliding with a CI one. That is exactly what broke the first
