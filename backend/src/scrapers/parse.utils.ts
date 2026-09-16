@@ -2,7 +2,7 @@
 export function toNumber(raw: string | null | undefined): number | null {
   if (raw === null || raw === undefined) return null;
   // Extract the first numeric token (handles "Rs. 1,234.50", "-3.1%", "45").
-  const match = raw.replace(/,/g, "").match(/-?\d+(\.\d+)?/);
+  const match = raw.replace(/,/g, '').match(/-?\d+(\.\d+)?/);
   if (!match) return null;
   const n = Number(match[0]);
   return Number.isFinite(n) ? n : null;
@@ -14,33 +14,6 @@ export function toIsoDate(raw: string | null | undefined): string | null {
   const t = Date.parse(raw.trim());
   if (!Number.isNaN(t)) return new Date(t).toISOString();
   return null;
-}
-
-/**
- * The session a quote belongs to, as a row key.
- *
- * Returns the reading's own trading day stamped at 16:00 PKT (11:00 UTC) — the same marker DPS
- * puts on its daily series and that the historical backfill stores. Every writer then converges
- * on ONE row per symbol per session, which is what makes the freshest volume visible: before
- * this, a page sync stamped its row with the moment it was read, so each sync appended a row
- * (FFC had six inside one session), the quote poll updated a *different* row, and the API served
- * whichever row carried the newest timestamp — a nine-minute-old reading could shadow a fresh one.
- *
- * The input is the *exchange's* quote timestamp, not our fetch time, so a reading taken before
- * the open (or over a weekend) carries the previous session's timestamp and correctly maps to
- * that session rather than to today.
- */
-export function sessionStamp(raw: string | null | undefined): string | null {
-  const iso = toIsoDate(raw);
-  if (!iso) return null;
-  const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
-  const pkt = new Date(new Date(iso).getTime() + PKT_OFFSET_MS);
-  const midnightUtc = Date.UTC(
-    pkt.getUTCFullYear(),
-    pkt.getUTCMonth(),
-    pkt.getUTCDate(),
-  );
-  return new Date(midnightUtc + 11 * 60 * 60 * 1000).toISOString(); // 16:00 PKT
 }
 
 /**
@@ -61,8 +34,7 @@ export function parseWeek52Range(
   // A price of zero is a placeholder, not an endpoint: Sarmaaya prints "0.0 — 0.0" for a
   // symbol it has no range for (ENGRO does exactly this), and storing that would put a
   // meaningless 0 in a column that promises "unknown shows as a dash".
-  const positive = (v: number | null): number | null =>
-    v === null || v <= 0 ? null : v;
+  const positive = (v: number | null): number | null => (v === null || v <= 0 ? null : v);
 
   const a = positive(toNumber(lowRaw));
   const b = positive(toNumber(highRaw));
