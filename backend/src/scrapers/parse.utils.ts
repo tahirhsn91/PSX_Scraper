@@ -31,8 +31,13 @@ export function parseWeek52Range(
   lowRaw: string | null | undefined,
   highRaw: string | null | undefined,
 ): { low: number | null; high: number | null } {
-  const a = toNumber(lowRaw);
-  const b = toNumber(highRaw);
+  // A price of zero is a placeholder, not an endpoint: Sarmaaya prints "0.0 — 0.0" for a
+  // symbol it has no range for (ENGRO does exactly this), and storing that would put a
+  // meaningless 0 in a column that promises "unknown shows as a dash".
+  const positive = (v: number | null): number | null => (v === null || v <= 0 ? null : v);
+
+  const a = positive(toNumber(lowRaw));
+  const b = positive(toNumber(highRaw));
 
   if (a === null || b === null) {
     return { low: a, high: b };

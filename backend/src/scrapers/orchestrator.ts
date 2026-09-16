@@ -52,11 +52,23 @@ export async function scrapeSymbol(symbol: string): Promise<OrchestrationResult>
   const psx = bySource.get('psx');
   const sarmaaya = bySource.get('sarmaaya');
 
+  // The price block comes from one provider (PSX preferred), but the 52-week pair is worth
+  // filling field-by-field: both providers publish it, and either can be the one that
+  // actually answered — Sarmaaya is what keeps the columns populated while PSX refuses us.
+  const chosenPrice = pick(psx?.price, sarmaaya?.price);
+  const price = chosenPrice
+    ? {
+        ...chosenPrice,
+        week52High: pick(psx?.price?.week52High, sarmaaya?.price?.week52High),
+        week52Low: pick(psx?.price?.week52Low, sarmaaya?.price?.week52Low),
+      }
+    : null;
+
   const merged: ScrapeResult = {
     symbol: symbol.toUpperCase(),
     companyName: pick(psx?.companyName, sarmaaya?.companyName),
     sector: pick(psx?.sector, sarmaaya?.sector),
-    price: pick(psx?.price, sarmaaya?.price),
+    price,
     ratios: pick(sarmaaya?.ratios, psx?.ratios),
     financials: [...(sarmaaya?.financials ?? []), ...(psx?.financials ?? [])],
     dividends: [...(sarmaaya?.dividends ?? []), ...(psx?.dividends ?? [])],
