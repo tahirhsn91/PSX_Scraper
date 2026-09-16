@@ -7,6 +7,8 @@ export const SYNC_ALL_QUEUE = 'stock-sync-all';
 export const HISTORY_QUEUE = 'stock-history-sync';
 export const INDEX_QUEUE = 'index-sync';
 export const QUOTE_QUEUE = 'quote-sync';
+/** Job name shared by the scheduler and the manual enqueue helper. */
+export const QUOTE_POLL_JOB = 'quote-poll';
 
 export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add' }
 export interface SyncAllJobData { trigger: 'manual' | 'cron' }
@@ -59,9 +61,9 @@ export const indexQueue = new Queue<IndexSyncJobData>(INDEX_QUEUE, {
  * Live-quote poll — one job per tick that refreshes every tracked symbol, so there is no
  * per-symbol fan-out and no child job to de-dupe.
  *
- * `attempts: 1`: this runs every minute (see QUOTE_POLL_CRON) and the next tick is only 60s
- * away, so retrying a failed tick just competes with the fresh one. A symbol that fails
- * inside a tick is simply carried by the next tick.
+ * `attempts: 1`: this runs every 5 minutes (see QUOTE_POLL_CRON) and the next tick is only
+ * minutes away, so retrying a failed tick just competes with the fresh one. A symbol that
+ * fails inside a tick is simply carried by the next tick.
  */
 export const quoteQueue = new Queue<QuotePollJobData>(QUOTE_QUEUE, {
   connection,
@@ -137,7 +139,7 @@ export async function enqueueSyncAll(trigger: SyncAllJobData['trigger']) {
  * running should not swallow the next one, and stale finish-state can't block a re-add.
  */
 export async function enqueueQuotePoll(trigger: QuotePollJobData['trigger']) {
-  return quoteQueue.add('quote-poll', { trigger }, { jobId: `quote-poll-${Date.now()}` });
+  return quoteQueue.add(QUOTE_POLL_JOB, { trigger }, { jobId: `quote-poll-${Date.now()}` });
 }
 
 /** Return an existing queued/active job for a symbol, if any. */

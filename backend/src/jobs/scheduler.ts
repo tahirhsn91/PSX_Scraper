@@ -1,21 +1,54 @@
 import { env } from '../config';
 import { logger } from '../utils/logger';
-import { syncAllQueue, indexQueue, quoteQueue, enqueueIndexSync } from './queues';
+import { syncAllQueue, indexQueue, quoteQueue, enqueueIndexSync, QUOTE_POLL_JOB } from './queues';
 import { indexRepository } from '../repositories/index.repository';
 
 /** One cron interval: an index whose last sync is older than this is treated as stale. */
 const INDEX_STALE_MS = 60 * 60 * 1000;
 
 /**
+ * Register (or re-point) the quote poll schedule.
+ *
+ * BullMQ does not reconcile a *changed* cron pattern: adding `scheduled-quote-poll` with a new
+ * pattern leaves the previously registered one — and its already-queued delayed job — sitting in
+ * Redis, so the poll fires on BOTH schedules until the old chain drains. Changing the cadence is a
+ * routine config change, so it has to clean up after itself: without this, moving from every
+ * minute to every 5 minutes silently kept the one-minute ticks coming, which is exactly the load
+ * that earned the source-side refusal in #27.
+ */
+async function registerQuotePollSchedule(): Promise<void> {
+  const existing = await quoteQueue.getRepeatableJobs();
+  for (const job of existing) {
+    if (job.name !== QUOTE_POLL_JOB || job.pattern === env.QUOTE_POLL_CRON) continue;
+    await quoteQueue.removeRepeatableByKey(job.key);
+    logger.info('scheduler.quote_poll_pattern_replaced', {
+      was: job.pattern,
+      now: env.QUOTE_POLL_CRON,
+    });
+  }
+
+  await quoteQueue.add(
+    QUOTE_POLL_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: env.QUOTE_POLL_CRON }, jobId: 'scheduled-quote-poll' },
+  );
+  logger.info('scheduler.quote_poll_registered', {
+    cron: env.QUOTE_POLL_CRON,
+    marketHoursOnly: env.QUOTE_POLL_MARKET_HOURS_ONLY,
+    concurrency: env.QUOTE_POLL_CONCURRENCY,
+  });
+}
+
+/**
  * Register repeatable jobs:
  *  - `scheduled-quote-poll` — live price / change% for every tracked symbol, on
- *    QUOTE_POLL_CRON (default: every minute). Plain HTTP, no browser.
+ *    QUOTE_POLL_CRON (default: every 5 minutes). Plain HTTP, no browser.
  *  - `scheduled-sync-all` — full stock sync on CRON_EXPRESSION.
  *  - `scheduled-index-<SYMBOL>` — one per tracked index, on the same expression.
  *
- * The quote poll is deliberately independent of CRON_EXPRESSION: prices move by the minute
- * while ratios, dividends and financials do not, and running the full company-page scrape
- * that often is both unnecessary and hostile to the source.
+ * The quote poll is deliberately independent of CRON_EXPRESSION: prices move during the
+ * session while ratios, dividends and financials do not, and running the full company-page
+ * scrape that often is both unnecessary and hostile to the source.
  *
  * BullMQ dedupes repeatable jobs by key, so multiple workers won't duplicate them.
  *
@@ -25,16 +58,7 @@ const INDEX_STALE_MS = 60 * 60 * 1000;
  * likely to be called.
  */
 export async function registerScheduler(): Promise<void> {
-  await quoteQueue.add(
-    'quote-poll',
-    { trigger: 'cron' },
-    { repeat: { pattern: env.QUOTE_POLL_CRON }, jobId: 'scheduled-quote-poll' },
-  );
-  logger.info('scheduler.quote_poll_registered', {
-    cron: env.QUOTE_POLL_CRON,
-    marketHoursOnly: env.QUOTE_POLL_MARKET_HOURS_ONLY,
-    concurrency: env.QUOTE_POLL_CONCURRENCY,
-  });
+  await registerQuotePollSchedule();
 
   await syncAllQueue.add(
     'scheduled-sync-all',

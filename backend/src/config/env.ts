@@ -12,7 +12,10 @@ const envSchema = z.object({
   // Live-quote poll: refreshes price / change% for every tracked symbol over plain HTTP
   // (no Chromium), independent of the heavy CRON_EXPRESSION sync. See jobs/scheduler.ts
   // and workers/quoteProcessor.ts.
-  QUOTE_POLL_CRON: z.string().default('* * * * *'),
+  // Every 5 minutes, not every minute: the site's edge started refusing our data paths
+  // after sustained one-minute polling (see #27), and the payload only moves when the
+  // exchange prints a new trade. See the scheduler for the market-hours guard.
+  QUOTE_POLL_CRON: z.string().default('*/5 * * * *'),
   QUOTE_POLL_CONCURRENCY: z.coerce.number().int().positive().default(5),
   QUOTE_POLL_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
   // Outside the PSX session the series returns the values it already returned, so polling

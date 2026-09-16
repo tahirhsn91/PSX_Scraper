@@ -24,6 +24,8 @@ const price = (over: Partial<PriceDTO> = {}): PriceDTO => ({
   open: 537,
   close: 540.41,
   marketCap: null,
+  week52High: 685,
+  week52Low: 441.7,
   lastTradeDate: '2026-09-15T11:00:00.000Z',
   ...over,
 });

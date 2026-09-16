@@ -6,7 +6,7 @@
  * The quote poll deliberately runs a little wide of the session: from 09:25 so the opening
  * print is picked up straight away, to 15:35 so the closing auction has settled. Outside
  * that window the DPS series returns the values it already returned, so polling there is
- * load for no new data (1,440 ticks/day instead of ~370).
+ * load for no new data (288 ticks/day instead of ~74).
  */
 
 const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
