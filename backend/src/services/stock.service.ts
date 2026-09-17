@@ -1,9 +1,10 @@
 import { Prisma } from '@prisma/client';
 import { stockRepository } from '../repositories/stock.repository';
 import { getStockDetail, getPriceHistory } from '../repositories/stockDetail.repository';
-import { enqueueSync } from '../jobs/queues';
+import { enqueueSync, cancelSyncJob } from '../jobs/queues';
 import { ConflictError, NotFoundError } from '../types/errors';
 import { rangeToFrom, HistoryRange } from '../utils/range';
+import { logger } from '../utils/logger';
 
 const num = (v: Prisma.Decimal | null): number | null => (v === null ? null : Number(v));
 
@@ -71,8 +72,17 @@ export const stockService = {
   },
 
   async remove(symbol: string) {
+    const sym = symbol.toUpperCase();
     const existing = await stockRepository.findBySymbol(symbol);
-    if (!existing) throw new NotFoundError(`Stock not tracked: ${symbol.toUpperCase()}`);
+    if (!existing) throw new NotFoundError(`Stock not tracked: ${sym}`);
+    // Cancel the symbol's sync job BEFORE dropping the row. The scraper persists through
+    // `stock.upsert`, so a job still queued for this symbol re-creates the stock that was just
+    // deleted — the reason a removed symbol kept coming back. Order matters: cancel, then
+    // delete, so nothing can be in flight when the row goes.
+    const cancelled = await cancelSyncJob(sym);
+    if (cancelled === 'active') {
+      logger.warn('stocks.remove_sync_still_running', { symbol: sym });
+    }
     await stockRepository.delete(symbol);
   },
 
