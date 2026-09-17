@@ -1,10 +1,23 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../database/prisma';
-import type { ScrapeResult } from '../types/dto';
+import type { PriceDTO, ScrapeResult } from '../types/dto';
 
 const dec = (v: number | null | undefined): Prisma.Decimal | null =>
   v === null || v === undefined ? null : new Prisma.Decimal(v);
 const date = (v: string | null | undefined): Date | null => (v ? new Date(v) : null);
+
+/**
+ * Whether a scraped price block is worth persisting at all.
+ *
+ * The company-page scrape merges several providers and can come back with a price object
+ * whose every field is null (the page rendered without its quote block, one provider timed
+ * out). Persisting that wrote an all-null `stock_prices` row which, being the newest, then
+ * shadowed the last good reading — 9 of 23 symbols served `currentPrice: null` while their
+ * syncs were logged SUCCESS. A block with no current price is treated as "no reading".
+ */
+export function hasUsablePrice(price: PriceDTO | null): price is PriceDTO {
+  return price !== null && price.currentPrice !== null;
+}
 
 /**
  * Persist a validated ScrapeResult in a single transaction.
@@ -26,7 +39,7 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
       },
     });
 
-    if (result.price && result.price.lastTradeDate) {
+    if (hasUsablePrice(result.price) && result.price.lastTradeDate) {
       await tx.stockPrice.upsert({
         where: {
           stockId_lastTradeDate: {
@@ -44,6 +57,10 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
           open: dec(result.price.open),
           close: dec(result.price.close),
           marketCap: dec(result.price.marketCap),
+          // 52-week range (#25). `?? undefined` leaves the stored value alone when this run
+          // had no such block: a partial page parse must not blank a dashboard column.
+          week52High: dec(result.price.week52High) ?? undefined,
+          week52Low: dec(result.price.week52Low) ?? undefined,
         },
         create: {
           stockId: stock.id,
@@ -56,6 +73,8 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
           open: dec(result.price.open),
           close: dec(result.price.close),
           marketCap: dec(result.price.marketCap),
+          week52High: dec(result.price.week52High),
+          week52Low: dec(result.price.week52Low),
           lastTradeDate: new Date(result.price.lastTradeDate),
         },
       });

@@ -1,6 +1,7 @@
 import { SyncStatus } from '@prisma/client';
 import {
-  syncQueue, syncAllQueue, enqueueSyncAll, enqueueSync, findExistingSyncJob,
+  syncQueue, syncAllQueue, historyQueue, indexQueue,
+  enqueueSyncAll, enqueueSync, findExistingSyncJob,
   enqueueHistorySync, findExistingHistoryJob,
 } from '../jobs/queues';
 import { stockRepository } from '../repositories/stock.repository';
@@ -31,13 +32,22 @@ export const syncService = {
   },
 
   async status() {
-    const [sync, syncAll] = await Promise.all([
+    const [sync, syncAll, history, index] = await Promise.all([
       syncQueue.getJobCounts('waiting', 'active', 'completed', 'failed', 'delayed'),
       syncAllQueue.getJobCounts('waiting', 'active', 'completed', 'failed'),
+      historyQueue.getJobCounts('waiting', 'active', 'completed', 'failed'),
+      indexQueue.getJobCounts('waiting', 'active', 'completed', 'failed'),
     ]);
     const active = await syncQueue.getActive();
     return {
-      queues: { 'stock-sync': sync, 'stock-sync-all': syncAll },
+      // Every queue this service owns is reported here; `index-sync` and
+      // `stock-history-sync` were previously missing from this summary.
+      queues: {
+        'stock-sync': sync,
+        'stock-sync-all': syncAll,
+        'stock-history-sync': history,
+        'index-sync': index,
+      },
       inFlight: active.map((j) => j.data.symbol),
     };
   },

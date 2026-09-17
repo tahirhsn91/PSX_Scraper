@@ -14,9 +14,17 @@ services:
     build:
       dockerfile: backend/Dockerfile.api
       target: build
-    command: sh -c "npx prisma migrate deploy --schema=../database/prisma/schema.prisma && npm --prefix backend run dev"
+    # The image's WORKDIR is /app/backend (both Dockerfiles), so npm runs from the
+    # backend package directly — `npm --prefix backend …` resolves to the non-existent
+    # /app/backend/backend/package.json and the container crash-loops with ENOENT.
+    command: sh -c "npx prisma migrate deploy --schema=../database/prisma/schema.prisma && npm run dev"
     volumes:
       - ./backend/src:/app/backend/src
+      # Unlike src, tests were NOT mounted, so the suite always ran the copy baked
+      # into the image at build time — a test added or edited in the working tree
+      # was invisible to `npx jest` (it just reported "No tests found"). Mounted so
+      # the guard tests actually track the checkout.
+      - ./backend/tests:/app/backend/tests
       - ./database:/app/database
     environment:
       LOG_LEVEL: debug
@@ -25,9 +33,10 @@ services:
     build:
       dockerfile: backend/Dockerfile.worker
       target: build
-    command: npm --prefix backend run dev:worker
+    command: npm run dev:worker
     volumes:
       - ./backend/src:/app/backend/src
+      - ./backend/tests:/app/backend/tests
       - ./database:/app/database
 
   frontend:
@@ -44,12 +53,28 @@ services:
     command: sh -c "npm install && npm run dev -- --host"
     environment:
       VITE_API_URL: ${VITE_API_URL:-http://localhost:4001/api/v1}
+      # Vite's HMR client must dial the port the BROWSER sees — the published host
+      # port (FRONTEND_PORT), not the container-internal 5173. See frontend/vite.config.ts.
+      VITE_HMR_CLIENT_PORT: ${FRONTEND_PORT:-5173}
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    # !override replaces the base file's mapping instead of appending to it — without it the
-    # base's "${FRONTEND_PORT}:80" and this "${FRONTEND_PORT}:5100" would both claim the same
-    # host port and the stack would refuse to start. Vite's dev server listens on 5100
-    # (frontend/vite.config.ts), so host and container ports match here.
     ports: !override
-      - "${FRONTEND_PORT:-5100}:5100"
+      # Published port is a variable so this dev stack can sit next to the production
+      # stack (frontend 5173) instead of fighting it for the port.
+      #
+      # !override is required, not decoration: Compose *concatenates* ports lists across
+      # files, so without it the base file's `5173:80` (added for the static nginx image)
+      # is kept alongside this mapping. That leaves the dev stack trying to bind 5173 —
+      # the production frontend's port — and `up` dies with
+      # "Bind for 0.0.0.0:5173 failed: port is already allocated".
+      - "${FRONTEND_PORT:-5173}:5173"
+    # The base file probes port 80 for the static nginx image. This service is a Vite dev
+    # server on 5173, so the inherited check would report "unhealthy" for its whole life.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:5173/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      # `npm install` runs on container start, so give it room on a cold start.
+      start_period: 120s

@@ -75,7 +75,7 @@ cd ../frontend && npm install && npm run dev
 
 ## Environment variables
 
-See [.env.example](./.env.example). Key backend vars: `DATABASE_URL`, `REDIS_URL`, `PORT`, `SCRAPER_TIMEOUT`, `SCRAPER_CONCURRENCY`, `CRON_EXPRESSION`, `LOG_LEVEL`. Frontend: `VITE_API_URL`.
+See [.env.example](./.env.example). Key backend vars: `DATABASE_URL`, `REDIS_URL`, `PORT`, `SCRAPER_TIMEOUT`, `SCRAPER_CONCURRENCY`, `CRON_EXPRESSION`, `QUOTE_POLL_CRON`, `LOG_LEVEL`. Frontend: `VITE_API_URL`.
 
 ## API surface
 
@@ -89,10 +89,24 @@ See [.env.example](./.env.example). Key backend vars: `DATABASE_URL`, `REDIS_URL
 | GET | `/stocks/:symbol/history` | Price history (optional `range` preset: 1W/1M/1Y/2Y/3Y/5Y/MAX) |
 | POST | `/stocks/:symbol/history/sync` | Fetch historical EOD data for a range (async, de-duped) |
 | GET | `/stocks/:symbol/history/status` | Live progress of a history fetch job |
+| GET | `/indices` | List tracked market indices (paginated) |
+| GET | `/indices/:symbol` | Index summary — `value`, `change`, `changePercent`, `previousClose`, `open`, `volume`, `lastTradeDate` (e.g. `/indices/KSE100`) |
+| GET | `/indices/:symbol/history` | Daily index closes, same envelope as `/stocks/:symbol/history` (`range` preset supported) |
+| POST | `/indices/:symbol/sync` | On-demand index sync (de-duped) |
+| GET | `/indices/:symbol/sync/status` | Live progress of an index sync job |
 | GET | `/search?q=` | Fuzzy search (cached) |
 | POST | `/sync/all` | Trigger full re-sync |
 | GET | `/sync/status` | Live queue status |
 | GET | `/sync/logs` | Sync log history |
+
+> **Indices** are a separate resource from stocks: no company profile, sector, ratios or
+> dividends, and they are stored in their own tables (`market_indices`, `index_values`).
+> `KSE100` is seeded by migration `0003_add_market_indices`, so it is queryable from the
+> first boot, and the worker syncs it hourly (plus immediately after a deploy when the
+> stored reading is stale). Unlike a stock quote, `high`/`low` are `null` — PSX's index
+> time series (`/timeseries/eod/KSE100`, `/timeseries/int/KSE100`) carries close, open and
+> volume per day only. To track another index (`KSE30`, `ALLSHR`, …) insert it into
+> `market_indices`; the sync path is symbol-generic.
 
 ## Cloud deployment
 

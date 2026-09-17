@@ -10,6 +10,7 @@ export const scrapeResultSchema = z.object({
     .object({
       currentPrice: num, change: num, changePercent: num, volume: num,
       high: num, low: num, open: num, close: num, marketCap: num,
+      week52High: num, week52Low: num,
       lastTradeDate: z.string().nullable(),
     })
     .nullable(),

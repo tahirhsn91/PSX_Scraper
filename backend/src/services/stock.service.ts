@@ -1,9 +1,10 @@
 import { Prisma } from '@prisma/client';
 import { stockRepository } from '../repositories/stock.repository';
 import { getStockDetail, getPriceHistory } from '../repositories/stockDetail.repository';
-import { enqueueSync } from '../jobs/queues';
+import { enqueueSync, cancelSyncJob } from '../jobs/queues';
 import { ConflictError, NotFoundError } from '../types/errors';
 import { rangeToFrom, HistoryRange } from '../utils/range';
+import { logger } from '../utils/logger';
 
 const num = (v: Prisma.Decimal | null): number | null => (v === null ? null : Number(v));
 
@@ -29,12 +30,14 @@ export const stockService = {
             currentPrice: num(price.currentPrice),
             change: num(price.change),
             changePercent: num(price.changePercent),
-            volume: price.volume ? Number(price.volume) : null,
+            volume: price.volume != null ? Number(price.volume) : null,
             high: num(price.high),
             low: num(price.low),
             open: num(price.open),
             close: num(price.close),
             marketCap: num(price.marketCap),
+            week52High: num(price.week52High),
+            week52Low: num(price.week52Low),
             lastTradeDate: price.lastTradeDate,
           }
         : null,
@@ -69,8 +72,17 @@ export const stockService = {
   },
 
   async remove(symbol: string) {
+    const sym = symbol.toUpperCase();
     const existing = await stockRepository.findBySymbol(symbol);
-    if (!existing) throw new NotFoundError(`Stock not tracked: ${symbol.toUpperCase()}`);
+    if (!existing) throw new NotFoundError(`Stock not tracked: ${sym}`);
+    // Cancel the symbol's sync job BEFORE dropping the row. The scraper persists through
+    // `stock.upsert`, so a job still queued for this symbol re-creates the stock that was just
+    // deleted — the reason a removed symbol kept coming back. Order matters: cancel, then
+    // delete, so nothing can be in flight when the row goes.
+    const cancelled = await cancelSyncJob(sym);
+    if (cancelled === 'active') {
+      logger.warn('stocks.remove_sync_still_running', { symbol: sym });
+    }
     await stockRepository.delete(symbol);
   },
 
@@ -85,7 +97,7 @@ export const stockService = {
     return {
       items: res.items.map((p) => ({
         currentPrice: num(p.currentPrice), open: num(p.open), high: num(p.high),
-        low: num(p.low), close: num(p.close), volume: p.volume ? Number(p.volume) : null,
+        low: num(p.low), close: num(p.close), volume: p.volume != null ? Number(p.volume) : null,
         lastTradeDate: p.lastTradeDate,
       })),
       page, limit, total: res.total, totalPages: Math.ceil(res.total / limit),

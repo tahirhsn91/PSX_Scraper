@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, Button, Dialog,
-  DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert, Stack, Grid, Card,
-  CardContent, LinearProgress, Snackbar,
+  Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination,
+  Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert,
+  Stack, Grid, Card, CardContent, LinearProgress, Snackbar,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
@@ -21,6 +21,10 @@ export function Dashboard() {
   const [symbol, setSymbol] = useState('');
   const [justTriggered, setJustTriggered] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  // The universe worker (#41) puts every listed security on this dashboard, so the table is
+  // paged rather than cut off at the first N symbols.
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
 
   // Poll queue status continuously; also while a "sync all" just fired so the
   // active/waiting counts (and the progress bar) reflect the fan-out in real time.
@@ -31,7 +35,7 @@ export function Dashboard() {
   const syncingAll = justTriggered || inFlightCount > 0 || queuedCount > 0;
 
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
-  const { data, isLoading, isError } = useStocks(1, 50, syncingAll);
+  const { data, isLoading, isError } = useStocks(page + 1, rowsPerPage, syncingAll);
 
   // Once the fan-out has actually started showing up in the queue, stop forcing
   // the "just triggered" state — the real counts take over.
@@ -72,7 +76,7 @@ export function Dashboard() {
   return (
     <Box>
       <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={2} mb={2}>
-        <Typography variant="h4">Dashboard</Typography>
+        <Typography variant="h4">Dashboard Scrapper</Typography>
         <Stack direction="row" spacing={1}>
           <Button
             variant="outlined"
@@ -122,33 +126,54 @@ export function Dashboard() {
               <TableCell>Symbol</TableCell>
               <TableCell>Company</TableCell>
               <TableCell align="right">Price</TableCell>
+              <TableCell align="right">52W Low</TableCell>
+              <TableCell align="right">52W High</TableCell>
               <TableCell align="right">Change %</TableCell>
+              <TableCell align="right">Volume</TableCell>
               <TableCell>Last synced</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {isLoading &&
               Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i}><TableCell colSpan={5}><Skeleton /></TableCell></TableRow>
+                <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
               ))}
             {data?.items.length === 0 && !isLoading && (
-              <TableRow><TableCell colSpan={5} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
             )}
             {data?.items.map((s) => (
               <TableRow key={s.id} hover sx={{ cursor: 'pointer' }} onClick={() => navigate(`/stocks/${s.symbol}`)}>
                 <TableCell><strong>{s.symbol}</strong></TableCell>
                 <TableCell>{s.companyName ?? '—'}</TableCell>
                 <TableCell align="right">{s.currentPrice ?? '—'}</TableCell>
+                {/* Null means "the page had no 52-week block", so it reads as a dash rather
+                    than a zero — the API never substitutes a value here. */}
+                <TableCell align="right">{s.week52Low ?? '—'}</TableCell>
+                <TableCell align="right">{s.week52High ?? '—'}</TableCell>
                 <TableCell align="right">
                   {s.changePercent != null ? (
                     <Chip size="small" color={s.changePercent >= 0 ? 'success' : 'error'} label={`${s.changePercent.toFixed(2)}%`} />
                   ) : '—'}
                 </TableCell>
+                {/* Thousands separators: session volumes run to seven figures. */}
+                <TableCell align="right">{s.volume != null ? s.volume.toLocaleString() : '—'}</TableCell>
                 <TableCell>{s.lastSyncedAt ? new Date(s.lastSyncedAt).toLocaleString() : 'never'}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={data?.total ?? 0}
+          page={page}
+          onPageChange={(_, next) => setPage(next)}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(e) => {
+            setRowsPerPage(parseInt(e.target.value, 10));
+            setPage(0);
+          }}
+          rowsPerPageOptions={[25, 50, 100, 250]}
+        />
       </Paper>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="xs">

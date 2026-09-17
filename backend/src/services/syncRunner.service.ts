@@ -1,9 +1,10 @@
 import { scrapeSymbol } from '../scrapers/orchestrator';
-import { persistScrapeResult } from '../repositories/scrapeResult.repository';
+import { persistScrapeResult, hasUsablePrice } from '../repositories/scrapeResult.repository';
 import { syncLogRepository } from '../repositories/syncLog.repository';
 import { stockRepository } from '../repositories/stock.repository';
+import { psxQuoteScraper } from '../scrapers/psxQuotes.scraper';
 import { childLogger } from '../utils/logger';
-import { ProviderOutcome } from '../types/dto';
+import { ProviderOutcome, ScrapeResult } from '../types/dto';
 
 export interface SyncRunSummary {
   symbol: string;
@@ -12,6 +13,23 @@ export interface SyncRunSummary {
 }
 
 export type ProgressFn = (percent: number, note?: string) => Promise<void> | void;
+
+/**
+ * Stamp the scraped price with the session date from the DPS series instead of the wall clock.
+ *
+ * The company page carries no trade date, and keying the price row on `now()` appended a new
+ * `stock_prices` row on every run (one symbol had 277) while making "newest row" mean "most
+ * recently written" rather than "newest trade".
+ *
+ * Best-effort: when the series can't be reached the scraped value is left untouched, so a
+ * transient network problem degrades to the previous behaviour instead of failing the sync.
+ */
+async function stampSessionDate(result: ScrapeResult): Promise<void> {
+  if (!hasUsablePrice(result.price)) return;
+  const snapshot = await psxQuoteScraper.fetchSnapshot(result.symbol).catch(() => null);
+  if (!snapshot) return;
+  result.price.lastTradeDate = snapshot.sessionDate.toISOString();
+}
 
 /**
  * Core sync unit: scrape → persist → SyncLog lifecycle. Used by the worker.
@@ -28,6 +46,7 @@ export async function runOneSync(symbol: string, onProgress?: ProgressFn): Promi
 
   try {
     const { result, outcomes, partial } = await scrapeSymbol(sym);
+    await stampSessionDate(result);
     await onProgress?.(60, 'persisting');
     await persistScrapeResult(result);
     await onProgress?.(100, 'done');

@@ -5,7 +5,12 @@ export async function getStockDetail(symbol: string) {
   const stock = await prisma.stock.findUnique({
     where: { symbol: symbol.toUpperCase() },
     include: {
-      prices: { orderBy: { lastTradeDate: 'desc' }, take: 1 },
+      // A price row with no price is not a reading — see hasUsablePrice().
+      prices: {
+        where: { currentPrice: { not: null } },
+        orderBy: { lastTradeDate: 'desc' },
+        take: 1,
+      },
       ratios: { orderBy: { createdAt: 'desc' }, take: 1 },
       financials: { orderBy: [{ year: 'desc' }, { quarter: 'desc' }] },
       dividends: { orderBy: { announcementDate: 'desc' } },
