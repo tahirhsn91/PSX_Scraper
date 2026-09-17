@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import { browserPool } from './browserPool';
-import { toNumber, toIsoDate, parseWeek52Range } from './parse.utils';
+import { toNumber, toIsoDate, parseWeek52Range, sessionStamp } from './parse.utils';
 import { logger } from '../utils/logger';
 import { IStockScraper } from '../types/scraper';
 import { ScrapeResult, FinancialDTO, DividendDTO } from '../types/dto';
@@ -214,10 +214,12 @@ export class SarmaayaScraper implements IStockScraper {
         // when PSX refuses us. Its 0.0/0.0 placeholders become null in parseWeek52Range.
         week52High: week52.high,
         week52Low: week52.low,
-        // The page carries its own quote timestamp ("16 Sep 02:14 PM" rendered, ISO in the
-        // payload) — prefer it over `now()`, so a row says when the exchange printed the
-        // price rather than when we happened to fetch it.
-        lastTradeDate: toIsoDate(data.quoteDate) ?? toIsoDate(new Date().toISOString()),
+        // Keyed on the session the reading belongs to, not the moment we read it: one row per
+        // symbol per session, shared with the quote poll and the historical backfill, so
+        // whichever writer holds the freshest reading is the one on screen. Stamping the read
+        // instant instead appended a row per sync (FFC had six rows inside one session) and let
+        // a nine-minute-old reading shadow a fresh volume.
+        lastTradeDate: sessionStamp(data.quoteDate) ?? toIsoDate(new Date().toISOString()),
       },
       dividends,
       financials,
