@@ -590,6 +590,12 @@ export const openapiSpec = {
           sector: { type: 'string', nullable: true, example: 'Fertilizer' },
           currentPrice: { type: 'number', nullable: true, example: 563.48 },
           changePercent: { type: 'number', nullable: true, example: 1.24 },
+          volume: {
+            type: 'integer',
+            nullable: true,
+            example: 834691,
+            description: 'Shares traded in the session. Null when the source carried no volume.',
+          },
           week52High: { type: 'number', nullable: true, example: 685 },
           week52Low: { type: 'number', nullable: true, example: 441.7 },
           lastTradeDate: { type: 'string', format: 'date-time', nullable: true },
