@@ -5,6 +5,8 @@ export interface StockListItem {
   sector: string | null;
   currentPrice: number | null;
   changePercent: number | null;
+  /** Session volume; null when the source carried none. */
+  volume: number | null;
   /** 52-week range (issue #25); null until the company page has been scraped. */
   week52High: number | null;
   week52Low: number | null;

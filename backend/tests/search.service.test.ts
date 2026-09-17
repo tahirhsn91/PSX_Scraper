@@ -40,6 +40,7 @@ const row = (over: Partial<StockListItem> = {}): StockListItem => ({
   sector: 'FERTILIZER',
   currentPrice: 540.41,
   changePercent: 0.99,
+  volume: 582743,
   week52High: 685,
   week52Low: 441.7,
   lastTradeDate: new Date('2026-09-15T15:31:27.071Z'),

@@ -125,16 +125,17 @@ export function Dashboard() {
               <TableCell align="right">52W Low</TableCell>
               <TableCell align="right">52W High</TableCell>
               <TableCell align="right">Change %</TableCell>
+              <TableCell align="right">Volume</TableCell>
               <TableCell>Last synced</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {isLoading &&
               Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i}><TableCell colSpan={7}><Skeleton /></TableCell></TableRow>
+                <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
               ))}
             {data?.items.length === 0 && !isLoading && (
-              <TableRow><TableCell colSpan={7} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
             )}
             {data?.items.map((s) => (
               <TableRow key={s.id} hover sx={{ cursor: 'pointer' }} onClick={() => navigate(`/stocks/${s.symbol}`)}>
@@ -150,6 +151,8 @@ export function Dashboard() {
                     <Chip size="small" color={s.changePercent >= 0 ? 'success' : 'error'} label={`${s.changePercent.toFixed(2)}%`} />
                   ) : '—'}
                 </TableCell>
+                {/* Thousands separators: session volumes run to seven figures. */}
+                <TableCell align="right">{s.volume != null ? s.volume.toLocaleString() : '—'}</TableCell>
                 <TableCell>{s.lastSyncedAt ? new Date(s.lastSyncedAt).toLocaleString() : 'never'}</TableCell>
               </TableRow>
             ))}
