@@ -48,8 +48,10 @@ export class StockRepository {
       sector: s.sector,
       currentPrice: s.prices[0]?.currentPrice ? Number(s.prices[0].currentPrice) : null,
       changePercent: s.prices[0]?.changePercent ? Number(s.prices[0].changePercent) : null,
-      // BigInt in the column, number on the wire (values here are far below 2^53).
-      volume: s.prices[0]?.volume ? Number(s.prices[0].volume) : null,
+      // BigInt in the column, number on the wire (values here are far below 2^53). Tested with
+      // `!= null` rather than for truthiness: volume 0 means "nothing traded" — a reading — and
+      // rendering it as absent would misreport a real session.
+      volume: s.prices[0]?.volume != null ? Number(s.prices[0].volume) : null,
       week52High: s.prices[0]?.week52High ? Number(s.prices[0].week52High) : null,
       week52Low: s.prices[0]?.week52Low ? Number(s.prices[0].week52Low) : null,
       lastTradeDate: s.prices[0]?.lastTradeDate ?? null,
@@ -120,7 +122,8 @@ export class StockRepository {
       sector: r.sector,
       currentPrice: r.current_price ? Number(r.current_price) : null,
       changePercent: r.change_percent ? Number(r.change_percent) : null,
-      volume: r.volume ? Number(r.volume) : null,
+      // `!= null`, not truthiness: 0 shares traded is a reading (see the list mapper).
+      volume: r.volume != null ? Number(r.volume) : null,
       week52High: r.week52_high ? Number(r.week52_high) : null,
       week52Low: r.week52_low ? Number(r.week52_low) : null,
       lastTradeDate: r.last_trade_date,

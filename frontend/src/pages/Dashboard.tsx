@@ -158,7 +158,13 @@ export function Dashboard() {
                     otherwise a stale number is indistinguishable from a wrong one. */}
                 <TableCell>
                   {s.lastTradeDate
-                    ? new Date(s.lastTradeDate).toLocaleDateString(undefined, { day: '2-digit', month: 'short' })
+                    ? new Date(s.lastTradeDate).toLocaleDateString(undefined, {
+                        day: '2-digit',
+                        month: 'short',
+                        // The exchange's calendar day, not the viewer's: the 16:00 PKT session
+                        // marker rendered in a far-eastern timezone would read as the next day.
+                        timeZone: 'Asia/Karachi',
+                      })
                     : '—'}
                 </TableCell>
                 <TableCell>{s.lastSyncedAt ? new Date(s.lastSyncedAt).toLocaleString() : 'never'}</TableCell>
