@@ -1,6 +1,14 @@
 import { env } from '../config';
 import { logger } from '../utils/logger';
-import { syncAllQueue, indexQueue, quoteQueue, enqueueIndexSync, QUOTE_POLL_JOB } from './queues';
+import {
+  syncAllQueue,
+  indexQueue,
+  quoteQueue,
+  enqueueIndexSync,
+  QUOTE_POLL_JOB,
+  UNIVERSE_PASS_JOB,
+  universeQueue,
+} from './queues';
 import { indexRepository } from '../repositories/index.repository';
 
 /** One cron interval: an index whose last sync is older than this is treated as stale. */
@@ -57,8 +65,42 @@ async function registerQuotePollSchedule(): Promise<void> {
  * until the next cron tick, which is exactly when `GET /api/v1/indices/KSE100` is most
  * likely to be called.
  */
+/**
+ * Offer a universe pass on UNIVERSE_PASS_CRON.
+ *
+ * Only when the worker is enabled: a disabled feature should not leave a repeatable job ticking.
+ * The pattern is deliberately frequent and timezone-independent — the runner inspects the PKT
+ * clock and decides whether this is an in-hours pass, the once-per-session closing pass, or
+ * nothing. That is what makes the passes never idle without a second schedule to keep in sync.
+ */
+async function registerUniversePassSchedule(): Promise<void> {
+  if (!env.UNIVERSE_ENABLED) {
+    logger.info('scheduler.universe_pass_disabled');
+    return;
+  }
+  // Drop any existing registration first: BullMQ keys a repeatable by pattern, so a job whose
+  // *data* changed (this one used to ask for intraday passes only) would otherwise keep running
+  // with the old payload. Cheap and idempotent — the pass guards itself against duplicate work.
+  for (const job of await universeQueue.getRepeatableJobs()) {
+    if (job.name !== UNIVERSE_PASS_JOB) continue;
+    await universeQueue.removeRepeatableByKey(job.key);
+  }
+
+  await universeQueue.add(
+    UNIVERSE_PASS_JOB,
+    { kind: 'auto' },
+    { repeat: { pattern: env.UNIVERSE_PASS_CRON }, jobId: 'scheduled-universe-pass' },
+  );
+  logger.info('scheduler.universe_pass_registered', {
+    cron: env.UNIVERSE_PASS_CRON,
+    pacingMs: env.UNIVERSE_PACING_MS,
+    maxQuoteAgeDays: env.UNIVERSE_MAX_QUOTE_AGE_DAYS,
+  });
+}
+
 export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
+  await registerUniversePassSchedule();
 
   await syncAllQueue.add(
     'scheduled-sync-all',

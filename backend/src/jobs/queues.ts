@@ -176,6 +176,70 @@ export async function enqueueSyncAll(trigger: SyncAllJobData['trigger']) {
   return syncAllQueue.add('sync-all', { trigger }, { jobId: `sync-all-${Date.now()}` });
 }
 
+export const UNIVERSE_QUEUE = 'universe-sync';
+/** The pass job: discovers the board and hands out one job per symbol. */
+export const UNIVERSE_PASS_JOB = 'universe-pass';
+export const UNIVERSE_SYMBOL_JOB = 'universe-symbol';
+
+export interface UniverseJobData {
+  /**
+   * `auto` is what the schedule asks for: the cron fires at a fixed, timezone-independent rate
+   * and the runner decides from the PKT clock whether that means an in-hours pass, the
+   * once-per-session closing pass, or nothing at all.
+   */
+  kind: 'auto' | 'intraday' | 'close';
+  symbol?: string;
+}
+
+/**
+ * The universe pass (#41).
+ *
+ * `attempts: 1` — a pass is a fan-out, not a unit of work: the next tick starts a fresh one as
+ * soon as this drains, so retrying it would only race the newer pass. Per-symbol jobs are the
+ * ones that retry.
+ */
+export const universeQueue = new Queue<UniverseJobData>(UNIVERSE_QUEUE, {
+  connection,
+  defaultJobOptions: {
+    attempts: 1,
+    removeOnComplete: { age: 3600, count: 100 },
+    removeOnFail: { age: 86400, count: 100 },
+  },
+});
+
+/**
+ * Enqueue one job per symbol, each delayed by its position in the list.
+ *
+ * The delay is the pacing: the worker runs one at a time, so a 500-symbol pass spreads over
+ * roughly `pacing * 500` instead of arriving at the source as a burst. `addBulk` keeps it to a
+ * single round trip rather than 500.
+ *
+ * Deliberately NO `jobId`: a deterministic id per symbol looks like free de-duplication, but it
+ * is harmful here. `addBulk` writes each job's hash and then its queue entry, so a worker killed
+ * part-way through leaves hashes with no queue entry — and a later pass handing BullMQ the same
+ * id is told "already queued" for every one of them, so those symbols are silently never synced
+ * again. Auto ids make every pass a clean set of jobs; overlapping passes are prevented by the
+ * pass lock in universeRunner instead.
+ */
+export async function enqueueUniverseSymbols(
+  symbols: string[],
+  kind: UniverseJobData['kind'],
+  pacingMs: number,
+): Promise<void> {
+  const jobs = symbols.map((symbol, i) => ({
+    name: UNIVERSE_SYMBOL_JOB,
+    data: { kind, symbol: symbol.toUpperCase() },
+    opts: {
+      delay: i * pacingMs,
+      attempts: 2,
+      backoff: { type: 'exponential' as const, delay: 10_000 },
+      removeOnComplete: { age: 3600, count: 2000 },
+      removeOnFail: { age: 86400, count: 2000 },
+    },
+  }));
+  await universeQueue.addBulk(jobs);
+}
+
 /**
  * Queue one quote-poll tick. The id is timestamped rather than fixed: a tick that is still
  * running should not swallow the next one, and stale finish-state can't block a re-add.

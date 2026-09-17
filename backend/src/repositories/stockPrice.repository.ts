@@ -19,6 +19,43 @@ const dec = (v: number | null): Prisma.Decimal | null => (v === null ? null : ne
  *
  * Returns `false` (writing nothing) when the symbol is not tracked.
  */
+/**
+ * Close of the most recent session before `before` — the figure a scraped change% is checked
+ * against. Prefers `close`, falling back to `currentPrice` for rows a source filled in
+ * partially.
+ */
+export async function previousCloseBefore(stockId: string, before: Date): Promise<number | null> {
+  const row = await prisma.stockPrice.findFirst({
+    where: { stockId, lastTradeDate: { lt: before } },
+    orderBy: { lastTradeDate: 'desc' },
+    select: { close: true, currentPrice: true },
+  });
+  const value = row?.close ?? row?.currentPrice ?? null;
+  return value === null ? null : Number(value);
+}
+
+/** The symbol's recent session volumes, newest first. */
+export async function recentVolumes(stockId: string, limit = 20): Promise<number[]> {
+  const rows = await prisma.stockPrice.findMany({
+    where: { stockId, volume: { not: null } },
+    orderBy: { lastTradeDate: 'desc' },
+    take: limit,
+    select: { volume: true },
+  });
+  return rows.map((r) => Number(r.volume)).filter((v) => Number.isFinite(v));
+}
+
+/**
+ * Median of a sample, or null when there is too little history to call anything abnormal.
+ * Requires at least 3 readings: with one or two, a normal spike would look like corruption.
+ */
+export function median(values: number[]): number | null {
+  if (values.length < 3) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
+}
+
 export async function upsertQuoteSnapshot(snapshot: QuoteSnapshot): Promise<boolean> {
   const stock = await prisma.stock.findUnique({
     where: { symbol: snapshot.symbol.toUpperCase() },

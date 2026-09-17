@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, Button, Dialog,
-  DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert, Stack, Grid, Card,
-  CardContent, LinearProgress, Snackbar,
+  Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination,
+  Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert,
+  Stack, Grid, Card, CardContent, LinearProgress, Snackbar,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
@@ -21,6 +21,10 @@ export function Dashboard() {
   const [symbol, setSymbol] = useState('');
   const [justTriggered, setJustTriggered] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  // The universe worker (#41) puts every listed security on this dashboard, so the table is
+  // paged rather than cut off at the first N symbols.
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
 
   // Poll queue status continuously; also while a "sync all" just fired so the
   // active/waiting counts (and the progress bar) reflect the fan-out in real time.
@@ -31,7 +35,7 @@ export function Dashboard() {
   const syncingAll = justTriggered || inFlightCount > 0 || queuedCount > 0;
 
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
-  const { data, isLoading, isError } = useStocks(1, 50, syncingAll);
+  const { data, isLoading, isError } = useStocks(page + 1, rowsPerPage, syncingAll);
 
   // Once the fan-out has actually started showing up in the queue, stop forcing
   // the "just triggered" state — the real counts take over.
@@ -158,6 +162,18 @@ export function Dashboard() {
             ))}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={data?.total ?? 0}
+          page={page}
+          onPageChange={(_, next) => setPage(next)}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(e) => {
+            setRowsPerPage(parseInt(e.target.value, 10));
+            setPage(0);
+          }}
+          rowsPerPageOptions={[25, 50, 100, 250]}
+        />
       </Paper>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="xs">

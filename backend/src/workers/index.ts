@@ -1,12 +1,20 @@
 import { Worker } from 'bullmq';
 import { createRedisConnection } from '../jobs/connection';
-import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE, INDEX_QUEUE, QUOTE_QUEUE } from '../jobs/queues';
+import {
+  SYNC_QUEUE,
+  SYNC_ALL_QUEUE,
+  HISTORY_QUEUE,
+  INDEX_QUEUE,
+  QUOTE_QUEUE,
+  UNIVERSE_QUEUE,
+} from '../jobs/queues';
 import { registerScheduler } from '../jobs/scheduler';
 import { processSyncJob } from './syncProcessor';
 import { processSyncAllJob } from './syncAllProcessor';
 import { processHistoryJob } from './historyProcessor';
 import { processIndexJob } from './indexProcessor';
 import { processQuotePollJob } from './quoteProcessor';
+import { processUniverseJob } from './universeProcessor';
 import { env } from '../config';
 import { logger } from '../utils/logger';
 import { browserPool } from '../scrapers/browserPool';
@@ -38,8 +46,14 @@ async function main() {
     connection,
     concurrency: 1,
   });
+  // Concurrency 1 is the feature, not a default: the universe pass walks the board one symbol at
+  // a time so ~500 page fetches trickle out instead of arriving as a burst (#27, #41).
+  const universeWorker = new Worker(UNIVERSE_QUEUE, processUniverseJob, {
+    connection,
+    concurrency: 1,
+  });
 
-  for (const w of [syncWorker, syncAllWorker, historyWorker, indexWorker, quoteWorker]) {
+  for (const w of [syncWorker, syncAllWorker, historyWorker, indexWorker, quoteWorker, universeWorker]) {
     w.on('completed', (job) => logger.info('job.completed', { queue: w.name, id: job.id }));
     w.on('failed', (job, err) =>
       logger.error('job.failed', { queue: w.name, id: job?.id, error: err.message }),
@@ -58,6 +72,7 @@ async function main() {
       historyWorker.close(),
       indexWorker.close(),
       quoteWorker.close(),
+      universeWorker.close(),
     ]);
     await browserPool.close();
     await disconnectPrisma();
