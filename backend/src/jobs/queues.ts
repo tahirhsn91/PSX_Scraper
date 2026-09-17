@@ -130,6 +130,48 @@ export async function enqueueSync(symbol: string, trigger: SyncJobData['trigger'
   return syncQueue.add('sync', { symbol: symbol.toUpperCase(), trigger }, { jobId });
 }
 
+/**
+ * How long a delete waits for an in-flight sync before going ahead without it.
+ * A sync is a few seconds of scraping; this bounds the wait so a stuck job cannot hang a
+ * delete request.
+ */
+const ACTIVE_JOB_WAIT_MS = 20_000;
+const ACTIVE_JOB_POLL_MS = 500;
+
+/**
+ * Drop the pending sync job for a symbol, if one is queued.
+ *
+ * A sync job carries only the symbol, and the scraper persists through `stock.upsert`, so a job
+ * left in the queue re-creates the row it was enqueued for: the stock a user just deleted comes
+ * back with a fresh price row attached. That is not hypothetical — a delisted symbol kept
+ * reappearing on the dashboard after every container restart because its cron-enqueued job was
+ * still sitting in Redis.
+ *
+ * Returns `null` when there was no job, the state it was in when cancelled, or `'active'` when
+ * a job was still running after the bounded wait (it cannot be removed, so the caller decides).
+ */
+export async function cancelSyncJob(symbol: string): Promise<string | null> {
+  const job = await syncQueue.getJob(syncJobId(symbol));
+  if (!job) return null;
+
+  if ((await job.getState()) === 'active') {
+    const deadline = Date.now() + ACTIVE_JOB_WAIT_MS;
+    while (Date.now() < deadline) {
+      await new Promise((r) => setTimeout(r, ACTIVE_JOB_POLL_MS));
+      const state = await job.getState();
+      if (state !== 'active') {
+        await job.remove().catch(() => undefined);
+        return state;
+      }
+    }
+    return 'active';
+  }
+
+  const state = await job.getState();
+  await job.remove().catch(() => undefined);
+  return state;
+}
+
 export async function enqueueSyncAll(trigger: SyncAllJobData['trigger']) {
   return syncAllQueue.add('sync-all', { trigger }, { jobId: `sync-all-${Date.now()}` });
 }
