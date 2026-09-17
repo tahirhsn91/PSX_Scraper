@@ -1,4 +1,4 @@
-import { toNumber, toIsoDate, parseWeek52Range } from '../src/scrapers/parse.utils';
+import { toNumber, toIsoDate, parseWeek52Range, sessionStamp } from '../src/scrapers/parse.utils';
 
 describe('parse.utils', () => {
   describe('toNumber', () => {
@@ -22,6 +22,29 @@ describe('parse.utils', () => {
     it('returns null for invalid dates', () => {
       expect(toIsoDate('not-a-date')).toBeNull();
       expect(toIsoDate(null)).toBeNull();
+    });
+  });
+
+  describe('sessionStamp', () => {
+    it('stamps the reading to its own session day at 16:00 PKT', () => {
+      // 19:32 PKT on the 17th -> that day's session marker.
+      expect(sessionStamp('2026-09-17T14:32:46.369Z')).toBe('2026-09-17T11:00:00.000Z');
+    });
+
+    it('keeps a just-after-midnight PKT reading on the same session day', () => {
+      // 00:30 PKT on the 18th is still the 18th in Karachi, though it is the 17th in UTC.
+      expect(sessionStamp('2026-09-17T19:30:00.000Z')).toBe('2026-09-18T11:00:00.000Z');
+    });
+
+    it('maps a stale reading to ITS session, never to today', () => {
+      // What a pre-open or weekend fetch sees: the exchange's last update, Friday's close.
+      expect(sessionStamp('2026-09-18T10:30:00.000Z')).toBe('2026-09-18T11:00:00.000Z');
+    });
+
+    it('returns null for junk so callers can fall back instead of inventing a date', () => {
+      expect(sessionStamp(null)).toBeNull();
+      expect(sessionStamp('')).toBeNull();
+      expect(sessionStamp('not-a-date')).toBeNull();
     });
   });
 
