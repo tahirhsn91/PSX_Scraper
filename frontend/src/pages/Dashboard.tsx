@@ -126,17 +126,16 @@ export function Dashboard() {
               <TableCell align="right">52W High</TableCell>
               <TableCell align="right">Change %</TableCell>
               <TableCell align="right">Volume</TableCell>
-              <TableCell>Trade date</TableCell>
               <TableCell>Last synced</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {isLoading &&
               Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i}><TableCell colSpan={9}><Skeleton /></TableCell></TableRow>
+                <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
               ))}
             {data?.items.length === 0 && !isLoading && (
-              <TableRow><TableCell colSpan={9} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
             )}
             {data?.items.map((s) => (
               <TableRow key={s.id} hover sx={{ cursor: 'pointer' }} onClick={() => navigate(`/stocks/${s.symbol}`)}>
@@ -154,19 +153,6 @@ export function Dashboard() {
                 </TableCell>
                 {/* Thousands separators: session volumes run to seven figures. */}
                 <TableCell align="right">{s.volume != null ? s.volume.toLocaleString() : '—'}</TableCell>
-                {/* Volume is cumulative within one session, so the session has to be visible —
-                    otherwise a stale number is indistinguishable from a wrong one. */}
-                <TableCell>
-                  {s.lastTradeDate
-                    ? new Date(s.lastTradeDate).toLocaleDateString(undefined, {
-                        day: '2-digit',
-                        month: 'short',
-                        // The exchange's calendar day, not the viewer's: the 16:00 PKT session
-                        // marker rendered in a far-eastern timezone would read as the next day.
-                        timeZone: 'Asia/Karachi',
-                      })
-                    : '—'}
-                </TableCell>
                 <TableCell>{s.lastSyncedAt ? new Date(s.lastSyncedAt).toLocaleString() : 'never'}</TableCell>
               </TableRow>
             ))}
