@@ -3,22 +3,13 @@ import { env } from '../config';
 import { childLogger, logger } from '../utils/logger';
 import { scrapeSymbol } from '../scrapers/orchestrator';
 import { fetchUniverse } from '../scrapers/universe.scraper';
-import { persistScrapeResult } from '../repositories/scrapeResult.repository';
 import { syncLogRepository } from '../repositories/syncLog.repository';
 import { stockRepository } from '../repositories/stock.repository';
-import { median, previousCloseBefore, recentVolumes } from '../repositories/stockPrice.repository';
 import { isClosingPassDue, isMarketOpen, resolvePassKind } from '../utils/marketHours';
 import { passLockTtlSeconds } from '../utils/universePacing';
 import { enqueueUniverseSymbols } from '../jobs/queues';
 import { createRedisConnection } from '../jobs/connection';
-import type { ScrapeResult } from '../types/dto';
-import {
-  type ScrapedQuote,
-  type VerificationContext,
-  type VerificationResult,
-  unwrittenVerdicts,
-  verifyQuote,
-} from './quoteVerification.service';
+import { verifyAndPersist, type UnwrittenField } from './verifiedWrite.service';
 
 export type PassKind = 'intraday' | 'close';
 export type PassRequestKind = 'auto' | PassKind;
@@ -33,16 +24,11 @@ export interface PassSummary {
   skipped?: string;
 }
 
-/** Local (PKT) wall clock, for logs that have to make sense to a human in Karachi. */
-function pktClock(now: Date): string {
-  return new Date(now.getTime() + PKT_OFFSET_MS).toISOString().slice(0, 16).replace('T', ' ') + ' PKT';
-}
-
 export interface SymbolOutcome {
   symbol: string;
   status: 'SUCCESS' | 'PARTIAL' | 'FAILED' | 'NOT_LISTED';
   written: string[];
-  unwritten: { field: string; status: string; rawValue: number | null; reason?: string }[];
+  unwritten: UnwrittenField[];
   reason?: string;
 }
 
@@ -51,6 +37,11 @@ const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
 
 function pktSessionKey(now: Date): string {
   return new Date(now.getTime() + PKT_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+/** Local (PKT) wall clock, for logs that have to make sense to a human in Karachi. */
+function pktClock(now: Date): string {
+  return new Date(now.getTime() + PKT_OFFSET_MS).toISOString().slice(0, 16).replace('T', ' ') + ' PKT';
 }
 
 let redis: IORedis | null = null;
@@ -78,8 +69,14 @@ async function claimClosingPass(now: Date): Promise<boolean> {
  * once the lock expires.
  */
 async function claimPassLock(now: Date, symbolCount: number): Promise<boolean> {
-  const key = `universe:pass-lock`;
-  const claimed = await getRedis().set(key, pktSessionKey(now), 'EX', passLockTtlSeconds(symbolCount, env.UNIVERSE_PACING_MS), 'NX');
+  const key = 'universe:pass-lock';
+  const claimed = await getRedis().set(
+    key,
+    pktSessionKey(now),
+    'EX',
+    passLockTtlSeconds(symbolCount, env.UNIVERSE_PACING_MS),
+    'NX',
+  );
   return claimed === 'OK';
 }
 
@@ -132,63 +129,8 @@ export async function startUniversePass(
   return { requested, kind, discovered: symbols.length, enqueued: symbols.length };
 }
 
-/** Map the orchestrator's price block onto the shape the verifier checks. */
-function toScrapedQuote(symbol: string, result: ScrapeResult): ScrapedQuote {
-  const p = result.price;
-  return {
-    symbol,
-    price: p?.currentPrice ?? null,
-    change: p?.change ?? null,
-    changePercent: p?.changePercent ?? null,
-    volume: p?.volume ?? null,
-    week52Low: p?.week52Low ?? null,
-    week52High: p?.week52High ?? null,
-    // Session-stamped by the scraper from the source's own quote timestamp, so this is the
-    // session the reading belongs to rather than the moment we fetched it (#38).
-    sessionDate: p?.lastTradeDate ?? null,
-  };
-}
-
-async function buildContext(stockId: string | null, sessionDate: string | null, now: Date): Promise<VerificationContext> {
-  const base = {
-    previousClose: null as number | null,
-    volumeMedian: null as number | null,
-    maxVolumeMultiple: env.UNIVERSE_MAX_VOLUME_MULTIPLE,
-    maxQuoteAgeDays: env.UNIVERSE_MAX_QUOTE_AGE_DAYS,
-    now,
-  };
-  if (!stockId || !sessionDate) return base;
-
-  const [previousClose, volumes] = await Promise.all([
-    previousCloseBefore(stockId, new Date(sessionDate)),
-    recentVolumes(stockId),
-  ]);
-  return { ...base, previousClose, volumeMedian: median(volumes) };
-}
-
-/** Null out everything the verifier did not accept, so the write cannot carry a bad value. */
-export function applyVerdicts(result: ScrapeResult, verification: VerificationResult): void {
-  if (!result.price) return;
-  for (const v of unwrittenVerdicts(verification)) {
-    switch (v.field) {
-      case 'price': result.price.currentPrice = null; break;
-      case 'change': result.price.change = null; break;
-      case 'changePercent': result.price.changePercent = null; break;
-      case 'volume': result.price.volume = null; break;
-      case 'week52Low': result.price.week52Low = null; break;
-      case 'week52High': result.price.week52High = null; break;
-    }
-  }
-}
-
-function rejectionSummary(verification: VerificationResult): string | undefined {
-  const rejected = verification.verdicts.filter((v) => v.status === 'rejected');
-  if (rejected.length === 0) return undefined;
-  return rejected.map((v) => `${v.field}: ${v.reason ?? 'rejected'}`).join('; ');
-}
-
 /**
- * Scrape one symbol of the universe, verify it, and write only what passed.
+ * Scrape one symbol of the universe and write only what passed verification.
  *
  * A symbol that fails the listing checks is *not* added: an old quote means the page outlived the
  * listing, and creating a row for it would put a dead security back on the dashboard. A symbol
@@ -207,48 +149,41 @@ export async function runUniverseSymbol(
 
   try {
     const { result, outcomes } = await scrapeSymbol(sym);
-    const quote = toScrapedQuote(sym, result);
-    const verification = verifyQuote(quote, await buildContext(existing?.id ?? null, quote.sessionDate, now));
+    const write = await verifyAndPersist(result, { stockId: existing?.id ?? null, now, log });
 
-    if (!verification.listed) {
+    if (!write.listed) {
       log.warn('universe.not_listed', {
-        reason: verification.notListedReason,
-        sessionDate: quote.sessionDate,
-        price: quote.price,
+        reason: write.notListedReason,
+        sessionDate: result.price?.lastTradeDate ?? null,
+        price: result.price?.currentPrice ?? null,
         sources: outcomes,
       });
-      await syncLogRepository.complete(syncLog.id, 'FAILED', started, `not listed: ${verification.notListedReason}`);
-      return { symbol: sym, status: 'NOT_LISTED', written: [], unwritten: [], reason: verification.notListedReason };
+      await syncLogRepository.complete(syncLog.id, 'FAILED', started, `not listed: ${write.notListedReason}`);
+      return { symbol: sym, status: 'NOT_LISTED', written: [], unwritten: [], reason: write.notListedReason };
     }
 
-    const unwritten = unwrittenVerdicts(verification);
-    for (const v of unwritten) {
-      log.warn('universe.field_unwritten', {
-        field: v.field,
-        verdict: v.status,
-        rawValue: v.rawValue ?? null,
-        reason: v.reason,
-        sessionDate: quote.sessionDate,
-      });
-    }
-
-    applyVerdicts(result, verification);
-    await persistScrapeResult(result);
-
-    const status: SymbolOutcome['status'] = unwritten.some((v) => v.status === 'rejected') ? 'PARTIAL' : 'SUCCESS';
-    await syncLogRepository.complete(syncLog.id, status, started, rejectionSummary(verification));
+    const rejection = write.unwritten.find((v) => v.status === 'rejected');
+    await syncLogRepository.complete(
+      syncLog.id,
+      write.status,
+      started,
+      write.unwritten
+        .filter((v) => v.status === 'rejected')
+        .map((v) => `${v.field}: ${v.reason ?? 'rejected'}`)
+        .join('; ') || undefined,
+    );
     log.info('universe.symbol_done', {
       kind,
-      status,
-      written: verification.verdicts.filter((v) => v.status === 'ok').map((v) => v.field),
-      unwritten: unwritten.map((v) => `${v.field}:${v.status}`),
+      status: write.status,
+      written: write.written,
+      unwritten: write.unwritten.map((v) => `${v.field}:${v.status}`),
     });
 
     return {
       symbol: sym,
-      status,
-      written: verification.verdicts.filter((v) => v.status === 'ok').map((v) => v.field),
-      unwritten: unwritten.map((v) => ({ field: v.field, status: v.status, rawValue: v.rawValue ?? null, reason: v.reason })),
+      status: write.listed && rejection ? 'PARTIAL' : write.status,
+      written: write.written,
+      unwritten: write.unwritten,
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
