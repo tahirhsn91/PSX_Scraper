@@ -1,5 +1,6 @@
 import { scrapeSymbol } from '../scrapers/orchestrator';
-import { persistScrapeResult, hasUsablePrice } from '../repositories/scrapeResult.repository';
+import { hasUsablePrice } from '../repositories/scrapeResult.repository';
+import { verifyAndPersist } from './verifiedWrite.service';
 import { syncLogRepository } from '../repositories/syncLog.repository';
 import { stockRepository } from '../repositories/stock.repository';
 import { psxQuoteScraper } from '../scrapers/psxQuotes.scraper';
@@ -48,11 +49,30 @@ export async function runOneSync(symbol: string, onProgress?: ProgressFn): Promi
     const { result, outcomes, partial } = await scrapeSymbol(sym);
     await stampSessionDate(result);
     await onProgress?.(60, 'persisting');
-    await persistScrapeResult(result);
+    // Same door as the universe pass (verifiedWrite.service): a value that fails verification is
+    // not written. Manual and scheduled syncs used to bypass the checks entirely, which is how
+    // SHSML ended up with a price of 354.76 against a 52-week range of 367-540.
+    const write = await verifyAndPersist(result, { stockId: stock?.id ?? null, now: started, log });
     await onProgress?.(100, 'done');
-    const status = partial ? 'PARTIAL' : 'SUCCESS';
-    await syncLogRepository.complete(syncLog.id, status, started);
-    log.info('sync.complete', { status });
+
+    if (!write.listed) {
+      const reason = `not listed: ${write.notListedReason ?? 'unknown'}`;
+      await syncLogRepository.complete(syncLog.id, 'FAILED', started, reason);
+      log.warn('sync.not_listed', { reason: write.notListedReason });
+      return { symbol: sym, status: 'FAILED', outcomes };
+    }
+
+    const status = partial || write.status === 'PARTIAL' ? 'PARTIAL' : 'SUCCESS';
+    await syncLogRepository.complete(
+      syncLog.id,
+      status,
+      started,
+      write.unwritten
+        .filter((v) => v.status === 'rejected')
+        .map((v) => `${v.field}: ${v.reason ?? 'rejected'}`)
+        .join('; ') || undefined,
+    );
+    log.info('sync.complete', { status, written: write.written, unwritten: write.unwritten.length });
     return { symbol: sym, status, outcomes };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
