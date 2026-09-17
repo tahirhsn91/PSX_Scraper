@@ -29,7 +29,7 @@ export const stockService = {
             currentPrice: num(price.currentPrice),
             change: num(price.change),
             changePercent: num(price.changePercent),
-            volume: price.volume ? Number(price.volume) : null,
+            volume: price.volume != null ? Number(price.volume) : null,
             high: num(price.high),
             low: num(price.low),
             open: num(price.open),
@@ -87,7 +87,7 @@ export const stockService = {
     return {
       items: res.items.map((p) => ({
         currentPrice: num(p.currentPrice), open: num(p.open), high: num(p.high),
-        low: num(p.low), close: num(p.close), volume: p.volume ? Number(p.volume) : null,
+        low: num(p.low), close: num(p.close), volume: p.volume != null ? Number(p.volume) : null,
         lastTradeDate: p.lastTradeDate,
       })),
       page, limit, total: res.total, totalPages: Math.ceil(res.total / limit),
