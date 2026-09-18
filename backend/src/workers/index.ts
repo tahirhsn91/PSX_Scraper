@@ -16,6 +16,7 @@ import { processIndexJob } from './indexProcessor';
 import { processQuotePollJob } from './quoteProcessor';
 import { processUniverseJob } from './universeProcessor';
 import { env } from '../config';
+import { auditFeatureSettings } from '../config/envAudit';
 import { logger } from '../utils/logger';
 import { browserPool } from '../scrapers/browserPool';
 import { disconnectPrisma } from '../database/prisma';
