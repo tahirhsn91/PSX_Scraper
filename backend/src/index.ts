@@ -1,7 +1,15 @@
 import { createApp } from './app';
 import { env } from './config';
+import { auditFeatureSettings } from './config/envAudit';
 import { logger } from './utils/logger';
 import { disconnectPrisma } from './database/prisma';
+
+// A feature setting that is absent is not an error — every one has a code default — but a
+// *silent* default is how a release lands with a feature switched off and nothing anywhere
+// saying so. State the effective value of each unset setting at start-up.
+for (const s of auditFeatureSettings()) {
+  logger.warn('config.feature_setting_absent', { setting: s.setting, effective: s.effective, meaning: s.meaning });
+}
 
 const app = createApp();
 const server = app.listen(env.PORT, () => {
