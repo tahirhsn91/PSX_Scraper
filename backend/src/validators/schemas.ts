@@ -13,6 +13,18 @@ export const paginationQuery = z.object({
   limit: z.coerce.number().int().positive().max(200).default(20),
 });
 
+/**
+ * The stocks list query: pagination plus sortable columns.
+ *
+ * `sort` is an enum, not a free string. The repository builds its ORDER BY from the value, so
+ * anything that is not one of these names is refused here — with a 400 that names the field —
+ * rather than reaching the query.
+ */
+export const stocksQuery = paginationQuery.extend({
+  sort: z.enum(['symbol', 'price', 'week52Low', 'week52High', 'changePercent', 'volume']).optional(),
+  order: z.enum(['asc', 'desc']).default('asc'),
+});
+
 export const addStockBody = z.object({ symbol: symbolSchema });
 
 export const symbolParam = z.object({ symbol: symbolSchema });
