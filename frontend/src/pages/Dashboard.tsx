@@ -1,16 +1,40 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
-  TablePagination,
+  TablePagination, TableSortLabel,
   Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert,
   Stack, Grid, Card, CardContent, LinearProgress, Snackbar,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import SyncIcon from '@mui/icons-material/Sync';
+import ArrowUpwardRounded from '@mui/icons-material/ArrowUpwardRounded';
+import ArrowDownwardRounded from '@mui/icons-material/ArrowDownwardRounded';
 import { useStocks, useAddStock, useSyncStatus, useSyncAll } from '../api/hooks';
 import { SearchBar } from '../components/SearchBar';
 import type { ApiError } from '../api/client';
+import type { StockSortField, SortOrder } from '../types';
+
+/**
+ * The pair of arrows on a sortable column: down for ascending, up for descending.
+ *
+ * Both are always drawn, so a column reads as sortable before it has been touched — MUI's own
+ * label hides the icon until hover, and on a phone there is no hover. The active direction is
+ * the solid arrow, the other stays faint. Tapping the header toggles between the two.
+ */
+function SortArrows({ active, direction }: { active?: boolean; direction?: 'asc' | 'desc' }) {
+  const faint = 0.3;
+  return (
+    <Box
+      component="span"
+      aria-hidden="true"
+      sx={{ display: 'inline-flex', flexDirection: 'column', lineHeight: 0, ml: 0.5, verticalAlign: 'middle' }}
+    >
+      <ArrowUpwardRounded sx={{ fontSize: 11, opacity: active && direction === 'desc' ? 1 : faint }} />
+      <ArrowDownwardRounded sx={{ fontSize: 11, mt: '-2px', opacity: active && direction === 'asc' ? 1 : faint }} />
+    </Box>
+  );
+}
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -26,6 +50,43 @@ export function Dashboard() {
   // paged rather than cut off at the first N symbols.
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
+  // Sorting is done by the API, not here: the table shows 50 of ~500 symbols, so ordering in
+  // the browser would only shuffle the page you happen to be looking at.
+  const [sort, setSort] = useState<StockSortField | undefined>(undefined);
+  const [order, setOrder] = useState<SortOrder>('asc');
+
+  /** Another column starts ascending; the same one flips. The page resets with the order —
+   *  page 4 of "volume descending" means nothing once the order changes. */
+  const handleSort = (field: StockSortField) => {
+    if (sort === field) {
+      setOrder((o) => (o === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSort(field);
+      setOrder('asc');
+    }
+    setPage(0);
+  };
+
+  /** A sortable numeric header. */
+  const sortableHeader = (label: string, field: StockSortField) => (
+    <TableCell align="right" sortDirection={sort === field ? order : false}>
+      <TableSortLabel
+        active={sort === field}
+        direction={order}
+        onClick={() => handleSort(field)}
+        // Deliberately not forwarding MUI's icon className: that class fades the icon out on
+        // unsorted columns and rotates it for the direction, and both would fight the two-arrow
+        // affordance. The arrows are drawn entirely from this component's own state (which
+        // column is sorted, and which way), so nothing depends on MUI's internal icon props.
+        IconComponent={() => <SortArrows active={sort === field} direction={order} />}
+        // "52W Low" / "52W High" would otherwise break onto two lines and drop their arrows
+        // out of line with the rest of the header.
+        sx={{ whiteSpace: 'nowrap' }}
+      >
+        {label}
+      </TableSortLabel>
+    </TableCell>
+  );
 
   // Poll queue status continuously; also while a "sync all" just fired so the
   // active/waiting counts (and the progress bar) reflect the fan-out in real time.
@@ -36,7 +97,7 @@ export function Dashboard() {
   const syncingAll = justTriggered || inFlightCount > 0 || queuedCount > 0;
 
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
-  const { data, isLoading, isError } = useStocks(page + 1, rowsPerPage, syncingAll);
+  const { data, isLoading, isError } = useStocks(page + 1, rowsPerPage, syncingAll, sort, order);
 
   // Once the fan-out has actually started showing up in the queue, stop forcing
   // the "just triggered" state — the real counts take over.
@@ -133,11 +194,11 @@ export function Dashboard() {
                     widest, the least load-bearing, and one tap away on the detail page. The
                     numbers are what a mobile dashboard is for, so they stay at every width. */}
                 <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Company</TableCell>
-                <TableCell align="right">Price</TableCell>
-                <TableCell align="right">52W Low</TableCell>
-                <TableCell align="right">52W High</TableCell>
-                <TableCell align="right">Change %</TableCell>
-                <TableCell align="right">Volume</TableCell>
+                {sortableHeader('Price', 'price')}
+                {sortableHeader('52W Low', 'week52Low')}
+                {sortableHeader('52W High', 'week52High')}
+                {sortableHeader('Change %', 'changePercent')}
+                {sortableHeader('Volume', 'volume')}
                 <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Last synced</TableCell>
               </TableRow>
             </TableHead>

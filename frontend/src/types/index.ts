@@ -1,3 +1,11 @@
+/**
+ * Columns the dashboard can sort by, and the direction. Kept in step with the API's `sort`
+ * enum: the server sorts (the table is paginated, so sorting in the browser would only reorder
+ * the fifty rows on screen).
+ */
+export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'changePercent' | 'volume';
+export type SortOrder = 'asc' | 'desc';
+
 export interface StockListItem {
   id: string;
   symbol: string;

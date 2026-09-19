@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { stockRepository } from '../repositories/stock.repository';
+import { stockRepository, StockSortField, SortOrder } from '../repositories/stock.repository';
 import { getStockDetail, getPriceHistory } from '../repositories/stockDetail.repository';
 import { enqueueSync, cancelSyncJob } from '../jobs/queues';
 import { ConflictError, NotFoundError } from '../types/errors';
@@ -9,9 +9,9 @@ import { logger } from '../utils/logger';
 const num = (v: Prisma.Decimal | null): number | null => (v === null ? null : Number(v));
 
 export const stockService = {
-  async list(page: number, limit: number) {
+  async list(page: number, limit: number, sort?: StockSortField, order: SortOrder = 'asc') {
     const offset = (page - 1) * limit;
-    const { items, total } = await stockRepository.list(limit, offset);
+    const { items, total } = await stockRepository.list(limit, offset, sort, order);
     return { items, page, limit, total, totalPages: Math.ceil(total / limit) };
   },
 

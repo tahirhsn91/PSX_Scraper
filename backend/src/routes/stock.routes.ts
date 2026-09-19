@@ -2,12 +2,12 @@ import { Router } from 'express';
 import * as ctrl from '../controllers/stock.controller';
 import { validate } from '../middleware/validate';
 import { asyncHandler } from '../middleware/errorHandler';
-import { paginationQuery, addStockBody, symbolParam, historyQuery, historySyncBody } from '../validators/schemas';
+import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody } from '../validators/schemas';
 import { mutationLimiter } from '../middleware/rateLimit';
 
 const router = Router();
 
-router.get('/', validate(paginationQuery, 'query'), asyncHandler(ctrl.listStocks));
+router.get('/', validate(stocksQuery, 'query'), asyncHandler(ctrl.listStocks));
 router.post('/', mutationLimiter, validate(addStockBody, 'body'), asyncHandler(ctrl.addStock));
 router.get('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.getStock));
 router.delete('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.deleteStock));
