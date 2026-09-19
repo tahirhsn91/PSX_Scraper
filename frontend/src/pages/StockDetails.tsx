@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Box, Typography, Button, Grid, Card, CardContent, Tabs, Tab, Table, TableBody, TableCell,
-  TableHead, TableRow, Chip, LinearProgress, Alert, Skeleton, Stack, Divider,
+  TableContainer, TableHead, TableRow, Chip, LinearProgress, Alert, Skeleton, Stack, Divider,
   ToggleButton, ToggleButtonGroup, useMediaQuery, useTheme,
 } from '@mui/material';
 import SyncIcon from '@mui/icons-material/Sync';
@@ -188,6 +188,7 @@ export function StockDetails() {
       )}
 
       {tab === 1 && (
+        <TableContainer>
         <Table size="small">
           <TableHead><TableRow><TableCell>Year</TableCell><TableCell>Qtr</TableCell><TableCell align="right">EPS</TableCell><TableCell align="right">Sales</TableCell><TableCell align="right">PAT</TableCell><TableCell align="right">Equity</TableCell></TableRow></TableHead>
           <TableBody>
@@ -197,6 +198,7 @@ export function StockDetails() {
             ))}
           </TableBody>
         </Table>
+        </TableContainer>
       )}
 
       {tab === 2 && (
@@ -213,6 +215,7 @@ export function StockDetails() {
       )}
 
       {tab === 3 && (
+        <TableContainer>
         <Table size="small">
           <TableHead><TableRow><TableCell>Announced</TableCell><TableCell>Book closure</TableCell><TableCell>Payment</TableCell><TableCell align="right">Dividend</TableCell></TableRow></TableHead>
           <TableBody>
@@ -227,6 +230,7 @@ export function StockDetails() {
             ))}
           </TableBody>
         </Table>
+        </TableContainer>
       )}
       <Divider sx={{ mt: 4 }} />
     </Box>

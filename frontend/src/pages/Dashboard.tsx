@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination,
+  Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
+  TablePagination,
   Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert,
   Stack, Grid, Card, CardContent, LinearProgress, Snackbar,
 } from '@mui/material';
@@ -120,48 +121,56 @@ export function Dashboard() {
       {isError && <Alert severity="error">Failed to load stocks.</Alert>}
 
       <Paper variant="outlined">
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Symbol</TableCell>
-              <TableCell>Company</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">52W Low</TableCell>
-              <TableCell align="right">52W High</TableCell>
-              <TableCell align="right">Change %</TableCell>
-              <TableCell align="right">Volume</TableCell>
-              <TableCell>Last synced</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {isLoading &&
-              Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
-              ))}
-            {data?.items.length === 0 && !isLoading && (
-              <TableRow><TableCell colSpan={8} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
-            )}
-            {data?.items.map((s) => (
-              <TableRow key={s.id} hover sx={{ cursor: 'pointer' }} onClick={() => navigate(`/stocks/${s.symbol}`)}>
-                <TableCell><strong>{s.symbol}</strong></TableCell>
-                <TableCell>{s.companyName ?? '—'}</TableCell>
-                <TableCell align="right">{s.currentPrice ?? '—'}</TableCell>
-                {/* Null means "the page had no 52-week block", so it reads as a dash rather
-                    than a zero — the API never substitutes a value here. */}
-                <TableCell align="right">{s.week52Low ?? '—'}</TableCell>
-                <TableCell align="right">{s.week52High ?? '—'}</TableCell>
-                <TableCell align="right">
-                  {s.changePercent != null ? (
-                    <Chip size="small" color={s.changePercent >= 0 ? 'success' : 'error'} label={`${s.changePercent.toFixed(2)}%`} />
-                  ) : '—'}
-                </TableCell>
-                {/* Thousands separators: session volumes run to seven figures. */}
-                <TableCell align="right">{s.volume != null ? s.volume.toLocaleString() : '—'}</TableCell>
-                <TableCell>{s.lastSyncedAt ? new Date(s.lastSyncedAt).toLocaleString() : 'never'}</TableCell>
+        {/* Eight columns do not fit a phone. TableContainer gives the table its own horizontal
+            scroll area; without one the table pushed the *page* sideways — at a 384px viewport
+            the document measured 835px (a 451px overflow), so every row ran off the screen. */}
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Symbol</TableCell>
+                {/* Company and "Last synced" are the two columns a phone cannot afford: the
+                    widest, the least load-bearing, and one tap away on the detail page. The
+                    numbers are what a mobile dashboard is for, so they stay at every width. */}
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Company</TableCell>
+                <TableCell align="right">Price</TableCell>
+                <TableCell align="right">52W Low</TableCell>
+                <TableCell align="right">52W High</TableCell>
+                <TableCell align="right">Change %</TableCell>
+                <TableCell align="right">Volume</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Last synced</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {isLoading &&
+                Array.from({ length: 5 }).map((_, i) => (
+                  <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
+                ))}
+              {data?.items.length === 0 && !isLoading && (
+                <TableRow><TableCell colSpan={8} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
+              )}
+              {data?.items.map((s) => (
+                <TableRow key={s.id} hover sx={{ cursor: 'pointer' }} onClick={() => navigate(`/stocks/${s.symbol}`)}>
+                  <TableCell><strong>{s.symbol}</strong></TableCell>
+                  <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{s.companyName ?? '—'}</TableCell>
+                  <TableCell align="right">{s.currentPrice ?? '—'}</TableCell>
+                  {/* Null means "the page had no 52-week block", so it reads as a dash rather
+                      than a zero — the API never substitutes a value here. */}
+                  <TableCell align="right">{s.week52Low ?? '—'}</TableCell>
+                  <TableCell align="right">{s.week52High ?? '—'}</TableCell>
+                  <TableCell align="right">
+                    {s.changePercent != null ? (
+                      <Chip size="small" color={s.changePercent >= 0 ? 'success' : 'error'} label={`${s.changePercent.toFixed(2)}%`} />
+                    ) : '—'}
+                  </TableCell>
+                  {/* Thousands separators: session volumes run to seven figures. */}
+                  <TableCell align="right">{s.volume != null ? s.volume.toLocaleString() : '—'}</TableCell>
+                  <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{s.lastSyncedAt ? new Date(s.lastSyncedAt).toLocaleString() : 'never'}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
         <TablePagination
           component="div"
           count={data?.total ?? 0}
