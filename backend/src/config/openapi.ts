@@ -88,6 +88,24 @@ export const openapiSpec = {
         parameters: [
           { $ref: '#/components/parameters/Page' },
           { $ref: '#/components/parameters/Limit' },
+          {
+            name: 'sort',
+            in: 'query',
+            description:
+              'Column to sort by: `symbol` (the default), `price`, `week52Low`, `week52High`, ' +
+              '`changePercent` or `volume`. Any other value is rejected with 400. Rows with no ' +
+              'value for that column sort last in both directions, and symbol breaks ties.',
+            schema: {
+              type: 'string',
+              enum: ['symbol', 'price', 'week52Low', 'week52High', 'changePercent', 'volume'],
+            },
+          },
+          {
+            name: 'order',
+            in: 'query',
+            description: 'Direction for `sort`: `asc` (default) or `desc`.',
+            schema: { type: 'string', enum: ['asc', 'desc'], default: 'asc' },
+          },
         ],
         responses: {
           '200': {

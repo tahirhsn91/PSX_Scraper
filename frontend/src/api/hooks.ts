@@ -2,11 +2,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
   Paginated, StockListItem, StockDetail, SearchResult, PriceRow, SyncLog, SyncStatus,
-  HistoryRange, HistoryJobStatus,
+  HistoryRange, HistoryJobStatus, StockSortField, SortOrder,
 } from '../types';
 
 export const keys = {
-  stocks: (page: number, limit: number) => ['stocks', page, limit] as const,
+  stocks: (page: number, limit: number, sort?: StockSortField, order: SortOrder = 'asc') =>
+    ['stocks', page, limit, sort ?? 'symbol', order] as const,
   stock: (symbol: string) => ['stock', symbol] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
@@ -15,10 +16,19 @@ export const keys = {
   syncLogs: (params: unknown) => ['sync', 'logs', params] as const,
 };
 
-export const useStocks = (page = 1, limit = 20, poll = false) =>
+export const useStocks = (
+  page = 1,
+  limit = 20,
+  poll = false,
+  sort?: StockSortField,
+  order: SortOrder = 'asc',
+) =>
   useQuery({
-    queryKey: keys.stocks(page, limit),
-    queryFn: async () => (await api.get<Paginated<StockListItem>>('/stocks', { params: { page, limit } })).data,
+    // The sort belongs in the key: a different order is a different page of data, not a
+    // re-render of this one.
+    queryKey: keys.stocks(page, limit, sort, order),
+    queryFn: async () =>
+      (await api.get<Paginated<StockListItem>>('/stocks', { params: { page, limit, sort, order } })).data,
     // Poll while a sync-all fan-out is in flight so prices / "last synced" update live.
     refetchInterval: poll ? 4000 : false,
   });
