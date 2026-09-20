@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
   Paginated, StockListItem, StockDetail, SearchResult, PriceRow, SyncLog, SyncStatus,
-  HistoryRange, HistoryJobStatus, StockSortField, SortOrder,
+  HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
 } from '../types';
 
 export const keys = {
@@ -11,6 +11,7 @@ export const keys = {
   stock: (symbol: string) => ['stock', symbol] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
+  candles: (symbol: string) => ['candles', symbol] as const,
   historyStatus: (symbol: string) => ['history-status', symbol] as const,
   syncStatus: ['sync', 'status'] as const,
   syncLogs: (params: unknown) => ['sync', 'logs', params] as const,
@@ -31,6 +32,17 @@ export const useStocks = (
       (await api.get<Paginated<StockListItem>>('/stocks', { params: { page, limit, sort, order } })).data,
     // Poll while a sync-all fan-out is in flight so prices / "last synced" update live.
     refetchInterval: poll ? 4000 : false,
+  });
+
+/**
+ * Daily candles for the chart: every session we hold for the symbol, oldest first. The API
+ * defaults the window to "everything on record", which is what the candle view opens on.
+ */
+export const useCandles = (symbol: string) =>
+  useQuery({
+    queryKey: keys.candles(symbol),
+    queryFn: async () => (await api.get<CandleSeries>(`/stocks/${symbol}/candles`)).data,
+    enabled: !!symbol,
   });
 
 export const useStock = (symbol: string) =>
