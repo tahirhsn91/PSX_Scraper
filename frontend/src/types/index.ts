@@ -4,6 +4,33 @@
  * the fifty rows on screen).
  */
 export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'changePercent' | 'volume';
+
+/**
+ * One daily candle. `open`/`high`/`low` are null when the source did not report them — the
+ * historical EOD feed carries open + close + volume, the live quote carries high/low + close
+ * + volume — and the API does not fill the gaps, so the renderer decides how to draw them.
+ */
+export interface Candle {
+  time: string; // exchange session day, YYYY-MM-DD
+  open: number | null;
+  high: number | null;
+  low: number | null;
+  close: number;
+  volume: number | null;
+}
+
+export interface CandleSeries {
+  symbol: string;
+  interval: '1D';
+  count: number;
+  /** Readings discarded because they cannot belong to this symbol (contaminated rows). */
+  skipped: number;
+  /** Readings kept with implausible individual fields nulled. */
+  sanitised: number;
+  from: string | null;
+  to: string | null;
+  items: Candle[];
+}
 export type SortOrder = 'asc' | 'desc';
 
 export interface StockListItem {

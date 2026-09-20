@@ -8,9 +8,12 @@ import {
 import SyncIcon from '@mui/icons-material/Sync';
 import DownloadIcon from '@mui/icons-material/Download';
 import { LineChart } from '@mui/x-charts/LineChart';
+import { CandleChart } from '../components/CandleChart';
+import { TradingViewChart } from '../components/TradingViewChart';
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  useStock, useHistory, useSyncStock, useSyncStatus, useFetchHistory, useHistoryStatus, keys,
+  useStock, useHistory, useSyncStock, useSyncStatus, useFetchHistory, useHistoryStatus,
+  useCandles, keys,
 } from '../api/hooks';
 import type { HistoryRange } from '../types';
 
@@ -35,6 +38,9 @@ function Stat({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
+/** Candles are ours; the TradingView tab is their widget; the line view is the older chart. */
+type ChartMode = 'candles' | 'line' | 'tradingview';
+
 export function StockDetails() {
   const { symbol = '' } = useParams();
   const theme = useTheme();
@@ -43,6 +49,10 @@ export function StockDetails() {
   const { data, isLoading, isError } = useStock(symbol);
   const [range, setRange] = useState<HistoryRange>('1Y');
   const { data: history, isFetching: historyLoading } = useHistory(symbol, range);
+  // Candles ignore the range preset on purpose: the ask is "from the earliest session on
+  // record until now", and the API's default window is exactly that.
+  const [chartMode, setChartMode] = useState<ChartMode>('candles');
+  const { data: candles, isLoading: candlesLoading } = useCandles(symbol);
   const syncStock = useSyncStock();
   const { data: status } = useSyncStatus(syncStock.isPending);
   const [tab, setTab] = useState(0);
@@ -167,7 +177,50 @@ export function StockDetails() {
             </Alert>
           )}
 
-          {historyLoading ? (
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ sm: 'center' }} sx={{ mb: 1 }}>
+            <ToggleButtonGroup
+              size="small"
+              exclusive
+              value={chartMode}
+              onChange={(_e, v: ChartMode | null) => v && setChartMode(v)}
+              aria-label="chart type"
+            >
+              <ToggleButton value="candles">Candles</ToggleButton>
+              <ToggleButton value="line">Line</ToggleButton>
+              <ToggleButton value="tradingview">TradingView</ToggleButton>
+            </ToggleButtonGroup>
+            <Typography variant="caption" color="text.secondary">
+              {chartMode === 'tradingview'
+                ? 'TradingView data, rendered by their widget'
+                : chartMode === 'candles'
+                  ? 'Our stored sessions, oldest first'
+                  : `Our stored sessions, ${range} window`}
+            </Typography>
+          </Stack>
+
+          {chartMode === 'candles' ? (
+            candlesLoading ? (
+              <Skeleton height={340} />
+            ) : (
+              <>
+                <CandleChart data={candles} height={isMobile ? 260 : 380} />
+                {candles && (
+                  <Typography variant="caption" color="text.secondary">
+                    {candles.count} daily candles · {candles.from ?? '—'} → {candles.to ?? '—'}
+                    {candles.sanitised > 0 && ` · ${candles.sanitised} readings with impossible fields ignored`}
+                    {candles.skipped > 0 && ` · ${candles.skipped} readings discarded as impossible`}
+                  </Typography>
+                )}
+              </>
+            )
+          ) : chartMode === 'tradingview' ? (
+            <>
+              <TradingViewChart symbol={symbol} height={isMobile ? 360 : 460} />
+              <Typography variant="caption" color="text.secondary">
+                Embedded from TradingView — nothing scraped, nothing stored.
+              </Typography>
+            </>
+          ) : historyLoading ? (
             <Skeleton height={320} />
           ) : chart.length > 1 ? (
             <LineChart
