@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { stockService } from '../services/stock.service';
 import { syncService } from '../services/sync.service';
 import { valid } from '../middleware/validate';
-import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody } from '../validators/schemas';
+import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, candlesQuery } from '../validators/schemas';
 
 type StocksQuery = z.infer<typeof stocksQuery>;
 type Sym = z.infer<typeof symbolParam>;
@@ -33,6 +33,12 @@ export const deleteStock: RequestHandler = async (req, res) => {
 export const syncStock: RequestHandler = async (req, res) => {
   const { symbol } = valid<Sym>(req, 'params');
   res.status(202).json(await syncService.syncOne(symbol));
+};
+
+export const stockCandles: RequestHandler = async (req, res) => {
+  const { symbol } = valid<Sym>(req, 'params');
+  const q = valid<z.infer<typeof candlesQuery>>(req, 'query');
+  res.json(await stockService.candles(symbol, q));
 };
 
 export const stockHistory: RequestHandler = async (req, res) => {

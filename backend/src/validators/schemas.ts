@@ -46,6 +46,20 @@ export const historyQuery = z.object({
 
 export const historySyncBody = z.object({ range: rangeSchema });
 
+/**
+ * Candle query. Daily is the only interval PSX supports for us — one session per symbol per
+ * day — so anything finer would be invented; `1D` is the enum's only member and the place to
+ * extend when an intraday source lands.
+ *
+ * Omit both dates and you get every session we hold, oldest first, which is what the chart
+ * asks for ("the past available date till now").
+ */
+export const candlesQuery = z.object({
+  interval: z.enum(['1D']).default('1D'),
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
+});
+
 export const logsQuery = z.object({
   symbol: z.string().trim().optional(),
   status: z.enum(['PENDING', 'RUNNING', 'SUCCESS', 'PARTIAL', 'FAILED']).optional(),
