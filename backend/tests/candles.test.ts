@@ -1,5 +1,6 @@
 import { candleDay, toCandle, buildCandles, type Candle } from '../src/repositories/stockDetail.repository';
 import { candlesQuery } from '../src/validators/schemas';
+import { rangeToFrom, HISTORY_RANGES } from '../src/utils/range';
 
 /**
  * The chart's data contract. Two things here are worth protecting: a candle is never invented
@@ -126,6 +127,28 @@ describe('buildCandles', () => {
   });
 });
 
+describe('range presets', () => {
+  const now = new Date('2026-09-20T12:00:00.000Z');
+
+  it('turns each preset into a lower bound, and MAX into none at all', () => {
+    expect(rangeToFrom('1W', now)!.toISOString().slice(0, 10)).toBe('2026-09-13');
+    expect(rangeToFrom('1M', now)!.toISOString().slice(0, 10)).toBe('2026-08-20');
+    expect(rangeToFrom('6M', now)!.toISOString().slice(0, 10)).toBe('2026-03-20');
+    expect(rangeToFrom('1Y', now)!.toISOString().slice(0, 10)).toBe('2025-09-20');
+    expect(rangeToFrom('3Y', now)!.toISOString().slice(0, 10)).toBe('2023-09-20');
+    expect(rangeToFrom('5Y', now)!.toISOString().slice(0, 10)).toBe('2021-09-20');
+    expect(rangeToFrom('MAX', now)).toBeUndefined();
+  });
+
+  it('gives every preset a distinct lower bound', () => {
+    const bounds = HISTORY_RANGES.filter((r) => r !== 'MAX').map((r) => rangeToFrom(r, now)!.getTime());
+    expect(new Set(bounds).size).toBe(bounds.length);
+    // And a wider range always starts earlier than a narrower one.
+    expect(rangeToFrom('1M', now)!.getTime()).toBeGreaterThan(rangeToFrom('6M', now)!.getTime());
+    expect(rangeToFrom('6M', now)!.getTime()).toBeGreaterThan(rangeToFrom('1Y', now)!.getTime());
+  });
+});
+
 describe('the candles query', () => {
   it('defaults to daily and accepts an explicit window', () => {
     expect(candlesQuery.parse({}).interval).toBe('1D');
@@ -139,5 +162,15 @@ describe('the candles query', () => {
     for (const bad of ['5m', '1h', '1W', '1M', '', 'D']) {
       expect(candlesQuery.safeParse({ interval: bad }).success).toBe(false);
     }
+  });
+
+  it('accepts the dashboard range presets, including the new 6M', () => {
+    for (const range of HISTORY_RANGES) {
+      expect(candlesQuery.parse({ range }).range).toBe(range);
+    }
+    expect(HISTORY_RANGES).toEqual(['1W', '1M', '6M', '1Y', '2Y', '3Y', '5Y', 'MAX']);
+    // 2Y stays accepted for clients that still ask for it, even though the button row dropped it.
+    expect(candlesQuery.parse({ range: '2Y' }).range).toBe('2Y');
+    expect(candlesQuery.safeParse({ range: '2D' }).success).toBe(false);
   });
 });

@@ -94,22 +94,37 @@ export function parseDailyBars(payload: YahooChart): DailyBar[] {
   return bars;
 }
 
+/**
+ * How long a single request may take. Without this, one stalled connection hangs the whole
+ * backfill pass — which is exactly what happened: the run sat on one symbol for minutes while
+ * every later symbol waited.
+ */
+const REQUEST_TIMEOUT_MS = 20000;
+
 async function getJson(url: string, attempt = 1): Promise<YahooChart> {
-  const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
-  if (res.status === 429 || res.status >= 500) {
-    if (attempt <= 3) {
-      // Yahoo rate-limits; back off rather than hammering it, and never retry a 404 (that
-      // symbol simply is not in their universe).
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': UA, Accept: 'application/json' },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+    if (!res.ok) {
+      const body = res.status === 404 ? '' : (await res.text()).slice(0, 120);
+      throw new SiteUnavailableError(`yahoo http ${res.status}${body ? `: ${body}` : ''}`);
+    }
+    return (await res.json()) as YahooChart;
+  } catch (e) {
+    const msg = (e as Error).message ?? String(e);
+    // A 404 means the instrument is not in their universe (ETFs, indices): report it, never
+    // retry it. Everything else — rate limits, 5xx, timeouts, resets — backs off and retries.
+    const retryable = !msg.includes('404');
+    if (retryable && attempt <= 3) {
       await new Promise((r) => setTimeout(r, attempt * 1500));
       return getJson(url, attempt + 1);
     }
-    throw new SiteUnavailableError(`yahoo http ${res.status}`);
+    throw e instanceof SiteUnavailableError
+      ? e
+      : new SiteUnavailableError(`yahoo: ${msg.slice(0, 90)}`);
   }
-  if (!res.ok) {
-    const body = (await res.text()).slice(0, 120);
-    throw new SiteUnavailableError(`yahoo http ${res.status}: ${body}`);
-  }
-  return (await res.json()) as YahooChart;
 }
 
 /** Daily bars for a PSX symbol. Throws when Yahoo has no series for it (ETFs, indices). */
