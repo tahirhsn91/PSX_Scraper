@@ -142,10 +142,29 @@ export function Dashboard() {
 
   return (
     <Box>
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={2} mb={2}>
-
+      {/* The ribbon is its own full-width row: as a flex child of the header below it competed
+          with the title for space and squeezed it into a wrapped, right-hand corner. */}
       <IndicesTicker indices={indexBoard?.items} />
-        <Typography variant="h4">Dashboard Scrapper</Typography>
+
+      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={2} mb={2}>
+        <Typography
+          variant="h5"
+          sx={{
+            // Kept on one line and slid the way the ribbon above slides, but inside its own box so
+            // the title stays readable. A reader who has asked their system for less motion gets a
+            // still title.
+            whiteSpace: 'nowrap',
+            '@keyframes titleSlide': {
+              '0%': { transform: 'translateX(0)' },
+              '50%': { transform: 'translateX(-10px)' },
+              '100%': { transform: 'translateX(0)' },
+            },
+            animation: 'titleSlide 5s ease-in-out infinite',
+            '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
+          }}
+        >
+          Dashboard Scrapper
+        </Typography>
         <Stack direction="row" spacing={1}>
           <Button
             variant="outlined"
