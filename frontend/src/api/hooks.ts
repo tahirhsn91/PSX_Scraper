@@ -11,7 +11,7 @@ export const keys = {
   stock: (symbol: string) => ['stock', symbol] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
-  candles: (symbol: string) => ['candles', symbol] as const,
+  candles: (symbol: string, range: HistoryRange) => ['candles', symbol, range] as const,
   historyStatus: (symbol: string) => ['history-status', symbol] as const,
   syncStatus: ['sync', 'status'] as const,
   syncLogs: (params: unknown) => ['sync', 'logs', params] as const,
@@ -35,13 +35,14 @@ export const useStocks = (
   });
 
 /**
- * Daily candles for the chart: every session we hold for the symbol, oldest first. The API
- * defaults the window to "everything on record", which is what the candle view opens on.
+ * Daily candles for the chart, for the selected range. The API resolves the preset to a
+ * lower bound, so 1W really is one week rather than the whole decade we hold.
  */
-export const useCandles = (symbol: string) =>
+export const useCandles = (symbol: string, range: HistoryRange) =>
   useQuery({
-    queryKey: keys.candles(symbol),
-    queryFn: async () => (await api.get<CandleSeries>(`/stocks/${symbol}/candles`)).data,
+    queryKey: keys.candles(symbol, range),
+    queryFn: async () =>
+      (await api.get<CandleSeries>(`/stocks/${symbol}/candles`, { params: { range } })).data,
     enabled: !!symbol,
   });
 

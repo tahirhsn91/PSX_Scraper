@@ -94,13 +94,16 @@ export const stockService = {
    * No dates means "every session we hold" — the chart's default request, and what makes the
    * view open on the earliest day on record rather than a fixed window.
    */
-  async candles(symbol: string, opts: { interval?: '1D'; from?: Date; to?: Date }) {
-    const res = await getCandles(symbol, opts.from, opts.to);
+  async candles(symbol: string, opts: { interval?: '1D'; range?: HistoryRange; from?: Date; to?: Date }) {
+    // A range preset wins over an explicit from, matching how /history resolves it.
+    const from = opts.range ? rangeToFrom(opts.range) : opts.from;
+    const res = await getCandles(symbol, from, opts.to);
     if (res === null) throw new NotFoundError(`Stock not tracked: ${symbol.toUpperCase()}`);
     const items: Candle[] = res.items;
     return {
       symbol: symbol.toUpperCase(),
       interval: opts.interval ?? '1D',
+      range: opts.range ?? null,
       count: items.length,
       // Readings thrown away, and readings kept with implausible fields nulled (see
       // buildCandles). Both are reported so contaminated sessions are visible in the response
