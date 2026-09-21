@@ -83,14 +83,35 @@ describe('buildCandles', () => {
   });
 
   it('drops a reading that cannot belong to the symbol, and counts it', () => {
-    // 48,131 is a KSE-100 level that the index history wrote against FFC (which trades ~530).
+    // 48,131 is a KSE-100 level that the index history wrote against FFC (which trades ~530),
+    // in the same session as the real price.
     const out = buildCandles([
       p('2026-09-15', { close: 530 }),
       p('2026-09-15', { close: 48131.13 }),
+      p('2026-09-15', { close: 531.5 }),
       p('2026-09-16', { close: 531.76 }),
     ]);
-    expect(out.items.map((c) => c.close)).toEqual([530, 531.76]);
+    expect(out.items.map((c) => c.close)).toEqual([531.5, 531.76]);
     expect(out.skipped).toBe(1);
+  });
+
+  it('keeps every year of a stock whose price multiplied, which a whole-history median deleted', () => {
+    // The regression that mattered: a symbol that went up 1000x had its early sessions judged
+    // against its own lifetime median and thrown away as impossible. Sessions are independent.
+    const out = buildCandles([
+      p('2020-01-01', { close: 5 }), p('2021-01-01', { close: 50 }),
+      p('2022-01-01', { close: 500 }), p('2023-01-01', { close: 5000 }),
+    ]);
+    expect(out.items.map((c) => c.close)).toEqual([5, 50, 500, 5000]);
+    expect(out.skipped).toBe(0);
+  });
+
+  it('takes a lone reading as it stands rather than judging it against history', () => {
+    // One row in a session is the normal case (the live poll, or the backfill). There is
+    // nothing to compare it with inside the day, and a whole-history comparison is unsound.
+    const out = buildCandles([p('2026-09-18', { close: 534.5 }), p('2019-01-01', { close: 12 })]);
+    expect(out.items.map((c) => c.close)).toEqual([12, 534.5]);
+    expect(out.skipped).toBe(0);
   });
 
   it('still returns the real sessions of a contaminated day', () => {
@@ -104,13 +125,17 @@ describe('buildCandles', () => {
 
   it('nulls an impossible field but keeps the values that reading got right', () => {
     // Dev really has this: an FFC row with a plausible close but an index level in open/high,
-    // and rows whose low is single digits. The close is kept; only the bad fields are dropped.
+    // in a session that also carries the real readings. The close is kept; the bad fields go.
     const out = buildCandles([
       p('2026-09-15', { open: 48131.13, high: 48131.13, low: 7, close: 530, volume: 1000 }),
+      p('2026-09-15', { open: 529.5, high: 532, low: 528, close: 530.5, volume: 1200 }),
     ]);
-    expect(out.items).toEqual([{
-      time: '2026-09-15', open: null, high: null, low: null, close: 530, volume: 1000,
-    }]);
+    const day = out.items[0]!;
+    expect(day.time).toBe('2026-09-15');
+    expect(day.close).toBe(530.5);   // newest reading wins the close
+    expect(day.open).toBe(529.5);    // taken from the reading that has a sane one
+    expect(day.high).toBe(532);
+    expect(day.low).toBe(528);
     expect(out.sanitised).toBe(1);
     expect(out.skipped).toBe(0);
   });
