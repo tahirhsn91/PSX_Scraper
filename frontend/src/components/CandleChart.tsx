@@ -34,6 +34,9 @@ import type { CandleSeries, HistoryRange } from '../types';
  * changed), leaving the new, empty series on screen. So the latest data lives in a ref and is
  * drawn whenever a chart is (re)built, not only when the data changes.
  */
+/** One session as the API returns it. */
+type Candle = CandleSeries['items'][number];
+
 export function CandleChart({
   data,
   range,
@@ -47,6 +50,8 @@ export function CandleChart({
   const chartRef = useRef<IChartApi | null>(null);
   const candleRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
   const volumeRef = useRef<ISeriesApi<'Histogram'> | null>(null);
+  /** One line series per run of close-only sessions — see the note in draw(). */
+  const lineRefs = useRef<ISeriesApi<'Line'>[]>([]);
   const dataRef = useRef<CandleSeries | undefined>(data);
   /** Which preset the current view is showing, so a redraw does not yank a panned view back. */
   const appliedRef = useRef<HistoryRange | null>(null);
@@ -59,15 +64,58 @@ export function CandleChart({
   const draw = (series: CandleSeries | undefined, preset: HistoryRange, force: boolean) => {
     if (!candleRef.current || !volumeRef.current || !chartRef.current) return;
     const items = series?.items ?? [];
-    candleRef.current.setData(items.map((c) => {
-      const open = c.open ?? c.close;
-      return {
-        time: c.time as unknown as UTCTimestamp,
-        open,
-        high: c.high ?? Math.max(open, c.close),
-        low: c.low ?? Math.min(open, c.close),
-        close: c.close,
-      };
+    const hasOpen = (c: Candle) => c.open !== null && c.open !== undefined;
+
+    candleRef.current.setData(items.filter(hasOpen).map((c) => ({
+      time: c.time as unknown as UTCTimestamp,
+      open: c.open as number,
+      high: c.high ?? Math.max(c.open as number, c.close),
+      low: c.low ?? Math.min(c.open as number, c.close),
+      close: c.close,
+    })));
+
+    /**
+     * Sessions whose source reported only a level (no open/high/low) are drawn as lines rather
+     * than candles: a candle would need a body and a wick it does not have, so each of those
+     * sessions would render as a flat zero-height tick, and thousands of them read as a broken
+     * dotted line.
+     *
+     * They arrive as *runs*, not just as a prefix: an index holds its old era without opens, and
+     * also the sessions scraped live since the last one that had an open. Each run gets its own
+     * series — one line cannot span two runs without drawing straight across the candle era — and
+     * a run is extended by the next session when there is one, so the line meets the candles
+     * rather than stopping short of them. No runs at all (every stock chart) means no line.
+     */
+    const runs: Candle[][] = [];
+    let run: Candle[] = [];
+    for (const c of items) {
+      if (hasOpen(c)) {
+        if (run.length > 0) { run.push(c); runs.push(run); run = []; }
+      } else {
+        run.push(c);
+      }
+    }
+    if (run.length > 0) runs.push(run);
+
+    const chart = chartRef.current;
+    while (lineRefs.current.length < runs.length) {
+      lineRefs.current.push(chart.addLineSeries({ color: '#26a69a', lineWidth: 1, priceLineVisible: false, lastValueVisible: false }));
+    }
+    while (lineRefs.current.length > runs.length) {
+      const spare = lineRefs.current.pop();
+      if (spare) chart.removeSeries(spare);
+    }
+    runs.forEach((points, i) => lineRefs.current[i]!.setData(
+      points.map((c) => ({ time: c.time as unknown as UTCTimestamp, value: c.close })),
+    ));
+
+    // The dashed price line and the "last value" badge belong to whichever series holds the newest
+    // session — the trailing line when the newest sessions are close-only, otherwise the candles.
+    const newestIsCloseOnly = items.length > 0 && !hasOpen(items[items.length - 1]!);
+    candleRef.current.applyOptions({ priceLineVisible: !newestIsCloseOnly, lastValueVisible: !newestIsCloseOnly });
+    lineRefs.current.forEach((series, i) => series.applyOptions({
+      priceLineVisible: newestIsCloseOnly && i === lineRefs.current.length - 1,
+      lastValueVisible: newestIsCloseOnly && i === lineRefs.current.length - 1,
     }));
     volumeRef.current.setData(items.map((c) => ({
       time: c.time as unknown as UTCTimestamp,
@@ -112,7 +160,16 @@ export function CandleChart({
         horzLines: { color: 'rgba(128,128,128,0.12)' },
       },
       rightPriceScale: { borderVisible: false },
-      timeScale: { borderVisible: false, timeVisible: false, secondsVisible: false },
+      timeScale: {
+        borderVisible: false,
+        timeVisible: false,
+        secondsVisible: false,
+        // A 16-year index series is ~4,000 daily bars. At the library's default minimum bar
+        // spacing (0.5px) that needs ~2,000px of width, so "MAX" silently clamped to the most
+        // recent few years. This lets the whole series fit in a normal chart width, which is what
+        // MAX says it does; zooming in restores full candles.
+        minBarSpacing: 0.15,
+      },
       // Panning back through history is the point of this chart, so it stays enabled;
       // the vertical price scale is fixed to the data instead of to the window.
       handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false },
@@ -139,6 +196,7 @@ export function CandleChart({
       chartRef.current = null;
       candleRef.current = null;
       volumeRef.current = null;
+      lineRefs.current = [];
       appliedRef.current = null;
     };
   }, [height]);

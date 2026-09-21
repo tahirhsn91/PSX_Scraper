@@ -55,6 +55,9 @@ export function IndexDetail() {
   if (isError || !data) return <Alert severity="error">Could not load index {symbol}. It may not be tracked yet.</Alert>;
 
   const change = data.change;
+  // Sessions the source gave only a level for: drawn as a line, and worth saying out loud rather
+  // than letting the chart look like it is missing something.
+  const closeOnly = candles?.items.filter((c) => c.open === null).length ?? 0;
   const tone = change === null ? undefined : change > 0 ? 'success.main' : change < 0 ? 'error.main' : undefined;
 
   return (
@@ -109,9 +112,11 @@ export function IndexDetail() {
           <CandleChart data={candles} range={range} height={380} />
           {candles && (
             <Typography variant="caption" color="text.secondary">
-              {candles.count} daily candles stored
+              {candles.count} daily sessions stored
               {candles.items.length > 0 && ` (${candles.items[0]!.time} → ${candles.items[candles.items.length - 1]!.time})`}
-              {' '}— index history is whatever we have collected, so a young series is expected for indices added recently
+              {closeOnly > 0
+                ? ` — ${closeOnly} of them close-only, drawn as a line: the exchange publishes no open/high/low for those sessions and no reachable source carries it, so none is invented`
+                : ' — full open/high/low candles'}
             </Typography>
           )}
         </>
