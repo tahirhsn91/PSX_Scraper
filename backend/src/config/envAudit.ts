@@ -49,6 +49,16 @@ export const FEATURE_SETTINGS: FeatureSetting[] = [
     effective: () => String(env.QUOTE_POLL_MARKET_HOURS_ONLY),
   },
   {
+    name: 'DAILY_BOARD_ENABLED',
+    effect: 'the daily board pass never runs, so a new listing is only picked up by the universe worker during market hours',
+    effective: () => String(env.DAILY_BOARD_ENABLED),
+  },
+  {
+    name: 'DAILY_BOARD_HOUR',
+    effect: 'default 2: the board pass runs at 02:00 Karachi (21:00 UTC), after the session has settled',
+    effective: () => String(env.DAILY_BOARD_HOUR),
+  },
+  {
     name: 'CRON_EXPRESSION',
     effect: 'default 0 * * * *: full board sync / index cadence',
     effective: () => env.CRON_EXPRESSION,
