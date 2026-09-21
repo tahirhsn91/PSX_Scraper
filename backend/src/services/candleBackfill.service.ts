@@ -29,6 +29,8 @@ export interface BackfillStats {
   inserted: number;
   filled: number;
   skipped: number;
+  /** True when the symbol was already deep enough and no request was made at all. */
+  alreadyDeep?: boolean;
 }
 
 /** What the database already holds for one session, as plain numbers. */
@@ -77,10 +79,19 @@ function toNumOrNull(v: unknown): number | null {
 }
 
 /** One symbol: fetch its full daily history and fill in whatever we are missing. */
-export async function backfillSymbol(symbol: string): Promise<BackfillStats> {
+export async function backfillSymbol(symbol: string, minSessions = 0): Promise<BackfillStats> {
   const sym = symbol.trim().toUpperCase();
   const stock = await prisma.stock.findUnique({ where: { symbol: sym }, select: { id: true } });
   if (!stock) throw new Error(`not tracked: ${sym}`);
+
+  // Already deep? Ask for nothing. Re-running the pass must not re-download a decade of bars
+  // for every symbol it has already filled.
+  if (minSessions > 0) {
+    const have = await prisma.stockPrice.count({ where: { stockId: stock.id } });
+    if (have >= minSessions) {
+      return { symbol: sym, barsFetched: 0, inserted: 0, filled: 0, skipped: have, alreadyDeep: true };
+    }
+  }
 
   const bars = await fetchDailyBars(sym);
   const rows = await prisma.stockPrice.findMany({

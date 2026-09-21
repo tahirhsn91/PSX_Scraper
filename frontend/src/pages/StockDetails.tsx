@@ -20,8 +20,8 @@ import type { HistoryRange } from '../types';
 const RANGES: { value: HistoryRange; label: string }[] = [
   { value: '1W', label: '1W' },
   { value: '1M', label: '1M' },
+  { value: '6M', label: '6M' },
   { value: '1Y', label: '1Y' },
-  { value: '2Y', label: '2Y' },
   { value: '3Y', label: '3Y' },
   { value: '5Y', label: '5Y' },
   { value: 'MAX', label: 'Max' },
@@ -41,6 +41,11 @@ function Stat({ label, value }: { label: string; value: React.ReactNode }) {
 /** Candles are ours; the TradingView tab is their widget; the line view is the older chart. */
 type ChartMode = 'candles' | 'line' | 'tradingview';
 
+/** Spelled-out form of a range preset, for the caption above the chart. */
+const rangeLabel = (r: HistoryRange): string =>
+  ({ '1W': 'past 1 week', '1M': 'past 1 month', '6M': 'past 6 months', '1Y': 'past 1 year',
+     '3Y': 'past 3 years', '5Y': 'past 5 years', MAX: 'all stored sessions' } as Record<HistoryRange, string>)[r];
+
 export function StockDetails() {
   const { symbol = '' } = useParams();
   const theme = useTheme();
@@ -49,10 +54,10 @@ export function StockDetails() {
   const { data, isLoading, isError } = useStock(symbol);
   const [range, setRange] = useState<HistoryRange>('1Y');
   const { data: history, isFetching: historyLoading } = useHistory(symbol, range);
-  // Candles ignore the range preset on purpose: the ask is "from the earliest session on
-  // record until now", and the API's default window is exactly that.
+  // One range control drives both views: the API resolves the preset (1W … MAX) to a lower
+  // bound, so the candle chart really does show one week when 1W is picked.
   const [chartMode, setChartMode] = useState<ChartMode>('candles');
-  const { data: candles, isLoading: candlesLoading } = useCandles(symbol);
+  const { data: candles, isLoading: candlesLoading } = useCandles(symbol, range);
   const syncStock = useSyncStock();
   const { data: status } = useSyncStatus(syncStock.isPending);
   const [tab, setTab] = useState(0);
@@ -193,8 +198,8 @@ export function StockDetails() {
               {chartMode === 'tradingview'
                 ? 'TradingView data, rendered by their widget'
                 : chartMode === 'candles'
-                  ? 'Our stored sessions, oldest first'
-                  : `Our stored sessions, ${range} window`}
+                  ? `Daily candles, ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
+                  : `Our stored sessions, ${rangeLabel(range)}`}
             </Typography>
           </Stack>
 

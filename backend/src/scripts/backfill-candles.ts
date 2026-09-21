@@ -17,6 +17,8 @@ const args = new Map(
 const only = args.get('--symbols')?.split(',').map((s) => s.trim().toUpperCase()).filter(Boolean);
 const limit = Number(args.get('--limit') ?? 0);
 const paceMs = Number(args.get('--pace') ?? 1200);
+/** Symbols already holding at least this many sessions are left alone entirely. */
+const minSessions = Number(args.get('--min-sessions') ?? 1000);
 
 async function main() {
   const symbols =
@@ -31,14 +33,18 @@ async function main() {
   for (const d of ['2026-09-16', '2026-01-02', '2025-12-31']) assertStampMatchesSessionRule(d);
 
   console.log(`backfill: ${list.length} symbol(s), pace ${paceMs}ms`);
-  const totals = { barsFetched: 0, inserted: 0, filled: 0, skipped: 0, failed: 0 };
+  const totals = { barsFetched: 0, inserted: 0, filled: 0, skipped: 0, failed: 0, alreadyDeep: 0 };
   const failures: string[] = [];
   const started = Date.now();
 
   for (let i = 0; i < list.length; i += 1) {
     const symbol = list[i]!;
     try {
-      const s = await backfillSymbol(symbol);
+      const s = await backfillSymbol(symbol, minSessions);
+      if (s.alreadyDeep) {
+        totals.alreadyDeep += 1;
+        continue; // no request was made, so no pacing pause is needed either
+      }
       totals.barsFetched += s.barsFetched;
       totals.inserted += s.inserted;
       totals.filled += s.filled;
