@@ -59,6 +59,46 @@ const round = (v: number, dp = 4): number => {
 /** UTC calendar day, so two timestamps on the same trading day compare equal. */
 const dayKey = (d: Date): string => d.toISOString().slice(0, 10);
 
+/** One daily candle for an index — structurally the same shape the stock candle endpoint returns. */
+export interface IndexCandle {
+  time: string;
+  open: number | null;
+  high: number | null;
+  low: number | null;
+  close: number;
+  volume: number | null;
+}
+
+/**
+ * Index value rows as candles, oldest session first.
+ *
+ * `value` is the close and `open` is carried when the row has one (the historical DPS series
+ * did). High and low are always null: no index series we hold reports them, and the chart draws
+ * a body-only candle rather than inventing a wick. Sessions are deduped with the newest reading
+ * for a day winning, and a row with no value yields no candle at all — a bar with no price would
+ * be fabricated.
+ */
+export function toIndexCandles(rows: IndexValueRow[]): IndexCandle[] {
+  const byDay = new Map<string, IndexCandle>();
+  // rows arrive newest first from the read path, so the first reading of a day is the newest.
+  for (const row of rows) {
+    const close = toNum(row.value);
+    if (close === null || !row.tradeDate) continue;
+    // The exchange's calendar day (UTC+5, no DST), matching how stock sessions are keyed.
+    const time = new Date(row.tradeDate.getTime() + 5 * 3600 * 1000).toISOString().slice(0, 10);
+    if (byDay.has(time)) continue;
+    byDay.set(time, {
+      time,
+      open: toNum(row.open),
+      high: null,
+      low: null,
+      close,
+      volume: row.volume === null ? null : Number(row.volume),
+    });
+  }
+  return [...byDay.values()].sort((a, b) => a.time.localeCompare(b.time));
+}
+
 export function buildIndexSummary(input: IndexSummaryInput) {
   const { symbol, name, daily } = input;
   const latest = daily[0] ?? null;

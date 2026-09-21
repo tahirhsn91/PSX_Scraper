@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard';
 import { SearchResults } from './pages/SearchResults';
 import { StockDetails } from './pages/StockDetails';
 import { SyncLogs } from './pages/SyncLogs';
+import { IndexDetail } from './pages/IndexDetail';
 import { NotFound } from './pages/NotFound';
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/stocks/:symbol" element={<StockDetails />} />
+        <Route path="/indices/:symbol" element={<IndexDetail />} />
         <Route path="/logs" element={<SyncLogs />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

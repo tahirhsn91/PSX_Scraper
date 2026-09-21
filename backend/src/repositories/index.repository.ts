@@ -48,6 +48,19 @@ export class IndexRepository {
    * Upsert daily values, idempotent on (index_id, trade_date): re-running a sync
    * updates the day's row instead of duplicating it, and never deletes history.
    */
+  /** Value rows for a window, newest first, for the candle read path. */
+  async candleRows(indexId: string, from: Date | undefined, to: Date | undefined, limit = 5000) {
+    return prisma.indexValue.findMany({
+      where: {
+        indexId,
+        ...(from || to ? { tradeDate: { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) } } : {}),
+      },
+      orderBy: { tradeDate: 'desc' },
+      take: limit,
+      select: { tradeDate: true, value: true, open: true, volume: true },
+    });
+  }
+
   async upsertValues(
     indexId: string,
     points: HistoricalPoint[],
