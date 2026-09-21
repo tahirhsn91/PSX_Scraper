@@ -102,12 +102,27 @@ export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
   await registerUniversePassSchedule();
 
-  await syncAllQueue.add(
-    'scheduled-sync-all',
-    { trigger: 'cron' },
-    { repeat: { pattern: env.CRON_EXPRESSION }, jobId: 'scheduled-sync-all' },
-  );
-  logger.info('scheduler.registered', { cron: env.CRON_EXPRESSION });
+  // With the universe worker on, the scheduled full-board sync is pure duplication: both walk
+  // every symbol through the same browser-bound scraper, and with ~500 symbols one walk already
+  // outlasts the hour it is scheduled for — so the queue never drains, the dashboard shows
+  // "SYNCING ALL" permanently, and the two compete for the browser pool (the source of the
+  // intermittent "Target closed" failures). The manual SYNC ALL button still works; only the
+  // *schedule* stands down. An existing registration is removed so an upgrade does not leave it
+  // ticking.
+  if (env.UNIVERSE_ENABLED) {
+    for (const job of await syncAllQueue.getRepeatableJobs()) {
+      if (job.name !== 'scheduled-sync-all') continue;
+      await syncAllQueue.removeRepeatableByKey(job.key);
+    }
+    logger.info('scheduler.sync_all_stood_down', { reason: 'universe worker covers the whole board' });
+  } else {
+    await syncAllQueue.add(
+      'scheduled-sync-all',
+      { trigger: 'cron' },
+      { repeat: { pattern: env.CRON_EXPRESSION }, jobId: 'scheduled-sync-all' },
+    );
+    logger.info('scheduler.registered', { cron: env.CRON_EXPRESSION });
+  }
 
   const indices = await indexRepository.findAll();
   for (const index of indices) {

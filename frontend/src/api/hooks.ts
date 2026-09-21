@@ -2,25 +2,51 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
   Paginated, StockListItem, StockDetail, SearchResult, PriceRow, SyncLog, SyncStatus,
-  HistoryRange, HistoryJobStatus,
+  HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
 } from '../types';
 
 export const keys = {
-  stocks: (page: number, limit: number) => ['stocks', page, limit] as const,
+  stocks: (page: number, limit: number, sort?: StockSortField, order: SortOrder = 'asc') =>
+    ['stocks', page, limit, sort ?? 'symbol', order] as const,
   stock: (symbol: string) => ['stock', symbol] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
+  candles: (symbol: string) => ['candles', symbol] as const,
   historyStatus: (symbol: string) => ['history-status', symbol] as const,
   syncStatus: ['sync', 'status'] as const,
   syncLogs: (params: unknown) => ['sync', 'logs', params] as const,
 };
 
-export const useStocks = (page = 1, limit = 20, poll = false) =>
+export const useStocks = (
+  page = 1,
+  limit = 20,
+  poll = false,
+  sort?: StockSortField,
+  order: SortOrder = 'asc',
+) =>
   useQuery({
-    queryKey: keys.stocks(page, limit),
-    queryFn: async () => (await api.get<Paginated<StockListItem>>('/stocks', { params: { page, limit } })).data,
+    // The sort belongs in the key: a different order is a different page of data, not a
+    // re-render of this one.
+    queryKey: keys.stocks(page, limit, sort, order),
+    queryFn: async () =>
+      (await api.get<Paginated<StockListItem>>('/stocks', { params: { page, limit, sort, order } })).data,
     // Poll while a sync-all fan-out is in flight so prices / "last synced" update live.
     refetchInterval: poll ? 4000 : false,
+  });
+
+/**
+ * Daily candles for the chart: every session we hold for the symbol, oldest first.
+ *
+ * Deliberately *not* range-filtered. The range buttons move the visible window instead, so
+ * dragging or scrolling backwards keeps showing real candles rather than running off the end of
+ * a truncated series into empty space. It also means switching a range refetches nothing.
+ * (The API still accepts `range` for callers that genuinely want a bounded window.)
+ */
+export const useCandles = (symbol: string) =>
+  useQuery({
+    queryKey: keys.candles(symbol),
+    queryFn: async () => (await api.get<CandleSeries>(`/stocks/${symbol}/candles`)).data,
+    enabled: !!symbol,
   });
 
 export const useStock = (symbol: string) =>

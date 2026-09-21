@@ -9,6 +9,7 @@ import {
   UNIVERSE_QUEUE,
 } from '../jobs/queues';
 import { registerScheduler } from '../jobs/scheduler';
+import { syncLogRepository } from '../repositories/syncLog.repository';
 import { processSyncJob } from './syncProcessor';
 import { processSyncAllJob } from './syncAllProcessor';
 import { processHistoryJob } from './historyProcessor';
@@ -16,12 +17,19 @@ import { processIndexJob } from './indexProcessor';
 import { processQuotePollJob } from './quoteProcessor';
 import { processUniverseJob } from './universeProcessor';
 import { env } from '../config';
+import { auditFeatureSettings } from '../config/envAudit';
 import { logger } from '../utils/logger';
 import { browserPool } from '../scrapers/browserPool';
 import { disconnectPrisma } from '../database/prisma';
 
 async function main() {
   const connection = createRedisConnection();
+
+  // A sync cannot outlive the process that owns it: anything still RUNNING at boot was abandoned
+  // by a previous worker (deploy, crash, restart) and would otherwise stay "running" forever on
+  // the Sync Logs page.
+  const swept = await syncLogRepository.sweepStale(5);
+  if (swept > 0) logger.warn('worker.swept_stale_sync_logs', { count: swept });
 
   const syncWorker = new Worker(SYNC_QUEUE, processSyncJob, {
     connection,

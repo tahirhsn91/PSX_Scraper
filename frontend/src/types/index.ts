@@ -1,3 +1,40 @@
+/**
+ * Columns the dashboard can sort by, and the direction. Kept in step with the API's `sort`
+ * enum: the server sorts (the table is paginated, so sorting in the browser would only reorder
+ * the fifty rows on screen).
+ */
+export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'changePercent' | 'volume';
+
+/**
+ * One daily candle. `open`/`high`/`low` are null when the source did not report them — the
+ * historical EOD feed carries open + close + volume, the live quote carries high/low + close
+ * + volume — and the API does not fill the gaps, so the renderer decides how to draw them.
+ */
+export interface Candle {
+  time: string; // exchange session day, YYYY-MM-DD
+  open: number | null;
+  high: number | null;
+  low: number | null;
+  close: number;
+  volume: number | null;
+}
+
+export interface CandleSeries {
+  symbol: string;
+  interval: '1D';
+  /** The range preset that produced this window, or null when the caller passed dates. */
+  range: string | null;
+  count: number;
+  /** Readings discarded because they cannot belong to this symbol (contaminated rows). */
+  skipped: number;
+  /** Readings kept with implausible individual fields nulled. */
+  sanitised: number;
+  from: string | null;
+  to: string | null;
+  items: Candle[];
+}
+export type SortOrder = 'asc' | 'desc';
+
 export interface StockListItem {
   id: string;
   symbol: string;
@@ -71,7 +108,8 @@ export interface SyncStatus {
   inFlight: string[];
 }
 
-export type HistoryRange = '1W' | '1M' | '1Y' | '2Y' | '3Y' | '5Y' | 'MAX';
+/** Presets the dashboard offers. The API also still accepts `2Y`; the UI no longer shows it. */
+export type HistoryRange = '1W' | '1M' | '6M' | '1Y' | '3Y' | '5Y' | 'MAX';
 
 export interface HistoryJobStatus {
   jobId?: string;

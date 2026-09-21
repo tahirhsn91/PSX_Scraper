@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, Chip, Button,
+  Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Chip, Button,
   Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, TextField, Skeleton, Alert,
 } from '@mui/material';
 import { useSyncLogs, useSyncAll } from '../api/hooks';
@@ -31,11 +31,15 @@ export function SyncLogs() {
       {isError && <Alert severity="error">Failed to load logs.</Alert>}
 
       <Paper variant="outlined">
+        {/* Six columns with full timestamps are wider than a phone: scroll the table, not the
+            page (see Dashboard for the measurement that motivated this). */}
+        <TableContainer>
         <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>Symbol</TableCell><TableCell>Status</TableCell><TableCell>Started</TableCell>
-              <TableCell>Completed</TableCell><TableCell align="right">Duration</TableCell><TableCell>Error</TableCell>
+              <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>Completed</TableCell>
+              <TableCell align="right">Duration</TableCell><TableCell>Error</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -47,13 +51,14 @@ export function SyncLogs() {
                 <TableCell>{l.symbol ?? 'ALL'}</TableCell>
                 <TableCell><Chip size="small" color={STATUS_COLOR[l.status] ?? 'default'} label={l.status} /></TableCell>
                 <TableCell>{new Date(l.startedAt).toLocaleString()}</TableCell>
-                <TableCell>{l.completedAt ? new Date(l.completedAt).toLocaleString() : '—'}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>{l.completedAt ? new Date(l.completedAt).toLocaleString() : '—'}</TableCell>
                 <TableCell align="right">{l.durationMs != null ? `${(l.durationMs / 1000).toFixed(1)}s` : '—'}</TableCell>
                 <TableCell sx={{ maxWidth: 240, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{l.errorMessage ?? ''}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        </TableContainer>
       </Paper>
 
       <Dialog open={confirm} onClose={() => setConfirm(false)}>

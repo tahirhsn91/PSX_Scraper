@@ -2,23 +2,26 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Box, Typography, Button, Grid, Card, CardContent, Tabs, Tab, Table, TableBody, TableCell,
-  TableHead, TableRow, Chip, LinearProgress, Alert, Skeleton, Stack, Divider,
+  TableContainer, TableHead, TableRow, Chip, LinearProgress, Alert, Skeleton, Stack, Divider,
   ToggleButton, ToggleButtonGroup, useMediaQuery, useTheme,
 } from '@mui/material';
 import SyncIcon from '@mui/icons-material/Sync';
 import DownloadIcon from '@mui/icons-material/Download';
 import { LineChart } from '@mui/x-charts/LineChart';
+import { CandleChart } from '../components/CandleChart';
+import { TradingViewChart } from '../components/TradingViewChart';
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  useStock, useHistory, useSyncStock, useSyncStatus, useFetchHistory, useHistoryStatus, keys,
+  useStock, useHistory, useSyncStock, useSyncStatus, useFetchHistory, useHistoryStatus,
+  useCandles, keys,
 } from '../api/hooks';
 import type { HistoryRange } from '../types';
 
 const RANGES: { value: HistoryRange; label: string }[] = [
   { value: '1W', label: '1W' },
   { value: '1M', label: '1M' },
+  { value: '6M', label: '6M' },
   { value: '1Y', label: '1Y' },
-  { value: '2Y', label: '2Y' },
   { value: '3Y', label: '3Y' },
   { value: '5Y', label: '5Y' },
   { value: 'MAX', label: 'Max' },
@@ -35,6 +38,14 @@ function Stat({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
+/** Candles are ours; the TradingView tab is their widget; the line view is the older chart. */
+type ChartMode = 'candles' | 'line' | 'tradingview';
+
+/** Spelled-out form of a range preset, for the caption above the chart. */
+const rangeLabel = (r: HistoryRange): string =>
+  ({ '1W': 'past 1 week', '1M': 'past 1 month', '6M': 'past 6 months', '1Y': 'past 1 year',
+     '3Y': 'past 3 years', '5Y': 'past 5 years', MAX: 'all stored sessions' } as Record<HistoryRange, string>)[r];
+
 export function StockDetails() {
   const { symbol = '' } = useParams();
   const theme = useTheme();
@@ -43,6 +54,10 @@ export function StockDetails() {
   const { data, isLoading, isError } = useStock(symbol);
   const [range, setRange] = useState<HistoryRange>('1Y');
   const { data: history, isFetching: historyLoading } = useHistory(symbol, range);
+  // One range control drives both views: the API resolves the preset (1W … MAX) to a lower
+  // bound, so the candle chart really does show one week when 1W is picked.
+  const [chartMode, setChartMode] = useState<ChartMode>('candles');
+  const { data: candles, isLoading: candlesLoading } = useCandles(symbol);
   const syncStock = useSyncStock();
   const { data: status } = useSyncStatus(syncStock.isPending);
   const [tab, setTab] = useState(0);
@@ -167,7 +182,51 @@ export function StockDetails() {
             </Alert>
           )}
 
-          {historyLoading ? (
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ sm: 'center' }} sx={{ mb: 1 }}>
+            <ToggleButtonGroup
+              size="small"
+              exclusive
+              value={chartMode}
+              onChange={(_e, v: ChartMode | null) => v && setChartMode(v)}
+              aria-label="chart type"
+            >
+              <ToggleButton value="candles">Candles</ToggleButton>
+              <ToggleButton value="line">Line</ToggleButton>
+              <ToggleButton value="tradingview">TradingView</ToggleButton>
+            </ToggleButtonGroup>
+            <Typography variant="caption" color="text.secondary">
+              {chartMode === 'tradingview'
+                ? 'TradingView data, rendered by their widget'
+                : chartMode === 'candles'
+                  ? `Daily candles · showing ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
+                  : `Our stored sessions, ${rangeLabel(range)}`}
+            </Typography>
+          </Stack>
+
+          {chartMode === 'candles' ? (
+            candlesLoading ? (
+              <Skeleton height={340} />
+            ) : (
+              <>
+                <CandleChart data={candles} range={range} height={isMobile ? 260 : 380} />
+                {candles && (
+                  <Typography variant="caption" color="text.secondary">
+                    {candles.count} daily candles stored ({candles.from ?? '—'} → {candles.to ?? '—'}) ·
+                    {' '}showing {range === 'MAX' ? 'all of them' : rangeLabel(range)} — drag or scroll back for earlier sessions
+                    {candles.sanitised > 0 && ` · ${candles.sanitised} readings with impossible fields ignored`}
+                    {candles.skipped > 0 && ` · ${candles.skipped} readings discarded as impossible`}
+                  </Typography>
+                )}
+              </>
+            )
+          ) : chartMode === 'tradingview' ? (
+            <>
+              <TradingViewChart symbol={symbol} height={isMobile ? 360 : 460} />
+              <Typography variant="caption" color="text.secondary">
+                Embedded from TradingView — nothing scraped, nothing stored.
+              </Typography>
+            </>
+          ) : historyLoading ? (
             <Skeleton height={320} />
           ) : chart.length > 1 ? (
             <LineChart
@@ -188,6 +247,7 @@ export function StockDetails() {
       )}
 
       {tab === 1 && (
+        <TableContainer>
         <Table size="small">
           <TableHead><TableRow><TableCell>Year</TableCell><TableCell>Qtr</TableCell><TableCell align="right">EPS</TableCell><TableCell align="right">Sales</TableCell><TableCell align="right">PAT</TableCell><TableCell align="right">Equity</TableCell></TableRow></TableHead>
           <TableBody>
@@ -197,6 +257,7 @@ export function StockDetails() {
             ))}
           </TableBody>
         </Table>
+        </TableContainer>
       )}
 
       {tab === 2 && (
@@ -213,6 +274,7 @@ export function StockDetails() {
       )}
 
       {tab === 3 && (
+        <TableContainer>
         <Table size="small">
           <TableHead><TableRow><TableCell>Announced</TableCell><TableCell>Book closure</TableCell><TableCell>Payment</TableCell><TableCell align="right">Dividend</TableCell></TableRow></TableHead>
           <TableBody>
@@ -227,6 +289,7 @@ export function StockDetails() {
             ))}
           </TableBody>
         </Table>
+        </TableContainer>
       )}
       <Divider sx={{ mt: 4 }} />
     </Box>

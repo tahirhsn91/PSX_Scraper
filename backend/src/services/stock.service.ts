@@ -1,6 +1,8 @@
 import { Prisma } from '@prisma/client';
-import { stockRepository } from '../repositories/stock.repository';
-import { getStockDetail, getPriceHistory } from '../repositories/stockDetail.repository';
+import { stockRepository, StockSortField, SortOrder } from '../repositories/stock.repository';
+import {
+  getStockDetail, getPriceHistory, getCandles, type Candle,
+} from '../repositories/stockDetail.repository';
 import { enqueueSync, cancelSyncJob } from '../jobs/queues';
 import { ConflictError, NotFoundError } from '../types/errors';
 import { rangeToFrom, HistoryRange } from '../utils/range';
@@ -9,9 +11,9 @@ import { logger } from '../utils/logger';
 const num = (v: Prisma.Decimal | null): number | null => (v === null ? null : Number(v));
 
 export const stockService = {
-  async list(page: number, limit: number) {
+  async list(page: number, limit: number, sort?: StockSortField, order: SortOrder = 'asc') {
     const offset = (page - 1) * limit;
-    const { items, total } = await stockRepository.list(limit, offset);
+    const { items, total } = await stockRepository.list(limit, offset, sort, order);
     return { items, page, limit, total, totalPages: Math.ceil(total / limit) };
   },
 
@@ -84,6 +86,36 @@ export const stockService = {
       logger.warn('stocks.remove_sync_still_running', { symbol: sym });
     }
     await stockRepository.delete(symbol);
+  },
+
+  /**
+   * Daily candles for the chart, oldest first.
+   *
+   * No dates means "every session we hold" — the chart's default request, and what makes the
+   * view open on the earliest day on record rather than a fixed window.
+   */
+  async candles(symbol: string, opts: { interval?: '1D'; range?: HistoryRange; from?: Date; to?: Date }) {
+    // A range preset wins over an explicit from, matching how /history resolves it.
+    const from = opts.range ? rangeToFrom(opts.range) : opts.from;
+    const res = await getCandles(symbol, from, opts.to);
+    if (res === null) throw new NotFoundError(`Stock not tracked: ${symbol.toUpperCase()}`);
+    const items: Candle[] = res.items;
+    return {
+      symbol: symbol.toUpperCase(),
+      interval: opts.interval ?? '1D',
+      range: opts.range ?? null,
+      count: items.length,
+      // Readings thrown away, and readings kept with implausible fields nulled (see
+      // buildCandles). Both are reported so contaminated sessions are visible in the response
+      // rather than quietly drawn as if they were real.
+      skipped: res.skipped,
+      sanitised: res.sanitised,
+      // Nulls rather than omitted keys: the chart can then tell "this symbol has no history"
+      // apart from "your range is outside our data".
+      from: items[0]?.time ?? null,
+      to: items[items.length - 1]?.time ?? null,
+      items,
+    };
   },
 
   async history(symbol: string, opts: { range?: HistoryRange; from?: Date; to?: Date; page?: number; limit?: number }) {

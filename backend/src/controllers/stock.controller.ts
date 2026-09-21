@@ -3,14 +3,14 @@ import { z } from 'zod';
 import { stockService } from '../services/stock.service';
 import { syncService } from '../services/sync.service';
 import { valid } from '../middleware/validate';
-import { paginationQuery, addStockBody, symbolParam, historyQuery, historySyncBody } from '../validators/schemas';
+import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, candlesQuery } from '../validators/schemas';
 
-type Pagination = z.infer<typeof paginationQuery>;
+type StocksQuery = z.infer<typeof stocksQuery>;
 type Sym = z.infer<typeof symbolParam>;
 
 export const listStocks: RequestHandler = async (req, res) => {
-  const { page, limit } = valid<Pagination>(req, 'query');
-  res.json(await stockService.list(page, limit));
+  const { page, limit, sort, order } = valid<StocksQuery>(req, 'query');
+  res.json(await stockService.list(page, limit, sort, order));
 };
 
 export const getStock: RequestHandler = async (req, res) => {
@@ -33,6 +33,12 @@ export const deleteStock: RequestHandler = async (req, res) => {
 export const syncStock: RequestHandler = async (req, res) => {
   const { symbol } = valid<Sym>(req, 'params');
   res.status(202).json(await syncService.syncOne(symbol));
+};
+
+export const stockCandles: RequestHandler = async (req, res) => {
+  const { symbol } = valid<Sym>(req, 'params');
+  const q = valid<z.infer<typeof candlesQuery>>(req, 'query');
+  res.json(await stockService.candles(symbol, q));
 };
 
 export const stockHistory: RequestHandler = async (req, res) => {

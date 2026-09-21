@@ -88,6 +88,24 @@ export const openapiSpec = {
         parameters: [
           { $ref: '#/components/parameters/Page' },
           { $ref: '#/components/parameters/Limit' },
+          {
+            name: 'sort',
+            in: 'query',
+            description:
+              'Column to sort by: `symbol` (the default), `price`, `week52Low`, `week52High`, ' +
+              '`changePercent` or `volume`. Any other value is rejected with 400. Rows with no ' +
+              'value for that column sort last in both directions, and symbol breaks ties.',
+            schema: {
+              type: 'string',
+              enum: ['symbol', 'price', 'week52Low', 'week52High', 'changePercent', 'volume'],
+            },
+          },
+          {
+            name: 'order',
+            in: 'query',
+            description: 'Direction for `sort`: `asc` (default) or `desc`.',
+            schema: { type: 'string', enum: ['asc', 'desc'], default: 'asc' },
+          },
         ],
         responses: {
           '200': {
@@ -189,6 +207,30 @@ export const openapiSpec = {
       },
     },
 
+    '/api/v1/stocks/{symbol}/candles': {
+      parameters: [{ $ref: '#/components/parameters/Symbol' }],
+      get: {
+        tags: ['History'],
+        summary: 'Get daily candles',
+        description:
+          'One candle per session, oldest first, for a candlestick chart. Omit both `range` and ' +
+          '`from` for every session on record — the chart loads the whole series and moves its ' +
+          'viewport, so it can be scrolled back past the selected range. A `range` preset takes ' +
+          'precedence over an explicit `from`. Fields the source did not report come back as ' +
+          'null rather than being filled in, and a session with no price at all is omitted: a ' +
+          'candle is never invented.',
+        parameters: [
+          { $ref: '#/components/parameters/Range' },
+          { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' }, description: 'Lower bound (ignored if `range` is set).' },
+          { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' }, description: 'Upper bound.' },
+          { name: 'interval', in: 'query', required: false, schema: { type: 'string', enum: ['1D'], default: '1D' }, description: 'Candle interval. Daily only — PSX reports one session per symbol per day.' },
+        ],
+        responses: {
+          '200': { description: 'Daily candles, oldest first' },
+          '404': { description: 'Symbol is not tracked' },
+        },
+      },
+    },
     '/api/v1/stocks/{symbol}/history': {
       parameters: [{ $ref: '#/components/parameters/Symbol' }],
       get: {

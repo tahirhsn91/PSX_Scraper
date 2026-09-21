@@ -17,47 +17,121 @@ export interface StockListItem {
   lastSyncedAt: Date | null;
 }
 
+/**
+ * Columns the dashboard may sort by.
+ *
+ * A whitelist rather than a filter: `sort` arrives in a query string and the ORDER BY is raw
+ * SQL, so the value must never travel as text. Only these fragments do — an unrecognised key
+ * simply has no column and the request is rejected by the validator before it gets here.
+ */
+export const SORTABLE_COLUMNS = {
+  symbol: 's.symbol',
+  price: 'p.current_price',
+  week52Low: 'p.week52_low',
+  week52High: 'p.week52_high',
+  changePercent: 'p.change_percent',
+  volume: 'p.volume',
+} as const;
+
+export type StockSortField = keyof typeof SORTABLE_COLUMNS;
+export type SortOrder = 'asc' | 'desc';
+
+export const STOCK_SORT_FIELDS = Object.keys(SORTABLE_COLUMNS) as [StockSortField, ...StockSortField[]];
+
+/**
+ * ORDER BY for the stocks list.
+ *
+ * `NULLS LAST` in *both* directions, deliberately: a missing price is not the cheapest price.
+ * About 500 symbols are walked and some sessions leave a field unreported; ascending a price
+ * column with nulls first would open the dashboard on a page of dashes, and descending it
+ * would bury them behind every real row. Missing readings belong at the bottom either way.
+ *
+ * Symbol breaks ties, so a page is stable when many rows share a value (0.00% is common).
+ */
+export function buildOrderBy(sort: StockSortField | undefined, order: SortOrder): string {
+  const column = sort ? SORTABLE_COLUMNS[sort] : SORTABLE_COLUMNS.symbol;
+  const direction = order === 'asc' ? 'ASC' : 'DESC';
+  return `${column} ${direction} NULLS LAST, s.symbol ASC`;
+}
+
+type RawStockListRow = {
+  id: string;
+  symbol: string;
+  company_name: string | null;
+  sector: string | null;
+  current_price: Prisma.Decimal | null;
+  change_percent: Prisma.Decimal | null;
+  volume: bigint | null;
+  week52_high: Prisma.Decimal | null;
+  week52_low: Prisma.Decimal | null;
+  last_trade_date: Date | null;
+  last_synced_at: Date | null;
+};
+
+/** One mapping for both list and search — they read the same columns and must agree. */
+function toListItem(r: RawStockListRow): StockListItem {
+  return {
+    id: r.id,
+    symbol: r.symbol,
+    companyName: r.company_name,
+    sector: r.sector,
+    currentPrice: r.current_price ? Number(r.current_price) : null,
+    changePercent: r.change_percent ? Number(r.change_percent) : null,
+    // `!= null`, not truthiness: 0 shares traded is a reading, not an absent value.
+    volume: r.volume != null ? Number(r.volume) : null,
+    week52High: r.week52_high ? Number(r.week52_high) : null,
+    week52Low: r.week52_low ? Number(r.week52_low) : null,
+    lastTradeDate: r.last_trade_date,
+    lastSyncedAt: r.last_synced_at,
+  };
+}
+
 export class StockRepository {
   findBySymbol(symbol: string): Promise<Stock | null> {
     return prisma.stock.findUnique({ where: { symbol: symbol.toUpperCase() } });
   }
 
-  async list(limit: number, offset: number): Promise<{ items: StockListItem[]; total: number }> {
-    const [rows, total] = await Promise.all([
-      prisma.stock.findMany({
-        skip: offset,
-        take: limit,
-        orderBy: { symbol: 'asc' },
-        include: {
-          // Skip price rows with no price: a bad tick used to be able to blank a symbol by
-          // being the newest row.
-          prices: {
-            where: { currentPrice: { not: null } },
-            orderBy: { lastTradeDate: 'desc' },
-            take: 1,
-          },
-          syncLogs: { orderBy: { startedAt: 'desc' }, take: 1 },
-        },
-      }),
-      prisma.stock.count(),
+  /**
+   * A page of tracked symbols with their newest priced row.
+   *
+   * Raw SQL rather than `findMany` because the sort key lives on a *related* row: price,
+   * 52-week range, change and volume are those of the latest session, and Prisma cannot order
+   * by "the field of the newest related row". The LATERAL join below picks that row (skipping
+   * price-less ones, so a bad tick cannot blank a symbol) and the whitelisted ORDER BY sorts
+   * on it. Same shape as the search query, on purpose.
+   */
+  async list(
+    limit: number,
+    offset: number,
+    sort?: StockSortField,
+    order: SortOrder = 'asc',
+  ): Promise<{ items: StockListItem[]; total: number }> {
+    const [rows, totals] = await Promise.all([
+      prisma.$queryRaw<RawStockListRow[]>(Prisma.sql`
+        SELECT s.id, s.symbol, s.company_name, s.sector,
+               p.current_price, p.change_percent, p.volume, p.week52_high, p.week52_low,
+               p.last_trade_date,
+               sl.completed_at AS last_synced_at
+        FROM stocks s
+        LEFT JOIN LATERAL (
+          SELECT current_price, change_percent, volume, week52_high, week52_low, last_trade_date
+          FROM stock_prices WHERE stock_id = s.id AND current_price IS NOT NULL
+          ORDER BY last_trade_date DESC NULLS LAST LIMIT 1
+        ) p ON true
+        LEFT JOIN LATERAL (
+          SELECT completed_at FROM sync_logs
+          WHERE stock_id = s.id
+          ORDER BY started_at DESC LIMIT 1
+        ) sl ON true
+        -- Prisma.raw, not a bound parameter: ORDER BY cannot take one. The string is safe by
+        -- construction — it is assembled from the SORTABLE_COLUMNS literals above and an enum
+        -- the validator already checked; no request text reaches it (see buildOrderBy's test).
+        ORDER BY ${Prisma.raw(buildOrderBy(sort, order))}
+        LIMIT ${limit} OFFSET ${offset}
+      `),
+      prisma.$queryRaw<Array<{ total: number }>>(Prisma.sql`SELECT COUNT(*)::int AS total FROM stocks`),
     ]);
-    const items: StockListItem[] = rows.map((s) => ({
-      id: s.id,
-      symbol: s.symbol,
-      companyName: s.companyName,
-      sector: s.sector,
-      currentPrice: s.prices[0]?.currentPrice ? Number(s.prices[0].currentPrice) : null,
-      changePercent: s.prices[0]?.changePercent ? Number(s.prices[0].changePercent) : null,
-      // BigInt in the column, number on the wire (values here are far below 2^53). Tested with
-      // `!= null` rather than for truthiness: volume 0 means "nothing traded" — a reading — and
-      // rendering it as absent would misreport a real session.
-      volume: s.prices[0]?.volume != null ? Number(s.prices[0].volume) : null,
-      week52High: s.prices[0]?.week52High ? Number(s.prices[0].week52High) : null,
-      week52Low: s.prices[0]?.week52Low ? Number(s.prices[0].week52Low) : null,
-      lastTradeDate: s.prices[0]?.lastTradeDate ?? null,
-      lastSyncedAt: s.syncLogs[0]?.completedAt ?? null,
-    }));
-    return { items, total };
+    return { items: rows.map(toListItem), total: totals[0]?.total ?? 0 };
   }
 
   create(symbol: string): Promise<Stock> {
@@ -115,20 +189,7 @@ export class StockRepository {
                         similarity(coalesce(s.company_name,''), ${term})) DESC
       LIMIT ${limit}
     `);
-    return rows.map((r) => ({
-      id: r.id,
-      symbol: r.symbol,
-      companyName: r.company_name,
-      sector: r.sector,
-      currentPrice: r.current_price ? Number(r.current_price) : null,
-      changePercent: r.change_percent ? Number(r.change_percent) : null,
-      // `!= null`, not truthiness: 0 shares traded is a reading (see the list mapper).
-      volume: r.volume != null ? Number(r.volume) : null,
-      week52High: r.week52_high ? Number(r.week52_high) : null,
-      week52Low: r.week52_low ? Number(r.week52_low) : null,
-      lastTradeDate: r.last_trade_date,
-      lastSyncedAt: r.last_synced_at,
-    }));
+    return rows.map(toListItem);
   }
 }
 
