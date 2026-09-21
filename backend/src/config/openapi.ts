@@ -207,6 +207,30 @@ export const openapiSpec = {
       },
     },
 
+    '/api/v1/stocks/{symbol}/candles': {
+      parameters: [{ $ref: '#/components/parameters/Symbol' }],
+      get: {
+        tags: ['History'],
+        summary: 'Get daily candles',
+        description:
+          'One candle per session, oldest first, for a candlestick chart. Omit both `range` and ' +
+          '`from` for every session on record — the chart loads the whole series and moves its ' +
+          'viewport, so it can be scrolled back past the selected range. A `range` preset takes ' +
+          'precedence over an explicit `from`. Fields the source did not report come back as ' +
+          'null rather than being filled in, and a session with no price at all is omitted: a ' +
+          'candle is never invented.',
+        parameters: [
+          { $ref: '#/components/parameters/Range' },
+          { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' }, description: 'Lower bound (ignored if `range` is set).' },
+          { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' }, description: 'Upper bound.' },
+          { name: 'interval', in: 'query', required: false, schema: { type: 'string', enum: ['1D'], default: '1D' }, description: 'Candle interval. Daily only — PSX reports one session per symbol per day.' },
+        ],
+        responses: {
+          '200': { description: 'Daily candles, oldest first' },
+          '404': { description: 'Symbol is not tracked' },
+        },
+      },
+    },
     '/api/v1/stocks/{symbol}/history': {
       parameters: [{ $ref: '#/components/parameters/Symbol' }],
       get: {
