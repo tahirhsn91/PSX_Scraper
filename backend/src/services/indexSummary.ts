@@ -25,6 +25,9 @@ export interface IndexValueRow {
 export interface LiveReading {
   value: number;
   at: Date;
+  /** The exchange's published change figures, when it reported them. */
+  change?: number | null;
+  changePercent?: number | null;
 }
 
 export interface IndexSummaryInput {
@@ -72,8 +75,14 @@ export function buildIndexSummary(input: IndexSummaryInput) {
     ? toNum(daily.find((r) => dayKey(r.tradeDate) < dayKey(lastTradeDate!))?.value)
     : null;
 
-  const change = value !== null && previousClose !== null ? round(value - previousClose) : null;
-  const changePercent = change !== null && previousClose ? round((change / previousClose) * 100) : null;
+  // Prefer the exchange's published move: it is measured against the official previous close.
+  // Derive one only when the page did not report a figure — which is the case for a series we
+  // are still accumulating ourselves. `null` (unknown) is never rendered as zero.
+  const derivedChange = value !== null && previousClose !== null ? round(value - previousClose) : null;
+  const change = (useLive ? live!.change ?? null : null) ?? derivedChange;
+  const changePercent =
+    (useLive ? live!.changePercent ?? null : null) ??
+    (derivedChange !== null && previousClose ? round((derivedChange / previousClose) * 100) : null);
 
   const sameDay = lastTradeDate ? daily.find((r) => dayKey(r.tradeDate) === dayKey(lastTradeDate!)) ?? null : null;
 
@@ -97,9 +106,16 @@ export function buildIndexSummary(input: IndexSummaryInput) {
 export function liveReading(
   value: number | { toString(): string } | null,
   at: Date | null,
+  change: number | { toString(): string } | null = null,
+  changePercent: number | { toString(): string } | null = null,
 ): LiveReading | null {
   if (value === null || at === null) return null;
-  return { value: Number(value), at };
+  const reading: LiveReading = { value: Number(value), at };
+  // Carried only when the exchange actually published them, so a reading that predates this
+  // field keeps exactly the shape it had before.
+  if (change !== null && change !== undefined) reading.change = Number(change);
+  if (changePercent !== null && changePercent !== undefined) reading.changePercent = Number(changePercent);
+  return reading;
 }
 
 /** A daily row in the same shape the stock history endpoint returns. */

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
   Paginated, StockListItem, StockDetail, SearchResult, PriceRow, SyncLog, SyncStatus,
-  HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
+  HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries, IndexSummary,
 } from '../types';
 
 export const keys = {
@@ -15,6 +15,7 @@ export const keys = {
   historyStatus: (symbol: string) => ['history-status', symbol] as const,
   syncStatus: ['sync', 'status'] as const,
   syncLogs: (params: unknown) => ['sync', 'logs', params] as const,
+  indices: ['indices'] as const,
 };
 
 export const useStocks = (
@@ -32,6 +33,17 @@ export const useStocks = (
       (await api.get<Paginated<StockListItem>>('/stocks', { params: { page, limit, sort, order } })).data,
     // Poll while a sync-all fan-out is in flight so prices / "last synced" update live.
     refetchInterval: poll ? 4000 : false,
+  });
+
+/**
+ * The index board: every index PSX publishes, scraped from the exchange's market-summary page
+ * (see the backend's indexScrape service). Polls alongside a sync so the board moves with it.
+ */
+export const useIndices = (poll = false) =>
+  useQuery({
+    queryKey: keys.indices,
+    queryFn: async () => (await api.get<Paginated<IndexSummary>>('/indices', { params: { limit: 50 } })).data,
+    refetchInterval: poll ? 30000 : false,
   });
 
 /**
