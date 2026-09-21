@@ -11,7 +11,7 @@ export const keys = {
   stock: (symbol: string) => ['stock', symbol] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
-  candles: (symbol: string, range: HistoryRange) => ['candles', symbol, range] as const,
+  candles: (symbol: string) => ['candles', symbol] as const,
   historyStatus: (symbol: string) => ['history-status', symbol] as const,
   syncStatus: ['sync', 'status'] as const,
   syncLogs: (params: unknown) => ['sync', 'logs', params] as const,
@@ -35,14 +35,17 @@ export const useStocks = (
   });
 
 /**
- * Daily candles for the chart, for the selected range. The API resolves the preset to a
- * lower bound, so 1W really is one week rather than the whole decade we hold.
+ * Daily candles for the chart: every session we hold for the symbol, oldest first.
+ *
+ * Deliberately *not* range-filtered. The range buttons move the visible window instead, so
+ * dragging or scrolling backwards keeps showing real candles rather than running off the end of
+ * a truncated series into empty space. It also means switching a range refetches nothing.
+ * (The API still accepts `range` for callers that genuinely want a bounded window.)
  */
-export const useCandles = (symbol: string, range: HistoryRange) =>
+export const useCandles = (symbol: string) =>
   useQuery({
-    queryKey: keys.candles(symbol, range),
-    queryFn: async () =>
-      (await api.get<CandleSeries>(`/stocks/${symbol}/candles`, { params: { range } })).data,
+    queryKey: keys.candles(symbol),
+    queryFn: async () => (await api.get<CandleSeries>(`/stocks/${symbol}/candles`)).data,
     enabled: !!symbol,
   });
 

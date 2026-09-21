@@ -57,7 +57,7 @@ export function StockDetails() {
   // One range control drives both views: the API resolves the preset (1W … MAX) to a lower
   // bound, so the candle chart really does show one week when 1W is picked.
   const [chartMode, setChartMode] = useState<ChartMode>('candles');
-  const { data: candles, isLoading: candlesLoading } = useCandles(symbol, range);
+  const { data: candles, isLoading: candlesLoading } = useCandles(symbol);
   const syncStock = useSyncStock();
   const { data: status } = useSyncStatus(syncStock.isPending);
   const [tab, setTab] = useState(0);
@@ -198,7 +198,7 @@ export function StockDetails() {
               {chartMode === 'tradingview'
                 ? 'TradingView data, rendered by their widget'
                 : chartMode === 'candles'
-                  ? `Daily candles, ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
+                  ? `Daily candles · showing ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
                   : `Our stored sessions, ${rangeLabel(range)}`}
             </Typography>
           </Stack>
@@ -208,10 +208,11 @@ export function StockDetails() {
               <Skeleton height={340} />
             ) : (
               <>
-                <CandleChart data={candles} height={isMobile ? 260 : 380} />
+                <CandleChart data={candles} range={range} height={isMobile ? 260 : 380} />
                 {candles && (
                   <Typography variant="caption" color="text.secondary">
-                    {candles.count} daily candles · {candles.from ?? '—'} → {candles.to ?? '—'}
+                    {candles.count} daily candles stored ({candles.from ?? '—'} → {candles.to ?? '—'}) ·
+                    {' '}showing {range === 'MAX' ? 'all of them' : rangeLabel(range)} — drag or scroll back for earlier sessions
                     {candles.sanitised > 0 && ` · ${candles.sanitised} readings with impossible fields ignored`}
                     {candles.skipped > 0 && ` · ${candles.skipped} readings discarded as impossible`}
                   </Typography>
