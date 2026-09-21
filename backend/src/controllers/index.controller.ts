@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { z } from 'zod';
 import { indexService } from '../services/index.service';
 import { valid } from '../middleware/validate';
-import { paginationQuery, symbolParam, historyQuery } from '../validators/schemas';
+import { paginationQuery, symbolParam, historyQuery, candlesQuery } from '../validators/schemas';
 
 type Pagination = z.infer<typeof paginationQuery>;
 type Sym = z.infer<typeof symbolParam>;
@@ -16,6 +16,12 @@ export const listIndices: RequestHandler = async (req, res) => {
 export const getIndex: RequestHandler = async (req, res) => {
   const { symbol } = valid<Sym>(req, 'params');
   res.json(await indexService.summary(symbol));
+};
+
+export const indexCandles: RequestHandler = async (req, res) => {
+  const { symbol } = valid<Sym>(req, 'params');
+  const q = valid<z.infer<typeof candlesQuery>>(req, 'query');
+  res.json(await indexService.candles(symbol, q));
 };
 
 export const indexHistory: RequestHandler = async (req, res) => {

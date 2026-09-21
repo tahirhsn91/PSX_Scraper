@@ -2,7 +2,7 @@ import { indexRepository } from '../repositories/index.repository';
 import { findExistingIndexJob, enqueueIndexSync } from '../jobs/queues';
 import { NotFoundError } from '../types/errors';
 import { rangeToFrom, HistoryRange } from '../utils/range';
-import { buildIndexSummary, liveReading, toHistoryItem } from './indexSummary';
+import { buildIndexSummary, liveReading, toHistoryItem, toIndexCandles } from './indexSummary';
 
 export const indexService = {
   async list(page: number, limit: number) {
@@ -33,6 +33,34 @@ export const indexService = {
       daily,
       live: liveReading(index.liveValue, index.liveAt, index.liveChange, index.liveChangePercent),
     });
+  },
+
+  /**
+   * Daily candles for an index, oldest first — the same contract as
+   * `/stocks/:symbol/candles`, so the dashboard's chart component draws either.
+   *
+   * No plausibility filter here: index levels are not written by the stock pipeline, and the
+   * sessions we hold for an index come from the exchange or from our own scrape.
+   */
+  async candles(symbol: string, opts: { interval?: '1D'; range?: HistoryRange; from?: Date; to?: Date }) {
+    const sym = symbol.toUpperCase();
+    const index = await indexRepository.findBySymbol(sym);
+    if (!index) throw new NotFoundError(`Index not tracked: ${sym}`);
+    const from = opts.range ? rangeToFrom(opts.range) : opts.from;
+    const rows = await indexRepository.candleRows(index.id, from, opts.to);
+    const items = toIndexCandles(rows);
+    return {
+      symbol: sym,
+      interval: opts.interval ?? '1D',
+      range: opts.range ?? null,
+      count: items.length,
+      // Never non-zero for an index: there is no contaminated-source path to filter.
+      skipped: 0,
+      sanitised: 0,
+      from: items[0]?.time ?? null,
+      to: items[items.length - 1]?.time ?? null,
+      items,
+    };
   },
 
   async history(
