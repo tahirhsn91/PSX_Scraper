@@ -125,37 +125,61 @@ export function buildCandles(parts: Candle[]): {
 } {
   if (parts.length === 0) return { items: [], skipped: 0, sanitised: 0 };
 
-  const closes = parts.map((p) => p.close).sort((a, b) => a - b);
-  const median = closes[Math.floor(closes.length / 2)]!;
-  // A factor of 10 either side of the symbol's own median. Generous on purpose: a real price
-  // must never be dropped, while an index level recorded against a share is ~100x out.
-  const floor = median / 10;
-  const ceiling = median * 10;
-  const sane = (v: number | null) => (v !== null && v >= floor && v <= ceiling ? v : null);
+  // Group by session first: every plausibility judgement below is made *within* a day.
+  const byDay = new Map<string, Candle[]>();
+  for (const p of parts) {
+    const group = byDay.get(p.time);
+    if (group) group.push(p);
+    else byDay.set(p.time, [p]);
+  }
 
-  const byDay = new Map<string, Candle>();
+  const items: Candle[] = [];
   let skipped = 0;
   let sanitised = 0;
-  // parts arrive oldest first, so later writes of the same day are the fresher readings.
-  for (const p of parts) {
-    if (p.close < floor || p.close > ceiling) {
-      skipped += 1;
-      continue;
+
+  for (const [day, group] of byDay) {
+    // The baseline is the session's own readings, never the symbol's whole history. A
+    // whole-history median looks reasonable and is badly wrong: on any stock whose price
+    // multiplied over the years, the early sessions sit far below the median and get deleted as
+    // "impossible" — 42 symbols lost up to 700 sessions of real history that way. Within a
+    // single day there is no trend to confuse the test, and the contamination this guards
+    // against (an index level written into a share's rows, ~100x out) is a same-day artefact.
+    const closes = group.map((g) => g.close).sort((a, b) => a - b);
+    // Lower middle value, deliberately: with an even number of readings the two middles
+    // straddle the truth when one is contamination, and contamination runs *high* — an index
+    // level sits above a share price, not below it. Picking the upper middle would keep the
+    // index level and discard the real price.
+    const median = closes[Math.floor((closes.length - 1) / 2)]!;
+    const floor = median / 10;
+    const ceiling = median * 10;
+    // With a single reading there is nothing to compare against, so it is taken as it stands —
+    // inventing a verdict from a whole-history median is what deleted good data.
+    const judgeable = group.length > 1;
+    const sane = (v: number | null) => (v !== null && v >= floor && v <= ceiling ? v : null);
+
+    let merged: Candle | null = null;
+    // group is in insertion order, i.e. oldest reading first, so later writes are fresher.
+    for (const p of group) {
+      if (judgeable && (p.close < floor || p.close > ceiling)) {
+        skipped += 1;
+        continue;
+      }
+      // Field-wise too: contamination is not always the close. Dev holds an FFC row whose close
+      // is plausible (~530) while its open and high are the index level (48,131), and another
+      // whose low is 7. A field that cannot belong is treated as absent; the reading itself
+      // usually still carries good values.
+      const open = judgeable ? sane(p.open) : p.open;
+      const high = judgeable ? sane(p.high) : p.high;
+      const low = judgeable ? sane(p.low) : p.low;
+      if (open !== p.open || high !== p.high || low !== p.low) sanitised += 1;
+      const clean: Candle = { time: day, open, high, low, close: p.close, volume: p.volume };
+      merged = merged ? mergeParts(merged, clean) : clean;
     }
-    // Field-wise too: the contamination is not always the close. Dev has an FFC row whose
-    // close is plausible (~530) while its open and high are the index level (48,131), and
-    // another whose low is 7. A field that cannot be that symbol's is treated as absent —
-    // the reading itself usually still carries good values.
-    const open = sane(p.open);
-    const high = sane(p.high);
-    const low = sane(p.low);
-    if (open !== p.open || high !== p.high || low !== p.low) sanitised += 1;
-    const clean: Candle = { time: p.time, open, high, low, close: p.close, volume: p.volume };
-    const prev = byDay.get(p.time);
-    byDay.set(p.time, prev ? mergeParts(prev, clean) : clean);
+    if (merged) items.push(merged);
   }
+
   return {
-    items: [...byDay.values()].sort((a, b) => a.time.localeCompare(b.time)),
+    items: items.sort((a, b) => a.time.localeCompare(b.time)),
     skipped,
     sanitised,
   };
