@@ -12,6 +12,7 @@ import ArrowUpwardRounded from '@mui/icons-material/ArrowUpwardRounded';
 import ArrowDownwardRounded from '@mui/icons-material/ArrowDownwardRounded';
 import { useStocks, useAddStock, useSyncStatus, useSyncAll, useIndices } from '../api/hooks';
 import { IndicesPanel } from '../components/IndicesPanel';
+import { IndicesTicker } from '../components/IndicesTicker';
 import { SearchBar } from '../components/SearchBar';
 import type { ApiError } from '../api/client';
 import type { StockSortField, SortOrder } from '../types';
@@ -142,6 +143,8 @@ export function Dashboard() {
   return (
     <Box>
       <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={2} mb={2}>
+
+      <IndicesTicker indices={indexBoard?.items} />
         <Typography variant="h4">Dashboard Scrapper</Typography>
         <Stack direction="row" spacing={1}>
           <Button

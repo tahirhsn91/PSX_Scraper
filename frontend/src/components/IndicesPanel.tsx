@@ -1,4 +1,5 @@
 import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import type { IndexSummary } from '../types';
 
 /**
@@ -9,6 +10,7 @@ import type { IndexSummary } from '../types';
  * did not quote is visible as unknown instead of looking flat.
  */
 export function IndicesPanel({ indices }: { indices: IndexSummary[] | undefined }) {
+  const navigate = useNavigate();
   if (!indices || indices.length === 0) return null;
 
   return (
@@ -23,7 +25,11 @@ export function IndicesPanel({ indices }: { indices: IndexSummary[] | undefined 
           const arrow = change === null ? '' : change > 0 ? '▲' : change < 0 ? '▼' : '·';
           return (
             <Grid item xs={6} sm={4} md={3} lg={2} key={index.symbol}>
-              <Card variant="outlined">
+              <Card
+                variant="outlined"
+                onClick={() => navigate(`/indices/${index.symbol}`)}
+                sx={{ cursor: 'pointer', height: '100%' }}
+              >
                 <CardContent sx={{ py: 1, '&:last-child': { pb: 1 } }}>
                   <Typography variant="caption" color="text.secondary" noWrap display="block" title={index.name}>
                     {index.name}

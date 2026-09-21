@@ -1,5 +1,5 @@
 import { parseIndices } from '../src/scrapers/psxIndices.scraper';
-import { buildIndexSummary, liveReading } from '../src/services/indexSummary';
+import { buildIndexSummary, liveReading, toIndexCandles } from '../src/services/indexSummary';
 
 /**
  * The index parser, exercised against the markup the exchange actually serves — including the
@@ -57,6 +57,42 @@ describe('parseIndices', () => {
 
   it('returns nothing for a page with no index blocks (a parse failure, not an empty market)', () => {
     expect(parseIndices('<html><body><p>no indices here</p></body></html>')).toEqual([]);
+  });
+});
+
+describe('toIndexCandles', () => {
+  const row = (over: Record<string, unknown> = {}) => ({
+    tradeDate: new Date('2026-09-21T11:00:00.000Z'), value: 171153.16, open: 169392.32, volume: BigInt(0), ...over,
+  });
+
+  it('maps an index row to a candle, with the level as the close', () => {
+    expect(toIndexCandles([row()])).toEqual([
+      { time: '2026-09-21', open: 169392.32, high: null, low: null, close: 171153.16, volume: 0 },
+    ]);
+  });
+
+  it('leaves high and low null — no index series reports them, and a wick must not be invented', () => {
+    const [candle] = toIndexCandles([row()]);
+    expect(candle!.high).toBeNull();
+    expect(candle!.low).toBeNull();
+  });
+
+  it('keeps one candle per session, newest reading first in the input winning', () => {
+    const out = toIndexCandles([row({ value: 171153.16 }), row({ value: 170000 }), row({ tradeDate: new Date('2026-09-18T11:00:00.000Z'), value: 168000 })]);
+    expect(out.map((c) => [c.time, c.close])).toEqual([['2026-09-18', 168000], ['2026-09-21', 171153.16]]);
+  });
+
+  it('attributes a late reading to the exchange calendar day', () => {
+    // 22:00 UTC is already the next Karachi date.
+    expect(toIndexCandles([row({ tradeDate: new Date('2026-09-21T22:00:00.000Z') })])[0]!.time).toBe('2026-09-22');
+  });
+
+  it('produces no candle for a row without a value', () => {
+    expect(toIndexCandles([row({ value: null })])).toEqual([]);
+  });
+
+  it('returns nothing for an index with no stored sessions', () => {
+    expect(toIndexCandles([])).toEqual([]);
   });
 });
 

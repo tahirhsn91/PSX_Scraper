@@ -16,6 +16,8 @@ export const keys = {
   syncStatus: ['sync', 'status'] as const,
   syncLogs: (params: unknown) => ['sync', 'logs', params] as const,
   indices: ['indices'] as const,
+  index: (symbol: string) => ['index', symbol] as const,
+  indexCandles: (symbol: string) => ['index-candles', symbol] as const,
 };
 
 export const useStocks = (
@@ -44,6 +46,22 @@ export const useIndices = (poll = false) =>
     queryKey: keys.indices,
     queryFn: async () => (await api.get<Paginated<IndexSummary>>('/indices', { params: { limit: 50 } })).data,
     refetchInterval: poll ? 30000 : false,
+  });
+
+/** One index's board figures. */
+export const useIndex = (symbol: string) =>
+  useQuery({
+    queryKey: keys.index(symbol),
+    queryFn: async () => (await api.get<IndexSummary>(`/indices/${symbol}`)).data,
+    enabled: !!symbol,
+  });
+
+/** One index's daily candles — same shape as a stock's, so the same chart draws it. */
+export const useIndexCandles = (symbol: string) =>
+  useQuery({
+    queryKey: keys.indexCandles(symbol),
+    queryFn: async () => (await api.get<CandleSeries>(`/indices/${symbol}/candles`)).data,
+    enabled: !!symbol,
   });
 
 /**
