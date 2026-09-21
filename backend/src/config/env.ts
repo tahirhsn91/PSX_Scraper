@@ -19,6 +19,10 @@ const envSchema = z.object({
   // services/indexScrape.service.ts), so it is a light interval rather than a queue job.
   INDEX_SCRAPE_INTERVAL_MS: z.coerce.number().int().positive().default(300000),
   INDEX_SCRAPE_MARKET_HOURS_ONLY: z.coerce.boolean().default(true),
+  // NOTE: not z.coerce.boolean() — that maps the string "false" to true.
+  DAILY_BOARD_ENABLED: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
+  /** Hour of the daily board pass, in Karachi time. */
+  DAILY_BOARD_HOUR: z.coerce.number().int().min(0).max(23).default(2),
 
   QUOTE_POLL_CRON: z.string().default('*/5 * * * *'),
   QUOTE_POLL_CONCURRENCY: z.coerce.number().int().positive().default(5),

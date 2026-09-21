@@ -10,6 +10,7 @@ import {
 } from '../jobs/queues';
 import { registerScheduler } from '../jobs/scheduler';
 import { scrapeIndices } from '../services/indexScrape.service';
+import { msUntilNextRun, runDailyBoard } from '../services/dailyBoard.service';
 import { isMarketOpen } from '../utils/marketHours';
 import { syncLogRepository } from '../repositories/syncLog.repository';
 import { processSyncJob } from './syncProcessor';
@@ -90,10 +91,38 @@ async function main() {
   // One shortly after boot so a restarted worker does not wait a full interval.
   const indexScrapeBoot = setTimeout(() => scrapeIndexBoard('boot'), 5000);
 
+  /**
+   * The daily board pass: one request for the whole market at 02:00 Karachi, registering anything
+   * listed that is not tracked yet and queueing every symbol for a refresh. A self-arming timer
+   * rather than a queue repeatable, for the same reason as the index snapshot above: one run per
+   * day needs no queue semantics, and a missed day is caught by the next one.
+   *
+   * Off unless DAILY_BOARD_ENABLED says otherwise, and it never throws into the worker: a failed
+   * board fetch must not take the other jobs down with it.
+   */
+  let dailyBoardTimer: NodeJS.Timeout | null = null;
+  const scheduleDailyBoard = () => {
+    if (!env.DAILY_BOARD_ENABLED) return;
+    const waitMs = msUntilNextRun(new Date(), env.DAILY_BOARD_HOUR);
+    dailyBoardTimer = setTimeout(() => {
+      void runDailyBoard().catch((err) =>
+        logger.warn('daily_board.failed', { error: err instanceof Error ? err.message : String(err) }),
+      );
+      scheduleDailyBoard();
+    }, waitMs);
+    dailyBoardTimer.unref?.();
+    logger.info('daily_board.scheduled', {
+      inMinutes: Math.round(waitMs / 60000),
+      hourKarachi: env.DAILY_BOARD_HOUR,
+    });
+  };
+  scheduleDailyBoard();
+
   const shutdown = async (sig: string) => {
     logger.info('worker.shutdown', { sig });
     clearInterval(indexScrapeTimer);
     clearTimeout(indexScrapeBoot);
+    if (dailyBoardTimer) clearTimeout(dailyBoardTimer);
     await Promise.allSettled([
       syncWorker.close(),
       syncAllWorker.close(),
