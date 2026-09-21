@@ -15,6 +15,11 @@ const envSchema = z.object({
   // Every 5 minutes, not every minute: the site's edge started refusing our data paths
   // after sustained one-minute polling (see #27), and the payload only moves when the
   // exchange prints a new trade. See the scheduler for the market-hours guard.
+  // The index board is one page fetch for every index PSX publishes (see
+  // services/indexScrape.service.ts), so it is a light interval rather than a queue job.
+  INDEX_SCRAPE_INTERVAL_MS: z.coerce.number().int().positive().default(300000),
+  INDEX_SCRAPE_MARKET_HOURS_ONLY: z.coerce.boolean().default(true),
+
   QUOTE_POLL_CRON: z.string().default('*/5 * * * *'),
   QUOTE_POLL_CONCURRENCY: z.coerce.number().int().positive().default(5),
   QUOTE_POLL_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),

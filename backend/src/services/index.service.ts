@@ -12,7 +12,7 @@ export const indexService = {
         symbol: i.symbol,
         name: i.name,
         daily: i.values,
-        live: liveReading(i.liveValue, i.liveAt),
+        live: liveReading(i.liveValue, i.liveAt, i.liveChange, i.liveChangePercent),
       }),
     );
     // Tracked indices are a short, fixed list (KSE100 today), so paginate in memory.
@@ -31,7 +31,7 @@ export const indexService = {
       symbol: index.symbol,
       name: index.name,
       daily,
-      live: liveReading(index.liveValue, index.liveAt),
+      live: liveReading(index.liveValue, index.liveAt, index.liveChange, index.liveChangePercent),
     });
   },
 

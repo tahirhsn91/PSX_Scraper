@@ -137,6 +137,9 @@ model MarketIndex {
   name        String
   liveValue   Decimal?     @map("live_value") @db.Decimal(18, 4)
   liveAt      DateTime?    @map("live_at")
+  /// Point and percent change as published by the exchange, against its official previous close.
+  liveChange        Decimal?     @map("live_change") @db.Decimal(18, 4)
+  liveChangePercent Decimal?     @map("live_change_percent") @db.Decimal(10, 4)
   lastSyncedAt DateTime?   @map("last_synced_at")
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt @map("updated_at")
