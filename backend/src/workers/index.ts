@@ -9,6 +9,8 @@ import {
   UNIVERSE_QUEUE,
 } from '../jobs/queues';
 import { registerScheduler } from '../jobs/scheduler';
+import { scrapeIndices } from '../services/indexScrape.service';
+import { isMarketOpen } from '../utils/marketHours';
 import { syncLogRepository } from '../repositories/syncLog.repository';
 import { processSyncJob } from './syncProcessor';
 import { processSyncAllJob } from './syncAllProcessor';
@@ -72,8 +74,26 @@ async function main() {
   await registerScheduler();
   logger.info('worker.started', { concurrency: env.WORKER_CONCURRENCY });
 
+  /**
+   * Index board snapshot: one page fetch per tick, no browser, idempotent upserts. Kept on a
+   * plain interval rather than a BullMQ repeatable because it needs no queue semantics — a
+   * duplicate tick can only rewrite the same day's rows.
+   */
+  const scrapeIndexBoard = (reason: string) => {
+    if (env.INDEX_SCRAPE_MARKET_HOURS_ONLY && !isMarketOpen(new Date())) return;
+    void scrapeIndices().catch((err) =>
+      // Never fatal: a failed page fetch must not take the worker's other jobs down with it.
+      logger.warn('index_scrape.failed', { reason, error: err instanceof Error ? err.message : String(err) }),
+    );
+  };
+  const indexScrapeTimer = setInterval(() => scrapeIndexBoard('interval'), env.INDEX_SCRAPE_INTERVAL_MS);
+  // One shortly after boot so a restarted worker does not wait a full interval.
+  const indexScrapeBoot = setTimeout(() => scrapeIndexBoard('boot'), 5000);
+
   const shutdown = async (sig: string) => {
     logger.info('worker.shutdown', { sig });
+    clearInterval(indexScrapeTimer);
+    clearTimeout(indexScrapeBoot);
     await Promise.allSettled([
       syncWorker.close(),
       syncAllWorker.close(),

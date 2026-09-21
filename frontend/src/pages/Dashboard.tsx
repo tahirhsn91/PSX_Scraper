@@ -10,7 +10,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import SyncIcon from '@mui/icons-material/Sync';
 import ArrowUpwardRounded from '@mui/icons-material/ArrowUpwardRounded';
 import ArrowDownwardRounded from '@mui/icons-material/ArrowDownwardRounded';
-import { useStocks, useAddStock, useSyncStatus, useSyncAll } from '../api/hooks';
+import { useStocks, useAddStock, useSyncStatus, useSyncAll, useIndices } from '../api/hooks';
+import { IndicesPanel } from '../components/IndicesPanel';
 import { SearchBar } from '../components/SearchBar';
 import type { ApiError } from '../api/client';
 import type { StockSortField, SortOrder } from '../types';
@@ -98,6 +99,9 @@ export function Dashboard() {
 
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
   const { data, isLoading, isError } = useStocks(page + 1, rowsPerPage, syncingAll, sort, order);
+  // The index board is scraped separately from the stocks: it comes from the exchange's own
+  // market-summary page, and it is a handful of rows rather than a paginated list.
+  const { data: indexBoard } = useIndices(syncingAll);
 
   // Once the fan-out has actually started showing up in the queue, stop forcing
   // the "just triggered" state — the real counts take over.
@@ -180,6 +184,8 @@ export function Dashboard() {
       )}
 
       {isError && <Alert severity="error">Failed to load stocks.</Alert>}
+
+      <IndicesPanel indices={indexBoard?.items} />
 
       <Paper variant="outlined">
         {/* Eight columns do not fit a phone. TableContainer gives the table its own horizontal

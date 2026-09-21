@@ -19,6 +19,22 @@ export interface Candle {
   volume: number | null;
 }
 
+/** One index from the exchange's board, as the API serves it. */
+export interface IndexSummary {
+  symbol: string;
+  name: string;
+  value: number | null;
+  /** Point move against the official previous close — null when nothing has been reported. */
+  change: number | null;
+  changePercent: number | null;
+  previousClose: number | null;
+  open: number | null;
+  high: number | null;
+  low: number | null;
+  volume: number | null;
+  lastTradeDate: string | null;
+}
+
 export interface CandleSeries {
   symbol: string;
   interval: '1D';
