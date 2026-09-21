@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { HISTORY_RANGES } from '../utils/range';
 
 export const symbolSchema = z
   .string()
@@ -34,7 +35,8 @@ export const searchQuery = z.object({
   limit: z.coerce.number().int().positive().max(50).default(20),
 });
 
-export const rangeSchema = z.enum(['1W', '1M', '1Y', '2Y', '3Y', '5Y', 'MAX']);
+// Derived from the single source of truth so the API and the jobs cannot drift apart.
+export const rangeSchema = z.enum([...HISTORY_RANGES]);
 
 export const historyQuery = z.object({
   range: rangeSchema.optional(),
@@ -56,6 +58,9 @@ export const historySyncBody = z.object({ range: rangeSchema });
  */
 export const candlesQuery = z.object({
   interval: z.enum(['1D']).default('1D'),
+  // The same presets the line chart uses, so one range control drives both views. `range`
+  // takes precedence over an explicit `from`, exactly as it does for /history.
+  range: rangeSchema.optional(),
   from: z.coerce.date().optional(),
   to: z.coerce.date().optional(),
 });
