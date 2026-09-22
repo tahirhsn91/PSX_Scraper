@@ -169,3 +169,18 @@ export const useSyncAll = () => {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['sync'] }),
   });
 };
+
+/**
+ * Empty one queue's failed set.
+ *
+ * Not just a convenience: an entry whose job payload is gone cannot be removed through BullMQ
+ * at all, so this endpoint is the only way to clear it from the app.
+ */
+export const useClearFailed = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (queue: string) =>
+      (await api.post<{ queue: string; removed: number; orphans: number }>('/sync/failed/clear', { queue })).data,
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.syncStatus }),
+  });
+};

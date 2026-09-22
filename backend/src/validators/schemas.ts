@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { HISTORY_RANGES } from '../utils/range';
+import { MONITORED_QUEUES } from '../utils/queueNames';
 
 export const symbolSchema = z
   .string()
@@ -71,3 +72,9 @@ export const logsQuery = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(200).default(50),
 });
+
+/**
+ * Clear one queue's failed set. The names come from the same list `GET /sync/status` reports,
+ * so an unknown queue is a 400 naming it rather than an action that silently does nothing.
+ */
+export const clearFailedBody = z.object({ queue: z.enum(MONITORED_QUEUES) });

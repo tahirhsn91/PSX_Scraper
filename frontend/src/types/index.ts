@@ -120,8 +120,29 @@ export interface SyncLog {
 }
 
 export interface SyncStatus {
+  /**
+   * Per-queue job counts. `failed` counts failures whose job still exists; `orphans` counts
+   * entries in the failed set whose payload is already gone — BullMQ's own counter adds those
+   * in, which is how the dashboard came to report a failure that no longer existed.
+   */
   queues: Record<string, Record<string, number>>;
+  /** Recent failures per queue, newest first. Absent on an older API. */
+  failures?: Record<string, QueueFailure[]>;
   inFlight: string[];
+}
+
+/**
+ * One failed job, as the API reports it. Only failures that still exist are listed here; an
+ * entry with no job behind it is counted as an orphan instead, since there is nothing to
+ * inspect, retry or act on.
+ */
+export interface QueueFailure {
+  id: string;
+  /** Null for jobs that carry no symbol (sync-all, quote-poll). */
+  symbol: string | null;
+  reason: string;
+  /** Failure time in ms since epoch, or null when it was not recorded. */
+  failedAt: number | null;
 }
 
 /** Presets the dashboard offers. The API also still accepts `2Y`; the UI no longer shows it. */

@@ -6,6 +6,8 @@
  * (/api/v1/...) and the root /health endpoint against the same origin that serves the docs.
  */
 
+import { MONITORED_QUEUES } from '../utils/queueNames';
+
 const ERROR_ENVELOPE = {
   type: 'object',
   properties: {
@@ -528,14 +530,67 @@ export const openapiSpec = {
                 schema: { $ref: '#/components/schemas/SyncStatus' },
                 example: {
                   queues: {
-                    'stock-sync': { waiting: 0, active: 1, completed: 12, failed: 0, delayed: 0 },
-                    'stock-sync-all': { waiting: 0, active: 0, completed: 3, failed: 0 },
+                    'stock-sync': { waiting: 0, active: 1, completed: 12, failed: 0, delayed: 0, orphans: 0 },
+                    'stock-sync-all': { waiting: 0, active: 0, completed: 3, failed: 0, delayed: 0, orphans: 0 },
+                    'index-sync': { waiting: 0, active: 0, completed: 240, failed: 2, delayed: 0, orphans: 1 },
+                  },
+                  failures: {
+                    'index-sync': [
+                      {
+                        id: 'repeat:383ad8c3ea58629e3164dfa30d061bed:1790089200000',
+                        symbol: 'KSE100',
+                        reason: 'Source site unavailable: psx-eod',
+                        failedAt: 1790089200000,
+                      },
+                    ],
                   },
                   inFlight: ['FFC'],
                 },
               },
             },
           },
+        },
+      },
+    },
+
+    '/api/v1/sync/failed/clear': {
+      post: {
+        tags: ['Sync'],
+        summary: 'Clear a queue’s failed jobs',
+        description:
+          'Removes every failed job in the named queue, including entries whose job payload is already gone — the `orphans` reported by GET /api/v1/sync/status, which BullMQ itself cannot remove.',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['queue'],
+                properties: { queue: { type: 'string', enum: [...MONITORED_QUEUES] } },
+              },
+              example: { queue: 'stock-sync' },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'What was removed',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    queue: { type: 'string' },
+                    removed: { type: 'integer', description: 'Failed jobs that still existed.' },
+                    orphans: { type: 'integer', description: 'Failed-set entries whose payload was already gone.' },
+                    countedAsFailed: { type: 'integer', description: 'The honest failed count before the clear.' },
+                  },
+                },
+                example: { queue: 'stock-sync', removed: 0, orphans: 1, countedAsFailed: 0 },
+              },
+            },
+          },
+          '400': { description: 'Unknown queue' },
         },
       },
     },
@@ -810,8 +865,27 @@ export const openapiSpec = {
       SyncStatus: {
         type: 'object',
         properties: {
-          queues: { type: 'object', additionalProperties: { type: 'object', additionalProperties: { type: 'integer' } } },
+          queues: {
+            type: 'object',
+            additionalProperties: { type: 'object', additionalProperties: { type: 'integer' } },
+            description:
+              'Job counts per queue, plus `orphans`: entries in the failed set whose job payload no longer exists. `failed` counts failures that still exist, so `failed + orphans` is what BullMQ\'s own counter reports.',
+          },
+          failures: {
+            type: 'object',
+            additionalProperties: { type: 'array', items: { $ref: '#/components/schemas/QueueFailure' } },
+            description: 'Recent failures per queue, newest first — the entries a human can act on.',
+          },
           inFlight: { type: 'array', items: { type: 'string' } },
+        },
+      },
+      QueueFailure: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          symbol: { type: 'string', nullable: true, description: 'Null for jobs that carry no symbol (sync-all, quote-poll).' },
+          reason: { type: 'string' },
+          failedAt: { type: 'integer', nullable: true, description: 'Failure time in ms since epoch.' },
         },
       },
     },
