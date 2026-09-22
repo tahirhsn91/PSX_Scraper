@@ -7,6 +7,10 @@ jest.mock('../src/jobs/queues', () => ({
   enqueueSync: jest.fn(),
   cancelSyncJob: jest.fn(),
 }));
+jest.mock('../src/repositories/deletedSymbol.repository', () => ({
+  deletedSymbolRepository: { record: jest.fn(), forget: jest.fn(), isDeleted: jest.fn(), all: jest.fn() },
+}));
+
 jest.mock('../src/repositories/stock.repository', () => ({
   stockRepository: {
     findBySymbol: jest.fn(),

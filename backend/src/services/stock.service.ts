@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { stockRepository, StockSortField, SortOrder } from '../repositories/stock.repository';
+import { deletedSymbolRepository } from '../repositories/deletedSymbol.repository';
 import {
   getStockDetail, getPriceHistory, getCandles, type Candle,
 } from '../repositories/stockDetail.repository';
@@ -69,11 +70,13 @@ export const stockService = {
     const existing = await stockRepository.findBySymbol(sym);
     if (existing) throw new ConflictError(`Stock already tracked: ${sym}`);
     const stock = await stockRepository.create(sym);
+    // Adding by hand overrides a previous removal: the operator is telling us it belongs here.
+    await deletedSymbolRepository.forget(sym);
     const job = await enqueueSync(sym, 'add');
     return { stock, jobId: job.id };
   },
 
-  async remove(symbol: string) {
+  async remove(symbol: string, reason?: string) {
     const sym = symbol.toUpperCase();
     const existing = await stockRepository.findBySymbol(symbol);
     if (!existing) throw new NotFoundError(`Stock not tracked: ${sym}`);
@@ -86,6 +89,9 @@ export const stockService = {
       logger.warn('stocks.remove_sync_still_running', { symbol: sym });
     }
     await stockRepository.delete(symbol);
+    // Remember it. Order matters here too: record only once the row is actually gone, so a failed
+    // delete cannot leave a tombstone denying a symbol that is still tracked.
+    await deletedSymbolRepository.record(sym, reason);
   },
 
   /**
