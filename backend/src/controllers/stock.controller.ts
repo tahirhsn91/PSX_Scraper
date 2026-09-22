@@ -19,8 +19,8 @@ export const getStock: RequestHandler = async (req, res) => {
 };
 
 export const addStock: RequestHandler = async (req, res) => {
-  const { symbol } = valid<z.infer<typeof addStockBody>>(req, 'body');
-  const result = await stockService.add(symbol);
+  const { symbol, force } = valid<z.infer<typeof addStockBody>>(req, 'body');
+  const result = await stockService.add(symbol, { force });
   res.status(201).json({ symbol, id: result.stock.id, jobId: result.jobId });
 };
 
