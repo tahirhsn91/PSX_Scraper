@@ -7,6 +7,7 @@ import {
 } from '../types/scraper';
 import { ScrapeResult } from '../types/dto';
 import { InvalidSymbolError, NavigationTimeoutError, SiteUnavailableError } from '../types/errors';
+import { recordSourceFailure, sourceBreaker } from '../utils/sourceBreaker';
 
 /** Raw strings read off the DPS company page, before parsing. */
 export interface PsxPageData {
@@ -115,7 +116,19 @@ export class PSXScraper implements IStockScraper {
 
   async scrape(symbol: string): Promise<ScrapeResult> {
     const sym = symbol.toUpperCase();
-    return browserPool.withPage(async (page) => this.run(page, sym));
+    // The company page shares its host with the time-series endpoints, so the breaker that a
+    // refused history fetch opens also stops this scrape from adding to the volume (#27).
+    sourceBreaker.assertAvailable(this.source);
+    return browserPool.withPage(async (page) => {
+      try {
+        const result = await this.run(page, sym);
+        sourceBreaker.recordSuccess(this.source);
+        return result;
+      } catch (err) {
+        recordSourceFailure(this.source, err);
+        throw err;
+      }
+    });
   }
 
   private async run(page: Page, symbol: string): Promise<ScrapeResult> {

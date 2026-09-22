@@ -1,5 +1,6 @@
 import { browserPool } from './browserPool';
 import { childLogger } from '../utils/logger';
+import { recordSourceFailure, sourceBreaker } from '../utils/sourceBreaker';
 import { InvalidSymbolError, NavigationTimeoutError, ParseError, SiteUnavailableError } from '../types/errors';
 
 export interface HistoricalPoint {
@@ -87,6 +88,8 @@ export class PSXHistoricalScraper {
 
   /** GET a DPS time-series URL inside the browser and parse its JSON body. */
   private async fetchJson(url: string, sym: string): Promise<unknown> {
+    // Never ask a source that is already refusing us (#27) — including through the browser.
+    sourceBreaker.assertAvailable(this.source);
     return browserPool.withPage(async (page) => {
       try {
         const resp = await page.goto(url, { waitUntil: 'domcontentloaded' });
@@ -94,13 +97,22 @@ export class PSXHistoricalScraper {
         if (resp && resp.status() >= 500) throw new SiteUnavailableError(this.source);
         // The endpoint returns JSON; read the raw text and parse.
         const text = await page.evaluate(() => document.body.innerText);
-        return JSON.parse(text) as unknown;
+        const body = JSON.parse(text) as unknown;
+        sourceBreaker.recordSuccess(this.source);
+        return body;
       } catch (err) {
-        if (err instanceof InvalidSymbolError || err instanceof SiteUnavailableError) throw err;
+        if (err instanceof InvalidSymbolError || err instanceof SiteUnavailableError) {
+          recordSourceFailure(this.source, err);
+          throw err;
+        }
         const msg = err instanceof Error ? err.message : String(err);
-        if (msg.toLowerCase().includes('timeout')) throw new NavigationTimeoutError(this.source, { url });
-        if (err instanceof SyntaxError) throw new ParseError(this.source, 'json-body');
-        throw new SiteUnavailableError(this.source, { message: msg });
+        const error = msg.toLowerCase().includes('timeout')
+          ? new NavigationTimeoutError(this.source, { url })
+          : err instanceof SyntaxError
+            ? new ParseError(this.source, 'json-body')
+            : new SiteUnavailableError(this.source, { message: msg });
+        recordSourceFailure(this.source, error);
+        throw error;
       }
     });
   }
