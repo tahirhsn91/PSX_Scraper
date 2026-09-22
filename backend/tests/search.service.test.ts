@@ -20,6 +20,10 @@ jest.mock('../src/services/cache', () => ({
   cacheSet: jest.fn(),
 }));
 
+jest.mock('../src/repositories/deletedSymbol.repository', () => ({
+  deletedSymbolRepository: { record: jest.fn(), forget: jest.fn(), isDeleted: jest.fn(), all: jest.fn() },
+}));
+
 jest.mock('../src/repositories/stock.repository', () => ({
   stockRepository: { search: jest.fn() },
 }));
