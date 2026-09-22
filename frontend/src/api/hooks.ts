@@ -135,7 +135,10 @@ export const useSyncLogs = (params: { page?: number; limit?: number; status?: st
 export const useAddStock = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (symbol: string) => (await api.post('/stocks', { symbol })).data,
+    mutationFn: async (symbol: string) =>
+      // A human clicked Add, so this one is allowed to override a remembered removal; the API
+      // refuses an unforced add of a symbol that was deleted (any automated client).
+      (await api.post('/stocks', { symbol, force: true })).data,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['stocks'] });
       qc.invalidateQueries({ queryKey: ['sync'] });

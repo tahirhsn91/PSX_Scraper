@@ -65,10 +65,21 @@ export const stockService = {
     };
   },
 
-  async add(symbol: string) {
+  /**
+   * Track a symbol — unless a human removed it and the caller has not said it means to override.
+   *
+   * This endpoint is what an automated client reaches for when it cannot find a symbol, and that is
+   * indistinguishable from a person clicking Add: observed live, PSX_Portfolio_Manager answered its
+   * own 404 with a `POST /api/v1/stocks` and put a delisted symbol back on the dashboard every time
+   * the page was opened. A removal therefore only yields to a caller that asks for it explicitly.
+   */
+  async add(symbol: string, options: { force?: boolean } = {}) {
     const sym = symbol.toUpperCase();
     const existing = await stockRepository.findBySymbol(sym);
     if (existing) throw new ConflictError(`Stock already tracked: ${sym}`);
+    if (!options.force && (await deletedSymbolRepository.isDeleted(sym))) {
+      throw new ConflictError(`Stock was removed and is not re-added automatically: ${sym}`);
+    }
     const stock = await stockRepository.create(sym);
     // Adding by hand overrides a previous removal: the operator is telling us it belongs here.
     await deletedSymbolRepository.forget(sym);

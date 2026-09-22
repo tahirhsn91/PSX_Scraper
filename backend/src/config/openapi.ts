@@ -129,13 +129,16 @@ export const openapiSpec = {
       post: {
         tags: ['Stocks'],
         summary: 'Add (track) a new stock',
-        description: 'Validates the symbol, inserts it, and enqueues a full scrape. Returns a `jobId` the client can poll.',
+        description:
+          'Validates the symbol, inserts it, and enqueues a full scrape. Returns a `jobId` the client can poll. ' +
+          'A symbol that was previously removed is refused with `409` unless the request sends `force: true`, ' +
+          'so an automated client re-requesting a symbol it got a 404 for cannot resurrect a deletion.',
         requestBody: {
           required: true,
           content: {
             'application/json': {
               schema: { $ref: '#/components/schemas/AddStockRequest' },
-              example: { symbol: 'FFC' },
+              example: { symbol: 'FFC', force: true },
             },
           },
         },
@@ -156,7 +159,7 @@ export const openapiSpec = {
             },
           },
           '400': err('Invalid symbol'),
-          '409': err('Stock already tracked'),
+          '409': err('Stock already tracked, or removed and not re-added without `force`'),
           '429': err('Rate limit exceeded'),
         },
       },
@@ -672,7 +675,16 @@ export const openapiSpec = {
       SyncStatusEnum: { type: 'string', enum: ['PENDING', 'RUNNING', 'SUCCESS', 'PARTIAL', 'FAILED'] },
       AddStockRequest: {
         type: 'object', required: ['symbol'],
-        properties: { symbol: { type: 'string', pattern: '^[A-Za-z0-9]{1,12}$', example: 'FFC' } },
+        properties: {
+          symbol: { type: 'string', pattern: '^[A-Za-z0-9]{1,12}$', example: 'FFC' },
+          force: {
+            type: 'boolean',
+            description:
+              'Override a remembered removal. A symbol that was deleted from the dashboard is not ' +
+              're-added by a plain request — an automated client answering its own 404 with this ' +
+              'endpoint must not undo a human decision. Send `true` only when a person asked for it.',
+          },
+        },
       },
       HistorySyncRequest: {
         type: 'object', required: ['range'],
