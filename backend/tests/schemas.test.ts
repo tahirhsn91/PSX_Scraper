@@ -12,4 +12,10 @@ describe('validators', () => {
     expect(addStockBody.parse({ symbol: 'ogdc' })).toEqual({ symbol: 'OGDC' });
     expect(() => addStockBody.parse({})).toThrow();
   });
+  it('accepts force only as a boolean', () => {
+    // `force` is the human override for a remembered removal — a string "true" must not slip through
+    // as a truthy value and quietly override a deletion.
+    expect(addStockBody.parse({ symbol: 'ogdc', force: true })).toEqual({ symbol: 'OGDC', force: true });
+    expect(() => addStockBody.parse({ symbol: 'OGDC', force: 'true' })).toThrow();
+  });
 });
