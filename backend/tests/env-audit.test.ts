@@ -10,16 +10,19 @@ describe('findUnsetFeatureSettings', () => {
   });
 
   it('stays quiet about a setting the environment actually configures', () => {
-    const unset = findUnsetFeatureSettings({
-      UNIVERSE_ENABLED: 'false', // present, even when false — that is a deliberate choice
-      UNIVERSE_PASS_CRON: '*/3 * * * *',
-      UNIVERSE_PACING_MS: '1500',
-      UNIVERSE_MAX_QUOTE_AGE_DAYS: '4',
-      QUOTE_POLL_MARKET_HOURS_ONLY: 'true',
-      CRON_EXPRESSION: '0 * * * *',
-    });
+    // Derived from the list on purpose. Hardcoding the names is what let this test trail the
+    // settings `758bfdf` added: the audit grew a `DAILY_BOARD_*` entry, this fixture did not,
+    // and the suite went red for a reason that had nothing to do with the audit's behaviour.
+    const configured: Record<string, string> = Object.fromEntries(
+      FEATURE_SETTINGS.map((s) => [s.name, '1']),
+    );
+    configured.UNIVERSE_ENABLED = 'false'; // present, even when false — that is a deliberate choice
+    configured.QUOTE_POLL_MARKET_HOURS_ONLY = 'true';
 
-    expect(unset).toEqual([]);
+    expect(findUnsetFeatureSettings(configured)).toEqual([]);
+    // …and the fixture has teeth: dropping one setting reports exactly that one.
+    const { DAILY_BOARD_HOUR: _dropped, ...missing } = configured;
+    expect(findUnsetFeatureSettings(missing).map((s) => s.name)).toEqual(['DAILY_BOARD_HOUR']);
   });
 
   it('treats an explicitly empty value as configured, not as missing', () => {
