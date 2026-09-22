@@ -60,3 +60,19 @@ export class RateLimitedError extends ScraperError {
     super('RATE_LIMITED', `Rate limited by ${source}`, true);
   }
 }
+/**
+ * The source is in its back-off window (`utils/sourceBreaker.ts`), so no request was sent.
+ * Raised *before* the network call: it means "we are deliberately not asking", which is not
+ * the same failure as the source refusing a request we did send.
+ */
+export class SourceCoolingDownError extends ScraperError {
+  constructor(
+    public readonly source: string,
+    public readonly resumeAt: Date,
+  ) {
+    super('SOURCE_COOLING_DOWN', `Source cooling down: ${source} (retry after ${resumeAt.toISOString()})`, true, {
+      source,
+      resumeAt: resumeAt.toISOString(),
+    });
+  }
+}
