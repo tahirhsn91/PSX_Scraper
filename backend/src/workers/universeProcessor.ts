@@ -1,6 +1,7 @@
 import type { Job } from 'bullmq';
 import { UNIVERSE_PASS_JOB, type UniverseJobData } from '../jobs/queues';
 import { runUniverseSymbol, startUniversePass } from '../services/universeRunner.service';
+import { deletedSymbolRepository } from '../repositories/deletedSymbol.repository';
 
 /**
  * Universe queue processor — one job per pass, then one job per symbol.
@@ -15,6 +16,11 @@ export async function processUniverseJob(job: Job<UniverseJobData>): Promise<unk
   }
   const { symbol } = job.data;
   if (!symbol) throw new Error(`Universe symbol job ${job.id ?? ''} carries no symbol`);
+  // Never walk a symbol a human removed. Its listing page can outlive the listing, and walking that
+  // page is what re-registers a security that no longer exists.
+  if (await deletedSymbolRepository.isDeleted(symbol)) {
+    return { skipped: true, reason: 'symbol was removed from Scrapper' };
+  }
   // Symbol jobs always come from a pass that already resolved the clock, so `auto` never reaches
   // here; the fallback only keeps the log label honest.
   return runUniverseSymbol(symbol, job.data.kind === 'close' ? 'close' : 'intraday');

@@ -1,5 +1,6 @@
 import { prisma } from '../database/prisma';
 import { stockRepository } from '../repositories/stock.repository';
+import { deletedSymbolRepository } from '../repositories/deletedSymbol.repository';
 import { enqueueSync } from '../jobs/queues';
 import { childLogger } from '../utils/logger';
 
@@ -117,10 +118,12 @@ export async function runDailyBoard(opts: { pacingMs?: number } = {}): Promise<D
   const tracked = new Set(
     (await prisma.stock.findMany({ select: { symbol: true } })).map((row) => row.symbol.toUpperCase()),
   );
+  // Symbols a human removed are neither registered nor refreshed, however the board reports them.
+  const removed = await deletedSymbolRepository.all();
 
   const registered: string[] = [];
   for (const row of board) {
-    if (tracked.has(row.symbol)) continue;
+    if (tracked.has(row.symbol) || removed.has(row.symbol)) continue;
     try {
       await stockRepository.create(row.symbol);
       registered.push(row.symbol);
@@ -135,6 +138,7 @@ export async function runDailyBoard(opts: { pacingMs?: number } = {}): Promise<D
   let queued = 0;
   let failed = 0;
   for (const [i, row] of board.entries()) {
+    if (removed.has(row.symbol)) continue;
     try {
       await enqueueSync(row.symbol, 'cron');
       queued++;
