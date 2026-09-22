@@ -62,15 +62,40 @@ describe('removal is remembered', () => {
     expect(record).not.toHaveBeenCalled();
   });
 
-  it('an explicit add forgets the removal', async () => {
+  it('refuses a plain add of a removed symbol, so an automated client cannot undo the deletion', async () => {
+    // The live shape of this: PSX_Portfolio_Manager answers its own 404 with `POST /api/v1/stocks`,
+    // which put a delisted symbol back on the dashboard every time its page was opened.
     findBySymbol.mockResolvedValue(null);
+    isDeleted.mockResolvedValue(true);
+
+    await expect(stockService.add('ENGRO')).rejects.toThrow(/removed/i);
+
+    expect(createRow).not.toHaveBeenCalled();
+    expect(forget).not.toHaveBeenCalled();
+  });
+
+  it('an explicit forced add forgets the removal', async () => {
+    findBySymbol.mockResolvedValue(null);
+    isDeleted.mockResolvedValue(true);
     createRow.mockResolvedValue({ id: 's2', symbol: 'ENGRO' });
     enqueue.mockResolvedValue({ id: 'job1' });
     forget.mockResolvedValue(undefined);
 
-    await stockService.add('ENGRO');
+    await stockService.add('ENGRO', { force: true });
 
+    expect(createRow).toHaveBeenCalledWith('ENGRO');
     expect(forget).toHaveBeenCalledWith('ENGRO');
+  });
+
+  it('a symbol that was never removed needs no force', async () => {
+    findBySymbol.mockResolvedValue(null);
+    isDeleted.mockResolvedValue(false);
+    createRow.mockResolvedValue({ id: 's3', symbol: 'FFC' });
+    enqueue.mockResolvedValue({ id: 'job2' });
+
+    await stockService.add('FFC');
+
+    expect(createRow).toHaveBeenCalledWith('FFC');
   });
 });
 

@@ -27,7 +27,12 @@ export const stocksQuery = paginationQuery.extend({
   order: z.enum(['asc', 'desc']).default('asc'),
 });
 
-export const addStockBody = z.object({ symbol: symbolSchema });
+/**
+ * `force` is how an explicit add overrides a remembered removal: the dashboard sends it because a
+ * human clicked Add, while a client that re-requests a symbol it got a 404 for does not — so an
+ * automated retry cannot resurrect a symbol someone deleted.
+ */
+export const addStockBody = z.object({ symbol: symbolSchema, force: z.boolean().optional() });
 
 export const symbolParam = z.object({ symbol: symbolSchema });
 
