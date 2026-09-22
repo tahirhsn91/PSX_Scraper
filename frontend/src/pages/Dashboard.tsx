@@ -13,6 +13,7 @@ import ArrowDownwardRounded from '@mui/icons-material/ArrowDownwardRounded';
 import { useStocks, useAddStock, useSyncStatus, useSyncAll, useIndices } from '../api/hooks';
 import { IndicesPanel } from '../components/IndicesPanel';
 import { IndicesTicker } from '../components/IndicesTicker';
+import { FailuresPanel } from '../components/FailuresPanel';
 import { SearchBar } from '../components/SearchBar';
 import type { ApiError } from '../api/client';
 import type { StockSortField, SortOrder } from '../types';
@@ -96,6 +97,10 @@ export function Dashboard() {
   const syncCounts = status?.queues['stock-sync'];
   const inFlightCount = syncCounts?.active ?? 0;
   const queuedCount = syncCounts?.waiting ?? 0;
+  // Failures across every queue, not just this one. The single-queue number was also BullMQ's
+  // *set size*, which counts entries whose job has already been trimmed away — see FailuresPanel.
+  const failedCount = Object.values(status?.queues ?? {})
+    .reduce((n, counts) => n + (counts.failed ?? 0), 0);
   const syncingAll = justTriggered || inFlightCount > 0 || queuedCount > 0;
 
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
@@ -185,7 +190,7 @@ export function Dashboard() {
           { label: 'Tracked stocks', value: data?.total ?? '—' },
           { label: 'Active syncs', value: syncCounts?.active ?? 0 },
           { label: 'Waiting', value: syncCounts?.waiting ?? 0 },
-          { label: 'Failed', value: syncCounts?.failed ?? 0 },
+          { label: 'Failed', value: failedCount },
         ].map((c) => (
           <Grid item xs={6} md={3} key={c.label}>
             <Card variant="outlined"><CardContent>
@@ -206,6 +211,8 @@ export function Dashboard() {
       )}
 
       {isError && <Alert severity="error">Failed to load stocks.</Alert>}
+
+      <FailuresPanel status={status} />
 
       <IndicesPanel indices={indexBoard?.items} />
 

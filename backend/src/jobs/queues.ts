@@ -1,6 +1,7 @@
 import { Queue } from 'bullmq';
 import { createRedisConnection } from './connection';
 import type { HistoryRange } from '../utils/range';
+import type { MonitoredQueueName } from '../utils/queueNames';
 
 export const SYNC_QUEUE = 'stock-sync';
 export const SYNC_ALL_QUEUE = 'stock-sync-all';
@@ -206,6 +207,23 @@ export const universeQueue = new Queue<UniverseJobData>(UNIVERSE_QUEUE, {
     removeOnFail: { age: 86400, count: 100 },
   },
 });
+
+/**
+ * Every queue the dashboard reports on, keyed by the name it is displayed under.
+ *
+ * One map, two consumers: `GET /sync/status` reports each queue's counts and failures from it,
+ * and the clear-failed action resolves its target through it. Typing it as
+ * `Record<MonitoredQueueName, Queue>` means adding a name to the list without wiring a queue
+ * here does not compile, so a new queue cannot end up invisible on the dashboard.
+ */
+export const monitoredQueues: Record<MonitoredQueueName, Queue> = {
+  [SYNC_QUEUE]: syncQueue,
+  [SYNC_ALL_QUEUE]: syncAllQueue,
+  [HISTORY_QUEUE]: historyQueue,
+  [INDEX_QUEUE]: indexQueue,
+  [QUOTE_QUEUE]: quoteQueue,
+  [UNIVERSE_QUEUE]: universeQueue,
+};
 
 /**
  * Enqueue one job per symbol, each delayed by its position in the list.
