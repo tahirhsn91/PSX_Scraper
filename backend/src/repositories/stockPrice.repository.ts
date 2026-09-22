@@ -68,7 +68,10 @@ export async function upsertQuoteSnapshot(snapshot: QuoteSnapshot): Promise<bool
     close: dec(snapshot.price),
     change: dec(snapshot.change),
     changePercent: dec(snapshot.changePercent),
-    open: dec(snapshot.open),
+    // A source that does not carry `open` (the market-wide ticker) must leave a stored one
+    // alone rather than blank it — `undefined` drops the column from the UPDATE, `null` would
+    // erase a real reading the company-page scrape had already written for this session.
+    open: snapshot.open === null ? undefined : dec(snapshot.open),
     volume: snapshot.volume === null ? null : BigInt(Math.trunc(snapshot.volume)),
   };
 
