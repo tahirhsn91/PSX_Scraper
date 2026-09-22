@@ -165,3 +165,13 @@ model SyncLog {
   @@index([status, startedAt(sort: Desc)])
   @@map("sync_logs")
 }
+
+/// A symbol removed on purpose. Registration paths consult this table so a stale listing page, a
+/// queued sync job or a discovery pass cannot put it back; adding the symbol by hand clears it.
+model DeletedSymbol {
+  symbol    String   @id
+  reason    String?
+  deletedAt DateTime @default(now()) @map("deleted_at")
+
+  @@map("deleted_symbols")
+}
