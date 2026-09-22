@@ -1,5 +1,7 @@
 import { env } from '../config';
 import { childLogger } from '../utils/logger';
+import { sourceBreaker } from '../utils/sourceBreaker';
+import { SCRAPER_USER_AGENT } from '../utils/userAgent';
 import { InvalidSymbolError, NavigationTimeoutError, ParseError, SiteUnavailableError } from '../types/errors';
 
 /**
@@ -114,23 +116,36 @@ export class PSXQuoteScraper {
 
   /** GET and parse a DPS JSON body over plain fetch — deliberately not the browser pool. */
   private async fetchJson(url: string, sym: string): Promise<unknown> {
+    // Never ask a source that is already refusing us: the request would be dropped anyway, and
+    // the volume is what earned the refusal (#27).
+    sourceBreaker.assertAvailable(this.source);
+
     let resp: Response;
     try {
       resp = await fetch(url, {
-        headers: { accept: 'application/json' },
+        headers: { accept: 'application/json', 'user-agent': SCRAPER_USER_AGENT },
         signal: AbortSignal.timeout(env.QUOTE_POLL_TIMEOUT_MS),
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      if (/abort|timeout/i.test(msg)) throw new NavigationTimeoutError(this.source, { url });
-      throw new SiteUnavailableError(this.source, { message: msg });
+      const error = /abort|timeout/i.test(msg)
+        ? new NavigationTimeoutError(this.source, { url })
+        : new SiteUnavailableError(this.source, { message: msg });
+      sourceBreaker.recordFailure(this.source, error.message);
+      throw error;
     }
 
     if (resp.status === 404) throw new InvalidSymbolError(sym);
-    if (!resp.ok) throw new SiteUnavailableError(this.source, { status: resp.status });
+    if (!resp.ok) {
+      const error = new SiteUnavailableError(this.source, { status: resp.status });
+      sourceBreaker.recordFailure(this.source, error.message);
+      throw error;
+    }
 
     try {
-      return JSON.parse(await resp.text()) as unknown;
+      const body = JSON.parse(await resp.text()) as unknown;
+      sourceBreaker.recordSuccess(this.source);
+      return body;
     } catch {
       throw new ParseError(this.source, 'json-body');
     }
