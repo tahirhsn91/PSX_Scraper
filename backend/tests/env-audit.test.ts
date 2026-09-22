@@ -10,14 +10,11 @@ describe('findUnsetFeatureSettings', () => {
   });
 
   it('stays quiet about a setting the environment actually configures', () => {
-    const unset = findUnsetFeatureSettings({
-      UNIVERSE_ENABLED: 'false', // present, even when false — that is a deliberate choice
-      UNIVERSE_PASS_CRON: '*/3 * * * *',
-      UNIVERSE_PACING_MS: '1500',
-      UNIVERSE_MAX_QUOTE_AGE_DAYS: '4',
-      QUOTE_POLL_MARKET_HOURS_ONLY: 'true',
-      CRON_EXPRESSION: '0 * * * *',
-    });
+    // Every setting present, however it is set — present-and-false is a deliberate choice, not a
+    // gap. Derived from the list itself rather than spelled out, so adding a setting cannot break
+    // this test, which is what happened when the daily-board settings were added.
+    const configured = Object.fromEntries(FEATURE_SETTINGS.map((s) => [s.name, 'configured']));
+    const unset = findUnsetFeatureSettings(configured);
 
     expect(unset).toEqual([]);
   });
