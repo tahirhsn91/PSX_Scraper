@@ -87,7 +87,10 @@ export function msUntilNextRun(now: Date, hour = 2): number {
   const target = new Date(Date.UTC(
     now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + dayShift, utcHour, 0, 0, 0,
   ));
-  if (target.getTime() <= now.getTime()) target.setUTCDate(target.getUTCDate() + 1);
+  // Step forward until the target is in the future. The UTC-day shift above leaves it a day in the
+  // past for most of the day, and stepping only once would schedule the pass in the past — which a
+  // timer fires immediately rather than ~23 hours later.
+  while (target.getTime() <= now.getTime()) target.setUTCDate(target.getUTCDate() + 1);
   return target.getTime() - now.getTime();
 }
 
