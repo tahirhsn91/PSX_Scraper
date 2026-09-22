@@ -5,6 +5,7 @@ import { stockRepository } from '../repositories/stock.repository';
 import { upsertQuoteSnapshot } from '../repositories/stockPrice.repository';
 import { psxQuoteScraper } from '../scrapers/psxQuotes.scraper';
 import { isMarketOpen } from '../utils/marketHours';
+import { sourceBreaker } from '../utils/sourceBreaker';
 import { childLogger } from '../utils/logger';
 
 export interface QuotePollSummary {
@@ -12,7 +13,9 @@ export interface QuotePollSummary {
   fetched: number;
   written: number;
   failed: number;
-  skipped?: 'market-closed';
+  skipped?: 'market-closed' | 'source-cooling';
+  /** When a cooling source is expected back, ISO — only set with `skipped: 'source-cooling'`. */
+  resumeAt?: string | null;
   durationMs: number;
 }
 
@@ -48,6 +51,24 @@ export async function processQuotePollJob(job: Job<QuotePollJobData>): Promise<Q
   }
 
   const symbols = await stockRepository.findAllSymbols();
+
+  // A refused source is the one case where a tick must not fan out at all (#27): the poll is
+  // the highest-volume caller we have, and asking 25 times per minute while the source is
+  // dropping us is what earned the refusal in the first place.
+  if (sourceBreaker.isCoolingDown(psxQuoteScraper.source)) {
+    const resumeAt = sourceBreaker.resumeAt(psxQuoteScraper.source)?.toISOString() ?? null;
+    log.warn('quote-poll.skipped', { reason: 'source-cooling', resumeAt });
+    return {
+      symbols: symbols.length,
+      fetched: 0,
+      written: 0,
+      failed: 0,
+      skipped: 'source-cooling',
+      resumeAt,
+      durationMs: Date.now() - started,
+    };
+  }
+
   const { snapshots, failures } = await psxQuoteScraper.fetchMany(symbols);
 
   let written = 0;

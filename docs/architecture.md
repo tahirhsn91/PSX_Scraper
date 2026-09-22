@@ -110,3 +110,27 @@ erDiagram
       enum status
     }
 ```
+
+## Sources, and backing off when one refuses us
+
+Our data paths live on `dps.psx.com.pk` (`/timeseries/eod/{SYMBOL}` for history and quotes,
+`/company/{SYMBOL}` for the page scrape) and on `www.psx.com.pk/market-summary` (the index
+board). The exchange's data paths refuse us from time to time in a way that looks like an
+outage but is not: TLS completes, the connection is closed with no response (`http=000`), and
+the root page keeps answering 200. That is a WAF/rate-limit rule, and we earn it with volume
+(#27).
+
+`utils/sourceBreaker.ts` tracks consecutive availability failures per source (a refusal or a
+timeout — never a 404 or a parse error, those are not the source declining). On the 5th
+consecutive failure the source enters a cooldown of 5 minutes, doubling per further trip up to
+an hour; `assertAvailable()` then throws *before* a request leaves the process, and the jobs
+that depend on that source **skip** (`index-sync.skipped`, `history-sync.skipped`,
+`quote-poll.skipped`, all with `reason: "source-cooling"` and a `resumeAt`) instead of failing
+once per symbol per tick. When the window elapses the next request is a probe: a success clears
+the run, a failure re-trips at the next longer cooldown.
+
+Two consequences worth knowing: the queue's failed set stops growing while a source is down
+(at most one probe per cooldown, instead of one failure per symbol per tick), and the breaker
+is **per worker process** — it is rebuilt on restart, and the API process cannot see it, which
+is why the cooldown is announced in the log stream rather than in `/sync/status`.
+
