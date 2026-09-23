@@ -24,9 +24,23 @@ const envSchema = z.object({
   /** Hour of the daily board pass, in Karachi time. */
   DAILY_BOARD_HOUR: z.coerce.number().int().min(0).max(23).default(2),
 
-  QUOTE_POLL_CRON: z.string().default('*/5 * * * *'),
+  // The poll ticks every minute: the market-wide ticker is one request and the per-symbol leg
+  // below is capped, so a tick costs ~30 requests and no browser — the dashboard shows the market
+  // as it moves without a Chromium pass.
+  QUOTE_POLL_CRON: z.string().default('*/1 * * * *'),
   QUOTE_POLL_CONCURRENCY: z.coerce.number().int().positive().default(5),
   QUOTE_POLL_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
+  // The DPS leg fans out one request per symbol (~508 when it answers), which is the load that
+  // earned the refusal in #27. It keeps its own slower interval so the tighter tick cadence
+  // cannot re-earn it: on a tick where it is not due, the ticker + per-symbol legs serve the
+  // board instead.
+  QUOTE_POLL_DPS_MIN_INTERVAL_MS: z.coerce.number().int().nonnegative().default(300000),
+  // Rail on the per-symbol leg, and its slice size. The ticker is the bulk path; this leg only
+  // covers what the ticker omits (ETFs, preference shares, renamed tickers — ~35 symbols), and
+  // that host throttles: measured 2026-09-23 at ~36 requests a minute it starts answering 429,
+  // which left a third of the tail unrefreshed every tick. So the tail is walked a slice per
+  // tick and wraps, covering all of it over a few minutes at a rate the host does not refuse.
+  SARMAYA_QUOTE_MAX_SYMBOLS: z.coerce.number().int().nonnegative().default(12),
   // Outside the PSX session the series returns the values it already returned, so polling
   // there is load for no new data. `false` polls around the clock.
   // NOTE: not z.coerce.boolean() — that maps the string "false" to true.

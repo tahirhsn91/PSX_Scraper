@@ -72,6 +72,9 @@ export async function upsertQuoteSnapshot(snapshot: QuoteSnapshot): Promise<bool
     // alone rather than blank it — `undefined` drops the column from the UPDATE, `null` would
     // erase a real reading the company-page scrape had already written for this session.
     open: snapshot.open === null ? undefined : dec(snapshot.open),
+    // Same rule for the day range: only a source that actually states one may update it.
+    high: snapshot.high == null ? undefined : dec(snapshot.high),
+    low: snapshot.low == null ? undefined : dec(snapshot.low),
     volume: snapshot.volume === null ? null : BigInt(Math.trunc(snapshot.volume)),
   };
 
