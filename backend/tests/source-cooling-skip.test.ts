@@ -4,6 +4,7 @@ import { sourceBreaker } from '../src/utils/sourceBreaker';
 import { processIndexJob } from '../src/workers/indexProcessor';
 import { processHistoryJob } from '../src/workers/historyProcessor';
 import { processQuotePollJob } from '../src/workers/quoteProcessor';
+import type { QuotePollSummary } from '../src/workers/quoteProcessor';
 import { runIndexSync } from '../src/services/indexSync.service';
 import { runHistorySync } from '../src/services/historySync.service';
 import { stockRepository } from '../src/repositories/stock.repository';
@@ -12,6 +13,15 @@ import { psxQuoteScraper } from '../src/scrapers/psxQuotes.scraper';
 import { fetchSarmaayaTicker } from '../src/scrapers/sarmaayaTicker.scraper';
 import { fetchSarmaayaQuotes } from '../src/scrapers/sarmaayaQuote.scraper';
 import type { QuoteSnapshot } from '../src/scrapers/psxQuotes.scraper';
+
+/**
+ * Drive one quote-poll tick and read the poll's summary.
+ *
+ * `processQuotePollJob` also carries the KSE-100 membership pass (same queue, same kind of light
+ * schedule-driven work), so its result is a union — and this file only ever feeds it poll jobs.
+ */
+const tick = async (j: Job<never>): Promise<QuotePollSummary> =>
+  (await processQuotePollJob(j)) as QuotePollSummary;
 
 /**
  * A source in its cooldown window must make the scheduled jobs *skip*, not fail (#27).
@@ -137,7 +147,7 @@ describe('the quote poll while its primary source is cooling down', () => {
     cool('psx-quotes');
     tickerMock.mockResolvedValue([snapshot('OGDC', 318.41, 0.92, 0.29)]);
 
-    const summary = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    const summary = await tick(job({ trigger: 'cron' }) as Job<never>);
 
     expect(summary).toMatchObject({ source: 'sarmaaya-ticker', fetched: 1, written: 1, failed: 0 });
     expect(summary.skipped).toBeUndefined();
@@ -149,7 +159,7 @@ describe('the quote poll while its primary source is cooling down', () => {
     cool('psx-quotes');
     tickerMock.mockRejectedValue(new Error('Source site unavailable: sarmaaya-ticker'));
 
-    const summary = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    const summary = await tick(job({ trigger: 'cron' }) as Job<never>);
 
     expect(summary).toMatchObject({ skipped: 'no-source', fetched: 0, written: 0 });
     expect(upsertMock).not.toHaveBeenCalled();
@@ -160,7 +170,7 @@ describe('the quote poll while its primary source is answering', () => {
   it('uses the primary alone when it covers every tracked symbol', async () => {
     fetchMany.mockResolvedValue({ snapshots: [snapshot('OGDC', 318.41, 0.92, 0.29)], failures: [] });
 
-    const summary = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    const summary = await tick(job({ trigger: 'cron' }) as Job<never>);
 
     expect(summary).toMatchObject({ source: 'psx-quotes', fetched: 1, written: 1, failed: 0 });
     expect(tickerMock).not.toHaveBeenCalled();
@@ -183,7 +193,7 @@ describe('the quote poll while its primary source is answering', () => {
       snapshot('ABL', 170.05, -0.43, -0.25),
     ]);
 
-    const summary = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    const summary = await tick(job({ trigger: 'cron' }) as Job<never>);
 
     expect(tickerMock).toHaveBeenCalledWith(['FFC', 'ABL']);
     expect(summary).toMatchObject({
@@ -202,7 +212,7 @@ describe('the quote poll while its primary source is answering', () => {
     });
     tickerMock.mockResolvedValue([]);
 
-    const summary = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    const summary = await tick(job({ trigger: 'cron' }) as Job<never>);
 
     expect(summary).toMatchObject({ source: 'psx-quotes', fetched: 1, written: 1, failed: 1 });
   });
@@ -222,7 +232,7 @@ describe('the quote poll while its primary source is answering', () => {
       failures: [],
     });
 
-    const summary = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    const summary = await tick(job({ trigger: 'cron' }) as Job<never>);
 
     expect(perSymbolMock).toHaveBeenCalledWith(['ACIETF', 'ENGROH'], { max: 60 });
     expect(summary).toMatchObject({
@@ -245,10 +255,10 @@ describe('the quote poll while its primary source is answering', () => {
     tickerMock.mockResolvedValue([snapshot('OGDC', 318.6, 1.11, 0.35)]);
 
     // With no interval to respect (the fixture's default) the fan-out runs.
-    const first = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    const first = await tick(job({ trigger: 'cron' }) as Job<never>);
 
     mockedEnv.QUOTE_POLL_DPS_MIN_INTERVAL_MS = 300_000;
-    const second = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    const second = await tick(job({ trigger: 'cron' }) as Job<never>);
 
     expect(first).toMatchObject({ source: 'psx-quotes', fetched: 1, written: 1 });
     expect(fetchMany).toHaveBeenCalledTimes(1);
@@ -267,8 +277,8 @@ describe('the quote poll while its primary source is answering', () => {
     });
     tickerMock.mockResolvedValue([]); // none of the tail is in its list
 
-    await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
-    await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    await tick(job({ trigger: 'cron' }) as Job<never>);
+    await tick(job({ trigger: 'cron' }) as Job<never>);
 
     const asked = perSymbolMock.mock.calls.map((call) => call[0] as string[]);
     expect(asked.every((slice) => slice.length <= 2)).toBe(true);
