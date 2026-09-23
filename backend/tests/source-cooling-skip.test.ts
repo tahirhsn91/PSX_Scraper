@@ -1,4 +1,5 @@
 import { Job } from 'bullmq';
+import { env } from '../src/config';
 import { sourceBreaker } from '../src/utils/sourceBreaker';
 import { processIndexJob } from '../src/workers/indexProcessor';
 import { processHistoryJob } from '../src/workers/historyProcessor';
@@ -9,6 +10,7 @@ import { stockRepository } from '../src/repositories/stock.repository';
 import { upsertQuoteSnapshot } from '../src/repositories/stockPrice.repository';
 import { psxQuoteScraper } from '../src/scrapers/psxQuotes.scraper';
 import { fetchSarmaayaTicker } from '../src/scrapers/sarmaayaTicker.scraper';
+import { fetchSarmaayaQuotes } from '../src/scrapers/sarmaayaQuote.scraper';
 import type { QuoteSnapshot } from '../src/scrapers/psxQuotes.scraper';
 
 /**
@@ -29,6 +31,10 @@ jest.mock('../src/config', () => ({
     QUOTE_POLL_MARKET_HOURS_ONLY: false,
     QUOTE_POLL_CONCURRENCY: 4,
     QUOTE_POLL_TIMEOUT_MS: 1_000,
+    // 0 = the DPS fan-out is always due, so a tick in these tests behaves like the first tick of
+    // a process. The deferral itself is asserted on its own, where the interval is raised.
+    QUOTE_POLL_DPS_MIN_INTERVAL_MS: 0,
+    SARMAYA_QUOTE_MAX_SYMBOLS: 60,
   },
 }));
 jest.mock('../src/services/indexSync.service', () => ({ runIndexSync: jest.fn() }));
@@ -46,13 +52,22 @@ jest.mock('../src/scrapers/sarmaayaTicker.scraper', () => ({
   SARMAYA_TICKER_SOURCE: 'sarmaaya-ticker',
   fetchSarmaayaTicker: jest.fn(),
 }));
+jest.mock('../src/scrapers/sarmaayaQuote.scraper', () => ({
+  SARMAYA_QUOTE_SOURCE: 'sarmaaya-quote',
+  fetchSarmaayaQuotes: jest.fn(),
+}));
 
 const runIndexSyncMock = runIndexSync as unknown as jest.Mock;
 const runHistorySyncMock = runHistorySync as unknown as jest.Mock;
 const findAllSymbols = stockRepository.findAllSymbols as unknown as jest.Mock;
 const fetchMany = psxQuoteScraper.fetchMany as unknown as jest.Mock;
 const tickerMock = fetchSarmaayaTicker as unknown as jest.Mock;
+const perSymbolMock = fetchSarmaayaQuotes as unknown as jest.Mock;
 const upsertMock = upsertQuoteSnapshot as unknown as jest.Mock;
+const mockedEnv = env as unknown as {
+  QUOTE_POLL_DPS_MIN_INTERVAL_MS: number;
+  SARMAYA_QUOTE_MAX_SYMBOLS: number;
+};
 
 const job = <T>(data: T): Job<T> =>
   ({ data, updateProgress: jest.fn().mockResolvedValue(undefined) }) as unknown as Job<T>;
@@ -78,6 +93,10 @@ beforeEach(() => {
   jest.clearAllMocks();
   findAllSymbols.mockResolvedValue(['OGDC']);
   upsertMock.mockResolvedValue(true);
+  mockedEnv.QUOTE_POLL_DPS_MIN_INTERVAL_MS = 0;
+  mockedEnv.SARMAYA_QUOTE_MAX_SYMBOLS = 60;
+  // Default: the per-symbol leg has nothing to add. Tests that exercise it override this.
+  perSymbolMock.mockResolvedValue({ snapshots: [], failures: [] });
 });
 
 describe('index-sync while its source is cooling down', () => {
@@ -186,5 +205,74 @@ describe('the quote poll while its primary source is answering', () => {
     const summary = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
 
     expect(summary).toMatchObject({ source: 'psx-quotes', fetched: 1, written: 1, failed: 1 });
+  });
+
+  it('asks the per-symbol source only for what the ticker list does not carry', async () => {
+    // The ticker's list covers the board but not the ETFs, the preference shares and the renamed
+    // tickers — measured 2026-09-23 it carried 471–485 rows against 508 tracked symbols, and those
+    // symbols kept the browser pass's reading while the rest of the market ticked.
+    findAllSymbols.mockResolvedValue(['OGDC', 'ACIETF', 'ENGROH']);
+    fetchMany.mockResolvedValue({
+      snapshots: [snapshot('OGDC', 318.41, 0.92, 0.29)],
+      failures: [],
+    });
+    tickerMock.mockResolvedValue([]); // neither ACIETF nor ENGROH is in its list
+    perSymbolMock.mockResolvedValue({
+      snapshots: [snapshot('ACIETF', 16.6, 0.19, 1.16), snapshot('ENGROH', 264.16, 0.36, 0.14)],
+      failures: [],
+    });
+
+    const summary = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+
+    expect(perSymbolMock).toHaveBeenCalledWith(['ACIETF', 'ENGROH'], { max: 60 });
+    expect(summary).toMatchObject({
+      source: 'psx-quotes+sarmaaya-quote',
+      fetched: 3,
+      written: 3,
+      failed: 0,
+    });
+  });
+
+  it('defers the DPS fan-out between its own intervals, and still lands the tick', async () => {
+    // A tick a minute against a source that costs one request per symbol is the load that earned
+    // the refusal in #27, so the fan-out keeps a slower interval and the ticker serves the board
+    // on the ticks in between.
+    findAllSymbols.mockResolvedValue(['OGDC']);
+    fetchMany.mockResolvedValue({
+      snapshots: [snapshot('OGDC', 318.41, 0.92, 0.29)],
+      failures: [],
+    });
+    tickerMock.mockResolvedValue([snapshot('OGDC', 318.6, 1.11, 0.35)]);
+
+    // With no interval to respect (the fixture's default) the fan-out runs.
+    const first = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+
+    mockedEnv.QUOTE_POLL_DPS_MIN_INTERVAL_MS = 300_000;
+    const second = await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+
+    expect(first).toMatchObject({ source: 'psx-quotes', fetched: 1, written: 1 });
+    expect(fetchMany).toHaveBeenCalledTimes(1);
+    expect(tickerMock).toHaveBeenCalledWith(['OGDC']);
+    expect(second).toMatchObject({ source: 'sarmaaya-ticker', fetched: 1, written: 1, failed: 0 });
+  });
+
+  it('walks the per-symbol tail in slices, wrapping so the whole tail is still covered', async () => {
+    // Measured 2026-09-23: asking that host for the whole tail every minute (~36 requests a
+    // minute) earns `http=429`, which left a third of the tail unrefreshed on every tick.
+    mockedEnv.SARMAYA_QUOTE_MAX_SYMBOLS = 2;
+    findAllSymbols.mockResolvedValue(['OGDC', 'ACIETF', 'HBLTETF', 'MIIETF']);
+    fetchMany.mockResolvedValue({
+      snapshots: [snapshot('OGDC', 318.41, 0.92, 0.29)],
+      failures: [],
+    });
+    tickerMock.mockResolvedValue([]); // none of the tail is in its list
+
+    await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+    await processQuotePollJob(job({ trigger: 'cron' }) as Job<never>);
+
+    const asked = perSymbolMock.mock.calls.map((call) => call[0] as string[]);
+    expect(asked.every((slice) => slice.length <= 2)).toBe(true);
+    // Two ticks with a slice of two cover all three tail symbols: the walk wraps.
+    expect(new Set(asked.flat())).toEqual(new Set(['ACIETF', 'HBLTETF', 'MIIETF']));
   });
 });

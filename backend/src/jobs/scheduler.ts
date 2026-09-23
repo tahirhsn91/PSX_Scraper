@@ -50,7 +50,8 @@ async function registerQuotePollSchedule(): Promise<void> {
 /**
  * Register repeatable jobs:
  *  - `scheduled-quote-poll` — live price / change% for every tracked symbol, on
- *    QUOTE_POLL_CRON (default: every 5 minutes). Plain HTTP, no browser.
+ *    QUOTE_POLL_CRON (default: every minute; its DPS leg runs on its own slower interval).
+ *    Plain HTTP, no browser.
  *  - `scheduled-sync-all` — full stock sync on CRON_EXPRESSION.
  *  - `scheduled-index-<SYMBOL>` — one per tracked index, on the same expression.
  *
