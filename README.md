@@ -75,7 +75,7 @@ cd ../frontend && npm install && npm run dev
 
 ## Environment variables
 
-See [.env.example](./.env.example). Key backend vars: `DATABASE_URL`, `REDIS_URL`, `PORT`, `SCRAPER_TIMEOUT`, `SCRAPER_CONCURRENCY`, `CRON_EXPRESSION`, `QUOTE_POLL_CRON`, `LOG_LEVEL`. Frontend: `VITE_API_URL`.
+See [.env.example](./.env.example). Key backend vars: `DATABASE_URL`, `REDIS_URL`, `PORT`, `SCRAPER_TIMEOUT`, `SCRAPER_CONCURRENCY`, `CRON_EXPRESSION`, `QUOTE_POLL_CRON`, `QUOTE_POLL_DPS_MIN_INTERVAL_MS`, `SARMAYA_QUOTE_MAX_SYMBOLS`, `LOG_LEVEL`. Frontend: `VITE_API_URL`.
 
 ## API surface
 

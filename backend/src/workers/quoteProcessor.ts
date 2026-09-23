@@ -6,6 +6,7 @@ import { upsertQuoteSnapshot } from '../repositories/stockPrice.repository';
 import { psxQuoteScraper } from '../scrapers/psxQuotes.scraper';
 import type { QuoteSnapshot } from '../scrapers/psxQuotes.scraper';
 import { fetchSarmaayaTicker, SARMAYA_TICKER_SOURCE } from '../scrapers/sarmaayaTicker.scraper';
+import { fetchSarmaayaQuotes, SARMAYA_QUOTE_SOURCE } from '../scrapers/sarmaayaQuote.scraper';
 import { isMarketOpen } from '../utils/marketHours';
 import { sourceBreaker } from '../utils/sourceBreaker';
 import { childLogger } from '../utils/logger';
@@ -23,6 +24,23 @@ export interface QuotePollSummary {
   resumeAt?: string | null;
   durationMs: number;
 }
+
+/**
+ * When the DPS fan-out last ran, in-process.
+ *
+ * A tick is cheap (one bulk request + a capped fan-out), but DPS is one request *per symbol* —
+ * the load that earned the refusal in #27 — so it runs on its own slower interval and the
+ * ticker serves the board on the ticks in between. Module scope is enough: one worker process
+ * owns the repeatable job.
+ */
+let lastDpsRunAt = 0;
+
+/**
+ * Where the per-symbol walk resumes, in-process: the tail is asked for in slices so the host does
+ * not answer `429`, and this is what keeps the slices moving forward instead of re-asking the
+ * first N symbols every tick.
+ */
+let perSymbolCursor = 0;
 
 /**
  * Refresh price / change% for every tracked symbol — the tick behind "no more manual
@@ -113,12 +131,20 @@ async function collectSnapshots(
   const bySymbol = new Map<string, QuoteSnapshot>();
   const sources: string[] = [];
 
-  if (sourceBreaker.isCoolingDown(psxQuoteScraper.source)) {
+  const dpsDue = Date.now() - lastDpsRunAt >= env.QUOTE_POLL_DPS_MIN_INTERVAL_MS;
+
+  if (!dpsDue) {
+    log.info('quote-poll.primary_deferred', {
+      source: psxQuoteScraper.source,
+      minIntervalMs: env.QUOTE_POLL_DPS_MIN_INTERVAL_MS,
+    });
+  } else if (sourceBreaker.isCoolingDown(psxQuoteScraper.source)) {
     log.warn('quote-poll.primary_cooling', {
       source: psxQuoteScraper.source,
       resumeAt: sourceBreaker.resumeAt(psxQuoteScraper.source)?.toISOString() ?? null,
     });
   } else {
+    lastDpsRunAt = Date.now();
     const { snapshots, failures } = await psxQuoteScraper.fetchMany(symbols);
     for (const snapshot of snapshots) bySymbol.set(snapshot.symbol.toUpperCase(), snapshot);
     if (snapshots.length > 0) sources.push(psxQuoteScraper.source);
@@ -163,9 +189,66 @@ async function collectSnapshots(
     }
   }
 
+  // What both bulk sources left behind: the ticker's list does not cover everything we track —
+  // measured 2026-09-23 it carried 471–485 rows against 508 tracked symbols, and the difference
+  // is the ETFs (ACIETF), the preference shares (AGLNCPS) and the renamed tickers
+  // (ENGRO → ENGROH). Those symbols kept the browser pass's reading from up to half an hour
+  // earlier while the rest of the market ticked. One plain-JSON request each covers them.
+  //
+  // Walked in slices, not all at once: asking that host for the whole tail every minute earns
+  // `http=429` (measured: ~36 requests a minute, a third of them refused), so a tick takes the
+  // next slice and wraps — every tail symbol is still refreshed within a few minutes.
+  const stillMissing = symbols.filter((symbol) => !bySymbol.has(symbol.toUpperCase()));
+  if (stillMissing.length > 0) {
+    const sliceSize = Math.max(0, env.SARMAYA_QUOTE_MAX_SYMBOLS);
+    let targets = stillMissing;
+    if (sliceSize > 0 && stillMissing.length > sliceSize) {
+      const start = perSymbolCursor % stillMissing.length;
+      targets = [...stillMissing.slice(start), ...stillMissing.slice(0, start)].slice(0, sliceSize);
+      perSymbolCursor = (start + sliceSize) % stillMissing.length;
+      log.info('quote-poll.per_symbol_rotated', {
+        tail: stillMissing.length,
+        asking: targets.length,
+        cursor: perSymbolCursor,
+      });
+    }
+    if (targets.length > 0) {
+      try {
+        const { snapshots: perSymbol, failures } = await fetchSarmaayaQuotes(targets, {
+          max: sliceSize,
+        });
+        for (const snapshot of perSymbol) {
+          const key = snapshot.symbol.toUpperCase();
+          if (!bySymbol.has(key)) bySymbol.set(key, snapshot);
+        }
+        if (perSymbol.length > 0) {
+          sources.push(SARMAYA_QUOTE_SOURCE);
+          log.info('quote-poll.per_symbol_filled', {
+            source: SARMAYA_QUOTE_SOURCE,
+            filled: perSymbol.length,
+            asked: targets.length,
+            failed: failures.length,
+            first: failures[0]?.error ?? null,
+          });
+        } else {
+          log.warn('quote-poll.per_symbol_empty', {
+            source: SARMAYA_QUOTE_SOURCE,
+            asked: targets.length,
+            first: failures[0]?.error ?? null,
+          });
+        }
+      } catch (err) {
+        log.warn('quote-poll.per_symbol_failed', {
+          source: SARMAYA_QUOTE_SOURCE,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    }
+  }
+
   return {
     snapshots: [...bySymbol.values()],
-    // Symbols still without a reading after both sources had their turn — the honest count of
+    // Symbols still without a reading after every source had its turn — the honest count of
     // what this tick could not refresh.
     failed: symbols.length - bySymbol.size,
     source: sources.length > 0 ? sources.join('+') : null,

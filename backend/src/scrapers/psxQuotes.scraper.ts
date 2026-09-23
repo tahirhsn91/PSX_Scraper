@@ -28,6 +28,13 @@ export interface QuoteSnapshot {
   previousClose: number | null;
   change: number | null;
   changePercent: number | null;
+  /**
+   * Day range, when the source states one. Optional and left undefined by the sources that do
+   * not carry it (the DPS series, the market-wide ticker) so a stored reading survives rather
+   * than being blanked — the same rule `open` follows.
+   */
+  high?: number | null;
+  low?: number | null;
 }
 
 export interface QuoteFetchResult {
