@@ -1,13 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
-  Paginated, StockListItem, StockDetail, SearchResult, PriceRow, SyncLog, SyncStatus,
-  HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries, IndexSummary,
+  Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
+  SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
+  IndexSummary,
 } from '../types';
 
 export const keys = {
-  stocks: (page: number, limit: number, sort?: StockSortField, order: SortOrder = 'asc') =>
-    ['stocks', page, limit, sort ?? 'symbol', order] as const,
+  // The group belongs in the key: page one (the KSE-100) and page two (everything else) are
+  // different row sets at the same page number, and without it the second request would be served
+  // from the first one's cache — page two showing the index.
+  stocks: (
+    page: number,
+    limit: number,
+    sort?: StockSortField,
+    order: SortOrder = 'asc',
+    group?: StockListGroup,
+  ) => ['stocks', page, limit, sort ?? 'symbol', order, group ?? 'all'] as const,
   stock: (symbol: string) => ['stock', symbol] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
@@ -29,13 +38,18 @@ export const useStocks = (
   poll = false,
   sort?: StockSortField,
   order: SortOrder = 'asc',
+  group?: StockListGroup,
 ) =>
   useQuery({
     // The sort belongs in the key: a different order is a different page of data, not a
     // re-render of this one.
-    queryKey: keys.stocks(page, limit, sort, order),
+    queryKey: keys.stocks(page, limit, sort, order, group),
     queryFn: async () =>
-      (await api.get<Paginated<StockListItem>>('/stocks', { params: { page, limit, sort, order } })).data,
+      (
+        await api.get<StocksPage>('/stocks', {
+          params: { page, limit, sort, order, group },
+        })
+      ).data,
     // Poll while a sync-all fan-out is in flight so prices / "last synced" update live.
     refetchInterval: poll ? 4000 : false,
   });

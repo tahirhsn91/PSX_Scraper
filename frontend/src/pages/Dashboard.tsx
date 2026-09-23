@@ -1,22 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
-  TablePagination, TableSortLabel,
+  TableSortLabel,
   Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert,
-  Stack, Grid, Card, CardContent, LinearProgress, Snackbar,
+  Stack, Grid, Card, CardContent, LinearProgress, Snackbar, IconButton, MenuItem,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import SyncIcon from '@mui/icons-material/Sync';
 import ArrowUpwardRounded from '@mui/icons-material/ArrowUpwardRounded';
 import ArrowDownwardRounded from '@mui/icons-material/ArrowDownwardRounded';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useStocks, useAddStock, useSyncStatus, useSyncAll, useIndices } from '../api/hooks';
 import { IndicesPanel } from '../components/IndicesPanel';
 import { IndicesTicker } from '../components/IndicesTicker';
 import { FailuresPanel } from '../components/FailuresPanel';
 import { SearchBar } from '../components/SearchBar';
 import type { ApiError } from '../api/client';
-import type { StockSortField, SortOrder } from '../types';
+import type { StockSortField, SortOrder, StockListGroup } from '../types';
 
 /**
  * The pair of arrows on a sortable column: down for ascending, up for descending.
@@ -51,8 +53,17 @@ export function Dashboard() {
   const [toast, setToast] = useState<string | null>(null);
   // The universe worker (#41) puts every listed security on this dashboard, so the table is
   // paged rather than cut off at the first N symbols.
+  //
+  // Page one is the KSE-100 — the index's own published member list — and the pages after it are
+  // every other tracked symbol, `rowsPerPage` at a time. Page one is therefore as long as the
+  // index is (99 today, not a hardcoded 100): "100 rows" is the index's size, so it follows the
+  // data rather than a constant that a rebalance would silently contradict.
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
+  // The group halves the list, and the API caps `limit` at 200 — comfortably above any KSE-100
+  // membership, so page one arrives in a single request.
+  const group: StockListGroup = page === 0 ? 'kse100' : 'rest';
+  const limit = page === 0 ? 200 : rowsPerPage;
   // Sorting is done by the API, not here: the table shows 50 of ~500 symbols, so ordering in
   // the browser would only shuffle the page you happen to be looking at.
   const [sort, setSort] = useState<StockSortField | undefined>(undefined);
@@ -104,7 +115,22 @@ export function Dashboard() {
   const syncingAll = justTriggered || inFlightCount > 0 || queuedCount > 0;
 
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
-  const { data, isLoading, isError } = useStocks(page + 1, rowsPerPage, syncingAll, sort, order);
+  const { data, isLoading, isError } = useStocks(
+    // The group carries the split, so page one is always the API's first page of it.
+    page === 0 ? 1 : page,
+    limit,
+    syncingAll,
+    sort,
+    order,
+    group,
+  );
+
+  // Both group sizes arrive with any grouped request: page one's length is the index's, and the
+  // page count follows from what is left over.
+  const kse100Count = data?.groups?.kse100 ?? 0;
+  const restCount = data?.groups?.rest ?? 0;
+  const restPages = Math.ceil(restCount / rowsPerPage);
+  const totalPages = 1 + restPages;
   // The index board is scraped separately from the stocks: it comes from the exchange's own
   // market-summary page, and it is a handful of rows rather than a paginated list.
   const { data: indexBoard, isLoading: indicesLoading, isError: indicesError } = useIndices(syncingAll);
@@ -187,7 +213,9 @@ export function Dashboard() {
 
       <Grid container spacing={2} mb={1}>
         {[
-          { label: 'Tracked stocks', value: data?.total ?? '—' },
+          // The universe, not the page: `total` is the current group's size now that the list is
+          // grouped, and this card counts everything tracked (the index's members plus the rest).
+          { label: 'Tracked stocks', value: data ? kse100Count + restCount : '—' },
           { label: 'Active syncs', value: syncCounts?.active ?? 0 },
           { label: 'Waiting', value: syncCounts?.waiting ?? 0 },
           { label: 'Failed', value: failedCount },
@@ -219,6 +247,19 @@ export function Dashboard() {
       <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
 
       <Paper variant="outlined">
+        {/* Page one is a *group*, not a window: the index's member list. Naming it on the page
+            matters because the rows are the same shape as page two's — without this the reader
+            has no way to see which list they are on. */}
+        <Box sx={{ px: 2, pt: 1.5 }}>
+          <Typography variant="subtitle2">
+            {page === 0 ? 'KSE-100 Index constituents' : 'Other tracked symbols'}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {page === 0
+              ? 'The index’s own member list, as the exchange publishes it — one row per company.'
+              : 'Every other tracked symbol, in pages of the size you choose.'}
+          </Typography>
+        </Box>
         {/* Eight columns do not fit a phone. TableContainer gives the table its own horizontal
             scroll area; without one the table pushed the *page* sideways — at a 384px viewport
             the document measured 835px (a 451px overflow), so every row ran off the screen. */}
@@ -245,7 +286,13 @@ export function Dashboard() {
                   <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
                 ))}
               {data?.items.length === 0 && !isLoading && (
-                <TableRow><TableCell colSpan={8} align="center">No stocks yet — add one to get started.</TableCell></TableRow>
+                <TableRow>
+                  <TableCell colSpan={8} align="center">
+                    {page === 0
+                      ? 'No KSE-100 members yet — the index’s member list has not been fetched.'
+                      : 'No other tracked symbols.'}
+                  </TableCell>
+                </TableRow>
               )}
               {data?.items.map((s) => (
                 <TableRow key={s.id} hover sx={{ cursor: 'pointer' }} onClick={() => navigate(`/stocks/${s.symbol}`)}>
@@ -269,18 +316,56 @@ export function Dashboard() {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          component="div"
-          count={data?.total ?? 0}
-          page={page}
-          onPageChange={(_, next) => setPage(next)}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={(e) => {
-            setRowsPerPage(parseInt(e.target.value, 10));
-            setPage(0);
-          }}
-          rowsPerPageOptions={[25, 50, 100, 250]}
-        />
+        {/* A group-aware pager, not MUI's TablePagination: that control assumes every page is
+            `rowsPerPage` rows long and derives its "1–50 of 508" label from that. Page one is the
+            whole KSE-100 group (99 today), so its label would be wrong on the one page the reader
+            lands on. This counts *pages*, and the size selector governs page two onward. */}
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="flex-end"
+          spacing={1.5}
+          sx={{ px: 2, py: 1, flexWrap: 'wrap' }}
+        >
+          <Typography variant="body2" color="text.secondary">
+            Page {page + 1} of {totalPages} · {page === 0 ? kse100Count : restCount} rows
+          </Typography>
+          <IconButton
+            size="small"
+            aria-label="Previous page"
+            disabled={page === 0}
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+          >
+            <ChevronLeftIcon fontSize="small" />
+          </IconButton>
+          <IconButton
+            size="small"
+            aria-label="Next page"
+            disabled={page >= totalPages - 1}
+            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+          >
+            <ChevronRightIcon fontSize="small" />
+          </IconButton>
+          <TextField
+            select
+            size="small"
+            label="Rows"
+            value={rowsPerPage}
+            // Selecting a size lands on the first page it governs — page one is the index, and
+            // its length is the index's, not this setting's.
+            onChange={(e) => {
+              setRowsPerPage(parseInt(e.target.value, 10));
+              setPage(1);
+            }}
+            sx={{ minWidth: 100 }}
+          >
+            {[25, 50, 100, 250].map((size) => (
+              <MenuItem key={size} value={size}>
+                {size}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Stack>
       </Paper>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="xs">

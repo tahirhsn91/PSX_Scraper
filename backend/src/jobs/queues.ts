@@ -10,6 +10,12 @@ export const INDEX_QUEUE = 'index-sync';
 export const QUOTE_QUEUE = 'quote-sync';
 /** Job name shared by the scheduler and the manual enqueue helper. */
 export const QUOTE_POLL_JOB = 'quote-poll';
+/**
+ * The KSE-100 membership pass, on the quote queue: one request a day that decides what page one
+ * of the dashboard shows. A second job name rather than a second queue — it is the same kind of
+ * work as the poll (light, schedule-driven, no fan-out) and reuses the worker that owns it.
+ */
+export const KSE100_MEMBERSHIP_JOB = 'kse100-membership';
 
 export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add' }
 export interface SyncAllJobData { trigger: 'manual' | 'cron' }
@@ -264,6 +270,17 @@ export async function enqueueUniverseSymbols(
  */
 export async function enqueueQuotePoll(trigger: QuotePollJobData['trigger']) {
   return quoteQueue.add(QUOTE_POLL_JOB, { trigger }, { jobId: `quote-poll-${Date.now()}` });
+}
+
+/**
+ * Queue the KSE-100 membership pass on demand — the same job the daily schedule runs.
+ *
+ * Idempotent by design: a second request while one is queued is a no-op (fixed job id), because a
+ * membership pass has no per-call argument. Used by the dev recipe to fill the group on a fresh
+ * database without waiting for the nightly run.
+ */
+export async function enqueueKse100Membership(trigger: QuotePollJobData['trigger'] = 'manual') {
+  return quoteQueue.add(KSE100_MEMBERSHIP_JOB, { trigger }, { jobId: 'kse100-membership-manual' });
 }
 
 /** Return an existing queued/active job for a symbol, if any. */

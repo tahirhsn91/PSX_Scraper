@@ -28,6 +28,16 @@ const envSchema = z.object({
   // below is capped, so a tick costs ~30 requests and no browser — the dashboard shows the market
   // as it moves without a Chromium pass.
   QUOTE_POLL_CRON: z.string().default('*/1 * * * *'),
+  /**
+   * The KSE-100 membership pass. On by default: page one of the dashboard *is* the index's member
+   * list, so a stack that does not run this shows an empty first page — the feature and its
+   * schedule are one thing. One request a day, before the session opens.
+   */
+  KSE100_MEMBERSHIP_ENABLED: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((v) => v === 'true'),
+  KSE100_MEMBERSHIP_CRON: z.string().default('15 1 * * *'),
   QUOTE_POLL_CONCURRENCY: z.coerce.number().int().positive().default(5),
   QUOTE_POLL_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
   // The DPS leg fans out one request per symbol (~508 when it answers), which is the load that

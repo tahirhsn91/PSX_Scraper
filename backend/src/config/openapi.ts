@@ -108,6 +108,19 @@ export const openapiSpec = {
             description: 'Direction for `sort`: `asc` (default) or `desc`.',
             schema: { type: 'string', enum: ['asc', 'desc'], default: 'asc' },
           },
+          {
+            name: 'group',
+            in: 'query',
+            description:
+              'Which half of the tracked universe to list. `kse100` is the KSE-100 index member ' +
+              'list — the dashboard\'s page one — and `rest` is every other tracked symbol, the ' +
+              'dashboard\'s page two onward. `sort` applies *within* the group, so page one stays ' +
+              'the index however the list is ordered. Omit it for one sequence over the whole ' +
+              'universe (every other client). When a group is given, the response also carries ' +
+              '`groups`, both counts, because a pager cannot place page two without knowing how ' +
+              'long page one is.',
+            schema: { type: 'string', enum: ['kse100', 'rest'] },
+          },
         ],
         responses: {
           '200': {
@@ -117,7 +130,22 @@ export const openapiSpec = {
                 schema: {
                   allOf: [
                     { $ref: '#/components/schemas/Paginated' },
-                    { type: 'object', properties: { items: { type: 'array', items: { $ref: '#/components/schemas/StockListItem' } } } },
+                    {
+                      type: 'object',
+                      properties: {
+                        items: { type: 'array', items: { $ref: '#/components/schemas/StockListItem' } },
+                        groups: {
+                          type: 'object',
+                          description:
+                            'Both group sizes, present only when `group` was given. `kse100` is ' +
+                            'the index member count (page one), `rest` is everything else.',
+                          properties: {
+                            kse100: { type: 'integer', example: 99 },
+                            rest: { type: 'integer', example: 409 },
+                          },
+                        },
+                      },
+                    },
                   ],
                 },
               },

@@ -6,6 +6,7 @@ import {
   quoteQueue,
   enqueueIndexSync,
   QUOTE_POLL_JOB,
+  KSE100_MEMBERSHIP_JOB,
   UNIVERSE_PASS_JOB,
   universeQueue,
 } from './queues';
@@ -45,6 +46,42 @@ async function registerQuotePollSchedule(): Promise<void> {
     marketHoursOnly: env.QUOTE_POLL_MARKET_HOURS_ONLY,
     concurrency: env.QUOTE_POLL_CONCURRENCY,
   });
+}
+
+/**
+ * Register the KSE-100 membership pass.
+ *
+ * page one of the dashboard is the index's member list, so this has to run without being asked
+ * for: the index rebalances twice a year and nothing on this side can notice that on its own. One
+ * request a day (~0.6s), on its own pattern, and the pattern is reconciled the same way the poll's
+ * is — BullMQ keys a repeatable by pattern, so a changed cron would otherwise tick on both.
+ */
+async function registerKse100MembershipSchedule(): Promise<void> {
+  if (!env.KSE100_MEMBERSHIP_ENABLED) {
+    // Switched off: drop a registration left by an earlier configuration, so an upgrade that
+    // disables the pass does not keep ticking.
+    for (const job of await quoteQueue.getRepeatableJobs()) {
+      if (job.name === KSE100_MEMBERSHIP_JOB) await quoteQueue.removeRepeatableByKey(job.key);
+    }
+    logger.info('scheduler.kse100_membership_disabled');
+    return;
+  }
+
+  for (const job of await quoteQueue.getRepeatableJobs()) {
+    if (job.name !== KSE100_MEMBERSHIP_JOB || job.pattern === env.KSE100_MEMBERSHIP_CRON) continue;
+    await quoteQueue.removeRepeatableByKey(job.key);
+    logger.info('scheduler.kse100_membership_pattern_replaced', {
+      was: job.pattern,
+      now: env.KSE100_MEMBERSHIP_CRON,
+    });
+  }
+
+  await quoteQueue.add(
+    KSE100_MEMBERSHIP_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: env.KSE100_MEMBERSHIP_CRON }, jobId: 'scheduled-kse100-membership' },
+  );
+  logger.info('scheduler.kse100_membership_registered', { cron: env.KSE100_MEMBERSHIP_CRON });
 }
 
 /**
@@ -101,6 +138,7 @@ async function registerUniversePassSchedule(): Promise<void> {
 
 export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
+  await registerKse100MembershipSchedule();
   await registerUniversePassSchedule();
 
   // With the universe worker on, the scheduled full-board sync is pure duplication: both walk

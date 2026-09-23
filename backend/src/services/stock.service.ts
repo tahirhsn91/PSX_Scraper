@@ -1,6 +1,9 @@
 import { Prisma } from '@prisma/client';
-import { stockRepository, StockSortField, SortOrder } from '../repositories/stock.repository';
+import {
+  stockRepository, StockSortField, SortOrder, StockListGroup,
+} from '../repositories/stock.repository';
 import { deletedSymbolRepository } from '../repositories/deletedSymbol.repository';
+import { kse100GroupCounts } from './kse100Membership.service';
 import {
   getStockDetail, getPriceHistory, getCandles, type Candle,
 } from '../repositories/stockDetail.repository';
@@ -12,10 +15,33 @@ import { logger } from '../utils/logger';
 const num = (v: Prisma.Decimal | null): number | null => (v === null ? null : Number(v));
 
 export const stockService = {
-  async list(page: number, limit: number, sort?: StockSortField, order: SortOrder = 'asc') {
+  /**
+   * A page of the tracked universe.
+   *
+   * `group` splits the universe for the dashboard: `kse100` is page one (the index's members) and
+   * `rest` is everything else. When a group is asked for, the response also carries both group
+   * counts, because a pager cannot place page two without knowing how long page one is.
+   */
+  async list(
+    page: number,
+    limit: number,
+    sort?: StockSortField,
+    order: SortOrder = 'asc',
+    group?: StockListGroup,
+  ) {
     const offset = (page - 1) * limit;
-    const { items, total } = await stockRepository.list(limit, offset, sort, order);
-    return { items, page, limit, total, totalPages: Math.ceil(total / limit) };
+    const [{ items, total }, groups] = await Promise.all([
+      stockRepository.list(limit, offset, sort, order, group),
+      group ? kse100GroupCounts() : Promise.resolve(undefined),
+    ]);
+    return {
+      items,
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+      ...(groups ? { groups: { kse100: groups.members, rest: groups.rest } } : {}),
+    };
   },
 
   async getDetail(symbol: string) {
