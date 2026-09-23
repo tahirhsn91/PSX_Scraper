@@ -75,6 +75,24 @@ export interface Paginated<T> {
   totalPages: number;
 }
 
+/**
+ * Which half of the tracked universe a list request is about.
+ *
+ * `kse100` is the index's published member list — the dashboard's page one — and `rest` is every
+ * other tracked symbol, the pages after it. Sorting applies within the group, so page one stays
+ * the index however the table is ordered.
+ */
+export type StockListGroup = 'kse100' | 'rest';
+
+/** The stocks list, with both group sizes when a group was asked for. */
+export interface StocksPage extends Paginated<StockListItem> {
+  /**
+   * Present only when `group` was sent. The pager needs both numbers: page one is the KSE-100's
+   * own length, and the page count follows from what is left over.
+   */
+  groups?: { kse100: number; rest: number };
+}
+
 export interface SearchResult {
   symbol: string;
   companyName: string | null;

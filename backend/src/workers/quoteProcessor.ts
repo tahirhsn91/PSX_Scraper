@@ -1,6 +1,8 @@
 import { Job } from 'bullmq';
 import { env } from '../config';
-import { QuotePollJobData } from '../jobs/queues';
+import { QuotePollJobData, KSE100_MEMBERSHIP_JOB } from '../jobs/queues';
+import { syncKse100Membership } from '../services/kse100Membership.service';
+import type { Kse100MembershipSummary } from '../services/kse100Membership.service';
 import { stockRepository } from '../repositories/stock.repository';
 import { upsertQuoteSnapshot } from '../repositories/stockPrice.repository';
 import { psxQuoteScraper } from '../scrapers/psxQuotes.scraper';
@@ -55,7 +57,14 @@ let perSymbolCursor = 0;
  * sync history the UI reads. The summary goes to the log stream, and the persisted row's
  * `lastTradeDate` is the proof the tick ran.
  */
-export async function processQuotePollJob(job: Job<QuotePollJobData>): Promise<QuotePollSummary> {
+export async function processQuotePollJob(
+  job: Job<QuotePollJobData>,
+): Promise<QuotePollSummary | Kse100MembershipSummary> {
+  // The KSE-100 membership pass rides this queue because it is the same kind of work — a light,
+  // schedule-driven refresh with no per-symbol fan-out — and page one of the dashboard depends on
+  // it being current. Its own job name keeps the two summaries apart in the logs.
+  if (job.name === KSE100_MEMBERSHIP_JOB) return syncKse100Membership();
+
   const log = childLogger({ op: 'quote-poll', trigger: job.data.trigger });
   const started = Date.now();
 

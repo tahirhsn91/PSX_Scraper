@@ -25,6 +25,14 @@ export const paginationQuery = z.object({
 export const stocksQuery = paginationQuery.extend({
   sort: z.enum(['symbol', 'price', 'week52Low', 'week52High', 'changePercent', 'volume']).optional(),
   order: z.enum(['asc', 'desc']).default('asc'),
+  /**
+   * Which half of the tracked universe to list: the index's member set (the dashboard's page one)
+   * or everything else (page two onward, 50 a page). Absent means one sequence over the whole
+   * universe, which is what every other client wants.
+   *
+   * A sort applies *within* the group — page one stays the KSE-100 whatever the column.
+   */
+  group: z.enum(['kse100', 'rest']).optional(),
 });
 
 /**
