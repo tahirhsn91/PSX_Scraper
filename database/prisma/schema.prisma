@@ -29,6 +29,9 @@ model Stock {
   financials  Financial[]
   ratios      Ratio[]
   syncLogs    SyncLog[]
+  // Membership of a published index (KSE-100 today). A join rather than a column: the exchange
+  // publishes each index's own member list, and the dashboard's first page is driven by it.
+  constituents IndexConstituent[]
 
   @@index([companyName])
   @@map("stocks")
@@ -145,8 +148,35 @@ model MarketIndex {
   updatedAt   DateTime     @updatedAt @map("updated_at")
 
   values      IndexValue[]
+  /// The index's published member list, newest pass wins.
+  constituents IndexConstituent[]
 
   @@map("market_indices")
+}
+
+/// One company's membership of one published index.
+///
+/// Written by `kse100Membership.service` from the exchange's own member list; the row set is
+/// *replaced* on each pass (a symbol that leaves the index must leave the group, or the
+/// dashboard keeps showing it on page one forever). `position` keeps the source's own order for
+/// the day a reader needs it; the list itself is presented through the stocks list query.
+model IndexConstituent {
+  id        String   @id @default(uuid())
+  indexId   String   @map("index_id")
+  stockId   String   @map("stock_id")
+  /// The name the source prints for this company, when it prints one.
+  name      String?
+  /// Position in the source's list, 1-based. Null when the source states no order.
+  position  Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  index MarketIndex @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  stock Stock       @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([indexId, stockId])
+  @@index([stockId])
+  @@map("index_constituents")
 }
 
 model SyncLog {
