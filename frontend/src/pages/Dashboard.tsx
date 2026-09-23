@@ -107,7 +107,7 @@ export function Dashboard() {
   const { data, isLoading, isError } = useStocks(page + 1, rowsPerPage, syncingAll, sort, order);
   // The index board is scraped separately from the stocks: it comes from the exchange's own
   // market-summary page, and it is a handful of rows rather than a paginated list.
-  const { data: indexBoard } = useIndices(syncingAll);
+  const { data: indexBoard, isLoading: indicesLoading, isError: indicesError } = useIndices(syncingAll);
 
   // Once the fan-out has actually started showing up in the queue, stop forcing
   // the "just triggered" state — the real counts take over.
@@ -214,7 +214,9 @@ export function Dashboard() {
 
       <FailuresPanel status={status} />
 
-      <IndicesPanel indices={indexBoard?.items} />
+      {/* The board reports its own loading / failure / empty state: a silent gap would be
+          indistinguishable from a board that has not arrived yet. */}
+      <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
 
       <Paper variant="outlined">
         {/* Eight columns do not fit a phone. TableContainer gives the table its own horizontal
