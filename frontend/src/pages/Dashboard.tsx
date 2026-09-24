@@ -247,24 +247,14 @@ export function Dashboard() {
       <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
 
       <Paper variant="outlined">
-        {/* Page one is a *group*, not a window: the index's member list. Naming it on the page
-            matters because the rows are the same shape as page two's — without this the reader
-            has no way to see which list they are on. */}
-        <Box sx={{ px: 2, pt: 1.5 }}>
-          <Typography variant="subtitle2">
-            {page === 0 ? 'KSE-100 Index constituents' : 'Other tracked symbols'}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {page === 0
-              ? 'The index’s own member list, as the exchange publishes it — one row per company.'
-              : 'Every other tracked symbol, in pages of the size you choose.'}
-          </Typography>
-        </Box>
         {/* Eight columns do not fit a phone. TableContainer gives the table its own horizontal
             scroll area; without one the table pushed the *page* sideways — at a 384px viewport
             the document measured 835px (a 451px overflow), so every row ran off the screen. */}
         <TableContainer>
-          <Table>
+          {/* Page one is a *group*, not a window: the index's member list, and its rows look the
+              same as page two's, so the table keeps a name for screen readers even though the page
+              no longer spells it out above the rows. */}
+          <Table aria-label={page === 0 ? 'KSE-100 Index constituents' : 'Other tracked symbols'}>
             <TableHead>
               <TableRow>
                 <TableCell>Symbol</TableCell>
