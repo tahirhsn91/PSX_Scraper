@@ -1,8 +1,8 @@
 import { Job } from 'bullmq';
 import { env } from '../config';
 import { QuotePollJobData, KSE100_MEMBERSHIP_JOB } from '../jobs/queues';
-import { syncKse100Membership } from '../services/kse100Membership.service';
-import type { Kse100MembershipSummary } from '../services/kse100Membership.service';
+import { syncAllIndexMembership } from '../services/indexMembership.service';
+import type { AllIndexMembershipSummary } from '../services/indexMembership.service';
 import { stockRepository } from '../repositories/stock.repository';
 import { upsertQuoteSnapshot } from '../repositories/stockPrice.repository';
 import { psxQuoteScraper } from '../scrapers/psxQuotes.scraper';
@@ -59,11 +59,12 @@ let perSymbolCursor = 0;
  */
 export async function processQuotePollJob(
   job: Job<QuotePollJobData>,
-): Promise<QuotePollSummary | Kse100MembershipSummary> {
-  // The KSE-100 membership pass rides this queue because it is the same kind of work — a light,
+): Promise<QuotePollSummary | AllIndexMembershipSummary> {
+  // The index membership pass rides this queue because it is the same kind of work — a light,
   // schedule-driven refresh with no per-symbol fan-out — and page one of the dashboard depends on
-  // it being current. Its own job name keeps the two summaries apart in the logs.
-  if (job.name === KSE100_MEMBERSHIP_JOB) return syncKse100Membership();
+  // it being current. It covers every published index now (not just the KSE-100), and its own job
+  // name keeps the two summaries apart in the logs.
+  if (job.name === KSE100_MEMBERSHIP_JOB) return syncAllIndexMembership();
 
   const log = childLogger({ op: 'quote-poll', trigger: job.data.trigger });
   const started = Date.now();
