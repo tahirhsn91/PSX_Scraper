@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
-  Alert, Box, Card, CardActionArea, Chip, Divider, Grid, LinearProgress, Skeleton, Stack,
+  Alert, Box, Button, Card, CardActionArea, Chip, Divider, Grid, LinearProgress, Skeleton, Stack,
   ToggleButton, ToggleButtonGroup, Typography, alpha,
 } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
@@ -58,6 +58,9 @@ function toneOf(direction: Direction): { ink: string; bar: string | ((t: Theme) 
   return { ink: 'text.secondary', bar: (t: Theme) => alpha(t.palette.text.secondary, 0.35) };
 }
 
+/** How many indices the board shows before the reader asks for the rest. */
+const TOP = 3;
+
 /** One tile. Kept as a component so the featured tile and the rest cannot drift apart. */
 function IndexTile({ index, featured = false }: { index: IndexSummary; featured?: boolean }) {
   const direction = directionOf(index.changePercent ?? index.change);
@@ -70,6 +73,11 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
         height: '100%',
         position: 'relative',
         overflow: 'hidden',
+        // Column flex so the tile's foot can be pinned to the card's bottom: cards in a row stretch
+        // to the tallest one, and without this the change figure drifts up into the middle of the
+        // taller cards instead of sitting in the same corner as everywhere else.
+        display: 'flex',
+        flexDirection: 'column',
         ...(featured ? { borderColor: 'primary.main', borderWidth: 2 } : {}),
       }}
     >
@@ -78,7 +86,7 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
       <CardActionArea
         component={RouterLink}
         to={`/indices/${index.symbol}`}
-        sx={{ height: '100%', p: 1.25, alignItems: 'stretch' }}
+        sx={{ height: '100%', p: 1.25, alignItems: 'stretch', display: 'flex', flexDirection: 'column' }}
       >
         {featured && (
           <Chip
@@ -121,7 +129,16 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           {index.value === null ? '—' : formatLevel(index.value)}
         </Typography>
 
-        <Stack direction="row" alignItems="baseline" justifyContent="space-between" spacing={1}>
+        {/* The tile's foot, pushed to the bottom of the card: on a row where a card is stretched by
+            a taller neighbour, the volume and the change figure still land on the same line as
+            their neighbours rather than floating in the middle of the card. */}
+        <Stack
+          direction="row"
+          alignItems="baseline"
+          justifyContent="space-between"
+          spacing={1}
+          sx={{ mt: 'auto', pt: 0.5 }}
+        >
           {/* The index summary carries no volume yet — the exchange's index pages publish none, and
               the scraper writes null — so this reads as a dash rather than as a zero traded. */}
           <Typography
@@ -198,6 +215,7 @@ export function IndicesPanel({
   isError?: boolean;
 }) {
   const [sort, setSort] = useState<SortMode>('size');
+  const [showAll, setShowAll] = useState(false);
 
   const counts = useMemo(() => {
     const list = indices ?? [];
@@ -245,6 +263,9 @@ export function IndicesPanel({
   // a silent gap is indistinguishable from a board that has not loaded yet.
   const featured = ordered.find((i) => i.symbol === 'KSE100') ?? ordered[0];
   const rest = ordered.filter((i) => i !== featured);
+  // The board opens as a summary — the featured index plus the next two, in whatever order the
+  // reader picked — and the rest stay behind an explicit "see all" rather than behind a scroll.
+  const visible = showAll ? rest : rest.slice(0, TOP - 1);
 
   return (
     <Box sx={{ mb: 3 }}>
@@ -335,18 +356,32 @@ export function IndicesPanel({
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <IndexTile index={featured} featured />
             </Grid>
-            {rest.map((index) => (
+            {visible.map((index) => (
               <Grid item xs={12} sm={6} md={3} key={index.symbol}>
                 <IndexTile index={index} />
               </Grid>
             ))}
           </Grid>
 
+          {/* A disclosure, not a second page: the tiles behind this button are the same list the
+              reader is already scanning, so they open in place instead of becoming a page number. */}
+          {rest.length > TOP - 1 && (
+            <Stack direction="row" justifyContent="center" sx={{ mt: 1.5 }}>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => setShowAll((shown) => !shown)}
+                aria-expanded={showAll}
+              >
+                {showAll ? `Show top ${TOP} only` : `See all ${ordered.length} indices`}
+              </Button>
+            </Stack>
+          )}
+
           <Divider sx={{ mt: 1.5, mb: 0.5 }} />
           <Typography variant="caption" color="text.secondary">
-            {featured.symbol === 'KSE100'
-              ? 'KSE-100 shown first · every index the exchange publishes · tap one to open its chart.'
-              : 'Every index the exchange publishes · tap one to open its chart.'}
+            {featured.symbol === 'KSE100' ? 'KSE-100 shown first · ' : ''}
+            {showAll ? `all ${ordered.length} indices` : `the top ${TOP} indices`} · tap one to open its chart.
           </Typography>
         </>
       )}
