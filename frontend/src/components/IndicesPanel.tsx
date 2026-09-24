@@ -112,14 +112,6 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           <Typography variant="subtitle1" fontWeight={700} noWrap>
             {index.symbol}
           </Typography>
-          {/* Every card carries its own chart beside the symbol — except the headline card, whose
-              chart runs along the foot of the card instead (below), because a wide, tall card has
-              the room for it and the corner would leave it stranded. */}
-          {!featured && (
-            <Box sx={{ flexShrink: 0 }}>
-              <MiniIndexChart symbol={index.symbol} flat={direction === 'flat'} />
-            </Box>
-          )}
         </Stack>
 
         <Typography
@@ -129,6 +121,16 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           {index.value === null ? '—' : formatLevel(index.value)}
         </Typography>
 
+        {/* The card's chart, right-aligned so it sits directly above the change figure. `mt: auto`
+            absorbs whatever height the card has been stretched to: where a neighbour in the row is
+            taller, the chart drops to the foot instead of leaving a hole between the chart and the
+            change figure it belongs with, and on a card at its natural height it adds nothing. */}
+        {!featured && (
+          <Box sx={{ mt: 'auto', alignSelf: 'flex-end', flexShrink: 0 }}>
+            <MiniIndexChart symbol={index.symbol} flat={direction === 'flat'} />
+          </Box>
+        )}
+
         {/* The tile's foot, pushed to the bottom of the card: on a row where a card is stretched by
             a taller neighbour, the volume and the change figure still land on the same line as
             their neighbours rather than floating in the middle of the card. */}
@@ -137,7 +139,7 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           alignItems="baseline"
           justifyContent="space-between"
           spacing={1}
-          sx={{ mt: 'auto', pt: 0.5 }}
+          sx={{ mt: featured ? 'auto' : 0, pt: 1 }}
         >
           {/* The index summary carries no volume yet — the exchange's index pages publish none, and
               the scraper writes null — so this reads as a dash rather than as a zero traded. */}
@@ -373,7 +375,7 @@ export function IndicesPanel({
                 onClick={() => setShowAll((shown) => !shown)}
                 aria-expanded={showAll}
               >
-                {showAll ? `Show top ${TOP} only` : `See all ${ordered.length} indices`}
+                {showAll ? `Show top ${TOP} only` : 'See all indices'}
               </Button>
             </Stack>
           )}
