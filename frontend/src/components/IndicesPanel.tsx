@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import {
   Alert, Box, Card, CardActionArea, Chip, Divider, Grid, LinearProgress, Skeleton, Stack,
-  ToggleButton, ToggleButtonGroup, Tooltip, Typography, alpha,
+  ToggleButton, ToggleButtonGroup, Typography, alpha,
 } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import type { IndexSummary } from '../types';
+import { MiniCandleChart } from './MiniCandleChart';
 
 /**
  * The PSX index board on the dashboard: breadth first, then one tile per index.
@@ -66,9 +67,7 @@ function changeLabel(index: IndexSummary) {
 }
 
 /** One tile. Kept as a component so the featured tile and the rest cannot drift apart. */
-function IndexTile({
-  index, featured = false, magnitude,
-}: { index: IndexSummary; featured?: boolean; magnitude: number }) {
+function IndexTile({ index, featured = false }: { index: IndexSummary; featured?: boolean }) {
   const direction = directionOf(index.changePercent ?? index.change);
   const tone = toneOf(direction);
 
@@ -134,24 +133,10 @@ function IndexTile({
           {index.change === null ? '' : ` · ${changeLabel(index)}`}
         </Typography>
 
-        {/* How big this move is against the day's biggest, so the numbers do not have to be
-            compared by eye. Decorative: the figures above carry the same information, so it is
-            hidden from assistive tech rather than announced twice. */}
-        <Tooltip title={`Move is ${Math.round(magnitude)}% of the board's largest`} arrow>
-          <Box
-            aria-hidden
-            sx={{ mt: 1, height: 4, borderRadius: 2, bgcolor: 'divider', overflow: 'hidden' }}
-          >
-            <Box
-              sx={{
-                width: `${magnitude}%`,
-                height: '100%',
-                bgcolor: tone.bar,
-                transition: 'width 240ms ease',
-              }}
-            />
-          </Box>
-        </Tooltip>
+        {/* The card's chart: this index's own sessions as candles, running into today's reading.
+            Replaces the old horizontal bar, which showed only how this move compared with the
+            day's largest and said nothing about the path the index took to get here. */}
+        <MiniCandleChart symbol={index.symbol} flat={direction === 'flat'} />
 
         <Typography
           variant="caption"
@@ -226,16 +211,6 @@ export function IndicesPanel({
       down: list.filter((i) => i.changePercent !== null && i.changePercent < 0).length,
       flat: list.filter((i) => i.changePercent === 0).length,
       unknown: list.filter((i) => i.changePercent === null).length,
-    };
-  }, [indices]);
-
-  const magnitudeOf = useMemo(() => {
-    // Against the day's largest move, so the bars compare within this snapshot — a bar is a
-    // comparison, and a comparison against a fixed scale would be a different claim.
-    const largest = Math.max(0, ...(indices ?? []).map((i) => Math.abs(i.changePercent ?? 0)));
-    return (index: IndexSummary) => {
-      if (largest === 0 || index.changePercent === null) return 0;
-      return Math.max(4, Math.round((Math.abs(index.changePercent) / largest) * 100));
     };
   }, [indices]);
 
@@ -363,11 +338,11 @@ export function IndicesPanel({
                 knocks the first tiles out of the column grid the rows below them use, so no tile
                 lines up with the one under it. */}
             <Grid item xs={12} sm={12} md={6} lg={6}>
-              <IndexTile index={featured} featured magnitude={magnitudeOf(featured)} />
+              <IndexTile index={featured} featured />
             </Grid>
             {rest.map((index) => (
               <Grid item xs={12} sm={6} md={3} key={index.symbol}>
-                <IndexTile index={index} magnitude={magnitudeOf(index)} />
+                <IndexTile index={index} />
               </Grid>
             ))}
           </Grid>
