@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
-  Alert, Box, Button, Card, CardActionArea, Chip, Divider, Grid, LinearProgress, Skeleton, Stack,
+  Alert, Box, Button, Card, CardActionArea, Chip, Grid, LinearProgress, Skeleton, Stack,
   ToggleButton, ToggleButtonGroup, Typography, alpha,
 } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
@@ -369,12 +369,6 @@ export function IndicesPanel({
               </Button>
             </Stack>
           )}
-
-          <Divider sx={{ mt: 1.5, mb: 0.5 }} />
-          <Typography variant="caption" color="text.secondary">
-            {featured.symbol === 'KSE100' ? 'KSE-100 shown first · ' : ''}
-            {showAll ? `all ${ordered.length} indices` : `the top ${TOP} indices`} · tap one to open its chart.
-          </Typography>
         </>
       )}
     </Box>
