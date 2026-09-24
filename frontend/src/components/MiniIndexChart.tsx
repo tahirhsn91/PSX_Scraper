@@ -85,6 +85,7 @@ export function MiniIndexChart({
   variant = 'line',
   flat = false,
   width,
+  fullWidth = false,
 }: {
   symbol: string;
   /**
@@ -102,6 +103,11 @@ export function MiniIndexChart({
    * headline card, which is twice the width of the rest and has the space to spend.
    */
   width?: number;
+  /**
+   * Span whatever the parent gives, instead of the fixed box. Used by the headline card, where the
+   * chart runs along the foot of the card: the sessions stay the same, the horizontal room does not.
+   */
+  fullWidth?: boolean;
 }) {
   const theme = useTheme();
   const { data, isLoading } = useIndexHistory(symbol, sessions);
@@ -119,9 +125,11 @@ export function MiniIndexChart({
   };
 
   const box = variant === 'line' ? { w: width ?? LINE.w, h: LINE.h } : { w: width ?? 100, h: CANDLES.h };
+  /** The box's own width unless the caller wants the chart to span its parent. */
+  const cssWidth = fullWidth ? '100%' : box.w;
 
   if (isLoading && candles.length === 0) {
-    return <Skeleton variant="rounded" width={box.w} height={box.h} />;
+    return <Skeleton variant="rounded" sx={{ width: cssWidth, height: box.h }} />;
   }
 
   // No series, no chart: an empty frame keeps the card's height and claims nothing. Drawing a shape
@@ -130,7 +138,7 @@ export function MiniIndexChart({
     return (
       <Box
         sx={{
-          width: box.w,
+          width: cssWidth,
           height: box.h,
           display: 'grid',
           placeItems: 'center',
@@ -167,7 +175,7 @@ export function MiniIndexChart({
         aria-label={`${symbol}: ${candles.length} sessions, latest session ${
           flat ? 'unchanged' : last.close >= last.open ? 'up' : 'down'
         }`}
-        sx={{ display: 'block', width: box.w, height: box.h, overflow: 'visible', flexShrink: 0 }}
+        sx={{ display: 'block', width: cssWidth, height: box.h, overflow: 'visible', flexShrink: 0 }}
       >
         {variant === 'line' ? (
           (() => {
