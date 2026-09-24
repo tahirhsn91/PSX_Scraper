@@ -60,10 +60,15 @@ export function Dashboard() {
   // data rather than a constant that a rebalance would silently contradict.
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
-  // The group halves the list, and the API caps `limit` at 200 — comfortably above any KSE-100
-  // membership, so page one arrives in a single request.
-  const group: StockListGroup = page === 0 ? 'kse100' : 'rest';
-  const limit = page === 0 ? 200 : rowsPerPage;
+  // Which list the table shows: the KSE-100's own published member list, or every tracked symbol.
+  // KSE-100 is the default — it is the list a reader opens the dashboard for, and it is the only
+  // membership the scraper stores today.
+  const [scope, setScope] = useState<'kse100' | 'all'>('kse100');
+  const indexed = scope === 'kse100';
+  // The API caps `limit` at 200 — comfortably above any KSE-100 membership, so the index's member
+  // list arrives in a single request and needs no paging of its own.
+  const group: StockListGroup | undefined = indexed ? 'kse100' : undefined;
+  const limit = indexed ? 200 : rowsPerPage;
   // Sorting is done by the API, not here: the table shows 50 of ~500 symbols, so ordering in
   // the browser would only shuffle the page you happen to be looking at.
   const [sort, setSort] = useState<StockSortField | undefined>(undefined);
@@ -116,8 +121,8 @@ export function Dashboard() {
 
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
   const { data, isLoading, isError } = useStocks(
-    // The group carries the split, so page one is always the API's first page of it.
-    page === 0 ? 1 : page,
+    // The index scope is one request (the whole member list); the all scope pages normally.
+    indexed ? 1 : page + 1,
     limit,
     syncingAll,
     sort,
@@ -125,12 +130,16 @@ export function Dashboard() {
     group,
   );
 
-  // Both group sizes arrive with any grouped request: page one's length is the index's, and the
-  // page count follows from what is left over.
+  // Both group sizes arrive with any grouped request, so the tracked-stocks card can count the
+  // whole universe (the index's members plus the rest) without a second call. An ungrouped
+  // request answers with `total` instead.
   const kse100Count = data?.groups?.kse100 ?? 0;
   const restCount = data?.groups?.rest ?? 0;
-  const restPages = Math.ceil(restCount / rowsPerPage);
-  const totalPages = 1 + restPages;
+  const universe = data?.groups ? kse100Count + restCount : data?.total ?? 0;
+  // The index scope is a single page — it holds the whole member list — and the all scope pages
+  // by the size the reader chose.
+  const scopeTotal = data?.total ?? 0;
+  const totalPages = indexed ? 1 : Math.max(1, Math.ceil(scopeTotal / rowsPerPage));
   // The index board is scraped separately from the stocks: it comes from the exchange's own
   // market-summary page, and it is a handful of rows rather than a paginated list.
   const { data: indexBoard, isLoading: indicesLoading, isError: indicesError } = useIndices(syncingAll);
@@ -213,9 +222,9 @@ export function Dashboard() {
 
       <Grid container spacing={2} mb={1}>
         {[
-          // The universe, not the page: `total` is the current group's size now that the list is
-          // grouped, and this card counts everything tracked (the index's members plus the rest).
-          { label: 'Tracked stocks', value: data ? kse100Count + restCount : '—' },
+          // The universe, not the page: a grouped request answers with both group sizes, so this
+          // card counts everything tracked (the index's members plus the rest) either way.
+          { label: 'Tracked stocks', value: data ? universe : '—' },
           { label: 'Active syncs', value: syncCounts?.active ?? 0 },
           { label: 'Waiting', value: syncCounts?.waiting ?? 0 },
           { label: 'Failed', value: failedCount },
@@ -247,14 +256,31 @@ export function Dashboard() {
       <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
 
       <Paper variant="outlined">
+        {/* Which list the table below lists, above the table's first column. A rounded box rather
+            than the table's square edges, so it reads as a control sitting on the panel. */}
+        <Stack direction="row" alignItems="center" sx={{ px: 2, pt: 1.5 }}>
+          <TextField
+            select
+            size="small"
+            label="Indices"
+            value={scope}
+            onChange={(e) => {
+              setScope(e.target.value as 'kse100' | 'all');
+              setPage(0);
+            }}
+            sx={{ minWidth: 200, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+          >
+            <MenuItem value="kse100">KSE100</MenuItem>
+            <MenuItem value="all">All</MenuItem>
+          </TextField>
+        </Stack>
         {/* Seven columns do not fit a phone. TableContainer gives the table its own horizontal
             scroll area; without one the table pushed the *page* sideways — at a 384px viewport
             the document measured 835px (a 451px overflow), so every row ran off the screen. */}
         <TableContainer>
-          {/* Page one is a *group*, not a window: the index's member list, and its rows look the
-              same as page two's, so the table keeps a name for screen readers even though the page
-              no longer spells it out above the rows. */}
-          <Table aria-label={page === 0 ? 'KSE-100 Index constituents' : 'Other tracked symbols'}>
+          {/* The rows look the same whichever list is on screen, so the table keeps a name for
+              screen readers even though the page does not spell it out above the rows. */}
+          <Table aria-label={indexed ? 'KSE-100 Index constituents' : 'All tracked symbols'}>
             <TableHead>
               <TableRow>
                 <TableCell>Symbol</TableCell>
@@ -277,9 +303,9 @@ export function Dashboard() {
               {data?.items.length === 0 && !isLoading && (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
-                    {page === 0
+                    {indexed
                       ? 'No KSE-100 members yet — the index’s member list has not been fetched.'
-                      : 'No other tracked symbols.'}
+                      : 'No tracked symbols.'}
                   </TableCell>
                 </TableRow>
               )}
@@ -304,10 +330,10 @@ export function Dashboard() {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* A group-aware pager, not MUI's TablePagination: that control assumes every page is
-            `rowsPerPage` rows long and derives its "1–50 of 508" label from that. Page one is the
-            whole KSE-100 group (99 today), so its label would be wrong on the one page the reader
-            lands on. This counts *pages*, and the size selector governs page two onward. */}
+        {/* A pager of our own, not MUI's TablePagination: that control assumes every page is
+            `rowsPerPage` rows long and derives its "1–50 of 508" label from that. The index scope
+            is one page holding the whole member list (99 today), so its label would be wrong on
+            the one page the reader lands on. This counts *pages*. */}
         <Stack
           direction="row"
           alignItems="center"
@@ -316,7 +342,7 @@ export function Dashboard() {
           sx={{ px: 2, py: 1, flexWrap: 'wrap' }}
         >
           <Typography variant="body2" color="text.secondary">
-            Page {page + 1} of {totalPages} · {page === 0 ? kse100Count : restCount} rows
+            Page {page + 1} of {totalPages} · {scopeTotal} rows
           </Typography>
           <IconButton
             size="small"
@@ -339,11 +365,10 @@ export function Dashboard() {
             size="small"
             label="Rows"
             value={rowsPerPage}
-            // Selecting a size lands on the first page it governs — page one is the index, and
-            // its length is the index's, not this setting's.
+            // Selecting a size lands on the first page of the list it governs.
             onChange={(e) => {
               setRowsPerPage(parseInt(e.target.value, 10));
-              setPage(1);
+              setPage(0);
             }}
             sx={{ minWidth: 100 }}
           >
