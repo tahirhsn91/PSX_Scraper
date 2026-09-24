@@ -321,8 +321,23 @@ export function Dashboard() {
               // instead, so the control is announced as "Indices" and not as its own value.
               labelId: 'index-scope-label',
               MenuProps: {
+                // A Select menu defaults to anchoring so the *selected item* can sit over the
+                // field, which hides both the field and the value you are about to change; and
+                // 18 options make a list taller than the space under a laptop field. So the list
+                // is pinned to the field's lower edge and capped: it opens just below the box,
+                // the selected row scrolls into view inside it, and the control stays readable
+                // while you choose.
+                anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+                transformOrigin: { vertical: 'top', horizontal: 'left' },
                 PaperProps: {
-                  sx: { mt: 1, borderRadius: 2, border: '1px solid', borderColor: 'divider', boxShadow: 4 },
+                  sx: {
+                    mt: 1,
+                    maxHeight: 320,
+                    borderRadius: 2,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    boxShadow: 4,
+                  },
                 },
                 MenuListProps: { sx: { py: 0.75 } },
               },
