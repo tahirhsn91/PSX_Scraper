@@ -165,8 +165,18 @@ export function MiniIndexChart({
   const slot = box.w / candles.length;
   const colour = ink(toneOf(last, flat));
 
+  /**
+   * The latest-close marker is a positioned DOM dot rather than an SVG circle: the chart's viewBox
+   * is stretched to fill its box, and that non-uniform stretch renders a circle inside it as an
+   * ellipse whenever the rendered width is not the box's aspect. A DOM element is not part of that
+   * transform, so the dot stays round on every card.
+   */
+  const markerLeft = ((candles.length - 0.5) / candles.length) * 100;
+  const markerTop = (y(last.close) / box.h) * 100;
+
   return (
     <Tooltip arrow placement="top" title={<Detail symbol={symbol} candles={candles} />}>
+      <Box sx={{ position: 'relative', width: cssWidth, height: box.h, flexShrink: 0 }}>
       <Box
         component="svg"
         viewBox={`0 0 ${box.w} ${box.h}`}
@@ -175,7 +185,7 @@ export function MiniIndexChart({
         aria-label={`${symbol}: ${candles.length} sessions, latest session ${
           flat ? 'unchanged' : last.close >= last.open ? 'up' : 'down'
         }`}
-        sx={{ display: 'block', width: cssWidth, height: box.h, overflow: 'visible', flexShrink: 0 }}
+        sx={{ display: 'block', width: '100%', height: '100%', overflow: 'visible' }}
       >
         {variant === 'line' ? (
           (() => {
@@ -198,7 +208,6 @@ export function MiniIndexChart({
                   strokeLinejoin="round"
                   vectorEffect="non-scaling-stroke"
                 />
-                <circle cx={points[points.length - 1].x} cy={y(last.close)} r={2.4} fill={colour} />
               </>
             );
           })()
@@ -236,6 +245,22 @@ export function MiniIndexChart({
             <rect x={box.w - 1.6} y={y(last.close) - 1.6} width={3.2} height={3.2} fill={colour} />
           </>
         )}
+      </Box>
+      {variant === 'line' && (
+        <Box
+          sx={{
+            position: 'absolute',
+            left: `${markerLeft}%`,
+            top: `${markerTop}%`,
+            width: 5,
+            height: 5,
+            ml: '-2.5px',
+            mt: '-2.5px',
+            borderRadius: '50%',
+            bgcolor: colour,
+          }}
+        />
+      )}
       </Box>
     </Tooltip>
   );
