@@ -20,7 +20,7 @@ import { IndicesTicker } from '../components/IndicesTicker';
 import { FailuresPanel } from '../components/FailuresPanel';
 import { SearchBar } from '../components/SearchBar';
 import type { ApiError } from '../api/client';
-import type { StockSortField, SortOrder, StockListGroup } from '../types';
+import type { StockSortField, SortOrder } from '../types';
 
 /**
  * The pair of arrows on a sortable column: down for ascending, up for descending.
@@ -56,20 +56,26 @@ export function Dashboard() {
   // The universe worker (#41) puts every listed security on this dashboard, so the table is
   // paged rather than cut off at the first N symbols.
   //
-  // Page one is the KSE-100 — the index's own published member list — and the pages after it are
-  // every other tracked symbol, `rowsPerPage` at a time. Page one is therefore as long as the
-  // index is (99 today, not a hardcoded 100): "100 rows" is the index's size, so it follows the
-  // data rather than a constant that a rebalance would silently contradict.
+  // KSE100 opens the dashboard — the index's own published member list — and every other scope is
+  // the same shape: an index scope asks the API for that index's tracked constituents, `all` asks
+  // for every tracked symbol. An index list is as long as the index is (99 today, not a hardcoded
+  // 100), so the row count follows the data rather than a constant a rebalance would silently
+  // contradict.
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
-  // Which list the table shows: the KSE-100's own published member list, or every tracked symbol.
-  // KSE-100 is the default — it is the list a reader opens the dashboard for, and it is the only
-  // membership the scraper stores today.
-  const [scope, setScope] = useState<'kse100' | 'all'>('kse100');
-  const indexed = scope === 'kse100';
-  // The API caps `limit` at 200 — comfortably above any KSE-100 membership, so the index's member
-  // list arrives in a single request and needs no paging of its own.
-  const group: StockListGroup | undefined = indexed ? 'kse100' : undefined;
+  /**
+   * Which list the table shows. `'all'` is the whole tracked universe; any other value is a PSX
+   * index symbol whose tracked constituents the API filters the list to. KSE100 is the default —
+   * the list a reader opens the dashboard for.
+   *
+   * The symbols are not hardcoded here: they are the index board's own 17 (below), so the dropdown
+   * cannot offer an index PSX does not publish, and a new one appears without a frontend change.
+   */
+  const [scope, setScope] = useState('KSE100');
+  const indexed = scope !== 'all';
+  // The API caps `limit` at 200 — comfortably above any index membership stored today, so an
+  // index's member list arrives in a single request. An index that grows past 200 pages like any
+  // other list, which is why the page count is derived from this `limit` and not assumed to be 1.
   const limit = indexed ? 200 : rowsPerPage;
   // Sorting is done by the API, not here: the table shows 50 of ~500 symbols, so ordering in
   // the browser would only shuffle the page you happen to be looking at.
@@ -123,28 +129,48 @@ export function Dashboard() {
 
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
   const { data, isLoading, isError } = useStocks(
-    // The index scope is one request (the whole member list); the all scope pages normally.
-    indexed ? 1 : page + 1,
+    // Every scope pages the same way; the index scope just asks for 200 rows at a time.
+    page + 1,
     limit,
     syncingAll,
     sort,
     order,
-    group,
+    // Deliberately no `group`: `index` is this table's scope filter, and All means no filter at
+    // all — sending `group` as well would intersect an index's members with the KSE-100's.
+    undefined,
+    indexed ? scope : undefined,
   );
 
-  // Both group sizes arrive with any grouped request, so the tracked-stocks card can count the
-  // whole universe (the index's members plus the rest) without a second call. An ungrouped
-  // request answers with `total` instead.
+  // Both group sizes arrive with any scoped request — grouped or index-filtered — so the
+  // tracked-stocks card can count the whole universe (the index's members plus the rest) without a
+  // second call. An unscoped request answers with `total` instead.
   const kse100Count = data?.groups?.kse100 ?? 0;
   const restCount = data?.groups?.rest ?? 0;
   const universe = data?.groups ? kse100Count + restCount : data?.total ?? 0;
-  // The index scope is a single page — it holds the whole member list — and the all scope pages
-  // by the size the reader chose.
+  // `total` is the *filtered* count: the index's tracked members, or the whole universe under All.
+  // The page count follows from that same number and the size this scope actually requests, so the
+  // label, the arrows and the rows on screen are all derived from one source and cannot disagree.
   const scopeTotal = data?.total ?? 0;
-  const totalPages = indexed ? 1 : Math.max(1, Math.ceil(scopeTotal / rowsPerPage));
+  const totalPages = Math.max(1, Math.ceil(scopeTotal / limit));
+  // A page number can outlive the list it pointed at — a rebalance drops an index below the page
+  // the reader is on. Above the last page the table would render no rows and a pager reading
+  // "Page 4 of 2"; the state is corrected instead. (A scope change already resets the page.)
+  useEffect(() => {
+    if (data && page > totalPages - 1) setPage(totalPages - 1);
+  }, [data, page, totalPages]);
   // The index board is scraped separately from the stocks: it comes from the exchange's own
   // market-summary page, and it is a handful of rows rather than a paginated list.
   const { data: indexBoard, isLoading: indicesLoading, isError: indicesError } = useIndices(syncingAll);
+  // The dropdown's index options are the board's own symbols, taken from the API at runtime rather
+  // than a hardcoded list: the selector then cannot offer an index PSX does not publish, and an
+  // index PSX adds appears without a frontend change.
+  const indexSymbols = indexBoard?.items.map((i) => i.symbol) ?? [];
+  // MUI renders the *selected option's* label, so a selected value with no matching option renders
+  // an empty control. KSE100 is selected on first paint and the board arrives a moment later, so
+  // the current scope is always in the list rather than waiting for the fetch.
+  const indexOptions = scope !== 'all' && !indexSymbols.includes(scope)
+    ? [scope, ...indexSymbols]
+    : indexSymbols;
 
   // Once the fan-out has actually started showing up in the queue, stop forcing
   // the "just triggered" state — the real counts take over.
@@ -224,8 +250,9 @@ export function Dashboard() {
 
       <Grid container spacing={2} mb={1}>
         {[
-          // The universe, not the page: a grouped request answers with both group sizes, so this
-          // card counts everything tracked (the index's members plus the rest) either way.
+          // The universe, not the page: any scoped request (an index, or a group) answers with both
+          // group sizes, so this card counts everything tracked (the index's members plus the rest)
+          // in every scope — it reads 508 even while the table shows one index's 99.
           { label: 'Tracked stocks', value: data ? universe : '—' },
           { label: 'Active syncs', value: syncCounts?.active ?? 0 },
           { label: 'Waiting', value: syncCounts?.waiting ?? 0 },
@@ -259,8 +286,10 @@ export function Dashboard() {
 
       <Paper variant="outlined">
         {/* Which list the table below lists, above the table's first column. Deliberately its own
-            object on the panel rather than another row of the table: a caption label, a 44px
-            rounded control with a leading glyph, and a menu whose items are rounded and tinted. */}
+            object on the panel rather than another row of the table: a caption label, a rounded
+            control with a leading glyph, and a menu whose items are rounded and tinted.
+            `All` is the whole tracked universe (no filter on the wire); every other option is an
+            index symbol sent as `index=<symbol>`. */}
         <Stack sx={{ px: 2, pt: 1.5 }}>
           <Typography
             variant="caption"
@@ -280,7 +309,8 @@ export function Dashboard() {
             size="small"
             value={scope}
             onChange={(e) => {
-              setScope(e.target.value as 'kse100' | 'all');
+              setScope(e.target.value);
+              // A page number belongs to the list it was counted in.
               setPage(0);
             }}
             // The caption above is this control's name — it is the visible label, so the control
@@ -344,8 +374,8 @@ export function Dashboard() {
             }}
           >
             {[
-              { value: 'kse100', label: 'KSE100' },
               { value: 'all', label: 'All' },
+              ...indexOptions.map((s) => ({ value: s, label: s })),
             ].map((option) => (
               <MenuItem
                 key={option.value}
@@ -370,8 +400,9 @@ export function Dashboard() {
             the document measured 835px (a 451px overflow), so every row ran off the screen. */}
         <TableContainer>
           {/* The rows look the same whichever list is on screen, so the table keeps a name for
-              screen readers even though the page does not spell it out above the rows. */}
-          <Table aria-label={indexed ? 'KSE-100 Index constituents' : 'All tracked symbols'}>
+              screen readers even though the page does not spell it out above the rows — and it
+              names the scope, so "which index am I looking at" survives with the table alone. */}
+          <Table aria-label={indexed ? `${scope} index constituents` : 'All tracked symbols'}>
             <TableHead>
               <TableRow>
                 <TableCell>Symbol</TableCell>
@@ -391,11 +422,15 @@ export function Dashboard() {
                 Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i}><TableCell colSpan={7}><Skeleton /></TableCell></TableRow>
                 ))}
+              {/* An empty index scope is a fact about *that index*, not an empty table. Naming the
+                  symbol is what separates "PSX's KMI30 membership has not been stored yet" from
+                  "nothing is tracked" — and the row stays empty rather than being filled with
+                  invented constituents, because there are none to show. */}
               {data?.items.length === 0 && !isLoading && (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
                     {indexed
-                      ? 'No KSE-100 members yet — the index’s member list has not been fetched.'
+                      ? `No tracked members stored for ${scope} yet.`
                       : 'No tracked symbols.'}
                   </TableCell>
                 </TableRow>
@@ -422,9 +457,10 @@ export function Dashboard() {
           </Table>
         </TableContainer>
         {/* A pager of our own, not MUI's TablePagination: that control assumes every page is
-            `rowsPerPage` rows long and derives its "1–50 of 508" label from that. The index scope
-            is one page holding the whole member list (99 today), so its label would be wrong on
-            the one page the reader lands on. This counts *pages*. */}
+            `rowsPerPage` rows long and derives its "1–50 of 508" label from that. An index scope
+            asks the API for 200 rows at a time whatever the rows control says, so that label would
+            be wrong on the page the reader lands on. This counts *pages* — from the filtered total
+            and the size this scope actually requests. */}
         <Stack
           direction="row"
           alignItems="center"
@@ -492,7 +528,7 @@ export function Dashboard() {
         <DialogTitle>Sync all stocks?</DialogTitle>
         <DialogContent>
           <Typography>
-            This fetches the latest data for all {data?.total ?? 0} tracked stock{data?.total === 1 ? '' : 's'} from PSX
+            This fetches the latest data for all {universe} tracked stock{universe === 1 ? '' : 's'} from PSX
             and Sarmaaya. It runs in the background — you can keep using the dashboard while it completes.
           </Typography>
         </DialogContent>

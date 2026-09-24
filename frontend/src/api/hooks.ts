@@ -7,16 +7,18 @@ import type {
 } from '../types';
 
 export const keys = {
-  // The group belongs in the key: page one (the KSE-100) and page two (everything else) are
-  // different row sets at the same page number, and without it the second request would be served
-  // from the first one's cache — page two showing the index.
+  // The group and the index belong in the key: page one (the KSE-100) and page two (everything
+  // else) are different row sets at the same page number, and so are KMI30's members and ALLSHR's.
+  // Without them the second request would be served from the first one's cache — page two showing
+  // the index, or KMI30's rows under ALLSHR's name.
   stocks: (
     page: number,
     limit: number,
     sort?: StockSortField,
     order: SortOrder = 'asc',
     group?: StockListGroup,
-  ) => ['stocks', page, limit, sort ?? 'symbol', order, group ?? 'all'] as const,
+    index?: string,
+  ) => ['stocks', page, limit, sort ?? 'symbol', order, group ?? 'all', index ?? 'none'] as const,
   stock: (symbol: string) => ['stock', symbol] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
@@ -32,6 +34,11 @@ export const keys = {
   indexHistory: (symbol: string, limit: number) => ['index-history', symbol, limit] as const,
 };
 
+/**
+ * The tracked-stock list. `group` splits the universe in two (the KSE-100 and the rest); `index`
+ * filters it to one PSX index's tracked constituents — the API 400s on a symbol it does not know,
+ * which is why callers pass symbols the index board actually returned rather than typed text.
+ */
 export const useStocks = (
   page = 1,
   limit = 20,
@@ -39,15 +46,18 @@ export const useStocks = (
   sort?: StockSortField,
   order: SortOrder = 'asc',
   group?: StockListGroup,
+  index?: string,
 ) =>
   useQuery({
     // The sort belongs in the key: a different order is a different page of data, not a
     // re-render of this one.
-    queryKey: keys.stocks(page, limit, sort, order, group),
+    queryKey: keys.stocks(page, limit, sort, order, group, index),
     queryFn: async () =>
       (
         await api.get<StocksPage>('/stocks', {
-          params: { page, limit, sort, order, group },
+          // Undefined params are dropped from the query string by axios, so "no scope" really is
+          // no `group` / `index` on the wire rather than an empty one.
+          params: { page, limit, sort, order, group, index },
         })
       ).data,
     // Poll while a sync-all fan-out is in flight so prices / "last synced" update live.
