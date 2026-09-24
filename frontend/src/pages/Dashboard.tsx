@@ -76,7 +76,8 @@ export function Dashboard() {
   // The API caps `limit` at 200 — comfortably above any index membership stored today, so an
   // index's member list arrives in a single request. An index that grows past 200 pages like any
   // other list, which is why the page count is derived from this `limit` and not assumed to be 1.
-  const limit = indexed ? 200 : rowsPerPage;
+  // The stocks endpoint rejects limit > 200, so clamp rather than trust the options to match it.
+  const limit = Math.min(indexed ? 200 : rowsPerPage, 200);
   // Sorting is done by the API, not here: the table shows 50 of ~500 symbols, so ordering in
   // the browser would only shuffle the page you happen to be looking at.
   const [sort, setSort] = useState<StockSortField | undefined>(undefined);
@@ -499,7 +500,9 @@ export function Dashboard() {
             }}
             sx={{ minWidth: 100 }}
           >
-            {[25, 50, 100, 250].map((size) => (
+            {/* 200 is the API's hard cap on `limit` (the validator rejects more), so offering
+                250 here only ever produced a 400 in the All scope. */}
+            {[25, 50, 100, 200].map((size) => (
               <MenuItem key={size} value={size}>
                 {size}
               </MenuItem>

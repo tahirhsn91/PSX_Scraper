@@ -96,10 +96,9 @@ describe('syncIndexMembership', () => {
         create: expect.objectContaining({ symbol: 'KMI30', name: 'KMI 30 Index' }),
       }),
     );
-    expect(mockedPrisma.marketIndex.update).toHaveBeenCalledWith({
-      where: { id: 'index-KMI30' },
-      data: { lastSyncedAt: expect.any(Date) },
-    });
+    // The stamp belongs to the index *values* sync, not to this pass: stamping it here would tell
+    // the scheduler's boot-time catch-up that KMI30 was synced when only its membership was.
+    expect(mockedPrisma.marketIndex.update).not.toHaveBeenCalled();
   });
 
   it('reports a published symbol we do not track instead of adding it', async () => {
