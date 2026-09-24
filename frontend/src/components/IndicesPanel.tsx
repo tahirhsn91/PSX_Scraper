@@ -6,7 +6,7 @@ import {
 import type { Theme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import type { IndexSummary } from '../types';
-import { MiniCandleChart } from './MiniCandleChart';
+import { MiniIndexChart } from './MiniIndexChart';
 
 /**
  * The PSX index board on the dashboard: breadth first, then one tile per index.
@@ -58,14 +58,6 @@ function toneOf(direction: Direction): { ink: string; bar: string | ((t: Theme) 
   return { ink: 'text.secondary', bar: (t: Theme) => alpha(t.palette.text.secondary, 0.35) };
 }
 
-/** `▲ 830.43 (0.48%)`, or a dash — never a zero standing in for silence. */
-function changeLabel(index: IndexSummary) {
-  if (index.change === null) return '—';
-  const arrow = GLYPH[directionOf(index.change)];
-  const percent = index.changePercent === null ? '' : ` (${index.changePercent.toFixed(2)}%)`;
-  return `${arrow} ${Math.abs(index.change).toFixed(2)}${percent}`;
-}
-
 /** One tile. Kept as a component so the featured tile and the rest cannot drift apart. */
 function IndexTile({ index, featured = false }: { index: IndexSummary; featured?: boolean }) {
   const direction = directionOf(index.changePercent ?? index.change);
@@ -100,58 +92,45 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
             of it — otherwise it covers the change figure, which is the one thing the tile is for. */}
         <Stack
           direction="row"
-          alignItems="baseline"
+          alignItems="flex-start"
           justifyContent="space-between"
           spacing={1}
-          sx={{ pr: featured ? 10 : 0 }}
+          sx={{ pr: featured ? 9 : 0 }}
         >
-          <Typography variant="body2" fontWeight={700} noWrap>
+          <Typography variant="subtitle1" fontWeight={700} noWrap>
             {index.symbol}
           </Typography>
+          {/* The card's chart: this index's own sessions. It replaces the horizontal bar, which
+              showed only how this move compared with the day's largest and nothing at all about the
+              path the index took to get here. */}
+          <MiniIndexChart symbol={index.symbol} flat={direction === 'flat'} />
+        </Stack>
+
+        <Typography
+          variant={featured ? 'h4' : 'h5'}
+          sx={{ mt: 0.25, fontVariantNumeric: 'tabular-nums', letterSpacing: featured ? '-.5px' : undefined }}
+        >
+          {index.value === null ? '—' : formatLevel(index.value)}
+        </Typography>
+
+        <Stack direction="row" alignItems="baseline" justifyContent="space-between" spacing={1}>
+          {/* The index summary carries no volume yet — the exchange's index pages publish none, and
+              the scraper writes null — so this reads as a dash rather than as a zero traded. */}
           <Typography
-            variant="body2"
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}
+          >
+            {index.volume === null ? 'Vol: —' : `Vol: ${index.volume.toLocaleString()}`}
+          </Typography>
+          <Typography
+            variant="subtitle2"
             fontWeight={700}
             sx={{ color: tone.ink, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}
           >
             {index.changePercent === null ? '—' : `${GLYPH[direction]} ${Math.abs(index.changePercent).toFixed(2)}%`}
           </Typography>
         </Stack>
-
-        <Typography
-          variant={featured ? 'h5' : 'h6'}
-          sx={{ mt: 0.75, fontVariantNumeric: 'tabular-nums', letterSpacing: featured ? '-.5px' : undefined }}
-        >
-          {index.value === null ? '—' : formatLevel(index.value)}
-        </Typography>
-
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{ display: 'block', mt: 0.25, fontVariantNumeric: 'tabular-nums' }}
-        >
-          {index.previousClose === null ? 'prev close —' : `prev close ${formatLevel(index.previousClose)}`}
-          {index.change === null ? '' : ` · ${changeLabel(index)}`}
-        </Typography>
-
-        {/* The card's chart: this index's own sessions as candles, running into today's reading.
-            Replaces the old horizontal bar, which showed only how this move compared with the
-            day's largest and said nothing about the path the index took to get here. */}
-        <MiniCandleChart symbol={index.symbol} flat={direction === 'flat'} />
-
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{
-            display: 'block',
-            mt: 0.75,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-          title={index.name}
-        >
-          {index.name}
-        </Typography>
       </CardActionArea>
     </Card>
   );
