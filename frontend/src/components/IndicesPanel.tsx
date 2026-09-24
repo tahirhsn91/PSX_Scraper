@@ -104,18 +104,14 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           <Typography variant="subtitle1" fontWeight={700} noWrap>
             {index.symbol}
           </Typography>
-          {/* The card's chart: this index's own sessions. It replaces the horizontal bar, which
-              showed only how this move compared with the day's largest and nothing at all about the
-              path the index took to get here. The headline card is twice as wide as the rest, so its
-              chart is given the width — and dropped a little, because the headline chip above it
-              otherwise leaves the chart sitting high in a taller card. */}
-          <Box sx={{ mt: featured ? 2 : 0, flexShrink: 0 }}>
-            <MiniIndexChart
-              symbol={index.symbol}
-              width={featured ? 200 : undefined}
-              flat={direction === 'flat'}
-            />
-          </Box>
+          {/* Every card carries its own chart beside the symbol — except the headline card, whose
+              chart runs along the foot of the card instead (below), because a wide, tall card has
+              the room for it and the corner would leave it stranded. */}
+          {!featured && (
+            <Box sx={{ flexShrink: 0 }}>
+              <MiniIndexChart symbol={index.symbol} flat={direction === 'flat'} />
+            </Box>
+          )}
         </Stack>
 
         <Typography
@@ -143,6 +139,14 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
             {index.changePercent === null ? '—' : `${GLYPH[direction]} ${Math.abs(index.changePercent).toFixed(2)}%`}
           </Typography>
         </Stack>
+
+        {/* The headline card's chart: along the foot of the card, just above its lower border, so
+            the widest card on the board closes on the index's own shape rather than on empty space. */}
+        {featured && (
+          <Box sx={{ mt: 1.5 }}>
+            <MiniIndexChart symbol={index.symbol} fullWidth flat={direction === 'flat'} />
+          </Box>
+        )}
       </CardActionArea>
     </Card>
   );
