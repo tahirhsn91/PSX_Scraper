@@ -18,6 +18,9 @@ export const keys = {
   indices: ['indices'] as const,
   index: (symbol: string) => ['index', symbol] as const,
   indexCandles: (symbol: string) => ['index-candles', symbol] as const,
+  // The window size belongs in the key: a 40-session card chart and a 252-session detail chart are
+  // different series at the same symbol, and without it one would be served the other's cache.
+  indexHistory: (symbol: string, limit: number) => ['index-history', symbol, limit] as const,
 };
 
 export const useStocks = (
@@ -61,6 +64,21 @@ export const useIndexCandles = (symbol: string) =>
   useQuery({
     queryKey: keys.indexCandles(symbol),
     queryFn: async () => (await api.get<CandleSeries>(`/indices/${symbol}/candles`)).data,
+    enabled: !!symbol,
+  });
+
+/**
+ * A bounded window of one index's sessions, newest first — what a card's mini chart draws.
+ *
+ * Deliberately not `useIndexCandles`: that returns every session we hold for the index (KSE100 is
+ * 4,000+ rows), and seventeen of those on the dashboard would be megabytes of JSON to draw forty
+ * candles' worth of ink. The card asks for the last N sessions instead.
+ */
+export const useIndexHistory = (symbol: string, limit = 40) =>
+  useQuery({
+    queryKey: keys.indexHistory(symbol, limit),
+    queryFn: async () =>
+      (await api.get<Paginated<PriceRow>>(`/indices/${symbol}/history`, { params: { limit } })).data,
     enabled: !!symbol,
   });
 
