@@ -11,9 +11,14 @@ export const QUOTE_QUEUE = 'quote-sync';
 /** Job name shared by the scheduler and the manual enqueue helper. */
 export const QUOTE_POLL_JOB = 'quote-poll';
 /**
- * The KSE-100 membership pass, on the quote queue: one request a day that decides what page one
- * of the dashboard shows. A second job name rather than a second queue — it is the same kind of
- * work as the poll (light, schedule-driven, no fan-out) and reuses the worker that owns it.
+ * The index membership pass, on the quote queue: a handful of requests a day that decide what the
+ * dashboard's index filter and its KSE-100 page show. A second job name rather than a second queue
+ * — it is the same kind of work as the poll (light, schedule-driven, no fan-out) and reuses the
+ * worker that owns it.
+ *
+ * The name still says KSE100 because the job *id* and the schedule's name are what operators and
+ * Redis already hold; what the handler does is sync every published index (see
+ * `indexMembership.service`).
  */
 export const KSE100_MEMBERSHIP_JOB = 'kse100-membership';
 
@@ -273,7 +278,8 @@ export async function enqueueQuotePoll(trigger: QuotePollJobData['trigger']) {
 }
 
 /**
- * Queue the KSE-100 membership pass on demand — the same job the daily schedule runs.
+ * Queue the index membership pass on demand — the same job the daily schedule runs, which syncs
+ * every published index (the KSE-100 from the exchange's member site, the rest from the ticker).
  *
  * Idempotent by design: a second request while one is queued is a no-op (fixed job id), because a
  * membership pass has no per-call argument. Used by the dev recipe to fill the group on a fresh

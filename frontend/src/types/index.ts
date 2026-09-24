@@ -78,17 +78,19 @@ export interface Paginated<T> {
 /**
  * Which half of the tracked universe a list request is about.
  *
- * `kse100` is the index's published member list — the dashboard's page one — and `rest` is every
- * other tracked symbol, the pages after it. Sorting applies within the group, so page one stays
- * the index however the table is ordered.
+ * `kse100` is the index's published member list and `rest` is every other tracked symbol. Sorting
+ * applies within the group, so a grouped page keeps its own membership however the table is
+ * ordered. The dashboard scopes its table with `index=<symbol>` instead (any of the 17 indices);
+ * `group` remains the way to ask for these two halves specifically.
  */
 export type StockListGroup = 'kse100' | 'rest';
 
-/** The stocks list, with both group sizes when a group was asked for. */
+/** The stocks list, with both group sizes when a scoped request was made. */
 export interface StocksPage extends Paginated<StockListItem> {
   /**
-   * Present only when `group` was sent. The pager needs both numbers: page one is the KSE-100's
-   * own length, and the page count follows from what is left over.
+   * Present when `group` or `index` was sent — a filtered list still reports the universe it was
+   * drawn from. That is what lets the "Tracked stocks" card count every tracked symbol in any
+   * scope without a second request; an unscoped request answers with `total` alone.
    */
   groups?: { kse100: number; rest: number };
 }
