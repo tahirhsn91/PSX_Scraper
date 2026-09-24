@@ -94,6 +94,10 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           direction="row"
           alignItems="flex-start"
           justifyContent="space-between"
+          // `useFlexGap` so the gap comes from CSS `gap`: with the margin-based spacing the Stack
+          // also emits `> :not(style) + :not(style) { margin: 0 }`, which silently ate the headline
+          // chart's offset below and left it pinned to the top of its card.
+          useFlexGap
           spacing={1}
           sx={{ pr: featured ? 9 : 0 }}
         >
@@ -102,8 +106,16 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           </Typography>
           {/* The card's chart: this index's own sessions. It replaces the horizontal bar, which
               showed only how this move compared with the day's largest and nothing at all about the
-              path the index took to get here. */}
-          <MiniIndexChart symbol={index.symbol} flat={direction === 'flat'} />
+              path the index took to get here. The headline card is twice as wide as the rest, so its
+              chart is given the width — and dropped a little, because the headline chip above it
+              otherwise leaves the chart sitting high in a taller card. */}
+          <Box sx={{ mt: featured ? 2 : 0, flexShrink: 0 }}>
+            <MiniIndexChart
+              symbol={index.symbol}
+              width={featured ? 200 : undefined}
+              flat={direction === 'flat'}
+            />
+          </Box>
         </Stack>
 
         <Typography
