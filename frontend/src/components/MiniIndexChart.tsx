@@ -84,6 +84,7 @@ export function MiniIndexChart({
   sessions = 28,
   variant = 'line',
   flat = false,
+  width,
 }: {
   symbol: string;
   /**
@@ -95,6 +96,12 @@ export function MiniIndexChart({
   variant?: 'line' | 'candles';
   /** Today's move is not meaningful — the chart goes neutral rather than forcing a tone. */
   flat?: boolean;
+  /**
+   * Draw wider than the default box. The height stays 46px, so a wider chart shows the same 28
+   * sessions with more horizontal room between them rather than more of the series. Used by the
+   * headline card, which is twice the width of the rest and has the space to spend.
+   */
+  width?: number;
 }) {
   const theme = useTheme();
   const { data, isLoading } = useIndexHistory(symbol, sessions);
@@ -111,7 +118,7 @@ export function MiniIndexChart({
     return theme.palette.text.disabled;
   };
 
-  const box = variant === 'line' ? LINE : { w: 100, h: CANDLES.h };
+  const box = variant === 'line' ? { w: width ?? LINE.w, h: LINE.h } : { w: width ?? 100, h: CANDLES.h };
 
   if (isLoading && candles.length === 0) {
     return <Skeleton variant="rounded" width={box.w} height={box.h} />;
