@@ -357,7 +357,12 @@ export function IndicesPanel({
           </Stack>
 
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={6} lg={4}>
+            {/* The headline tile is exactly two tiles wide (6 of 12 columns at md and up, 12 of
+                12 at sm, where the tiles go two-up): a width that is a whole number of tile
+                widths. Anything else — the 4 columns this started as — leaves the row short and
+                knocks the first tiles out of the column grid the rows below them use, so no tile
+                lines up with the one under it. */}
+            <Grid item xs={12} sm={12} md={6} lg={6}>
               <IndexTile index={featured} featured magnitude={magnitudeOf(featured)} />
             </Grid>
             {rest.map((index) => (
