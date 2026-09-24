@@ -247,7 +247,7 @@ export function Dashboard() {
       <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
 
       <Paper variant="outlined">
-        {/* Eight columns do not fit a phone. TableContainer gives the table its own horizontal
+        {/* Seven columns do not fit a phone. TableContainer gives the table its own horizontal
             scroll area; without one the table pushed the *page* sideways — at a 384px viewport
             the document measured 835px (a 451px overflow), so every row ran off the screen. */}
         <TableContainer>
@@ -258,26 +258,25 @@ export function Dashboard() {
             <TableHead>
               <TableRow>
                 <TableCell>Symbol</TableCell>
-                {/* Company and "Last synced" are the two columns a phone cannot afford: the
-                    widest, the least load-bearing, and one tap away on the detail page. The
-                    numbers are what a mobile dashboard is for, so they stay at every width. */}
+                {/* Company is the one column a phone cannot afford: the widest, the least
+                    load-bearing, and one tap away on the detail page. The numbers are what a
+                    mobile dashboard is for, so they stay at every width. */}
                 <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Company</TableCell>
                 {sortableHeader('Price', 'price')}
                 {sortableHeader('52W Low', 'week52Low')}
                 {sortableHeader('52W High', 'week52High')}
                 {sortableHeader('Change %', 'changePercent')}
                 {sortableHeader('Volume', 'volume')}
-                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Last synced</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {isLoading &&
                 Array.from({ length: 5 }).map((_, i) => (
-                  <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
+                  <TableRow key={i}><TableCell colSpan={7}><Skeleton /></TableCell></TableRow>
                 ))}
               {data?.items.length === 0 && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={8} align="center">
+                  <TableCell colSpan={7} align="center">
                     {page === 0
                       ? 'No KSE-100 members yet — the index’s member list has not been fetched.'
                       : 'No other tracked symbols.'}
@@ -300,7 +299,6 @@ export function Dashboard() {
                   </TableCell>
                   {/* Thousands separators: session volumes run to seven figures. */}
                   <TableCell align="right">{s.volume != null ? s.volume.toLocaleString() : '—'}</TableCell>
-                  <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{s.lastSyncedAt ? new Date(s.lastSyncedAt).toLocaleString() : 'never'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
