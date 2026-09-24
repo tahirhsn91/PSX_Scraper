@@ -121,16 +121,6 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           {index.value === null ? '—' : formatLevel(index.value)}
         </Typography>
 
-        {/* The card's chart, right-aligned so it sits directly above the change figure. `mt: auto`
-            absorbs whatever height the card has been stretched to: where a neighbour in the row is
-            taller, the chart drops to the foot instead of leaving a hole between the chart and the
-            change figure it belongs with, and on a card at its natural height it adds nothing. */}
-        {!featured && (
-          <Box sx={{ mt: 'auto', alignSelf: 'flex-end', flexShrink: 0 }}>
-            <MiniIndexChart symbol={index.symbol} flat={direction === 'flat'} />
-          </Box>
-        )}
-
         {/* The tile's foot, pushed to the bottom of the card: on a row where a card is stretched by
             a taller neighbour, the volume and the change figure still land on the same line as
             their neighbours rather than floating in the middle of the card. */}
@@ -139,7 +129,7 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           alignItems="baseline"
           justifyContent="space-between"
           spacing={1}
-          sx={{ mt: featured ? 'auto' : 0, pt: 1 }}
+          sx={{ mt: 'auto', pt: 1 }}
         >
           {/* The index summary carries no volume yet — the exchange's index pages publish none, and
               the scraper writes null — so this reads as a dash rather than as a zero traded. */}
@@ -159,13 +149,13 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           </Typography>
         </Stack>
 
-        {/* The headline card's chart: along the foot of the card, just above its lower border, so
-            the widest card on the board closes on the index's own shape rather than on empty space. */}
-        {featured && (
-          <Box sx={{ mt: 1.5 }}>
-            <MiniIndexChart symbol={index.symbol} fullWidth flat={direction === 'flat'} />
-          </Box>
-        )}
+        {/* The card closes on the index's own shape: the chart runs the width of the card, under the
+            change figure, on every tile — the headline card's arrangement, which the narrower cards
+            now share. `mt: auto` above puts the pair at the foot of a stretched card, so the change
+            figure never floats away from the chart that explains it. */}
+        <Box sx={{ pt: 1.25 }}>
+          <MiniIndexChart symbol={index.symbol} fullWidth flat={direction === 'flat'} />
+        </Box>
       </CardActionArea>
     </Card>
   );
