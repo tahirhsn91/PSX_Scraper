@@ -33,6 +33,16 @@ export const stocksQuery = paginationQuery.extend({
    * A sort applies *within* the group — page one stays the KSE-100 whatever the column.
    */
   group: z.enum(['kse100', 'rest']).optional(),
+  /**
+   * Narrow the list to one published index's tracked members, by index symbol (KMI30, ALLSHR, …).
+   * Validated with the same symbol rules as everywhere else — trimmed and upper-cased, so a caller
+   * cannot miss an index on casing alone. Format only: whether the index exists is answered
+   * against the database, which is the only place that can answer it, and an unknown symbol is a
+   * 400 naming it rather than a silent 200 over the whole universe.
+   *
+   * `index` wins over `group` when both are sent (see buildListFilter).
+   */
+  index: symbolSchema.optional(),
 });
 
 /**

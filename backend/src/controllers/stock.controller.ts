@@ -9,8 +9,8 @@ type StocksQuery = z.infer<typeof stocksQuery>;
 type Sym = z.infer<typeof symbolParam>;
 
 export const listStocks: RequestHandler = async (req, res) => {
-  const { page, limit, sort, order, group } = valid<StocksQuery>(req, 'query');
-  res.json(await stockService.list(page, limit, sort, order, group));
+  const { page, limit, sort, order, group, index } = valid<StocksQuery>(req, 'query');
+  res.json(await stockService.list(page, limit, sort, order, group, index));
 };
 
 export const getStock: RequestHandler = async (req, res) => {

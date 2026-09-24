@@ -3,12 +3,13 @@ import {
   stockRepository, StockSortField, SortOrder, StockListGroup,
 } from '../repositories/stock.repository';
 import { deletedSymbolRepository } from '../repositories/deletedSymbol.repository';
+import { indexRepository } from '../repositories/index.repository';
 import { kse100GroupCounts } from './kse100Membership.service';
 import {
   getStockDetail, getPriceHistory, getCandles, type Candle,
 } from '../repositories/stockDetail.repository';
 import { enqueueSync, cancelSyncJob } from '../jobs/queues';
-import { ConflictError, NotFoundError } from '../types/errors';
+import { ConflictError, NotFoundError, ValidationError } from '../types/errors';
 import { rangeToFrom, HistoryRange } from '../utils/range';
 import { logger } from '../utils/logger';
 
@@ -19,8 +20,18 @@ export const stockService = {
    * A page of the tracked universe.
    *
    * `group` splits the universe for the dashboard: `kse100` is page one (the index's members) and
-   * `rest` is everything else. When a group is asked for, the response also carries both group
-   * counts, because a pager cannot place page two without knowing how long page one is.
+   * `rest` is everything else. `index` narrows the list to one named index's tracked members and
+   * wins over `group` when both are sent — the two are different questions, and intersecting them
+   * would answer an empty page for every index but KSE100.
+   *
+   * An index symbol we do not know is a 400 naming it. That matters more than it looks: before
+   * this, `index=KMI30` was simply ignored and the endpoint answered 200 with all 508 rows, so a
+   * selector built on it looked like it worked while showing the wrong data. There is no way to
+   * tell that from the response, so it must not be a 200.
+   *
+   * When either filter is asked for, the response also carries both group counts, because the
+   * dashboard's universe card sums them to the whole tracked universe whatever the list shows —
+   * `total` is the *filtered* count, `groups` is the universe.
    */
   async list(
     page: number,
@@ -28,11 +39,15 @@ export const stockService = {
     sort?: StockSortField,
     order: SortOrder = 'asc',
     group?: StockListGroup,
+    index?: string,
   ) {
     const offset = (page - 1) * limit;
+    if (index && !(await indexRepository.findBySymbol(index))) {
+      throw new ValidationError(`Unknown index: ${index}`);
+    }
     const [{ items, total }, groups] = await Promise.all([
-      stockRepository.list(limit, offset, sort, order, group),
-      group ? kse100GroupCounts() : Promise.resolve(undefined),
+      stockRepository.list(limit, offset, sort, order, group, index),
+      index || group ? kse100GroupCounts() : Promise.resolve(undefined),
     ]);
     return {
       items,
