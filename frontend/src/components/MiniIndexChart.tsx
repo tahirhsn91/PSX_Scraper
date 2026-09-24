@@ -21,7 +21,7 @@ import { toCandles, toneOf, type MiniCandle } from '../lib/candles';
  */
 
 /** The sparkline's box, in CSS pixels. Fixed so cards on a row stay the same height. */
-const LINE = { w: 76, h: 30 };
+const LINE = { w: 120, h: 46 };
 
 /** The candle variant's box. */
 const CANDLES = { h: 44 };
@@ -163,20 +163,30 @@ export function MiniIndexChart({
         sx={{ display: 'block', width: box.w, height: box.h, overflow: 'visible', flexShrink: 0 }}
       >
         {variant === 'line' ? (
-          <>
-            {/* The whole path follows the index, so a card cannot show a trend the index did not
-                have — but the stroke takes today's tone, which is what the card is answering. */}
-            <path
-              d={smoothPath(candles.map((c, i) => ({ x: i * slot + slot / 2, y: y(c.close) })))}
-              fill="none"
-              stroke={colour}
-              strokeWidth={1.6}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              vectorEffect="non-scaling-stroke"
-            />
-            <circle cx={box.w - slot / 2} cy={y(last.close)} r={1.6} fill={colour} />
-          </>
+          (() => {
+            const points = candles.map((c, i) => ({ x: i * slot + slot / 2, y: y(c.close) }));
+            const line = smoothPath(points);
+            // A flat low-opacity wash under the path — not a gradient — so the shape reads as a
+            // filled series rather than a stray thread, without the decoration the theme avoids.
+            const area = `${line} L ${points[points.length - 1].x} ${box.h} L ${points[0].x} ${box.h} Z`;
+            return (
+              <>
+                <path d={area} fill={colour} fillOpacity={0.12} stroke="none" />
+                {/* The whole path follows the index, so a card cannot show a trend the index did
+                    not have — but the stroke takes today's tone, which is what the card answers. */}
+                <path
+                  d={line}
+                  fill="none"
+                  stroke={colour}
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+                <circle cx={points[points.length - 1].x} cy={y(last.close)} r={2.4} fill={colour} />
+              </>
+            );
+          })()
         ) : (
           <>
             {candles.map((candle, i) => {
