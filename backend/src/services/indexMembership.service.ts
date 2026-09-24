@@ -101,7 +101,12 @@ export async function syncIndexMembership(
   });
 
   const { added, removed, kept } = await indexConstituentRepository.replaceForIndex(index.id, rows);
-  await prisma.marketIndex.update({ where: { id: index.id }, data: { lastSyncedAt: new Date() } });
+
+  // Deliberately NOT stamping market_indices.last_synced_at here. That column means "this index's
+  // values were last synced", and `scheduler.ts` reads it at boot to decide which indices still
+  // need a catch-up: a membership pass that stamped it could let a restart straight after a pass
+  // skip a stale index value set. KSE100 has stamped it since before this pass existed — left
+  // alone on purpose, because changing page one's behaviour is its own decision.
 
   const summary: IndexMembershipSummary = {
     index: symbol,
