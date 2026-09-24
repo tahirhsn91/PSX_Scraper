@@ -3,8 +3,9 @@ import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
   TableSortLabel,
   Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert,
-  Stack, Grid, Card, CardContent, LinearProgress, Snackbar, IconButton, MenuItem,
+  Stack, Grid, Card, CardContent, LinearProgress, Snackbar, IconButton, MenuItem, InputAdornment,
 } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import SyncIcon from '@mui/icons-material/Sync';
@@ -12,6 +13,7 @@ import ArrowUpwardRounded from '@mui/icons-material/ArrowUpwardRounded';
 import ArrowDownwardRounded from '@mui/icons-material/ArrowDownwardRounded';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ShowChartRounded from '@mui/icons-material/ShowChartRounded';
 import { useStocks, useAddStock, useSyncStatus, useSyncAll, useIndices } from '../api/hooks';
 import { IndicesPanel } from '../components/IndicesPanel';
 import { IndicesTicker } from '../components/IndicesTicker';
@@ -256,22 +258,96 @@ export function Dashboard() {
       <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
 
       <Paper variant="outlined">
-        {/* Which list the table below lists, above the table's first column. A rounded box rather
-            than the table's square edges, so it reads as a control sitting on the panel. */}
-        <Stack direction="row" alignItems="center" sx={{ px: 2, pt: 1.5 }}>
+        {/* Which list the table below lists, above the table's first column. Deliberately its own
+            object on the panel rather than another row of the table: a caption label, a 44px
+            rounded control with a leading glyph, and a menu whose items are rounded and tinted. */}
+        <Stack sx={{ px: 2, pt: 1.5 }}>
+          <Typography
+            variant="caption"
+            id="index-scope-label"
+            sx={{
+              color: 'text.secondary',
+              fontWeight: 600,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              mb: 0.75,
+            }}
+          >
+            Indices
+          </Typography>
           <TextField
             select
             size="small"
-            label="Indices"
             value={scope}
             onChange={(e) => {
               setScope(e.target.value as 'kse100' | 'all');
               setPage(0);
             }}
-            sx={{ minWidth: 200, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+            // The caption above is this control's name — it is the visible label, so the control
+            // borrows it rather than carrying a floating label that would sit inside a box this
+            // short and read as a value.
+            sx={{
+              minWidth: 240,
+              // A column Stack stretches its children to the panel's width; a filter reads as a
+              // control, not a form field spanning 1,100px.
+              alignSelf: 'flex-start',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'border-color .15s ease, box-shadow .15s ease',
+                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'text.primary' },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'primary.main',
+                  borderWidth: 1.5,
+                },
+                // A ring rather than MUI's grey fill, so focus is visible without the field
+                // looking disabled. Primary at low alpha holds up in light and dark alike.
+                '&.Mui-focused': {
+                  boxShadow: (t) => `0 0 0 3px ${alpha(t.palette.primary.main, 0.18)}`,
+                },
+              },
+              '& .MuiSelect-select': { fontWeight: 600, py: 1.25 },
+              '& .MuiSelect-select:focus': { backgroundColor: 'transparent' },
+              '& .MuiSelect-icon': { color: 'text.secondary' },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <ShowChartRounded fontSize="small" sx={{ color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            }}
+            SelectProps={{
+              // MUI gives the combobox its own generated label id; point it at the visible caption
+              // instead, so the control is announced as "Indices" and not as its own value.
+              labelId: 'index-scope-label',
+              MenuProps: {
+                PaperProps: {
+                  sx: { mt: 1, borderRadius: 2, border: '1px solid', borderColor: 'divider', boxShadow: 4 },
+                },
+                MenuListProps: { sx: { py: 0.75 } },
+              },
+            }}
           >
-            <MenuItem value="kse100">KSE100</MenuItem>
-            <MenuItem value="all">All</MenuItem>
+            {[
+              { value: 'kse100', label: 'KSE100' },
+              { value: 'all', label: 'All' },
+            ].map((option) => (
+              <MenuItem
+                key={option.value}
+                value={option.value}
+                sx={{
+                  mx: 0.75,
+                  borderRadius: 1,
+                  '&.Mui-selected': {
+                    fontWeight: 600,
+                    color: 'primary.main',
+                    bgcolor: (t) => alpha(t.palette.primary.main, 0.1),
+                  },
+                }}
+              >
+                {option.label}
+              </MenuItem>
+            ))}
           </TextField>
         </Stack>
         {/* Seven columns do not fit a phone. TableContainer gives the table its own horizontal
