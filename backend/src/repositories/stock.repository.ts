@@ -49,19 +49,38 @@ export type StockListGroup = 'kse100' | 'rest';
 export const DASHBOARD_GROUP_INDEX = 'KSE100';
 
 /**
- * WHERE clause for a group, as a composable fragment.
+ * The EXISTS fragment for one index's member list.
+ *
+ * The index symbol is a **bound parameter**, never assembled into the text: the fragment is raw
+ * SQL and the symbol arrives in a query string, so it must not be able to change the query it
+ * takes part in. One fragment for every index — the KSE-100 group and an `index=` filter differ
+ * only in the symbol they carry.
+ */
+function membershipFilter(indexSymbol: string): Prisma.Sql {
+  return Prisma.sql`EXISTS (
+    SELECT 1 FROM index_constituents c
+     WHERE c.stock_id = s.id
+       AND c.index_id = (SELECT id FROM market_indices WHERE symbol = ${indexSymbol})
+  )`;
+}
+
+/**
+ * WHERE clause for the list query, as a composable fragment.
  *
  * Membership is read from `index_constituents` on every request rather than from a column on
  * `stocks`, so a rebalance takes effect the moment the membership pass writes — and a symbol that
  * leaves the index cannot be left behind on page one by a missed update.
+ *
+ * `index` wins over `group` when both arrive: a caller that names an index is asking a narrower
+ * question than the dashboard's page-one split, and intersecting the two would answer an empty
+ * page for every index but KSE100 with nothing in the response to say why. Whether the named index
+ * exists is decided before the query runs (see `stockService.list`), so a typo is a 400 rather
+ * than an empty page.
  */
-function groupFilter(group?: StockListGroup): Prisma.Sql {
+export function buildListFilter(group?: StockListGroup, index?: string): Prisma.Sql {
+  if (index) return Prisma.sql`WHERE ${membershipFilter(index)}`;
   if (!group) return Prisma.sql``;
-  const member = Prisma.sql`EXISTS (
-    SELECT 1 FROM index_constituents c
-     WHERE c.stock_id = s.id
-       AND c.index_id = (SELECT id FROM market_indices WHERE symbol = ${DASHBOARD_GROUP_INDEX})
-  )`;
+  const member = membershipFilter(DASHBOARD_GROUP_INDEX);
   return group === 'kse100' ? Prisma.sql`WHERE ${member}` : Prisma.sql`WHERE NOT ${member}`;
 }
 
@@ -136,8 +155,9 @@ export class StockRepository {
     sort?: StockSortField,
     order: SortOrder = 'asc',
     group?: StockListGroup,
+    index?: string,
   ): Promise<{ items: StockListItem[]; total: number }> {
-    const filter = groupFilter(group);
+    const filter = buildListFilter(group, index);
     const [rows, totals] = await Promise.all([
       prisma.$queryRaw<RawStockListRow[]>(Prisma.sql`
         SELECT s.id, s.symbol, s.company_name, s.sector,
