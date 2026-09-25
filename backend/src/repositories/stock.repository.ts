@@ -35,6 +35,7 @@ export const SORTABLE_COLUMNS = {
   price: 'p.current_price',
   week52Low: 'p.week52_low',
   week52High: 'p.week52_high',
+  change: 'p.change',
   changePercent: 'p.change_percent',
   volume: 'p.volume',
 } as const;

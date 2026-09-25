@@ -414,9 +414,9 @@ export function Dashboard() {
                 {sortableHeader('Price', 'price')}
                 {sortableHeader('52W Low', 'week52Low')}
                 {sortableHeader('52W High', 'week52High')}
-                {/* Plain rather than sortable: he asked for the column, not for a new ordering,
-                    and the sort whitelist is API-side — a new key there is its own change. */}
-                <TableCell align="right">Change</TableCell>
+                {/* Sortable like its neighbours: the column and its ordering shipped together,
+                    so a header that could not be clicked would be the odd one out. */}
+                {sortableHeader('Change', 'change')}
                 {sortableHeader('Change %', 'changePercent')}
                 {sortableHeader('Volume', 'volume')}
               </TableRow>
