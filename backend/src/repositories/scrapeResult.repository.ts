@@ -56,7 +56,12 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
           low: dec(result.price.low),
           open: dec(result.price.open),
           close: dec(result.price.close),
-          marketCap: dec(result.price.marketCap),
+          // Same rule as the 52-week range below, and it matters more: PSX's company page is
+          // refused at the edge, so this run's marketCap is null for every symbol — writing that
+          // would blank the value the market-cap refresh just fetched, and the column would flip
+          // back to a dash on every sync. `undefined` drops the column from the UPDATE, so only a
+          // real reading ever overwrites one.
+          marketCap: dec(result.price.marketCap) ?? undefined,
           // 52-week range (#25). `?? undefined` leaves the stored value alone when this run
           // had no such block: a partial page parse must not blank a dashboard column.
           week52High: dec(result.price.week52High) ?? undefined,
