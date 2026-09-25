@@ -209,6 +209,39 @@ export async function findSymbolsWithoutLatestMarketCap(): Promise<string[]> {
 }
 
 /**
+ * Symbols whose stored cap is also stored against another symbol.
+ *
+ * Together with `dropSharedGapValues` this is how a *previous* gap-fill artefact is found: the value
+ * collides with another symbol's. The collision is legitimate only when the scanner reports a cap for
+ * both symbols (a security and its convertible or rights), so the caller checks that — anything the
+ * scanner cannot vouch for is a stale artefact and gets cleared. Needed because the per-symbol walk
+ * only asks about symbols with *no* cap, so a wrong value would otherwise never be revisited.
+ */
+export async function findSymbolsWithDuplicateMarketCap(): Promise<string[]> {
+  const rows = await prisma.$queryRaw<Array<{ symbol: string }>>`
+    SELECT s.symbol
+    FROM stocks s
+    JOIN stock_prices p ON p.stock_id = s.id
+    WHERE p.market_cap IS NOT NULL
+      AND p.last_trade_date = (
+        SELECT max(x.last_trade_date) FROM stock_prices x WHERE x.stock_id = s.id
+      )
+      AND EXISTS (
+        SELECT 1
+        FROM stock_prices q
+        JOIN stocks t ON t.id = q.stock_id
+        WHERE q.market_cap = p.market_cap
+          AND t.symbol <> s.symbol
+          AND q.last_trade_date = (
+            SELECT max(y.last_trade_date) FROM stock_prices y WHERE y.stock_id = t.id
+          )
+      )
+    ORDER BY s.symbol
+  `;
+  return rows.map((r) => r.symbol);
+}
+
+/**
  * Clear the market cap on each symbol's newest price row.
  *
  * Used when a freshly-read cap is rejected (a gap-fill collision, see `dropSharedGapValues`): leaving
