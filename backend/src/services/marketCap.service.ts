@@ -1,6 +1,7 @@
 import {
   carryForwardLatestMarketCaps,
   clearLatestMarketCap,
+  findSymbolsWithDuplicateMarketCap,
   findSymbolsWithoutLatestMarketCap,
   stockRepository,
   updateLatestMarketCaps,
@@ -74,13 +75,23 @@ export const marketCapService = {
       snapshots.map((s) => s.marketCap),
     );
 
-    // A rejected reading is cleared, not merely skipped: the symbol's row may already carry the
-    // wrong number from an earlier run, and "leave it alone" would preserve exactly that.
-    const cleared = await clearLatestMarketCap(discarded.map((s) => s.symbol));
-
     // The universe sync keeps writing newer rows, and a new row starts empty — so the freshest caps
     // are carried onto any newest row that has none, or the column would flicker between refreshes.
     const carried = await carryForwardLatestMarketCaps();
+
+    // A rejected reading is cleared, not merely skipped: the symbol's row may already carry the
+    // wrong number from an earlier run, and "leave it alone" would preserve exactly that. This runs
+    // *after* the carry-forward so a cleared row cannot be refilled from a previous wrong value.
+    //
+    // A *stored* collision needs the same treatment, and cannot rely on this run's fetch: the walk
+    // only asks about symbols with no cap, so a wrong value it wrote earlier would never be revisited
+    // — stockanalysis reported 1.61B for both ESBL and HICL, 1.45B for ASTM and PAKD, 1.24B for ITANZ
+    // and SHDT. Where the scanner vouches for a pair (sibling lines) the value stays; where it cannot,
+    // the collision is a gap-fill artefact and the row goes back to a dash.
+    const colliding = (await findSymbolsWithDuplicateMarketCap()).filter((s) => !covered.has(s));
+    const cleared = await clearLatestMarketCap([
+      ...new Set([...discarded.map((s) => s.symbol), ...colliding]),
+    ]);
 
     const summary: MarketCapRefreshSummary = {
       tracked: symbols.length,
