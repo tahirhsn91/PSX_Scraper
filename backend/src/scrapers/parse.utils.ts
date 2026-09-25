@@ -8,6 +8,20 @@ export function toNumber(raw: string | null | undefined): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+/**
+ * Market cap in rupees, read from a source that publishes it in thousands.
+ *
+ * PSX labels the figure `Market Cap (000's)`, so the raw read is 1000x small; Sarmaaya's page
+ * shows rupees. Normalising at the mapping site keeps one meaning in the database whatever the
+ * source's label says. A zero, a negative or a missing read is `null` rather than a number: an
+ * absent value must not become a real-looking one, and a placeholder zero must not become a cap.
+ */
+export function toMarketCapRupees(raw: string | null | undefined): number | null {
+  const n = toNumber(raw);
+  if (n === null || n <= 0) return null;
+  return n * 1000;
+}
+
 /** Parse a date string to ISO, or null. Accepts common dd-Mon-yyyy / yyyy-mm-dd forms. */
 export function toIsoDate(raw: string | null | undefined): string | null {
   if (!raw) return null;

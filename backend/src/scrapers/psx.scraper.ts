@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import { browserPool } from './browserPool';
-import { toNumber, toIsoDate, parseWeek52Range } from './parse.utils';
+import { toNumber, toIsoDate, parseWeek52Range, toMarketCapRupees } from './parse.utils';
 import { logger } from '../utils/logger';
 import {
   IStockScraper,
@@ -84,6 +84,24 @@ export function extractPsxPageData(): PsxPageData {
       const parts = (hit.querySelector('.stats_value')?.textContent ?? '').split(/[—–]/);
       return { low: parts[0]?.trim() || null, high: parts[1]?.trim() || null };
     },
+    /**
+     * The value of the stats item whose label matches `pattern`, read from that item's own
+     * subtree.
+     *
+     * Sibling of `labelledRange` above and for exactly the same reason: `byLabel()` matches the
+     * first node whose text merely *contains* the label and hands back a concatenated container,
+     * which is how every symbol ended up storing the same market cap (#21). The page also
+     * carries duplicate stats blocks for derivatives (`FFC-SEPB`, `FFC-OCT`) with the same
+     * labels and different numbers, so this matches the label and takes the first block.
+     */
+    labelledValue(pattern: RegExp): string | null {
+      const items = Array.from(document.querySelectorAll('.stats_item'));
+      const hit = items.find((item) =>
+        pattern.test(item.querySelector('.stats_label')?.textContent ?? ''),
+      );
+      const value = hit?.querySelector('.stats_value')?.textContent?.trim();
+      return value ? value : null;
+    },
   };
 
   const week52 = H.labelledRange(/52-?week/i);
@@ -101,7 +119,7 @@ export function extractPsxPageData(): PsxPageData {
     high: H.byLabel('high'),
     low: H.byLabel('low'),
     open: H.byLabel('open'),
-    marketCap: H.byLabel('market cap'),
+    marketCap: H.labelledValue(/market cap/i),
   };
 }
 
@@ -161,7 +179,7 @@ export class PSXScraper implements IStockScraper {
         low: toNumber(data.low),
         open: toNumber(data.open),
         close: toNumber(data.price),
-        marketCap: toNumber(data.marketCap),
+        marketCap: toMarketCapRupees(data.marketCap),
         week52High: week52.high,
         week52Low: week52.low,
         lastTradeDate: toIsoDate(new Date().toISOString()),

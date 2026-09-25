@@ -21,6 +21,7 @@ import { FailuresPanel } from '../components/FailuresPanel';
 import { SearchBar } from '../components/SearchBar';
 import type { ApiError } from '../api/client';
 import type { StockSortField, SortOrder } from '../types';
+import { formatMarketCap, formatRupees } from '../lib/format';
 
 /**
  * The pair of arrows on a sortable column: down for ascending, up for descending.
@@ -414,12 +415,16 @@ export function Dashboard() {
                 {sortableHeader('Change', 'change')}
                 {sortableHeader('Change %', 'changePercent')}
                 {sortableHeader('Volume', 'volume')}
+                {/* Last by request. Sortable like its neighbours even though most rows are
+                    currently null — the ordering places nulls last, and a column that cannot be
+                    clicked would be the odd one out. */}
+                {sortableHeader('Market Cap', 'marketCap')}
               </TableRow>
             </TableHead>
             <TableBody>
               {isLoading &&
                 Array.from({ length: 5 }).map((_, i) => (
-                  <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
+                  <TableRow key={i}><TableCell colSpan={9}><Skeleton /></TableCell></TableRow>
                 ))}
               {/* An empty index scope is a fact about *that index*, not an empty table. Naming the
                   symbol is what separates "PSX's KMI30 membership has not been stored yet" from
@@ -427,7 +432,7 @@ export function Dashboard() {
                   invented constituents, because there are none to show. */}
               {data?.items.length === 0 && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={8} align="center">
+                  <TableCell colSpan={9} align="center">
                     {indexed
                       ? `No tracked members stored for ${scope} yet.`
                       : 'No tracked symbols.'}
@@ -489,6 +494,14 @@ export function Dashboard() {
                   </TableCell>
                   {/* Thousands separators: session volumes run to seven figures. */}
                   <TableCell align="right">{s.volume != null ? s.volume.toLocaleString() : '—'}</TableCell>
+                  {/* Abbreviated in the cell, exact in the title. A null cap is "not reported" —
+                      a dash, never a zero, and never inferred from the price. */}
+                  <TableCell
+                    align="right"
+                    title={s.marketCap != null ? formatRupees(s.marketCap) : undefined}
+                  >
+                    {formatMarketCap(s.marketCap) ?? '—'}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -61,6 +61,10 @@ export async function scrapeSymbol(symbol: string): Promise<OrchestrationResult>
         ...chosenPrice,
         week52High: pick(psx?.price?.week52High, sarmaaya?.price?.week52High),
         week52Low: pick(psx?.price?.week52Low, sarmaaya?.price?.week52Low),
+        // Field-by-field for the same reason as the pair above: a whole-block pick throws the
+        // losing provider's market cap away, so a provider that read nothing on a given run
+        // blanks a value the other one actually had (#71).
+        marketCap: pick(psx?.price?.marketCap, sarmaaya?.price?.marketCap),
       }
     : null;
 

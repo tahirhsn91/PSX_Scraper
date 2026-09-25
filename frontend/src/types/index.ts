@@ -3,7 +3,7 @@
  * enum: the server sorts (the table is paginated, so sorting in the browser would only reorder
  * the fifty rows on screen).
  */
-export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume';
+export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume' | 'marketCap';
 
 /**
  * One daily candle. `open`/`high`/`low` are null when the source did not report them — the
@@ -65,6 +65,8 @@ export interface StockListItem {
   changePercent: number | null;
   /** Session volume; null when the source carried none. */
   volume: number | null;
+  /** Market capitalisation in rupees; absent when no reachable source published one (#71). */
+  marketCap?: number | null;
   /** 52-week range (issue #25); null until the company page has been scraped. */
   week52High: number | null;
   week52Low: number | null;
