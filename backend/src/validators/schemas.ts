@@ -23,7 +23,7 @@ export const paginationQuery = z.object({
  * rather than reaching the query.
  */
 export const stocksQuery = paginationQuery.extend({
-  sort: z.enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume']).optional(),
+  sort: z.enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap']).optional(),
   order: z.enum(['asc', 'desc']).default('asc'),
   /**
    * Which half of the tracked universe to list: the index's member set (the dashboard's page one)

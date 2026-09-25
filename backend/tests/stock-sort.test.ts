@@ -11,6 +11,7 @@ describe('buildOrderBy', () => {
     expect(buildOrderBy('price', 'asc')).toBe('p.current_price ASC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('volume', 'desc')).toBe('p.volume DESC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('change', 'desc')).toBe('p.change DESC NULLS LAST, s.symbol ASC');
+    expect(buildOrderBy('marketCap', 'desc')).toBe('p.market_cap DESC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('changePercent', 'desc')).toBe('p.change_percent DESC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('week52Low', 'asc')).toBe('p.week52_low ASC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('week52High', 'asc')).toBe('p.week52_high ASC NULLS LAST, s.symbol ASC');
@@ -38,7 +39,7 @@ describe('buildOrderBy', () => {
     // Every identifier in the clause is one of those two literals — nothing was interpolated.
     expect(clause.split(/\s+/).filter((t) => t.includes('.'))).toEqual(['p.volume', 's.symbol']);
     expect(STOCK_SORT_FIELDS).toEqual([
-      'symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume',
+      'symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap',
     ]);
   });
 });
