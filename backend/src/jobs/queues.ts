@@ -22,6 +22,13 @@ export const QUOTE_POLL_JOB = 'quote-poll';
  */
 export const KSE100_MEMBERSHIP_JOB = 'kse100-membership';
 
+/**
+ * The market-cap refresh, on the same queue for the same reason: schedule-driven background work
+ * that reuses the worker which owns the light periodic jobs. It is not as light as they are (~150
+ * requests for the whole book), so it carries its own slow cron rather than riding the tick.
+ */
+export const MARKET_CAP_JOB = 'market-cap-refresh';
+
 export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add' }
 export interface SyncAllJobData { trigger: 'manual' | 'cron' }
 export interface HistoryJobData { symbol: string; range: HistoryRange }

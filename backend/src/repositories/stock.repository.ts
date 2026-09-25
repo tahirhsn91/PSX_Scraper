@@ -157,6 +157,57 @@ function toListItem(r: RawStockListRow): StockListItem {
   return item;
 }
 
+/**
+ * Write fetched market caps onto each symbol's **newest** price row — the one the dashboard reads.
+ *
+ * Deliberately not an insert: a market cap belongs to the session row it was read for, and adding
+ * a row here would fabricate a price tick that never happened. Symbols with no cap are simply not
+ * in the arrays, so their existing (absent) value is left alone — nothing is written as zero.
+ *
+ * `symbols` and `caps` are parallel arrays; the caller builds them from the same snapshot list.
+ */
+export async function updateLatestMarketCaps(
+  symbols: string[],
+  caps: number[],
+): Promise<number> {
+  if (symbols.length === 0) return 0;
+  return prisma.$executeRaw`
+    UPDATE stock_prices sp
+    SET market_cap = v.cap
+    FROM (
+      SELECT unnest(${symbols}::text[]) AS symbol, unnest(${caps}::numeric[]) AS cap
+    ) v
+    JOIN stocks s ON s.symbol = v.symbol
+    WHERE sp.stock_id = s.id
+      AND sp.last_trade_date = (
+        SELECT max(x.last_trade_date) FROM stock_prices x WHERE x.stock_id = s.id
+      )
+  `;
+}
+
+/**
+ * Tracked symbols whose newest priced row carries no market cap — the gap-fill's work list.
+ *
+ * Narrowing the walk to these is what keeps the refresh polite: once a symbol has a cap, later runs
+ * ask nobody about it, so a refresh costs the scanner's batched POSTs plus whatever genuinely still
+ * needs filling, and that set only shrinks.
+ */
+export async function findSymbolsWithoutLatestMarketCap(): Promise<string[]> {
+  const rows = await prisma.$queryRaw<Array<{ symbol: string }>>`
+    SELECT s.symbol
+    FROM stocks s
+    JOIN LATERAL (
+      SELECT market_cap FROM stock_prices
+      WHERE stock_id = s.id AND current_price IS NOT NULL
+      ORDER BY last_trade_date DESC NULLS LAST
+      LIMIT 1
+    ) p ON true
+    WHERE p.market_cap IS NULL
+    ORDER BY s.symbol
+  `;
+  return rows.map((r) => r.symbol);
+}
+
 export class StockRepository {
   findBySymbol(symbol: string): Promise<Stock | null> {
     return prisma.stock.findUnique({ where: { symbol: symbol.toUpperCase() } });

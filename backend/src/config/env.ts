@@ -38,6 +38,24 @@ const envSchema = z.object({
     .default('true')
     .transform((v) => v === 'true'),
   KSE100_MEMBERSHIP_CRON: z.string().default('15 1 * * *'),
+  /**
+   * The market-cap refresh. Two batched scanner POSTs cover most of the book and the leftovers cost
+   * one spaced request each (~150 requests for 508 symbols), so it sits on its own slow schedule
+   * rather than the poll's minute tick: a cap moves with price, not with the tick. The window is
+   * the PSX session in UTC (09:30-15:30 PKT), weekdays.
+   */
+  MARKET_CAP_REFRESH_ENABLED: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((v) => v === 'true'),
+  MARKET_CAP_REFRESH_CRON: z.string().default('*/30 4-11 * * 1-5'),
+  /**
+   * Spacing for the per-symbol leg of the refresh. It runs only for symbols the bulk pass could not
+   * serve and that have no cap yet, and this host starts answering 429 to a fast walk (measured
+   * 2026-09-25: 150 pages in ~2 minutes earned a refusal on the next pass). Slow by default; the
+   * set it walks only shrinks.
+   */
+  MARKET_CAP_GAP_DELAY_MS: z.coerce.number().int().nonnegative().default(2500),
   QUOTE_POLL_CONCURRENCY: z.coerce.number().int().positive().default(5),
   QUOTE_POLL_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
   // The DPS leg fans out one request per symbol (~508 when it answers), which is the load that

@@ -7,6 +7,7 @@ import {
   enqueueIndexSync,
   QUOTE_POLL_JOB,
   KSE100_MEMBERSHIP_JOB,
+  MARKET_CAP_JOB,
   UNIVERSE_PASS_JOB,
   universeQueue,
 } from './queues';
@@ -136,9 +137,46 @@ async function registerUniversePassSchedule(): Promise<void> {
   });
 }
 
+/**
+ * Register the market-cap refresh.
+ *
+ * Same pattern reconciliation as the poll and the membership pass: BullMQ keys a repeatable by its
+ * pattern, so a *changed* cron would otherwise tick on both the old and the new schedule. Its own
+ * pattern because its cost profile differs — ~150 requests for the whole book, against one for the
+ * ticker — and because its window is the session rather than every minute of the day.
+ */
+async function registerMarketCapSchedule(): Promise<void> {
+  if (!env.MARKET_CAP_REFRESH_ENABLED) {
+    // Switched off: drop a registration left by an earlier configuration, so an upgrade that
+    // disables the refresh does not keep ticking.
+    for (const job of await quoteQueue.getRepeatableJobs()) {
+      if (job.name === MARKET_CAP_JOB) await quoteQueue.removeRepeatableByKey(job.key);
+    }
+    logger.info('scheduler.market_cap_disabled');
+    return;
+  }
+
+  for (const job of await quoteQueue.getRepeatableJobs()) {
+    if (job.name !== MARKET_CAP_JOB || job.pattern === env.MARKET_CAP_REFRESH_CRON) continue;
+    await quoteQueue.removeRepeatableByKey(job.key);
+    logger.info('scheduler.market_cap_pattern_replaced', {
+      was: job.pattern,
+      now: env.MARKET_CAP_REFRESH_CRON,
+    });
+  }
+
+  await quoteQueue.add(
+    MARKET_CAP_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: env.MARKET_CAP_REFRESH_CRON }, jobId: 'scheduled-market-cap-refresh' },
+  );
+  logger.info('scheduler.market_cap_registered', { cron: env.MARKET_CAP_REFRESH_CRON });
+}
+
 export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
   await registerKse100MembershipSchedule();
+  await registerMarketCapSchedule();
   await registerUniversePassSchedule();
 
   // With the universe worker on, the scheduled full-board sync is pure duplication: both walk
