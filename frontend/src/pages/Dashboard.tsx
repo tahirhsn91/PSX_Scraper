@@ -403,7 +403,10 @@ export function Dashboard() {
                     load-bearing, and one tap away on the detail page. The numbers are what a
                     mobile dashboard is for, so they stay at every width. */}
                 <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Company</TableCell>
-                {sortableHeader('Price', 'price')}
+                {/* Labelled "Current", not "Price": it is the latest session's reading, and the two
+                    columns beside it are also prices. The sort key stays `price` — the label is
+                    the only thing changing here. */}
+                {sortableHeader('Current', 'price')}
                 {sortableHeader('52W Low', 'week52Low')}
                 {sortableHeader('52W High', 'week52High')}
                 {/* Sortable like its neighbours: the column and its ordering shipped together,
