@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import { z } from 'zod';
 import { stockService } from '../services/stock.service';
 import { syncService } from '../services/sync.service';
+import { marketCapService } from '../services/marketCap.service';
 import { valid } from '../middleware/validate';
 import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, candlesQuery } from '../validators/schemas';
 
@@ -33,6 +34,15 @@ export const deleteStock: RequestHandler = async (req, res) => {
 export const syncStock: RequestHandler = async (req, res) => {
   const { symbol } = valid<Sym>(req, 'params');
   res.status(202).json(await syncService.syncOne(symbol));
+};
+
+/**
+ * Refresh market caps across the tracked universe. On demand for the same reason the membership
+ * pass is: a stack that has the column but no value should not have to wait for a schedule to see
+ * one, and this is the endpoint that fills a fresh database.
+ */
+export const refreshMarketCaps: RequestHandler = async (_req, res) => {
+  res.json(await marketCapService.refresh());
 };
 
 export const stockCandles: RequestHandler = async (req, res) => {
