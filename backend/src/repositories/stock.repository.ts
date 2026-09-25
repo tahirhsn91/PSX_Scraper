@@ -208,6 +208,33 @@ export async function findSymbolsWithoutLatestMarketCap(): Promise<string[]> {
   return rows.map((r) => r.symbol);
 }
 
+/**
+ * Carry each symbol's most recent known cap onto its newest row, where that row has none.
+ *
+ * Without this the column flickers: a market cap is fetched every half hour, but the universe sync
+ * writes fresh price rows continuously, and a new row starts with no cap — so a symbol that was
+ * filled at 10:00 reads as a dash again by 10:05. The cap a session row shows is therefore the most
+ * recent one *reported* for that symbol (the same way the 52-week range persists), not a claim that
+ * it was re-read in that tick. Only rows with no value at all are touched.
+ */
+export async function carryForwardLatestMarketCaps(): Promise<number> {
+  return prisma.$executeRaw`
+    UPDATE stock_prices sp
+    SET market_cap = prev.cap
+    FROM (
+      SELECT DISTINCT ON (stock_id) stock_id, market_cap AS cap
+      FROM stock_prices
+      WHERE market_cap IS NOT NULL
+      ORDER BY stock_id, last_trade_date DESC
+    ) prev
+    WHERE sp.stock_id = prev.stock_id
+      AND sp.market_cap IS NULL
+      AND sp.last_trade_date = (
+        SELECT max(x.last_trade_date) FROM stock_prices x WHERE x.stock_id = sp.stock_id
+      )
+  `;
+}
+
 export class StockRepository {
   findBySymbol(symbol: string): Promise<Stock | null> {
     return prisma.stock.findUnique({ where: { symbol: symbol.toUpperCase() } });

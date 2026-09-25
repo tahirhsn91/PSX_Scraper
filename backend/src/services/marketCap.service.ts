@@ -1,4 +1,9 @@
-import { findSymbolsWithoutLatestMarketCap, stockRepository, updateLatestMarketCaps } from '../repositories/stock.repository';
+import {
+  carryForwardLatestMarketCaps,
+  findSymbolsWithoutLatestMarketCap,
+  stockRepository,
+  updateLatestMarketCaps,
+} from '../repositories/stock.repository';
 import { fetchMarketCaps, fetchTradingViewMarketCaps, MarketCapSnapshot } from '../scrapers/marketCap.scraper';
 import { env } from '../config';
 import { logger } from '../utils/logger';
@@ -53,6 +58,10 @@ export const marketCapService = {
       snapshots.map((s) => s.marketCap),
     );
 
+    // The universe sync keeps writing newer rows, and a new row starts empty — so the freshest caps
+    // are carried onto any newest row that has none, or the column would flicker between refreshes.
+    const carried = await carryForwardLatestMarketCaps();
+
     const summary: MarketCapRefreshSummary = {
       tracked: symbols.length,
       fetched: snapshots.length,
@@ -65,6 +74,7 @@ export const marketCapService = {
       tracked: summary.tracked,
       fetched: summary.fetched,
       written: summary.written,
+      carried,
       fromTradingView: summary.fromTradingView,
       fromStockanalysis: summary.fromStockanalysis,
       missing: summary.missing.length,
