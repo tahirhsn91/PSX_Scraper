@@ -414,6 +414,9 @@ export function Dashboard() {
                 {sortableHeader('Price', 'price')}
                 {sortableHeader('52W Low', 'week52Low')}
                 {sortableHeader('52W High', 'week52High')}
+                {/* Plain rather than sortable: he asked for the column, not for a new ordering,
+                    and the sort whitelist is API-side — a new key there is its own change. */}
+                <TableCell align="right">Change</TableCell>
                 {sortableHeader('Change %', 'changePercent')}
                 {sortableHeader('Volume', 'volume')}
               </TableRow>
@@ -421,7 +424,7 @@ export function Dashboard() {
             <TableBody>
               {isLoading &&
                 Array.from({ length: 5 }).map((_, i) => (
-                  <TableRow key={i}><TableCell colSpan={7}><Skeleton /></TableCell></TableRow>
+                  <TableRow key={i}><TableCell colSpan={8}><Skeleton /></TableCell></TableRow>
                 ))}
               {/* An empty index scope is a fact about *that index*, not an empty table. Naming the
                   symbol is what separates "PSX's KMI30 membership has not been stored yet" from
@@ -429,7 +432,7 @@ export function Dashboard() {
                   invented constituents, because there are none to show. */}
               {data?.items.length === 0 && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={7} align="center">
+                  <TableCell colSpan={8} align="center">
                     {indexed
                       ? `No tracked members stored for ${scope} yet.`
                       : 'No tracked symbols.'}
@@ -445,6 +448,27 @@ export function Dashboard() {
                       than a zero — the API never substitutes a value here. */}
                   <TableCell align="right">{s.week52Low ?? '—'}</TableCell>
                   <TableCell align="right">{s.week52High ?? '—'}</TableCell>
+                  {/* The absolute move in the exchange's own units, toned like the percent beside
+                      it so the pair reads as one idea. `change` is optional on the wire: a session
+                      whose row carried none shows a dash, not a zero. */}
+                  <TableCell align="right">
+                    {s.change != null ? (
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        sx={{
+                          color:
+                            s.change > 0 ? 'success.main'
+                            : s.change < 0 ? 'error.main'
+                            : 'text.secondary',
+                          fontWeight: 600,
+                          fontVariantNumeric: 'tabular-nums',
+                        }}
+                      >
+                        {`${s.change > 0 ? '▲' : s.change < 0 ? '▼' : '·'} ${Math.abs(s.change).toLocaleString(undefined, { maximumFractionDigits: 2 })}`}
+                      </Typography>
+                    ) : '—'}
+                  </TableCell>
                   <TableCell align="right">
                     {/* The value itself is toned rather than seated in a filled pill: a column of
                         badges reads as a column of badges, and the whole table's numbers stop
