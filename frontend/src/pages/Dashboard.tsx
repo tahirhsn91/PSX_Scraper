@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
   TableSortLabel,
-  Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Chip, Skeleton, Alert,
+  Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Skeleton, Alert,
   Stack, Grid, Card, CardContent, LinearProgress, Snackbar, IconButton, MenuItem, InputAdornment,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
@@ -446,8 +446,26 @@ export function Dashboard() {
                   <TableCell align="right">{s.week52Low ?? '—'}</TableCell>
                   <TableCell align="right">{s.week52High ?? '—'}</TableCell>
                   <TableCell align="right">
+                    {/* The value itself is toned rather than seated in a filled pill: a column of
+                        badges reads as a column of badges, and the whole table's numbers stop
+                        lining up. Direction is carried twice — the glyph and the tone — so the
+                        column still reads for anyone who cannot separate the two hues, and a flat
+                        0 is neither good news nor bad. */}
                     {s.changePercent != null ? (
-                      <Chip size="small" color={s.changePercent >= 0 ? 'success' : 'error'} label={`${s.changePercent.toFixed(2)}%`} />
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        sx={{
+                          color:
+                            s.changePercent > 0 ? 'success.main'
+                            : s.changePercent < 0 ? 'error.main'
+                            : 'text.secondary',
+                          fontWeight: 600,
+                          fontVariantNumeric: 'tabular-nums',
+                        }}
+                      >
+                        {`${s.changePercent > 0 ? '▲' : s.changePercent < 0 ? '▼' : '·'} ${Math.abs(s.changePercent).toFixed(2)}%`}
+                      </Typography>
                     ) : '—'}
                   </TableCell>
                   {/* Thousands separators: session volumes run to seven figures. */}
