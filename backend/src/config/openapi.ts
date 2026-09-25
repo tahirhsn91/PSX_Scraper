@@ -726,12 +726,26 @@ export const openapiSpec = {
           companyName: { type: 'string', nullable: true, example: 'Fauji Fertilizer Company Limited' },
           sector: { type: 'string', nullable: true, example: 'Fertilizer' },
           currentPrice: { type: 'number', nullable: true, example: 563.48 },
+          change: {
+            type: 'number',
+            nullable: true,
+            example: -1.12,
+            description: 'Absolute change for the session. Absent when the row carried none.',
+          },
           changePercent: { type: 'number', nullable: true, example: 1.24 },
           volume: {
             type: 'integer',
             nullable: true,
             example: 834691,
             description: 'Shares traded in the session. Null when the source carried no volume.',
+          },
+          marketCap: {
+            type: 'number',
+            nullable: true,
+            example: 745206000000,
+            description:
+              'Market capitalisation in rupees, from whichever provider published one. Absent ' +
+              'when no reachable source reported a figure — the dashboard renders it as a dash.',
           },
           week52High: { type: 'number', nullable: true, example: 685 },
           week52Low: { type: 'number', nullable: true, example: 441.7 },

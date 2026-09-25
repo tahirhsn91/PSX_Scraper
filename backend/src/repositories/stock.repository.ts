@@ -16,6 +16,12 @@ export interface StockListItem {
   changePercent: number | null;
   /** Session volume; null when the source carried none. */
   volume: number | null;
+  /**
+   * Market capitalisation in rupees, from whichever provider published it. Optional and absent
+   * when no reachable source reported a figure — the dashboard renders the dash, and a missing
+   * cap is never inferred from the price.
+   */
+  marketCap?: number | null;
   /** 52-week range (#25); null when the company page carried no such block. */
   week52High: number | null;
   week52Low: number | null;
@@ -38,6 +44,7 @@ export const SORTABLE_COLUMNS = {
   change: 'p.change',
   changePercent: 'p.change_percent',
   volume: 'p.volume',
+  marketCap: 'p.market_cap',
 } as const;
 
 export type StockSortField = keyof typeof SORTABLE_COLUMNS;
@@ -119,6 +126,7 @@ type RawStockListRow = {
   change: Prisma.Decimal | null;
   change_percent: Prisma.Decimal | null;
   volume: bigint | null;
+  market_cap: Prisma.Decimal | null;
   week52_high: Prisma.Decimal | null;
   week52_low: Prisma.Decimal | null;
   last_trade_date: Date | null;
@@ -144,6 +152,8 @@ function toListItem(r: RawStockListRow): StockListItem {
   // Additive: set only when the row carries one, so callers that read an older session keep the
   // exact shape they had before this field existed.
   if (r.change != null) item.change = Number(r.change);
+  // Same additive rule: a row with no cap keeps the key absent rather than reporting a zero.
+  if (r.market_cap != null) item.marketCap = Number(r.market_cap);
   return item;
 }
 
@@ -173,12 +183,14 @@ export class StockRepository {
     const [rows, totals] = await Promise.all([
       prisma.$queryRaw<RawStockListRow[]>(Prisma.sql`
         SELECT s.id, s.symbol, s.company_name, s.sector,
-               p.current_price, p.change, p.change_percent, p.volume, p.week52_high, p.week52_low,
+               p.current_price, p.change, p.change_percent, p.volume, p.market_cap,
+               p.week52_high, p.week52_low,
                p.last_trade_date,
                sl.completed_at AS last_synced_at
         FROM stocks s
         LEFT JOIN LATERAL (
-          SELECT current_price, change, change_percent, volume, week52_high, week52_low, last_trade_date
+          SELECT current_price, change, change_percent, volume, market_cap, week52_high,
+                 week52_low, last_trade_date
           FROM stock_prices WHERE stock_id = s.id AND current_price IS NOT NULL
           ORDER BY last_trade_date DESC NULLS LAST LIMIT 1
         ) p ON true
@@ -227,6 +239,7 @@ export class StockRepository {
         change: Prisma.Decimal | null;
         change_percent: Prisma.Decimal | null;
         volume: bigint | null;
+        market_cap: Prisma.Decimal | null;
         week52_high: Prisma.Decimal | null;
         week52_low: Prisma.Decimal | null;
         last_trade_date: Date | null;
@@ -234,12 +247,14 @@ export class StockRepository {
       }>
     >(Prisma.sql`
       SELECT s.id, s.symbol, s.company_name, s.sector,
-             p.current_price, p.change, p.change_percent, p.volume, p.week52_high, p.week52_low,
+             p.current_price, p.change, p.change_percent, p.volume, p.market_cap,
+             p.week52_high, p.week52_low,
              p.last_trade_date,
              sl.completed_at AS last_synced_at
       FROM stocks s
       LEFT JOIN LATERAL (
-        SELECT current_price, change, change_percent, volume, week52_high, week52_low, last_trade_date
+        SELECT current_price, change, change_percent, volume, market_cap, week52_high,
+               week52_low, last_trade_date
         FROM stock_prices WHERE stock_id = s.id AND current_price IS NOT NULL
         ORDER BY last_trade_date DESC NULLS LAST LIMIT 1
       ) p ON true
