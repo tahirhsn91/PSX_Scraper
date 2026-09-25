@@ -57,6 +57,11 @@ export interface StockListItem {
   companyName: string | null;
   sector: string | null;
   currentPrice: number | null;
+  /**
+   * Absolute change for the session, in the exchange's own units. Optional: the API sets it only
+   * for readings that carried one, so an absent key is "not reported", never a zero.
+   */
+  change?: number | null;
   changePercent: number | null;
   /** Session volume; null when the source carried none. */
   volume: number | null;
