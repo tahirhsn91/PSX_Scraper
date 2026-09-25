@@ -3,7 +3,7 @@
  * enum: the server sorts (the table is paginated, so sorting in the browser would only reorder
  * the fifty rows on screen).
  */
-export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'changePercent' | 'volume';
+export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume';
 
 /**
  * One daily candle. `open`/`high`/`low` are null when the source did not report them — the
