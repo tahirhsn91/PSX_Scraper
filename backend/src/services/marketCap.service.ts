@@ -1,10 +1,16 @@
 import {
   carryForwardLatestMarketCaps,
+  clearLatestMarketCap,
   findSymbolsWithoutLatestMarketCap,
   stockRepository,
   updateLatestMarketCaps,
 } from '../repositories/stock.repository';
-import { fetchMarketCaps, fetchTradingViewMarketCaps, MarketCapSnapshot } from '../scrapers/marketCap.scraper';
+import {
+  dropSharedGapValues,
+  fetchMarketCaps,
+  fetchTradingViewMarketCaps,
+  MarketCapSnapshot,
+} from '../scrapers/marketCap.scraper';
 import { env } from '../config';
 import { logger } from '../utils/logger';
 
@@ -19,6 +25,12 @@ export interface MarketCapRefreshSummary {
   fromStockanalysis: number;
   /** Tracked symbols nobody reported a cap for — the dashboard shows those as a dash. */
   missing: string[];
+  /**
+   * Gap-fill readings thrown away because another symbol reported the same figure — a source
+   * artefact, not a market cap. Cleared rather than kept, so a previously-written wrong number does
+   * not survive the refresh.
+   */
+  discarded: string[];
 }
 
 /**
@@ -50,13 +62,21 @@ export const marketCapService = {
       delayMs: env.MARKET_CAP_GAP_DELAY_MS,
     });
 
-    const snapshots: MarketCapSnapshot[] = [...scannerSnapshots, ...gapFill.snapshots];
+    // A cap is computed, so a gap-fill figure that lands on another symbol's cap is a source
+    // artefact rather than data — discarded before it is written (see dropSharedGapValues).
+    const { kept: gapKept, discarded } = dropSharedGapValues(scannerSnapshots, gapFill.snapshots);
+
+    const snapshots: MarketCapSnapshot[] = [...scannerSnapshots, ...gapKept];
     const missing = symbols.filter((s) => !snapshots.some((snap) => snap.symbol === s));
 
     const written = await updateLatestMarketCaps(
       snapshots.map((s) => s.symbol),
       snapshots.map((s) => s.marketCap),
     );
+
+    // A rejected reading is cleared, not merely skipped: the symbol's row may already carry the
+    // wrong number from an earlier run, and "leave it alone" would preserve exactly that.
+    const cleared = await clearLatestMarketCap(discarded.map((s) => s.symbol));
 
     // The universe sync keeps writing newer rows, and a new row starts empty — so the freshest caps
     // are carried onto any newest row that has none, or the column would flicker between refreshes.
@@ -67,17 +87,20 @@ export const marketCapService = {
       fetched: snapshots.length,
       written,
       fromTradingView: scannerSnapshots.length,
-      fromStockanalysis: gapFill.snapshots.length,
+      fromStockanalysis: gapFill.snapshots.length - discarded.length,
       missing,
+      discarded: discarded.map((s) => s.symbol),
     };
     logger.info('marketcap.refresh_done', {
       tracked: summary.tracked,
       fetched: summary.fetched,
       written: summary.written,
       carried,
+      cleared,
       fromTradingView: summary.fromTradingView,
       fromStockanalysis: summary.fromStockanalysis,
       missing: summary.missing.length,
+      discarded: summary.discarded,
       errors: gapFill.errors,
     });
     return summary;
