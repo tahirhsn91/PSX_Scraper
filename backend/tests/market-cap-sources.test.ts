@@ -2,6 +2,8 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import {
   CAP_COLUMN_INDEX,
+  dropSharedGapValues,
+  MarketCapSnapshot,
   parseCompactAmount,
   parseStockanalysisMarketCap,
   parseTradingViewRows,
@@ -126,5 +128,55 @@ describe('the scrapers keep their promises about sources', () => {
   it('never turns a failure into a zero', () => {
     expect(src).toContain('missing: wanted.filter((s) => !found.has(s))');
     expect(src).toContain('return null;');
+  });
+});
+
+describe('dropSharedGapValues', () => {
+  const snap = (
+    symbol: string,
+    marketCap: number,
+    source: MarketCapSnapshot['source'],
+  ): MarketCapSnapshot => ({ symbol, marketCap, source });
+
+  // The real case (#71): stockanalysis reports 1.61B for both Escorts Investment Bank and Habib
+  // Insurance, and the scanner has a cap for neither — so without this rule the dashboard shows one
+  // company's figure on another's row. A wrong number is worse than a dash.
+  it('drops a gap-fill figure that another symbol also reported', () => {
+    const { kept, discarded } = dropSharedGapValues(
+      [],
+      [snap('ESBL', 1_610_000_000, 'stockanalysis'), snap('HICL', 1_610_000_000, 'stockanalysis')],
+    );
+    expect(kept).toEqual([]);
+    expect(discarded.map((s) => s.symbol)).toEqual(['ESBL', 'HICL']);
+  });
+
+  it('drops a gap-fill figure that collides with another symbol on the scanner', () => {
+    const { kept, discarded } = dropSharedGapValues(
+      [snap('FFC', 779_403_734_961, 'tradingview')],
+      [snap('NOTFFC', 779_403_734_961, 'stockanalysis')],
+    );
+    expect(kept).toEqual([]);
+    expect(discarded.map((s) => s.symbol)).toEqual(['NOTFFC']);
+  });
+
+  // A security and its convertible genuinely report one company cap (Mughal/MUGHALC), which is why
+  // the rule judges the gap-fill only — the scanner corroborates those pairs with a share count.
+  it('does not judge the scanner, where sibling lines share a figure legitimately', () => {
+    const shared = 25_723_770_643;
+    const { kept, discarded } = dropSharedGapValues(
+      [snap('MUGHAL', shared, 'tradingview'), snap('MUGHALC', shared, 'tradingview')],
+      [],
+    );
+    expect(kept).toEqual([]);
+    expect(discarded).toEqual([]);
+  });
+
+  it('keeps a gap-fill figure nobody else reports', () => {
+    const { kept, discarded } = dropSharedGapValues(
+      [snap('FFC', 779_403_734_961, 'tradingview')],
+      [snap('DFSM', 1_390_000_000, 'stockanalysis')],
+    );
+    expect(kept.map((s) => s.symbol)).toEqual(['DFSM']);
+    expect(discarded).toEqual([]);
   });
 });

@@ -209,6 +209,27 @@ export async function findSymbolsWithoutLatestMarketCap(): Promise<string[]> {
 }
 
 /**
+ * Clear the market cap on each symbol's newest price row.
+ *
+ * Used when a freshly-read cap is rejected (a gap-fill collision, see `dropSharedGapValues`): leaving
+ * the old value in place would preserve exactly the wrong number we just refused, so the row goes
+ * back to a dash until a source it trusts reports one.
+ */
+export async function clearLatestMarketCap(symbols: string[]): Promise<number> {
+  if (symbols.length === 0) return 0;
+  return prisma.$executeRaw`
+    UPDATE stock_prices sp
+    SET market_cap = NULL
+    FROM stocks s
+    WHERE s.id = sp.stock_id
+      AND s.symbol = ANY(${symbols})
+      AND sp.last_trade_date = (
+        SELECT max(x.last_trade_date) FROM stock_prices x WHERE x.stock_id = sp.stock_id
+      )
+  `;
+}
+
+/**
  * Carry each symbol's most recent known cap onto its newest row, where that row has none.
  *
  * Without this the column flickers: a market cap is fetched every half hour, but the universe sync
