@@ -117,6 +117,46 @@ export function parseTradingViewRows(payload: unknown): MarketCapSnapshot[] {
 }
 
 /**
+ * Drop gap-fill readings that collide with another symbol's cap.
+ *
+ * A market cap is a computed figure, so two *different* companies landing on the same number is a
+ * source artefact rather than a coincidence — stockanalysis returns `1.61B` for both Escorts
+ * Investment Bank (ESBL) and Habib Insurance (HICL), `1.45B` for ASTM and PAKD, `1.24B` for ITANZ and
+ * SHDT, and the scanner has no cap for any of those six. A wrong number is worse than a dash, so
+ * these are discarded rather than written (#71).
+ *
+ * Sibling lines — ANL/ANLNV, MUGHAL/MUGHALC, PIAHCLA/PIAHCLB, FPRM/FPRMR2, GCIL/GCWLPRS — share a
+ * figure *legitimately*, which is why the rule only judges the gap-fill: those pairs come from the
+ * scanner, and the scanner reports the same share count for both, so the value is corroborated.
+ */
+export function dropSharedGapValues(
+  scanner: MarketCapSnapshot[],
+  gapFill: MarketCapSnapshot[],
+): { kept: MarketCapSnapshot[]; discarded: MarketCapSnapshot[] } {
+  const scannerValues = new Map<number, Set<string>>();
+  for (const snap of scanner) {
+    const holders = scannerValues.get(snap.marketCap) ?? new Set<string>();
+    holders.add(snap.symbol);
+    scannerValues.set(snap.marketCap, holders);
+  }
+
+  const gapCounts = new Map<number, number>();
+  for (const snap of gapFill) gapCounts.set(snap.marketCap, (gapCounts.get(snap.marketCap) ?? 0) + 1);
+
+  const kept: MarketCapSnapshot[] = [];
+  const discarded: MarketCapSnapshot[] = [];
+  for (const snap of gapFill) {
+    const collidesWithScanner = [...(scannerValues.get(snap.marketCap) ?? [])].some(
+      (symbol) => symbol !== snap.symbol,
+    );
+    const collidesWithGapFill = (gapCounts.get(snap.marketCap) ?? 0) > 1;
+    if (collidesWithScanner || collidesWithGapFill) discarded.push(snap);
+    else kept.push(snap);
+  }
+  return { kept, discarded };
+}
+
+/**
  * Caps for `symbols` in as few requests as the scanner allows: one ticker-set POST per
  * SCANNER_BATCH_SIZE symbols. Empty on total failure — the caller then falls to stockanalysis,
  * and anything still missing stays a dash.
