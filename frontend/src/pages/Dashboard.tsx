@@ -218,19 +218,11 @@ export function Dashboard() {
       <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={2} mb={2}>
         <Typography
           variant="h5"
-          sx={{
-            // Kept on one line and slid the way the ribbon above slides, but inside its own box so
-            // the title stays readable. A reader who has asked their system for less motion gets a
-            // still title.
-            whiteSpace: 'nowrap',
-            '@keyframes titleSlide': {
-              '0%': { transform: 'translateX(0)' },
-              '50%': { transform: 'translateX(-10px)' },
-              '100%': { transform: 'translateX(0)' },
-            },
-            animation: 'titleSlide 5s ease-in-out infinite',
-            '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
-          }}
+          // Deliberately static: this heading used to slide 10px sideways on a 5s loop, which read
+          // as the page twitching while the eye was trying to read it. The ribbon above still
+          // glides — the heading no longer competes with it, and nothing here needs a
+          // reduced-motion escape hatch because there is no motion left to switch off.
+          sx={{ whiteSpace: 'nowrap' }}
         >
           Dashboard Scrapper
         </Typography>
