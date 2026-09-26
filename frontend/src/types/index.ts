@@ -31,7 +31,17 @@ export interface IndexSummary {
   open: number | null;
   high: number | null;
   low: number | null;
+  /**
+   * The exchange's own published index volume. Nothing has been published to us since 2026-09-22
+   * (the source is refused at the edge and the reachable one carries no volume), so this is null.
+   */
   volume: number | null;
+  /**
+   * Sum of the index's constituents' volumes for the newest session, present only where that sum was
+   * proved to equal PSX's published figure on the last day both existed (12 of the 17 indices). A
+   * derived figure, which is why it is a separate key from `volume`.
+   */
+  constituentVolume?: number | null;
   lastTradeDate: string | null;
 }
 
