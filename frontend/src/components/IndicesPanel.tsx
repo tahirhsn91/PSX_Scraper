@@ -7,6 +7,7 @@ import type { Theme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import type { IndexSummary } from '../types';
 import { MiniIndexChart } from './MiniIndexChart';
+import { formatVolume } from '../lib/format';
 
 /**
  * The PSX index board on the dashboard: breadth first, then one tile per index.
@@ -21,9 +22,9 @@ import { MiniIndexChart } from './MiniIndexChart';
  * than flat — and the sorts and the breadth strip keep unknown out of both, so an unreported
  * index cannot be counted as a gain or drag the "biggest movers" list to the top.
  *
- * Only fields the API populates are shown: `open`/`high`/`low`/`volume` are null for every index
- * today, so there is no day-range bar and no volume column here — a placeholder for data we do
- * not have would read as data we do.
+ * Only fields the API populates are shown: `open`/`high`/`low` are null for every index today, so
+ * there is no day-range bar. Volume is the one field with a stand-in, and it is marked as one — see
+ * `volumeParts`.
  */
 
 type SortMode = 'size' | 'move' | 'symbol';
@@ -33,6 +34,41 @@ const GLYPH: Record<Direction, string> = { up: '▲', down: '▼', flat: '·', u
 
 /** Levels run to seven figures with paisa: thousands separators, two decimals. */
 const formatLevel = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+
+/**
+ * What the volume line says, and what its tooltip explains.
+ *
+ * PSX's own index volume has not reached us since 22 Sep 2026 — the source that carried it is
+ * refused at the edge, and the reachable one publishes no volume — so the line falls back to the sum
+ * of the index's constituents, and only where that sum is *provably* the exchange's figure: it
+ * matched PSX exactly on the last day both were available (12 of the 17 indices). A derived figure
+ * is marked `(members)` so it never passes as a published one, and an index whose sum could not be
+ * proved keeps the dash rather than a number that would mean something else.
+ */
+function volumeParts(index: IndexSummary): { label: string; title: string } {
+  if (index.volume !== null) {
+    return {
+      label: `Vol: ${index.volume.toLocaleString()}`,
+      title: `${index.volume.toLocaleString()} shares traded — published by the exchange.`,
+    };
+  }
+  const derived = formatVolume(index.constituentVolume);
+  if (derived !== null && index.constituentVolume != null) {
+    return {
+      label: `Vol: ${derived} (members)`,
+      title:
+        `${index.constituentVolume.toLocaleString()} — the sum of this index's constituents' ` +
+        "volumes, which matched PSX's own figure on the last day both were available. PSX has " +
+        'published no index volume since 22 Sep 2026.',
+    };
+  }
+  return {
+    label: 'Vol: —',
+    title:
+      "PSX has published no index volume since 22 Sep 2026, and this index's constituents could " +
+      'not be summed to a figure provably matching it.',
+  };
+}
 
 /** The exchange's own change sign decides the direction, never the level's magnitude. */
 function directionOf(change: number | null): Direction {
@@ -131,14 +167,17 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           spacing={1}
           sx={{ mt: 'auto', pt: 1 }}
         >
-          {/* The index summary carries no volume yet — the exchange's index pages publish none, and
-              the scraper writes null — so this reads as a dash rather than as a zero traded. */}
+          {/* Volume is the one field with a stand-in: PSX's own index volume has not been published
+              to us since 22 Sep 2026, so where the sum of the index's constituents is provably the
+              exchange's figure it is shown, marked `(members)`; otherwise this stays a dash. See
+              `volumeParts`. */}
           <Typography
             variant="caption"
             color="text.secondary"
+            title={volumeParts(index).title}
             sx={{ fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}
           >
-            {index.volume === null ? 'Vol: —' : `Vol: ${index.volume.toLocaleString()}`}
+            {volumeParts(index).label}
           </Typography>
           <Typography
             variant="subtitle2"

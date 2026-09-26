@@ -786,7 +786,25 @@ export const openapiSpec = {
           high: { type: 'number', nullable: true, description: 'Always null for indices.' },
           low: { type: 'number', nullable: true, description: 'Always null for indices.' },
           previousClose: { type: 'number', nullable: true, example: 170511.85 },
-          volume: { type: 'number', nullable: true, example: 232943686 },
+          volume: {
+            type: 'number',
+            nullable: true,
+            example: 232943686,
+            description:
+              "The exchange's own published index volume. None has been published to us since " +
+              '2026-09-22 — the series that carried it is refused at the edge and the reachable index ' +
+              'source carries no volume — so this is null.',
+          },
+          constituentVolume: {
+            type: 'number',
+            nullable: true,
+            example: 48053826,
+            description:
+              "Sum of the index's constituents' volumes for the newest session, present only where " +
+              "that sum is provably PSX's own figure: it matched the published value exactly on the " +
+              'last day both existed (12 of the 17 indices; the rest omit it). A derived figure, kept ' +
+              'in its own key so `volume` keeps one meaning.',
+          },
           lastTradeDate: { type: 'string', format: 'date-time', nullable: true },
         },
       },
