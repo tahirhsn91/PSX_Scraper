@@ -3,6 +3,7 @@ import { prisma } from '../database/prisma';
 import { indexRepository } from '../repositories/index.repository';
 import { fetchPsxIndices, fetchIndexNames } from '../scrapers/psxIndices.scraper';
 import { sessionStamp } from '../scrapers/parse.utils';
+import { isMarketOpen } from '../utils/marketHours';
 import { childLogger } from '../utils/logger';
 
 /**
@@ -19,6 +20,9 @@ import { childLogger } from '../utils/logger';
  * The level is also the day's value: during a session the page shows the live index, which is
  * what the dashboard wants, and after the close it is the close. The summary endpoint derives
  * the change by comparing it with the previous session, so nothing is stored twice.
+ *
+ * The day's opening level is captured here too, on the one reading that may be the session's
+ * first — see `openingLevelFor`.
  */
 export interface IndexScrapeResult {
   symbols: number;
@@ -26,6 +30,42 @@ export interface IndexScrapeResult {
   updated: number;
   valuesWritten: number;
   namesResolved: number;
+}
+
+/**
+ * The window in which a reading may become the session's opening level, as minutes past midnight
+ * PKT. 09:30 is the first trade of the session; the scrape runs every `INDEX_SCRAPE_INTERVAL_MS`
+ * (5 minutes by default) while the market is open, so one pass always lands inside these six
+ * minutes no matter where the worker's own clock drifts.
+ */
+export const OPEN_CAPTURE_OPEN_MINUTES = 9 * 60 + 30;
+export const OPEN_CAPTURE_CLOSE_MINUTES = 9 * 60 + 36;
+
+/**
+ * The opening level to store on the session's row, or `null` to leave whatever is already there.
+ *
+ * PSX publishes no open for an index — the market-summary carousel the index scrape reads carries
+ * level, change and percent only (see `psxIndices.scraper.ts`) — and `dps.psx.com.pk`, whose series
+ * did carry one, is refused at the edge. So the opening level here is the first reading we take in
+ * the session, which is also the exchange's own definition: the index level at the session's first
+ * trade. At a five-minute cadence that reading lands within a few minutes of 09:30, not at it.
+ *
+ * Two rules keep the number honest:
+ *  - Only the first reading counts. An open the row already has is never overwritten (a real one
+ *    from the DPS series, if that source returns, always wins), and a reading outside the window is
+ *    refused — so a pass whose first success is 11:00 records nothing rather than labelling an
+ *    11:00 level as the open. `isMarketOpen` adds the weekday guard: over a weekend the carousel
+ *    still answers, with Friday's level, and that must not be written as anybody's open.
+ *  - `null` means "nothing to say about the open", and the repository leaves the column alone, so
+ *    the later passes of the same session cannot blank what this one captured.
+ */
+export function openingLevelFor(args: { now: Date; level: number; existingOpen: number | null }): number | null {
+  if (args.existingOpen !== null) return null;
+  const inWindow = isMarketOpen(args.now, {
+    openMinutes: OPEN_CAPTURE_OPEN_MINUTES,
+    closeMinutes: OPEN_CAPTURE_CLOSE_MINUTES,
+  });
+  return inWindow ? args.level : null;
 }
 
 export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult> {
@@ -74,8 +114,20 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     if (existing) updated += 1;
     else created += 1;
 
+    // The page carries no open, so the day's row is read first: its `open` is what decides whether
+    // this reading may become the session's opening level.
+    const dayRow = await prisma.indexValue.findUnique({
+      where: { indexId_tradeDate: { indexId: row.id, tradeDate: stamp } },
+      select: { open: true },
+    });
+    const open = openingLevelFor({
+      now,
+      level: index.level,
+      existingOpen: dayRow?.open == null ? null : dayRow.open.toNumber(),
+    });
+
     valuesWritten += await indexRepository.upsertValues(row.id, [
-      { date: stamp.toISOString(), close: index.level, open: null, volume: null },
+      { date: stamp.toISOString(), close: index.level, open, volume: null },
     ]);
   }
 

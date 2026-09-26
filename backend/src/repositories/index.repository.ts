@@ -77,8 +77,15 @@ export class IndexRepository {
             update: {
               // `value` is required on the model, so build the Decimal directly (dec() returns null-able).
               value: new Prisma.Decimal(p.close),
-              open: dec(p.open),
-              volume: p.volume ? BigInt(Math.trunc(p.volume)) : null,
+              // A null means "this reading has nothing to say about the open or the volume" — it
+              // must not blank what another source stored on the day's row. The market-summary
+              // carousel carries no open and no volume (see `psxIndices.scraper.ts`) and it is the
+              // only reachable source for indices, so without this the opening level captured at
+              // 09:31 is wiped by the 09:36 pass of the same session. `undefined` drops the column
+              // from the UPDATE; only a real reading overwrites one. Same rule as the market cap in
+              // `scrapeResult.repository.ts`.
+              open: dec(p.open) ?? undefined,
+              volume: p.volume ? BigInt(Math.trunc(p.volume)) : undefined,
             },
             create: {
               indexId,
