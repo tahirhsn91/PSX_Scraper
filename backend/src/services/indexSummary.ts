@@ -36,6 +36,12 @@ export interface IndexSummaryInput {
   /** Daily rows, newest first. */
   daily: IndexValueRow[];
   live?: LiveReading | null;
+  /**
+   * Sum of the constituents' volumes for the newest session — set only when that sum is provably
+   * PSX's own figure (see `derivedIndexVolume`). Distinct from `volume`, which is what the exchange
+   * published and has been unavailable since 2026-09-22.
+   */
+  constituentVolume?: number | null;
 }
 
 export interface IndexHistoryItem {
@@ -99,6 +105,31 @@ export function toIndexCandles(rows: IndexValueRow[]): IndexCandle[] {
   return [...byDay.values()].sort((a, b) => a.time.localeCompare(b.time));
 }
 
+/**
+ * The volume to show for an index, and only when it is provably the exchange's own figure.
+ *
+ * Index volume stopped being published to us on 2026-09-22 (DPS refuses every data path; the
+ * market-summary carousel carries no volume). An index's traded volume is the sum of its
+ * constituents' volumes, so a derived figure is available — but a *sum* is only the exchange's
+ * number when the membership is complete and every member reported, and neither is guaranteed:
+ * on 22 Sep the sum matched PSX exactly for 12 of the 17 indices and fell short for five
+ * (KSE100 94,179,871 against a published 123,439,837, because three members had no volume that
+ * day). So this returns the derived sum only when it equals the published figure on the check day,
+ * and null otherwise — a card shows `—` rather than a number that quietly means something else.
+ */
+export function derivedIndexVolume(
+  membersVolume: bigint | number | null | undefined,
+  published: bigint | number | null | undefined,
+  derivedCheck: bigint | number | null | undefined,
+): number | null {
+  if (membersVolume === null || membersVolume === undefined) return null;
+  if (published === null || published === undefined) return null;
+  if (derivedCheck === null || derivedCheck === undefined) return null;
+  // Exact by construction, not approximately: both figures count the same members on the same day.
+  if (Number(derivedCheck) !== Number(published)) return null;
+  return Number(membersVolume);
+}
+
 export function buildIndexSummary(input: IndexSummaryInput) {
   const { symbol, name, daily } = input;
   const latest = daily[0] ?? null;
@@ -137,7 +168,11 @@ export function buildIndexSummary(input: IndexSummaryInput) {
     high: null,
     low: null,
     previousClose,
+    // Published by the exchange, and none has been available since 2026-09-22 (DPS refused; the
+    // carousel carries no volume). Never derived from the constituents here — that figure is served
+    // separately as `constituentVolume`, so this key keeps one meaning.
     volume: sameDay?.volume != null ? Number(sameDay.volume) : latest?.volume != null ? Number(latest.volume) : null,
+    constituentVolume: input.constituentVolume ?? null,
     lastTradeDate,
   };
 }

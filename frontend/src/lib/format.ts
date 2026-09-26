@@ -29,3 +29,26 @@ export function formatMarketCap(rupees: number | null | undefined): string | nul
 export function formatRupees(rupees: number): string {
   return `Rs ${rupees.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 }
+
+/**
+ * A share count as a card line can hold it: `40.7M`, and un-abbreviated below a million.
+ *
+ * An index card shows one volume rather than a column of them, so this abbreviates only when the
+ * number would be genuinely long. Null is not zero: a missing reading returns null and the caller
+ * renders the dash, exactly like every other unread value.
+ */
+export function formatVolume(shares: number | null | undefined): string | null {
+  if (shares == null || !Number.isFinite(shares) || shares <= 0) return null;
+  const units: [number, string][] = [
+    [1e12, 'T'],
+    [1e9, 'B'],
+    [1e6, 'M'],
+  ];
+  for (const [size, suffix] of units) {
+    if (shares >= size) {
+      const scaled = shares / size;
+      return `${scaled.toFixed(scaled >= 100 ? 0 : 1)}${suffix}`;
+    }
+  }
+  return shares.toLocaleString();
+}

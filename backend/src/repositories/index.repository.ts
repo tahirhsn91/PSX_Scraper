@@ -48,6 +48,57 @@ export class IndexRepository {
    * Upsert daily values, idempotent on (index_id, trade_date): re-running a sync
    * updates the day's row instead of duplicating it, and never deletes history.
    */
+  /**
+   * Per index: the newest session, plus a day to check a constituent sum against — the last day the
+   * exchange published an index volume, with the figure it published.
+   *
+   * Split from `constituentVolumeSums` on purpose: resolving the two days first lets the sums run as
+   * a single range scan on `stock_prices.last_trade_date` (the column's index is unusable once it is
+   * cast to a date, and a correlated sum per index takes the endpoint past the client's timeout).
+   */
+  async constituentVolumeScopes() {
+    const rows = await prisma.$queryRaw<
+      Array<{ id: string; symbol: string; session: Date | null; check_day: Date | null; published: bigint | null; members: number }>
+    >`
+      SELECT mi.id, mi.symbol,
+             (SELECT max(iv.trade_date) FROM index_values iv WHERE iv.index_id = mi.id) AS session,
+             p.trade_date AS check_day,
+             p.volume AS published,
+             (SELECT count(*)::int FROM index_constituents ic WHERE ic.index_id = mi.id) AS members
+      FROM market_indices mi
+      LEFT JOIN LATERAL (
+        SELECT iv.trade_date, iv.volume
+        FROM index_values iv
+        WHERE iv.index_id = mi.id AND iv.volume IS NOT NULL
+        ORDER BY iv.trade_date DESC
+        LIMIT 1
+      ) p ON true
+      ORDER BY mi.symbol
+    `;
+    return rows;
+  }
+
+  /**
+   * Each member's volume for every day in a span, one row per member per day.
+   *
+   * A stock can have several rows inside one day (the universe sync stamps sessions as it walks), so
+   * each (index, member, day) contributes only its newest row — summing every row would double-count
+   * and inflate the total. The span comes from the caller and is compared as a timestamp range so the
+   * `last_trade_date` index is used.
+   */
+  async constituentVolumeSums(indexIds: string[], from: Date, to: Date) {
+    return prisma.$queryRaw<Array<{ index_id: string; day: Date; volume: bigint | null }>>`
+      SELECT DISTINCT ON (ic.index_id, ic.stock_id, sp.last_trade_date::date)
+             ic.index_id, sp.last_trade_date::date AS day, sp.volume
+      FROM index_constituents ic
+      JOIN stock_prices sp ON sp.stock_id = ic.stock_id
+      WHERE ic.index_id = ANY(${indexIds}::text[])
+        AND sp.last_trade_date >= ${from}
+        AND sp.last_trade_date < ${to}
+      ORDER BY ic.index_id, ic.stock_id, sp.last_trade_date::date, sp.last_trade_date DESC
+    `;
+  }
+
   /** Value rows for a window, newest first, for the candle read path. */
   async candleRows(indexId: string, from: Date | undefined, to: Date | undefined, limit = 5000) {
     return prisma.indexValue.findMany({
