@@ -7,6 +7,7 @@ import { sessionStamp } from '../scrapers/parse.utils';
 import { createRedisConnection } from '../jobs/connection';
 import { isClosingPassDue, isMarketOpen } from '../utils/marketHours';
 import { childLogger } from '../utils/logger';
+import { tradingDayState, type TradingDayState } from './marketCalendar.service';
 
 /**
  * Snapshot every index PSX publishes into `market_indices` + `index_values`.
@@ -34,6 +35,11 @@ export interface IndexScrapeResult {
   namesResolved: number;
   /** Rows of a previous session corrected to the exchange's own implied close. */
   repaired: number;
+  /** What the calendar said about the day this pass ran on. */
+  sessionDay?: TradingDayState;
+  /** False when the pass declined to write a session row - a weekend, a listed holiday, or no
+   *  readable calendar. The live snapshot is written either way. */
+  sessionRowWritten?: boolean;
 }
 
 /**
@@ -140,6 +146,27 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
   // with the stock rows for that day.
   const stamp = new Date(sessionStamp(now.toISOString())!);
 
+  // Whether a session row may exist at all. `marketHours` counts the weekdays and cannot tell a
+  // trading Wednesday from a holiday one, and this pass runs pre-open, hours before the exchange
+  // publishes anything - which is how 2026-08-26 (a holiday it never opened on) came to exist as
+  // 441 stock rows plus this board's row, all carrying the previous close and `volume = 0`. A
+  // phantom session then reached the candles API, the 52W columns and "last traded", so the
+  // calendar vetoes the row this pass would otherwise synthesise.
+  //
+  // It never vetoes a *published* one. PSX's list carries 2026-08-25 - a Tuesday that traded, and
+  // that both independent session calendars publish - so an Eid date can land a day either side of
+  // the published one, and the closing pass (which reads a real session) stays the authority on
+  // whether a session happened. `unknown` (the calendar could not be read) is treated as "no
+  // evidence": a missing session is recoverable from the published series, a phantom one is not.
+  const sessionDay = await tradingDayState(stamp);
+  const writeSessionRow = sessionDay === 'trading';
+  if (!writeSessionRow) {
+    log.warn('index-scrape.session_skipped', {
+      date: stamp.toISOString().slice(0, 10),
+      reason: sessionDay,
+    });
+  }
+
   let created = 0;
   let updated = 0;
   let valuesWritten = 0;
@@ -196,11 +223,13 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
       existingOpen: dayRow?.open == null ? null : dayRow.open.toNumber(),
     });
 
-    valuesWritten += await indexRepository.upsertValues(row.id, [
-      // `valueAt` is when this reading was taken: the only thing on the row that can say whether the
-      // value it lands on is a close (see `isPostCloseReading`).
-      { date: stamp.toISOString(), close: index.level, open, volume: null, valueAt: now },
-    ]);
+    if (writeSessionRow) {
+      valuesWritten += await indexRepository.upsertValues(row.id, [
+        // `valueAt` is when this reading was taken: the only thing on the row that can say whether the
+        // value it lands on is a close (see `isPostCloseReading`).
+        { date: stamp.toISOString(), close: index.level, open, volume: null, valueAt: now },
+      ]);
+    }
 
     if (canRepair) {
       // The session before this one, which is the row the exchange's implied close is about.
@@ -236,6 +265,8 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     valuesWritten,
     namesResolved: Object.keys(names).length,
     repaired,
+    sessionDay,
+    sessionRowWritten: writeSessionRow,
   };
   log.info('index-scrape.done', { ...result, stamp: stamp.toISOString() });
   return result;

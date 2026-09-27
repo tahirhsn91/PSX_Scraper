@@ -50,6 +50,16 @@ const envSchema = z.object({
     .transform((v) => v === 'true'),
   MARKET_CAP_REFRESH_CRON: z.string().default('*/30 4-11 * * 1-5'),
   /**
+   * The exchange's published market holidays - the gate the index session stamp reads. One request
+   * to `www.psx.com.pk` a day, so a daily pre-open tick rather than a session cadence: PSX
+   * republishes the table rarely, and 02:15 UTC is 07:15 PKT, ahead of the 09:30 open.
+   */
+  MARKET_HOLIDAYS_REFRESH_ENABLED: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((v) => v === 'true'),
+  MARKET_HOLIDAYS_REFRESH_CRON: z.string().default('15 2 * * *'),
+  /**
    * Spacing for the per-symbol leg of the refresh. It runs only for symbols the bulk pass could not
    * serve and that have no cap yet, and this host starts answering 429 to a fast walk (measured
    * 2026-09-25: 150 pages in ~2 minutes earned a refusal on the next pass). Slow by default; the
