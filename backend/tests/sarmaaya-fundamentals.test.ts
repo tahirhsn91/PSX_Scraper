@@ -215,14 +215,24 @@ describe('parseSarmaayaDividends', () => {
 describe('mergeRatios', () => {
   const none: RatioDTO = {
     peRatio: null, pbRatio: null, roe: null, roa: null,
-    dividendYield: null, bookValue: null, beta: null,
+    dividendYield: null, bookValue: null, beta: null, eps: null,
   };
 
   it('fills each field from the first provider that actually stated it', () => {
-    const api: RatioDTO = { ...none, peRatio: 12.48, pbRatio: 5.95, dividendYield: 6.16, bookValue: 32.842, roe: 49.444 };
+    const api: RatioDTO = { ...none, peRatio: 12.48, pbRatio: 5.95, dividendYield: 6.16, bookValue: 32.842, roe: 49.444, eps: 15.94 };
     const page: RatioDTO = { ...none, beta: 0.87 };
     const merged = mergeRatios(api, page);
     expect(merged).toEqual({ ...api, beta: 0.87 });
+  });
+
+  it('keeps EPS from the provider that read it, where the other has none to read', () => {
+    // The production shape: the page scraper's block states the ratios it can still read, and its
+    // EPS is null by design (#79) — the fundamentals block is the only source for that row, so a
+    // field-wise merge has to take it from there rather than let the preceding block's null win.
+    const page: RatioDTO = { ...none, peRatio: 12.48 };
+    const api: RatioDTO = { ...none, eps: 15.94 };
+    expect(mergeRatios(page, api)).toMatchObject({ peRatio: 12.48, eps: 15.94 });
+    expect(mergeRatios(page)).toMatchObject({ eps: null });
   });
 
   it('leaves a field nobody published null rather than reaching for another provider block', () => {
@@ -261,9 +271,10 @@ describe('scrapeResultSchema with the new field', () => {
   it('accepts a merged result that carries book value', () => {
     const parsed = scrapeResultSchema.parse({
       ...base,
-      ratios: { peRatio: 12.48, pbRatio: 5.95, roe: 49.44, roa: 10.72, dividendYield: 6.16, bookValue: 32.842, beta: null },
+      ratios: { peRatio: 12.48, pbRatio: 5.95, roe: 49.44, roa: 10.72, dividendYield: 6.16, bookValue: 32.842, eps: 15.94, beta: null },
     }) as { ratios: RatioDTO };
     expect(parsed.ratios.bookValue).toBeCloseTo(32.842, 3);
+    expect(parsed.ratios.eps).toBeCloseTo(15.94, 3);
   });
 
   it('still accepts a provider block that has nothing to say about book value', () => {
@@ -300,7 +311,7 @@ describe('SarmaayaFundamentalsScraper over a stubbed source', () => {
       sarmaayaRatioSeriesUrl('PK0099701010', 'LTM'),
       sarmaayaDividendsUrl('EFERT'),
     ]);
-    expect(result.ratios).toMatchObject({ peRatio: 12.48, pbRatio: 5.95, dividendYield: 6.16, bookValue: 32.842 });
+    expect(result.ratios).toMatchObject({ peRatio: 12.48, pbRatio: 5.95, dividendYield: 6.16, bookValue: 32.842, eps: 15.94 });
     // Beta is computed from our own history against the index, never borrowed from this payload.
     expect(result.ratios!.beta).toBeNull();
     expect(result.dividends[0]).toMatchObject({ announcementDate: '2026-08-10T00:00:00.000Z', dividend: 1.75 });

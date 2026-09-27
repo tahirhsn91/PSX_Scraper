@@ -107,6 +107,8 @@ export const stockService = {
             roa: num(ratio.roa), dividendYield: num(ratio.dividendYield),
             // Book value per share (#79): one column, read from the source's own ratio series.
             bookValue: num(ratio.bookValue),
+            // Earnings per share: the source's own snapshot figure, which its stock page prints.
+            eps: num(ratio.eps),
             // Beta: our own measurement (see `beta` below), so the card and the dedicated block
             // cannot disagree. Null — the dash — when the history is too thin to measure one.
             beta: beta.value,
@@ -126,6 +128,9 @@ export const stockService = {
       // `ratios`: the app reads it at the top level, and a symbol whose source publishes none still
       // reads null (the dash), never 0.
       bookValue: ratio ? num(ratio.bookValue) : null,
+      // Earnings per share, also served top-level so the app can read it without knowing which table
+      // it lives in. A symbol whose source publishes none reads null (the dash), never 0.
+      eps: ratio ? num(ratio.eps) : null,
       nextDividendDate: newestDividend?.announcementDate ?? null,
       nextDividendAmount: num(newestDividend?.dividend ?? null),
       financials: s.financials.map((f) => ({
