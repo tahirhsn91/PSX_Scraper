@@ -20,6 +20,7 @@ router.get(
 router.post('/', mutationLimiter, validate(addStockBody, 'body'), asyncHandler(ctrl.addStock));
 // Two segments, so the one-segment `/:symbol` routes below cannot shadow it.
 router.post('/market-cap/refresh', mutationLimiter, asyncHandler(ctrl.refreshMarketCaps));
+router.post('/beta/refresh', mutationLimiter, asyncHandler(ctrl.refreshBeta));
 router.get('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.getStock));
 router.delete('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.deleteStock));
 router.post('/:symbol/sync', mutationLimiter, validate(symbolParam, 'params'), asyncHandler(ctrl.syncStock));

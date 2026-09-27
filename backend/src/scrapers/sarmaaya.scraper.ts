@@ -229,6 +229,10 @@ export class SarmaayaScraper implements IStockScraper {
         roe: toNumber(data.roe),
         roa: toNumber(data.roa),
         dividendYield: toNumber(data.dividendYield),
+        // The page extractor cannot read this one: the site publishes book value per share only in
+        // its ratio-series API, which `sarmaaya-fundamentals.scraper.ts` reads. Null here means the
+        // field-wise merge in the orchestrator gets its chance to fill it.
+        bookValue: null,
         beta: toNumber(data.beta),
       },
     };

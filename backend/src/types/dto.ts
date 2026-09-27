@@ -39,6 +39,8 @@ export interface RatioDTO {
   roe: number | null;
   roa: number | null;
   dividendYield: number | null;
+  /** Book value per share (equity / shares outstanding) for the newest period the source reports. */
+  bookValue: number | null;
   beta: number | null;
 }
 

@@ -1,6 +1,7 @@
 import { IStockScraper } from '../types/scraper';
 import { PSXScraper } from './psx.scraper';
 import { SarmaayaScraper } from './sarmaaya.scraper';
+import { SarmaayaFundamentalsScraper } from './sarmaayaFundamentals.scraper';
 
 /**
  * Pluggable scraper registry. Add a provider by implementing IStockScraper
@@ -25,3 +26,6 @@ class ScraperRegistry {
 export const scraperRegistry = new ScraperRegistry();
 scraperRegistry.register(new PSXScraper());
 scraperRegistry.register(new SarmaayaScraper());
+// The plain-HTTP JSON leg: ratios, book value per share and dividends. Its own provider rather
+// than a step inside the page scraper, so a Chromium failure cannot take the ratios with it.
+scraperRegistry.register(new SarmaayaFundamentalsScraper());
