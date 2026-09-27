@@ -193,6 +193,54 @@ export const openapiSpec = {
       },
     },
 
+    '/api/v1/stocks/beta/refresh': {
+      post: {
+        tags: ['Stocks'],
+        summary: 'Recompute beta for every tracked symbol',
+        description:
+          'Measures beta against the KSE-100 from our own daily closes (#79) and stores it in '
+          + '`ratios.beta`, over the last 250 index sessions with the symbol\'s close aligned session '
+          + 'by session. Local computation only — no source is fetched — and idempotent. Symbols with '
+          + 'fewer aligned sessions than the minimum stay a dash and are reported under `belowMinimum`.',
+        responses: {
+          '200': {
+            description: 'Refresh summary',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    tracked: { type: 'integer', example: 508 },
+                    computed: { type: 'integer', example: 442 },
+                    belowMinimum: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          symbol: { type: 'string', example: 'ENGROH' },
+                          observations: { type: 'integer', example: 0 },
+                          reason: { type: 'string' },
+                        },
+                      },
+                    },
+                    written: {
+                      type: 'object',
+                      properties: {
+                        updated: { type: 'integer' },
+                        created: { type: 'integer' },
+                        skipped: { type: 'integer' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          '429': err('Rate limit exceeded'),
+        },
+      },
+    },
+
     '/api/v1/stocks/{symbol}': {
       parameters: [{ $ref: '#/components/parameters/Symbol' }],
       get: {
@@ -852,7 +900,24 @@ export const openapiSpec = {
           roe: { type: 'number', nullable: true },
           roa: { type: 'number', nullable: true },
           dividendYield: { type: 'number', nullable: true },
-          beta: { type: 'number', nullable: true },
+          bookValue: {
+            type: 'number',
+            nullable: true,
+            description:
+              'Book value per share (equity / shares outstanding) for the newest period the source '
+              + 'reports. Null means the source publishes none for this symbol — a dash in the UI, '
+              + 'never a zero.',
+          },
+          beta: {
+            type: 'number',
+            nullable: true,
+            description:
+              'Beta measured against the KSE-100 from our own daily closes (#79), over the last '
+              + '250 index sessions with the symbol\'s close aligned session by session. The same '
+              + 'value the top-level `beta` block reports, which also carries the window. Null '
+              + 'means the history is too thin to measure one — a dash, never a figure derived '
+              + 'from a handful of days, and never borrowed from a source.',
+          },
         },
       },
       Financial: {
@@ -886,6 +951,59 @@ export const openapiSpec = {
           sector: { type: 'string', nullable: true },
           price: { allOf: [{ $ref: '#/components/schemas/Price' }], nullable: true },
           ratios: { allOf: [{ $ref: '#/components/schemas/Ratios' }], nullable: true },
+          beta: {
+            type: 'object',
+            nullable: false,
+            description:
+              'Beta measured against the KSE-100 from our own daily closes, reported with the '
+              + 'window it was measured over (#79). `value` is null when the symbol has fewer than '
+              + '`window.minimum` aligned sessions — the dash — and `reason` says why.',
+            properties: {
+              value: { type: 'number', nullable: true, example: 0.8942 },
+              index: { type: 'string', example: 'KSE100' },
+              method: {
+                type: 'string',
+                description: 'How the number was obtained, stated rather than assumed by the reader.',
+              },
+              reason: {
+                type: 'string',
+                nullable: true,
+                description: 'Why `value` is null, in words the UI can show. Null when a value was computed.',
+              },
+              window: {
+                type: 'object',
+                properties: {
+                  index: { type: 'string', example: 'KSE100' },
+                  label: { type: 'string', example: '1Y', description: 'The window in human units: one trading year.' },
+                  sessions: { type: 'integer', example: 250, description: 'The window\u2019s length in index sessions.' },
+                  observations: {
+                    type: 'integer',
+                    example: 250,
+                    description:
+                      'Aligned sessions actually used — the sample size. Sessions where only one of the two '
+                      + 'series has a close contribute no return.',
+                  },
+                  from: { type: 'string', nullable: true, example: '2025-09-25', description: 'First session day a return was taken on.' },
+                  to: { type: 'string', nullable: true, example: '2026-09-25', description: 'Last session day a return was taken on.' },
+                  minimum: { type: 'integer', example: 60, description: 'The floor below which no value is served.' },
+                },
+              },
+            },
+          },
+          nextDividendDate: {
+            type: 'string',
+            format: 'date-time',
+            nullable: true,
+            description:
+              'Announcement date of the newest dividend on record. No reachable source publishes '
+              + 'an ex-date, so the UI labels this as an announcement rather than presenting it as '
+              + 'one. Null when the symbol has no dividend on record.',
+          },
+          nextDividendAmount: {
+            type: 'number',
+            nullable: true,
+            description: 'Dividend per share for that same newest announcement. Null when none is on record.',
+          },
           financials: { type: 'array', items: { $ref: '#/components/schemas/Financial' } },
           dividends: { type: 'array', items: { $ref: '#/components/schemas/Dividend' } },
           lastSync: {

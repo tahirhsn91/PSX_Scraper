@@ -2,6 +2,7 @@ import type { ScrapeResult } from '../types/dto';
 import { persistScrapeResult } from '../repositories/scrapeResult.repository';
 import { median, previousCloseBefore, recentVolumes } from '../repositories/stockPrice.repository';
 import { env } from '../config';
+import { betaService } from './beta.service';
 import { childLogger } from '../utils/logger';
 import {
   type ScrapedQuote,
@@ -128,6 +129,27 @@ export async function verifyAndPersist(
 
   applyVerdicts(result, verification);
   await persistScrapeResult(result);
+
+  // Beta follows every write, from the same door (#79, criterion 7). It is the one ratio we do not
+  // read from a source: it is measured from the history the write just landed plus the KSE-100, so
+  // the column would otherwise never be filled by a sync. Best-effort on purpose — a derived
+  // statistic must not fail a sync that has already written its price, and the detail payload
+  // computes beta live, so the worst case is a dash.
+  try {
+    const beta = await betaService.refreshSymbol(result.symbol);
+    opts.log?.info('beta.refreshed', {
+      value: beta.value,
+      stored: beta.stored,
+      observations: beta.window.observations,
+      from: beta.window.from,
+      to: beta.window.to,
+      reason: beta.reason,
+    });
+  } catch (err) {
+    opts.log?.warn('beta.refresh_failed', {
+      message: err instanceof Error ? err.message : String(err),
+    });
+  }
 
   return {
     listed: true,
