@@ -105,6 +105,10 @@ model Ratio {
   roe           Decimal? @db.Decimal(12, 4)
   roa           Decimal? @db.Decimal(12, 4)
   dividendYield Decimal? @map("dividend_yield") @db.Decimal(12, 4)
+  /// Book value per share (equity / shares outstanding), as the source publishes it for the newest
+  /// period it reports. Null means "the source published none" and renders as a dash -- never 0 and
+  /// never carried over from an earlier sync (#79). Migration 0011.
+  bookValue     Decimal? @map("book_value") @db.Decimal(12, 4)
   beta          Decimal? @db.Decimal(12, 4)
   createdAt     DateTime @default(now()) @map("created_at")
 
