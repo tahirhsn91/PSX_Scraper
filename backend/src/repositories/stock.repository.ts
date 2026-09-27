@@ -263,6 +263,20 @@ export async function clearLatestMarketCap(symbols: string[]): Promise<number> {
 }
 
 /**
+ * The session a market cap must have been read in to be trusted (#71).
+ *
+ * Before the scoped-read fix (`661ed39`, 2026-09-25 14:19 PKT) the extractor read a page-wide sweep
+ * that could return a container's concatenated text, which is how 460 rows came to hold an index's
+ * level as a company's market cap, 127 of them carrying one identical value. Those rows were nulled;
+ * this constant is what keeps the defect from re-entering through the carry-forward below, which
+ * would otherwise take any non-null cap, however old, and present it as the current one.
+ *
+ * 2026-09-25 is the fix's own day, and it admits the caps the aggregator wrote that afternoon onto
+ * the session row stamped 16:00 PKT — those are post-fix reads — while refusing everything earlier.
+ */
+export const MARKET_CAP_TRUSTWORTHY_SINCE = '2026-09-25';
+
+/**
  * Carry each symbol's most recent known cap onto its newest row, where that row has none.
  *
  * Without this the column flickers: a market cap is fetched every half hour, but the universe sync
@@ -270,6 +284,10 @@ export async function clearLatestMarketCap(symbols: string[]): Promise<number> {
  * filled at 10:00 reads as a dash again by 10:05. The cap a session row shows is therefore the most
  * recent one *reported* for that symbol (the same way the 52-week range persists), not a claim that
  * it was re-read in that tick. Only rows with no value at all are touched.
+ *
+ * "Most recent" is bounded by `MARKET_CAP_TRUSTWORTHY_SINCE`: a cap read before the scoped-read fix
+ * is not a candidate at all, so a stale value can never become a current one — the row it would
+ * have filled stays a dash instead.
  */
 export async function carryForwardLatestMarketCaps(): Promise<number> {
   return prisma.$executeRaw`
@@ -279,6 +297,7 @@ export async function carryForwardLatestMarketCaps(): Promise<number> {
       SELECT DISTINCT ON (stock_id) stock_id, market_cap AS cap
       FROM stock_prices
       WHERE market_cap IS NOT NULL
+        AND last_trade_date >= ${MARKET_CAP_TRUSTWORTHY_SINCE}::date
       ORDER BY stock_id, last_trade_date DESC
     ) prev
     WHERE sp.stock_id = prev.stock_id
