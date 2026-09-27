@@ -1,9 +1,11 @@
 import { Prisma } from '@prisma/client';
+import type IORedis from 'ioredis';
 import { prisma } from '../database/prisma';
 import { indexRepository } from '../repositories/index.repository';
 import { fetchPsxIndices, fetchIndexNames } from '../scrapers/psxIndices.scraper';
 import { sessionStamp } from '../scrapers/parse.utils';
-import { isMarketOpen } from '../utils/marketHours';
+import { createRedisConnection } from '../jobs/connection';
+import { isClosingPassDue, isMarketOpen } from '../utils/marketHours';
 import { childLogger } from '../utils/logger';
 
 /**
@@ -30,6 +32,8 @@ export interface IndexScrapeResult {
   updated: number;
   valuesWritten: number;
   namesResolved: number;
+  /** Rows of a previous session corrected to the exchange's own implied close. */
+  repaired: number;
 }
 
 /**
@@ -68,6 +72,65 @@ export function openingLevelFor(args: { now: Date; level: number; existingOpen: 
   return inWindow ? args.level : null;
 }
 
+/** PKT is a fixed UTC+5, so the session key is arithmetic, not a timezone database. */
+const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
+
+/** The Karachi calendar day an instant falls on — the key a session is claimed under. */
+export function pktSessionKey(now: Date): string {
+  return new Date(now.getTime() + PKT_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+/** The instant a session's close is settled: 15:35 PKT on the session's own day. */
+export function sessionCloseAt(tradeDate: Date): Date {
+  const pkt = new Date(tradeDate.getTime() + PKT_OFFSET_MS);
+  const midnightUtc = Date.UTC(pkt.getUTCFullYear(), pkt.getUTCMonth(), pkt.getUTCDate());
+  return new Date(midnightUtc + (15 * 60 + 35) * 60 * 1000 - PKT_OFFSET_MS);
+}
+
+/**
+ * Whether a reading was taken after its session's close — i.e. whether the value it produced can
+ * be read as that session's close.
+ *
+ * A session's row is upserted in place on every pass, so `value` alone cannot say what it is; the
+ * row's `value_at` is the only thing on it that can. Null means no reading we can point at, which
+ * is not a close either. 15:35 is the moment `isClosingPassDue` treats as settled, so the two agree
+ * on what "after the close" means.
+ */
+export function isPostCloseReading(valueAt: Date | null, tradeDate: Date): boolean {
+  return valueAt !== null && valueAt.getTime() > sessionCloseAt(tradeDate).getTime();
+}
+
+/** A paisa: closer than this and two index levels are the same number, not a correction. */
+const LEVEL_EPSILON = 0.005;
+
+/**
+ * The value a stored row should be corrected to, or `null` to leave it exactly as it is.
+ *
+ * A session whose close was never captured still has one, published: the exchange's market-summary
+ * page gives each index's `level` and its `change` against the exchange's own previous close, so
+ * `level - change` *is* the previous session's close — an independent observation from the same
+ * page, not a figure we derived. Measured on 2026-09-26 that arithmetic reproduced the stored 24 Sep
+ * row for all 17 indices to the paisa, which is what licenses using it to repair the row for 25 Sep.
+ *
+ * The catch is that it is only the previous session's close while the page is describing a *live*
+ * session — so the caller gates on that (see `scrapeIndices`). Over a weekend the page still serves
+ * the last session's figures, and the same arithmetic would "correct" the last row to its own
+ * previous close, which is why a weekend pass must never reach here.
+ *
+ * A row already holding a post-close reading is left alone: a real close outranks a repair.
+ */
+export function repairedValueFor(args: {
+  storedValue: number;
+  valueAt: Date | null;
+  tradeDate: Date;
+  impliedClose: number | null;
+}): number | null {
+  if (args.impliedClose === null || !Number.isFinite(args.impliedClose)) return null;
+  if (isPostCloseReading(args.valueAt, args.tradeDate)) return null;
+  if (Math.abs(args.storedValue - args.impliedClose) < LEVEL_EPSILON) return null;
+  return args.impliedClose;
+}
+
 export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult> {
   const log = childLogger({ op: 'index-scrape' });
   const parsed = await fetchPsxIndices();
@@ -80,6 +143,13 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
   let created = 0;
   let updated = 0;
   let valuesWritten = 0;
+  let repaired = 0;
+
+  // `level - change` is the previous session's close only while the page describes a live session.
+  // Over a weekend or a holiday the carousel still answers, with the last session's figures, and the
+  // same arithmetic would "correct" that session's row to its own previous close — so repair is
+  // confined to the sessions a pass can legitimately be about.
+  const canRepair = isMarketOpen(now) || isClosingPassDue(now);
 
   for (const index of parsed) {
     const existing = await prisma.marketIndex.findUnique({
@@ -127,8 +197,36 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     });
 
     valuesWritten += await indexRepository.upsertValues(row.id, [
-      { date: stamp.toISOString(), close: index.level, open, volume: null },
+      // `valueAt` is when this reading was taken: the only thing on the row that can say whether the
+      // value it lands on is a close (see `isPostCloseReading`).
+      { date: stamp.toISOString(), close: index.level, open, volume: null, valueAt: now },
     ]);
+
+    if (canRepair) {
+      // The session before this one, which is the row the exchange's implied close is about.
+      const previous = await prisma.indexValue.findFirst({
+        where: { indexId: row.id, tradeDate: { lt: stamp } },
+        orderBy: { tradeDate: 'desc' },
+        select: { tradeDate: true, value: true, valueAt: true },
+      });
+      if (previous) {
+        const corrected = repairedValueFor({
+          storedValue: previous.value.toNumber(),
+          valueAt: previous.valueAt,
+          tradeDate: previous.tradeDate,
+          impliedClose: index.change === null ? null : index.level - index.change,
+        });
+        if (corrected !== null) {
+          await prisma.indexValue.update({
+            where: { indexId_tradeDate: { indexId: row.id, tradeDate: previous.tradeDate } },
+            // Only the value: `value_at` stays as it was, so the row still says that its close was
+            // never captured and that this figure came from the exchange's own arithmetic.
+            data: { value: new Prisma.Decimal(corrected) },
+          });
+          repaired += 1;
+        }
+      }
+    }
   }
 
   const result: IndexScrapeResult = {
@@ -137,7 +235,61 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     updated,
     valuesWritten,
     namesResolved: Object.keys(names).length,
+    repaired,
   };
   log.info('index-scrape.done', { ...result, stamp: stamp.toISOString() });
   return result;
+}
+
+let redis: IORedis | null = null;
+const getRedis = (): IORedis => (redis ??= createRedisConnection());
+
+/**
+ * Claim the closing pass for a session.
+ *
+ * The board timer keeps firing every `INDEX_SCRAPE_INTERVAL_MS` once a session's close has passed,
+ * so without a claim the closing pass would run ~170 times a session. `SET NX` makes the claim
+ * atomic, exactly as the universe runner's closing pass does — a check-then-set would let two
+ * workers both decide they were first.
+ */
+async function claimIndexClosingPass(now: Date): Promise<boolean> {
+  const key = `indices:close-pass:${pktSessionKey(now)}`;
+  const claimed = await getRedis().set(key, '1', 'EX', 60 * 60 * 48, 'NX');
+  return claimed === 'OK';
+}
+
+export interface IndexClosingPassResult {
+  ran: boolean;
+  reason: 'not-due' | 'already-claimed' | 'ran';
+  result?: IndexScrapeResult;
+}
+
+/**
+ * The once-per-session pass that reads each index's settled level.
+ *
+ * The board snapshot runs only while `isMarketOpen` (09:25–15:35 PKT) and upserts a session's row in
+ * place, so the number the row ends the day with is whatever the last successful pass read — not
+ * necessarily the close. On 2026-09-26 that was visible on all 17 indices: each newest row held a
+ * 09:25 pre-open reading while the session had closed up, and every figure derived from the series
+ * (the comparison charts, change, percent) inherited it with no way to tell. This pass guarantees
+ * the close is read; the claim guarantees it is read once, not on every tick of the timer that
+ * follows it.
+ *
+ * Deliberately not gated by `INDEX_SCRAPE_MARKET_HOURS_ONLY`: that flag is on by default and exists
+ * to stop useless in-hours polling, which would also stop this. `claim` and `scrape` are injectable
+ * so the rule is testable without Redis or a live page.
+ */
+export async function runIndexClosingPass(
+  args: {
+    now?: Date;
+    claim?: (now: Date) => Promise<boolean>;
+    scrape?: (now: Date) => Promise<IndexScrapeResult>;
+  } = {},
+): Promise<IndexClosingPassResult> {
+  const now = args.now ?? new Date();
+  if (!isClosingPassDue(now)) return { ran: false, reason: 'not-due' };
+  const claim = args.claim ?? claimIndexClosingPass;
+  if (!(await claim(now))) return { ran: false, reason: 'already-claimed' };
+  const scrape = args.scrape ?? scrapeIndices;
+  return { ran: true, reason: 'ran', result: await scrape(now) };
 }

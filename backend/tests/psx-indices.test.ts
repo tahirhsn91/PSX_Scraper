@@ -67,8 +67,15 @@ describe('toIndexCandles', () => {
 
   it('maps an index row to a candle, with the level as the close', () => {
     expect(toIndexCandles([row()])).toEqual([
-      { time: '2026-09-21', open: 169392.32, high: null, low: null, close: 171153.16, volume: 0 },
+      // `valueAt` is the instant of the reading behind the close (see migration 0009); a row
+      // written before that column existed has none, which is reported as-is rather than guessed.
+      { time: '2026-09-21', open: 169392.32, high: null, low: null, close: 171153.16, volume: 0, valueAt: null },
     ]);
+  });
+
+  it('carries the reading time onto the candle when the row has one', () => {
+    const readAt = new Date('2026-09-21T10:36:00.000Z'); // 15:36 PKT, after the session's close
+    expect(toIndexCandles([row({ valueAt: readAt })])[0]!.valueAt).toEqual(readAt);
   });
 
   it('leaves high and low null — no index series reports them, and a wick must not be invented', () => {
