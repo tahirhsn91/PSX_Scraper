@@ -208,3 +208,19 @@ model DeletedSymbol {
 
   @@map("deleted_symbols")
 }
+
+/// PSX's published market holidays (issue: the holiday hole). `partial` marks a closure PSX
+/// qualifies as one community's - not a market-wide closure, so it never blocks a session.
+model MarketHoliday {
+  id        String   @id @default(uuid())
+  date      DateTime @unique @db.Date
+  name      String
+  days      Int?
+  partial   Boolean  @default(false)
+  source    String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([date])
+  @@map("market_holidays")
+}
