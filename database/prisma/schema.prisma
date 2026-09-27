@@ -110,6 +110,10 @@ model Ratio {
   /// never carried over from an earlier sync (#79). Migration 0011.
   bookValue     Decimal? @map("book_value") @db.Decimal(12, 4)
   beta          Decimal? @db.Decimal(12, 4)
+  /// Earnings per share, as the source's own snapshot publishes it (`FF_EPS` -- the LTM figure its
+  /// stock page shows). Null means "the source published none" and renders as a dash -- never 0 and
+  /// never derived from price / (price-to-earnings). Migration 0012.
+  eps           Decimal? @db.Decimal(12, 4)
   createdAt     DateTime @default(now()) @map("created_at")
 
   stock         Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)

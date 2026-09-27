@@ -233,6 +233,9 @@ export class SarmaayaScraper implements IStockScraper {
         // its ratio-series API, which `sarmaaya-fundamentals.scraper.ts` reads. Null here means the
         // field-wise merge in the orchestrator gets its chance to fill it.
         bookValue: null,
+        // Same reason as book value: the page extractor has no EPS to read (its ratio block returns
+        // nulls for the whole board — see #79), so the merge takes the fundamentals scraper's figure.
+        eps: null,
         beta: toNumber(data.beta),
       },
     };
