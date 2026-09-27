@@ -75,7 +75,21 @@ cd ../frontend && npm install && npm run dev
 
 ## Environment variables
 
-See [.env.example](./.env.example). Key backend vars: `DATABASE_URL`, `REDIS_URL`, `PORT`, `SCRAPER_TIMEOUT`, `SCRAPER_CONCURRENCY`, `CRON_EXPRESSION`, `QUOTE_POLL_CRON`, `QUOTE_POLL_DPS_MIN_INTERVAL_MS`, `SARMAYA_QUOTE_MAX_SYMBOLS`, `LOG_LEVEL`. Frontend: `VITE_API_URL`.
+See [.env.example](./.env.example). Key backend vars: `DATABASE_URL`, `REDIS_URL`, `PORT`, `SCRAPER_TIMEOUT`, `SCRAPER_CONCURRENCY`, `CRON_EXPRESSION`, `QUOTE_POLL_CRON`, `QUOTE_POLL_MARKET_HOURS_ONLY`, `QUOTE_POLL_DPS_MIN_INTERVAL_MS`, `SARMAYA_QUOTE_MAX_SYMBOLS`, `LOG_LEVEL`. Frontend: `VITE_API_URL`.
+
+### What polling outside market hours costs
+
+`QUOTE_POLL_MARKET_HOURS_ONLY` is **`true` by default**. The poll's cron is once a minute (`QUOTE_POLL_CRON=*/1 * * * *`), and the guard is what keeps those ticks inside the session — Mon–Fri 09:25–15:35 PKT, about **370 ticks a day**. Setting it to `false` lets the poll run around the clock: **1,440 ticks a day**.
+
+Each tick's volume is bounded by configuration, and the polled universe is **every tracked symbol** (508 today), not the handful this option was written against:
+
+- **DPS quotes** (`dps.psx.com.pk`, the primary source) — at most one sweep per `QUOTE_POLL_DPS_MIN_INTERVAL_MS` (default 5 minutes), one request per symbol at `QUOTE_POLL_CONCURRENCY` (default 5) in parallel: up to 288 sweeps × 508 symbols ≈ **146,000 requests a day** if the source answers every one.
+- **Board ticker** (`sarmaaya.pk`) — one request per tick whenever anything is still missing, ≈ **1,400 a day**.
+- **Per-symbol tail** (the ETFs, preference shares and renamed tickers the ticker omits) — at most `SARMAYA_QUOTE_MAX_SYMBOLS` (default 12) requests per tick, ≈ **17,000 a day**.
+
+That is the arithmetic ceiling, and it is the reason the guard is on. What holds it down in practice is the **circuit breaker**: after 5 consecutive availability failures — a refusal or a timeout, never a 404 or a parse error — the worker refuses to send that source anything for a cooldown that doubles per re-trip, from 5 minutes up to 60, and announces it in its own log stream (`source.cooling_down`, then `quote-poll.skipped` with `reason: "source-cooling"` and a `resumeAt`). A source that is refusing us therefore sees a handful of requests an hour instead of thousands, while the poll falls through to the next source.
+
+The breaker is **per worker process** — it is rebuilt on restart, and the API process cannot see it, which is why a cooldown is reported in the log stream rather than in `/api/v1/sync/status` (see [docs/architecture.md](./docs/architecture.md)).
 
 ## API surface
 
