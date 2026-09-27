@@ -52,22 +52,31 @@ export function extractPsxPageData(): PsxPageData {
     text(sel: string): string | null {
       return document.querySelector(sel)?.textContent?.trim() ?? null;
     },
-    byLabel(label: string): string | null {
-      const nodes = Array.from(
-        document.querySelectorAll('.stats_item, .quote__item, .company__title, td, div'),
-      );
-      const hit = nodes.find((n) => n.textContent?.toLowerCase().includes(label.toLowerCase()));
-      return hit?.textContent?.trim() ?? null;
+    /**
+     * The company name with PSX's status badge removed.
+     *
+     * The page renders the name and its status inside the same node, so `textContent` returns
+     * `Engro Corporation LimitedDELISTED` — which is what the API served and what the Portfolio
+     * Manager displayed (#21). Only a *trailing* status word is removed, and only when something
+     * is left: a name is never truncated to nothing, and an unrecognised suffix is left alone
+     * rather than guessed at.
+     */
+    companyName(sel: string): string | null {
+      const raw = document.querySelector(sel)?.textContent?.replace(/\s+/g, ' ').trim() ?? null;
+      if (!raw) return null;
+      const stripped = raw.replace(/\s*(DELISTED|SUSPENDED|DEFAULTED|HALTED)\s*$/i, '').trim();
+      return stripped || raw;
     },
     /**
      * The low/high pair from the stats item whose label matches `pattern` — the
      * "52-WEEK RANGE" box. Reads the machine-readable data-low/data-high attributes of the
      * inner `.numRange` node, falling back to splitting the displayed "441.70 — 685.00".
      *
-     * Scoped to the labelled item on purpose: `byLabel()` above matches the first node whose
-     * text merely *contains* a word, which is how the day high/low currently pick up a whole
-     * concatenated stats block (#21). Null when the page has no such item — a missing range
-     * must stay missing instead of borrowing a number from a neighbouring box.
+     * Scoped to the labelled item on purpose: matching a label by a page-wide text search hands
+     * back the first *container* whose text merely contains the word, which is how the day
+     * high/low, the open, the volume and the market cap all became one figure repeated for every
+     * symbol (#21, #71). Null when the page has no such item — a missing range must stay missing
+     * instead of borrowing a number from a neighbouring box.
      */
     labelledRange(pattern: RegExp): { low: string | null; high: string | null } | null {
       const items = Array.from(document.querySelectorAll('.stats_item'));
@@ -88,11 +97,12 @@ export function extractPsxPageData(): PsxPageData {
      * The value of the stats item whose label matches `pattern`, read from that item's own
      * subtree.
      *
-     * Sibling of `labelledRange` above and for exactly the same reason: `byLabel()` matches the
-     * first node whose text merely *contains* the label and hands back a concatenated container,
-     * which is how every symbol ended up storing the same market cap (#21). The page also
-     * carries duplicate stats blocks for derivatives (`FFC-SEPB`, `FFC-OCT`) with the same
-     * labels and different numbers, so this matches the label and takes the first block.
+     * Sibling of `labelledRange` above, and for exactly the same reason: searching the whole
+     * page for a label matches a container and returns the entire block concatenated, so
+     * `48,401…` was parsed as a high, a stray `7` as a low and `-74000` as a volume — identical
+     * for every symbol (#21). The page also carries duplicate stats blocks for derivatives
+     * (`FFC-SEPB`, `FFC-OCT`) with the same labels and different numbers, so this matches the
+     * label and takes the first block.
      */
     labelledValue(pattern: RegExp): string | null {
       const items = Array.from(document.querySelectorAll('.stats_item'));
@@ -108,17 +118,20 @@ export function extractPsxPageData(): PsxPageData {
 
   // Missing fields => null (never fabricated).
   return {
-    company: H.text('.quote__name') ?? H.text('h1') ?? H.text('.company__title'),
-    sector: H.text('.quote__sector') ?? H.byLabel('sector'),
+    company: H.companyName('.quote__name') ?? H.companyName('h1') ?? H.companyName('.company__title'),
+    sector: H.text('.quote__sector') ?? H.labelledValue(/sector/i),
     week52Low: week52?.low ?? null,
     week52High: week52?.high ?? null,
     price: H.text('.quote__close') ?? H.text('[data-field="price"]'),
     change: H.text('.quote__change'),
     changePercent: H.text('.quote__change_percent') ?? H.text('.change__percent'),
-    volume: H.byLabel('volume'),
-    high: H.byLabel('high'),
-    low: H.byLabel('low'),
-    open: H.byLabel('open'),
+    // Open, High, Low, Volume and Market Cap are each a labelled stats item on this page. All
+    // five read through `labelledValue`, so a value can only ever come from the box beside its
+    // own label (#21).
+    volume: H.labelledValue(/volume/i),
+    high: H.labelledValue(/high/i),
+    low: H.labelledValue(/low/i),
+    open: H.labelledValue(/open/i),
     marketCap: H.labelledValue(/market cap/i),
   };
 }
