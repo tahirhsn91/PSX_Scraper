@@ -117,14 +117,29 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
     }
 
     if (result.ratios) {
-      await tx.ratio.create({
-        data: {
-          stockId: stock.id,
-          peRatio: dec(result.ratios.peRatio), pbRatio: dec(result.ratios.pbRatio),
-          roe: dec(result.ratios.roe), roa: dec(result.ratios.roa),
-          dividendYield: dec(result.ratios.dividendYield), beta: dec(result.ratios.beta),
-        },
-      });
+      const values = [
+        result.ratios.peRatio, result.ratios.pbRatio, result.ratios.roe, result.ratios.roa,
+        result.ratios.dividendYield, result.ratios.bookValue, result.ratios.beta,
+      ];
+      // A ratio row with nothing in it is not a reading, and writing one is worse than useless:
+      // the detail read path serves the *newest* ratio row, so an all-null row shadows the real
+      // figures an earlier sync stored and the card goes back to dashes while the sync logs
+      // SUCCESS. That is exactly how `ratios` reached 64,709 rows with `pe_ratio` populated in
+      // none of them. When there is nothing to write, the previous row stays the newest.
+      if (values.some((v) => v !== null && v !== undefined)) {
+        await tx.ratio.create({
+          data: {
+            stockId: stock.id,
+            peRatio: dec(result.ratios.peRatio), pbRatio: dec(result.ratios.pbRatio),
+            roe: dec(result.ratios.roe), roa: dec(result.ratios.roa),
+            dividendYield: dec(result.ratios.dividendYield),
+            // Book value per share (#79): read from the source's own ratio series, never derived
+            // from price / (price-to-book) and never carried over from an earlier sync.
+            bookValue: dec(result.ratios.bookValue),
+            beta: dec(result.ratios.beta),
+          },
+        });
+      }
     }
 
     return stock.id;

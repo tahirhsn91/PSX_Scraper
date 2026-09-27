@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { z } from 'zod';
 import { stockService } from '../services/stock.service';
+import { betaService } from '../services/beta.service';
 import { syncService } from '../services/sync.service';
 import { marketCapService } from '../services/marketCap.service';
 import { valid } from '../middleware/validate';
@@ -43,6 +44,18 @@ export const syncStock: RequestHandler = async (req, res) => {
  */
 export const refreshMarketCaps: RequestHandler = async (_req, res) => {
   res.json(await marketCapService.refresh());
+};
+
+/**
+ * Recompute beta for every tracked symbol (#79, criterion 7).
+ *
+ * On demand for the same reason the market-cap refresh is: beta is derived from our own stored
+ * history, so a stack that has the column but no value yet should not have to wait for all ~500
+ * symbols to be synced once. Nothing is fetched — the whole pass is local SQL — so there is no
+ * request budget here, only the symbol count.
+ */
+export const refreshBeta: RequestHandler = async (_req, res) => {
+  res.json(await betaService.refreshAll());
 };
 
 export const stockCandles: RequestHandler = async (req, res) => {

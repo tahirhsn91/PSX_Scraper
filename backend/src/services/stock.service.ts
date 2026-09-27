@@ -5,6 +5,7 @@ import {
 import { deletedSymbolRepository } from '../repositories/deletedSymbol.repository';
 import { indexRepository } from '../repositories/index.repository';
 import { kse100GroupCounts } from './kse100Membership.service';
+import { betaService } from './beta.service';
 import {
   getStockDetail, getPriceHistory, getCandles, type Candle,
 } from '../repositories/stockDetail.repository';
@@ -62,8 +63,23 @@ export const stockService = {
   async getDetail(symbol: string) {
     const s = await getStockDetail(symbol);
     if (!s) throw new NotFoundError(`Stock not tracked: ${symbol.toUpperCase()}`);
+    // Beta (#79): measured from our own daily closes against the KSE-100, and computed *here*
+    // rather than read back from the column so that the window printed beside the value is exactly
+    // the window the value came from — the same function's output is what the sync stores in
+    // `ratios.beta`. Below the minimum aligned sessions it is null with the reason attached: a dash,
+    // never a figure derived from a handful of days.
+    const beta = await betaService.forSymbol(s.symbol);
     const price = s.prices[0];
     const ratio = s.ratios[0];
+    // `dividends` arrives newest announcement first, so the first row is the newest one the source
+    // has published. The two top-level fields are that row spelled out for the valuation card
+    // ("Next Dividend" and its date row); the `dividends` array below keeps its existing shape, so
+    // nothing that already reads it changes.
+    //
+    // The date is the **announcement** date — no reachable source publishes an ex-date (#79), and
+    // the card says so in a note rather than presenting one as the other. Both stay null for a
+    // symbol with no dividend on record: a dash, never a zero and never a borrowed figure.
+    const newestDividend = s.dividends[0];
     return {
       id: s.id,
       symbol: s.symbol,
@@ -88,9 +104,30 @@ export const stockService = {
       ratios: ratio
         ? {
             peRatio: num(ratio.peRatio), pbRatio: num(ratio.pbRatio), roe: num(ratio.roe),
-            roa: num(ratio.roa), dividendYield: num(ratio.dividendYield), beta: num(ratio.beta),
+            roa: num(ratio.roa), dividendYield: num(ratio.dividendYield),
+            // Book value per share (#79): one column, read from the source's own ratio series.
+            bookValue: num(ratio.bookValue),
+            // Beta: our own measurement (see `beta` below), so the card and the dedicated block
+            // cannot disagree. Null — the dash — when the history is too thin to measure one.
+            beta: beta.value,
           }
         : null,
+      // Beta, with the window it was measured over (#79, criterion 7). Reported here as its own
+      // block so the value and the sessions behind it travel together: the UI can print
+      // "0.8942 · 1Y · 250 sessions" without assuming a window, and `reason` explains the dash.
+      beta: {
+        value: beta.value,
+        index: beta.window.index,
+        method: beta.method,
+        reason: beta.reason,
+        window: beta.window,
+      },
+      // Book value per share (#79). Served top-level as the issue specifies, as well as inside
+      // `ratios`: the app reads it at the top level, and a symbol whose source publishes none still
+      // reads null (the dash), never 0.
+      bookValue: ratio ? num(ratio.bookValue) : null,
+      nextDividendDate: newestDividend?.announcementDate ?? null,
+      nextDividendAmount: num(newestDividend?.dividend ?? null),
       financials: s.financials.map((f) => ({
         year: f.year, quarter: f.quarter, eps: num(f.eps), sales: num(f.sales),
         profitAfterTax: num(f.profitAfterTax), assets: num(f.assets),
