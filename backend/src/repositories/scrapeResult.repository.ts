@@ -119,7 +119,7 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
     if (result.ratios) {
       const values = [
         result.ratios.peRatio, result.ratios.pbRatio, result.ratios.roe, result.ratios.roa,
-        result.ratios.dividendYield, result.ratios.bookValue, result.ratios.beta,
+        result.ratios.dividendYield, result.ratios.bookValue, result.ratios.eps, result.ratios.beta,
       ];
       // A ratio row with nothing in it is not a reading, and writing one is worse than useless:
       // the detail read path serves the *newest* ratio row, so an all-null row shadows the real
@@ -136,6 +136,8 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
             // Book value per share (#79): read from the source's own ratio series, never derived
             // from price / (price-to-book) and never carried over from an earlier sync.
             bookValue: dec(result.ratios.bookValue),
+            // Earnings per share, from the source's snapshot (migration 0012). Absent reads null.
+            eps: dec(result.ratios.eps),
             beta: dec(result.ratios.beta),
           },
         });

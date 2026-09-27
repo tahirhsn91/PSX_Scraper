@@ -42,6 +42,10 @@ export interface RatioDTO {
   /** Book value per share (equity / shares outstanding) for the newest period the source reports. */
   bookValue: number | null;
   beta: number | null;
+  /** Earnings per share, read from the source's own snapshot (`FF_EPS`). Never derived from the
+   *  P/E: the source's P/E and its EPS do not divide into one another exactly, so a computed value
+   *  would be a different number wearing this row's label. Null = the dash. */
+  eps: number | null;
 }
 
 export interface ScrapeResult {

@@ -908,6 +908,14 @@ export const openapiSpec = {
               + 'reports. Null means the source publishes none for this symbol — a dash in the UI, '
               + 'never a zero.',
           },
+          eps: {
+            type: 'number',
+            nullable: true,
+            description:
+              'Earnings per share, as the source\'s own snapshot publishes it (the LTM figure its '
+              + 'stock page prints). Null means the source publishes none for this symbol — a dash '
+              + 'in the UI, never a zero and never derived from the P/E.',
+          },
           beta: {
             type: 'number',
             nullable: true,
@@ -989,6 +997,21 @@ export const openapiSpec = {
                 },
               },
             },
+          },
+          bookValue: {
+            type: 'number',
+            nullable: true,
+            description:
+              'Book value per share, spelled out at the top level as well as inside `ratios` so a '
+              + 'client can read it without knowing the table it lives in. Null when the source '
+              + 'publishes none — a dash, never 0.',
+          },
+          eps: {
+            type: 'number',
+            nullable: true,
+            description:
+              'Earnings per share, top-level for the same reason as `bookValue`. Null when the '
+              + 'source publishes none — a dash, never 0 and never price / (P/E).',
           },
           nextDividendDate: {
             type: 'string',
