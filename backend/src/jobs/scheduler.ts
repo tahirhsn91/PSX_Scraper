@@ -8,9 +8,11 @@ import {
   QUOTE_POLL_JOB,
   KSE100_MEMBERSHIP_JOB,
   MARKET_CAP_JOB,
+  MARKET_HOLIDAYS_JOB,
   UNIVERSE_PASS_JOB,
   universeQueue,
 } from './queues';
+import { ensureMarketHolidaysSeeded } from '../services/marketCalendar.service';
 import { indexRepository } from '../repositories/index.repository';
 
 /** One cron interval: an index whose last sync is older than this is treated as stale. */
@@ -173,10 +175,52 @@ async function registerMarketCapSchedule(): Promise<void> {
   logger.info('scheduler.market_cap_registered', { cron: env.MARKET_CAP_REFRESH_CRON });
 }
 
+/**
+ * Register the holiday-calendar refresh.
+ *
+ * Same pattern reconciliation as the poll and the market cap: BullMQ keys a repeatable by its
+ * pattern, so a changed cron would otherwise tick on both the old and the new schedule.
+ */
+async function registerMarketHolidaysSchedule(): Promise<void> {
+  if (!env.MARKET_HOLIDAYS_REFRESH_ENABLED) {
+    for (const job of await quoteQueue.getRepeatableJobs()) {
+      if (job.name === MARKET_HOLIDAYS_JOB) await quoteQueue.removeRepeatableByKey(job.key);
+    }
+    logger.info('scheduler.market_holidays_disabled');
+    return;
+  }
+
+  for (const job of await quoteQueue.getRepeatableJobs()) {
+    if (job.name !== MARKET_HOLIDAYS_JOB || job.pattern === env.MARKET_HOLIDAYS_REFRESH_CRON) continue;
+    await quoteQueue.removeRepeatableByKey(job.key);
+    logger.info('scheduler.market_holidays_pattern_replaced', {
+      was: job.pattern,
+      now: env.MARKET_HOLIDAYS_REFRESH_CRON,
+    });
+  }
+
+  await quoteQueue.add(
+    MARKET_HOLIDAYS_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: env.MARKET_HOLIDAYS_REFRESH_CRON }, jobId: 'scheduled-market-holidays-refresh' },
+  );
+  logger.info('scheduler.market_holidays_registered', { cron: env.MARKET_HOLIDAYS_REFRESH_CRON });
+
+  // The gate has to have a calendar before the first pre-open pass of a fresh install, and a
+  // failure to seed must not stop the worker from starting.
+  try {
+    const { seeded, count } = await ensureMarketHolidaysSeeded();
+    if (seeded) logger.info('scheduler.market_holidays_seeded', { count });
+  } catch (err) {
+    logger.warn('scheduler.market_holidays_seed_failed', { error: (err as Error).message.slice(0, 120) });
+  }
+}
+
 export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
   await registerKse100MembershipSchedule();
   await registerMarketCapSchedule();
+  await registerMarketHolidaysSchedule();
   await registerUniversePassSchedule();
 
   // With the universe worker on, the scheduled full-board sync is pure duplication: both walk
