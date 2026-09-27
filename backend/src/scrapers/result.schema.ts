@@ -31,7 +31,7 @@ export const scrapeResultSchema = z.object({
       peRatio: num, pbRatio: num, roe: num, roa: num, dividendYield: num,
       // Optional so a provider that has nothing to say about book value can leave the key out
       // instead of asserting a shape it does not fill.
-      bookValue: num.optional(), beta: num,
+      bookValue: num.optional(), eps: num.optional(), beta: num,
     })
     .nullable(),
 });

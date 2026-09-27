@@ -354,7 +354,8 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
     // failure counts, and only when the run produced nothing at all.
     const transportFailures = failed.filter(([, l]) => l.transport);
     const producedSomething = details.peRatio !== null || details.pbRatio !== null
-      || details.dividendYield !== null || series.bookValue !== null || dividends.length > 0;
+      || details.dividendYield !== null || details.eps !== null
+      || series.bookValue !== null || dividends.length > 0;
     if (transportFailures.length > 0 && !producedSomething) {
       sourceBreaker.recordFailure(this.source, transportFailures[0]?.[1].error ?? 'transport failure');
     } else {
@@ -368,6 +369,11 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
       roa: series.roa,
       dividendYield: details.dividendYield,
       bookValue: series.bookValue,
+      // Earnings per share: read from the same metric table as the ratios above (`FF_EPS`), which is
+      // the figure the source's own stock page prints. Its P/E and EPS are not each other's inverse
+      // (195.27 / 12.48 = 15.64 against a published 15.94), so the published one is read and a
+      // genuinely absent one stays null -- the app's dash, never a figure derived from a ratio.
+      eps: details.eps,
       // Beta is computed from our own history against the index (#79, criterion 7), never borrowed
       // from this payload — it carries no beta at all.
       beta: null,
@@ -378,6 +384,7 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
       pbRatio: ratios.pbRatio,
       dividendYield: ratios.dividendYield,
       bookValue: ratios.bookValue,
+      eps: ratios.eps,
       bookValuePeriod: series.periodicity,
       bookValueAsOf: series.bookValueAsOf,
       dividends: dividends.length,

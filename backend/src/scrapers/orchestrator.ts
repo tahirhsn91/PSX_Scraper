@@ -35,6 +35,7 @@ export function mergeRatios(...blocks: Array<RatioDTO | null | undefined>): Rati
     roa: pick(...present.map((b) => b.roa)),
     dividendYield: pick(...present.map((b) => b.dividendYield)),
     bookValue: pick(...present.map((b) => b.bookValue)),
+    eps: pick(...present.map((b) => b.eps)),
     beta: pick(...present.map((b) => b.beta)),
   };
 }
