@@ -11,6 +11,9 @@
  *   previousClose  the last daily close *strictly before* the day of `value`
  *   change / pct   value - previousClose
  *   open / volume  from the daily row for the day of `value`, when one exists
+ *   valueAt        when the reading behind a history row's close was taken — the only thing on a
+ *                  row that can say whether that value is a close (see `isPostCloseReading` in
+ *                  indexScrape.service). Null means no reading we can point at.
  *   high / low     null: the upstream series carries no high/low for indices
  */
 
@@ -20,6 +23,8 @@ export interface IndexValueRow {
   value: number | { toString(): string };
   open: number | { toString(): string } | null;
   volume: bigint | null;
+  /** When the reading behind `value` was taken (migration 0009). Optional: older rows have none. */
+  valueAt?: Date | null;
 }
 
 export interface LiveReading {
@@ -46,6 +51,12 @@ export interface IndexHistoryItem {
   low: number | null;
   close: number;
   volume: number | null;
+  /**
+   * When the reading behind `close` was taken. Additive: a row whose time is missing or earlier
+   * than its session's close is not known to hold that session's close, and a consumer that cares
+   * can now say so instead of presenting a pre-open reading as a close.
+   */
+  valueAt: Date | null;
 }
 
 const toNum = (v: number | { toString(): string } | null | undefined): number | null =>
@@ -67,6 +78,8 @@ export interface IndexCandle {
   low: number | null;
   close: number;
   volume: number | null;
+  /** When the reading behind this bar's close was taken — see `IndexHistoryItem.valueAt`. */
+  valueAt: Date | null;
 }
 
 /**
@@ -94,6 +107,7 @@ export function toIndexCandles(rows: IndexValueRow[]): IndexCandle[] {
       low: null,
       close,
       volume: row.volume === null ? null : Number(row.volume),
+      valueAt: row.valueAt ?? null,
     });
   }
   return [...byDay.values()].sort((a, b) => a.time.localeCompare(b.time));
@@ -169,5 +183,6 @@ export function toHistoryItem(row: IndexValueRow): IndexHistoryItem {
     low: null,
     close,
     volume: row.volume === null ? null : Number(row.volume),
+    valueAt: row.valueAt ?? null,
   };
 }

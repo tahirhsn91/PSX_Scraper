@@ -121,6 +121,9 @@ model IndexValue {
   value     Decimal  @db.Decimal(18, 4)
   open      Decimal? @db.Decimal(18, 4)
   volume    BigInt?
+  /// When the reading behind `value` was taken. Null, or a time before the session's close, means
+  /// this row's value is not known to be the session's close — see the note in migration 0009.
+  valueAt   DateTime? @map("value_at")
   createdAt DateTime @default(now()) @map("created_at")
 
   index     MarketIndex @relation(fields: [indexId], references: [id], onDelete: Cascade)
