@@ -429,7 +429,9 @@ export const openapiSpec = {
         summary: 'Index history (daily closes)',
         description:
           'Persisted daily index values, newest first, in the same envelope and row shape as the stock history ' +
-          'endpoint so consumers reuse one mapper. A `range` preset takes precedence over an explicit `from`.',
+          'endpoint so consumers reuse one mapper. A `range` preset takes precedence over an explicit `from`. ' +
+          'An index row additionally carries `valueAt`, the instant of the reading behind its close: a null, or ' +
+          'a time before that session\'s close, means the row is not known to hold the session\'s close.',
         parameters: [
           { $ref: '#/components/parameters/Range' },
           { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' }, description: 'Lower bound (ignored if `range` is set).' },

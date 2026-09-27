@@ -9,9 +9,9 @@ import {
   UNIVERSE_QUEUE,
 } from '../jobs/queues';
 import { registerScheduler } from '../jobs/scheduler';
-import { scrapeIndices } from '../services/indexScrape.service';
+import { runIndexClosingPass, scrapeIndices } from '../services/indexScrape.service';
 import { msUntilNextRun, runDailyBoard } from '../services/dailyBoard.service';
-import { isMarketOpen } from '../utils/marketHours';
+import { isClosingPassDue, isMarketOpen } from '../utils/marketHours';
 import { syncLogRepository } from '../repositories/syncLog.repository';
 import { processSyncJob } from './syncProcessor';
 import { processSyncAllJob } from './syncAllProcessor';
@@ -81,6 +81,18 @@ async function main() {
    * duplicate tick can only rewrite the same day's rows.
    */
   const scrapeIndexBoard = (reason: string) => {
+    // Past the close the in-hours gate below is shut, and that is exactly when the session's
+    // settled level has to be read. `runIndexClosingPass` claims the pass, so the timer firing on
+    // every interval still produces exactly one closing read per session.
+    if (isClosingPassDue(new Date())) {
+      void runIndexClosingPass().catch((err: unknown) =>
+        logger.warn('index_close_pass.failed', {
+          reason,
+          error: err instanceof Error ? err.message : String(err),
+        }),
+      );
+      return;
+    }
     if (env.INDEX_SCRAPE_MARKET_HOURS_ONLY && !isMarketOpen(new Date())) return;
     void scrapeIndices().catch((err) =>
       // Never fatal: a failed page fetch must not take the worker's other jobs down with it.

@@ -2,6 +2,14 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../database/prisma';
 import type { HistoricalPoint } from '../scrapers/historical.scraper';
 
+/**
+ * A daily index point, plus when the reading that produced it was taken.
+ *
+ * Extended here rather than on `HistoricalPoint`, which the stock path shares: only index rows
+ * carry `value_at` (migration 0009), and a stock point has no such notion.
+ */
+export type IndexPoint = HistoricalPoint & { valueAt?: Date | null };
+
 const dec = (v: number | null): Prisma.Decimal | null => (v === null ? null : new Prisma.Decimal(v));
 
 export type ChunkProgress = (persisted: number, total: number) => void | Promise<void>;
@@ -57,13 +65,13 @@ export class IndexRepository {
       },
       orderBy: { tradeDate: 'desc' },
       take: limit,
-      select: { tradeDate: true, value: true, open: true, volume: true },
+      select: { tradeDate: true, value: true, open: true, volume: true, valueAt: true },
     });
   }
 
   async upsertValues(
     indexId: string,
-    points: HistoricalPoint[],
+    points: IndexPoint[],
     onChunk?: ChunkProgress,
     chunkSize = 100,
   ): Promise<number> {
@@ -86,6 +94,9 @@ export class IndexRepository {
               // `scrapeResult.repository.ts`.
               open: dec(p.open) ?? undefined,
               volume: p.volume ? BigInt(Math.trunc(p.volume)) : undefined,
+              // Same rule again: a pass that does not know when its reading was taken must not
+              // erase a time another pass recorded.
+              valueAt: p.valueAt ?? undefined,
             },
             create: {
               indexId,
@@ -93,6 +104,7 @@ export class IndexRepository {
               value: new Prisma.Decimal(p.close),
               open: dec(p.open),
               volume: p.volume ? BigInt(Math.trunc(p.volume)) : null,
+              valueAt: p.valueAt ?? null,
             },
           }),
         ),

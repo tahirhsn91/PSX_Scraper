@@ -1,10 +1,17 @@
 import { buildIndexSummary, toHistoryItem, liveReading, IndexValueRow } from '../src/services/indexSummary';
 
-const row = (date: string, value: number, open: number | null = null, volume: number | null = null): IndexValueRow => ({
+const row = (
+  date: string,
+  value: number,
+  open: number | null = null,
+  volume: number | null = null,
+  valueAt: Date | null = null,
+): IndexValueRow => ({
   tradeDate: new Date(date),
   value,
   open,
   volume: volume === null ? null : BigInt(volume),
+  valueAt,
 });
 
 describe('buildIndexSummary', () => {
@@ -88,8 +95,9 @@ describe('buildIndexSummary', () => {
 });
 
 describe('toHistoryItem', () => {
-  it('maps a daily row into the stock history shape', () => {
-    const item = toHistoryItem(row('2026-09-14T11:00:00.000Z', 167970.65, 169830.1135, 232943686));
+  it('maps a daily row into the stock history shape, carrying when the reading was taken', () => {
+    const readAt = new Date('2026-09-14T10:36:00.000Z'); // 15:36 PKT, after the session's close
+    const item = toHistoryItem(row('2026-09-14T11:00:00.000Z', 167970.65, 169830.1135, 232943686, readAt));
     expect(item).toEqual({
       lastTradeDate: new Date('2026-09-14T11:00:00.000Z'),
       currentPrice: 167970.65,
@@ -98,13 +106,16 @@ describe('toHistoryItem', () => {
       high: null,
       low: null,
       volume: 232943686,
+      valueAt: readAt,
     });
   });
 
-  it('keeps null open/volume null', () => {
+  it('keeps null open/volume/valueAt null', () => {
     const item = toHistoryItem(row('2026-09-13T11:00:00.000Z', 170511.85));
     expect(item.open).toBeNull();
     expect(item.volume).toBeNull();
+    // A row from before the column existed has no reading time to point at — not a close.
+    expect(item.valueAt).toBeNull();
   });
 });
 
