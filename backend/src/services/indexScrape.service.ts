@@ -7,6 +7,7 @@ import { sessionStamp } from '../scrapers/parse.utils';
 import { createRedisConnection } from '../jobs/connection';
 import { isClosingPassDue, isMarketOpen } from '../utils/marketHours';
 import { childLogger } from '../utils/logger';
+import { registerSupplementaryIndices } from './supplementaryIndices.service';
 import { tradingDayState, type TradingDayState } from './marketCalendar.service';
 
 /**
@@ -40,6 +41,9 @@ export interface IndexScrapeResult {
   /** False when the pass declined to write a session row - a weekend, a listed holiday, or no
    *  readable calendar. The live snapshot is written either way. */
   sessionRowWritten?: boolean;
+  /** Indices registered this pass that no board carries, filled from the source that publishes them
+   *  (`supplementaryIndices.service.ts`). Present only on a pass that added one. */
+  registered?: string[];
 }
 
 /**
@@ -258,6 +262,14 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     }
   }
 
+  // Indices no board carries, registered from the source that publishes them and filled from it:
+  // the one part of the tracked set the board read above cannot reach. Last, because it writes rows
+  // of its own and must not colour what the pass reports about the board.
+  const registered = await registerSupplementaryIndices().catch((error: unknown) => {
+    log.warn('index-scrape.supplementary_failed', { error: (error as Error).message.slice(0, 120) });
+    return [] as string[];
+  });
+
   const result: IndexScrapeResult = {
     symbols: parsed.length,
     created,
@@ -267,6 +279,7 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     repaired,
     sessionDay,
     sessionRowWritten: writeSessionRow,
+    ...(registered.length > 0 ? { registered } : {}),
   };
   log.info('index-scrape.done', { ...result, stamp: stamp.toISOString() });
   return result;
