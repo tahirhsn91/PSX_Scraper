@@ -324,3 +324,36 @@ export async function runIndexClosingPass(
   const scrape = args.scrape ?? scrapeIndices;
   return { ran: true, reason: 'ran', result: await scrape(now) };
 }
+
+export type IndexBoardPassResult =
+  | { ran: true; kind: 'closing' | 'intraday'; result: IndexScrapeResult }
+  | { ran: false; reason: 'outside-hours' | 'not-due' | 'already-claimed' };
+
+/**
+ * One tick of the index board timer.
+ *
+ * The board snapshot itself only runs while the market is open, so after 15:35 PKT a tick has
+ * nothing to read — and that is precisely when the session's close has to be read. So the closing
+ * pass goes first: it self-gates on `isClosingPassDue` and claims the session, which means an
+ * in-hours tick spends one Redis call and is told `not-due`, while the first tick after the settle
+ * performs the pass that makes the session's row its close rather than its last in-session reading.
+ *
+ * `scrapeIndices` guards itself — it decides whether a session row may exist at all, and gates the
+ * previous-session repair on the market being open — so an off-hours call cannot fabricate a row.
+ * The intraday path is gated here anyway: there is no reason to read a page that cannot change.
+ * `closing` and `scrape` are injectable so the rule is testable without Redis or a browser.
+ */
+export async function runIndexBoardPass(args: {
+  now?: Date;
+  closing?: (a: { now: Date }) => Promise<IndexClosingPassResult>;
+  scrape?: (now: Date) => Promise<IndexScrapeResult>;
+} = {}): Promise<IndexBoardPassResult> {
+  const now = args.now ?? new Date();
+  const closing = await (args.closing ?? runIndexClosingPass)({ now });
+  if (closing.result) return { ran: true, kind: 'closing', result: closing.result };
+  if (!isMarketOpen(now)) {
+    return { ran: false, reason: closing.reason === 'already-claimed' ? 'already-claimed' : 'outside-hours' };
+  }
+  const scrape = args.scrape ?? scrapeIndices;
+  return { ran: true, kind: 'intraday', result: await scrape(now) };
+}

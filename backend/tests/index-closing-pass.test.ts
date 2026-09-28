@@ -1,12 +1,20 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { isClosingPassDue } from '../src/utils/marketHours';
 import {
   isPostCloseReading,
   pktSessionKey,
   repairedValueFor,
+  runIndexBoardPass,
   runIndexClosingPass,
   sessionCloseAt,
   type IndexScrapeResult,
 } from '../src/services/indexScrape.service';
+/* Deliberately not importing `INDEX_BOARD_JOB` from the queues module: that module builds its
+ * BullMQ queues at import time, so importing it opens a Redis connection in the test process and
+ * the run never exits. The name is asserted as a literal instead — the wiring tests below read the
+ * source, which is what they are about. */
+const INDEX_BOARD_JOB = 'index-board';
 
 /** An instant on the Karachi wall clock, written the way it is spoken: date + time + PKT. */
 const pkt = (date: string, time: string) => new Date(`${date}T${time}:00+05:00`);
@@ -167,5 +175,82 @@ describe('repairedValueFor', () => {
         impliedClose: 170500,
       }),
     ).toBe(170500);
+  });
+});
+
+describe('one tick of the board timer', () => {
+  const closingRan = async () => ({ ran: true, reason: 'ran' as const, result: emptyResult() });
+  const closingNotDue = async () => ({ ran: false, reason: 'not-due' as const });
+
+  it('performs the closing pass after the settle, and no second board read', async () => {
+    let scraped = 0;
+    const out = await runIndexBoardPass({
+      now: pkt(MONDAY, '15:36'),
+      closing: closingRan,
+      scrape: async () => { scraped += 1; return emptyResult(); },
+    });
+    expect(out).toEqual({ ran: true, kind: 'closing', result: emptyResult() });
+    // The closing pass reads the board itself; a second read on the same tick would be waste.
+    expect(scraped).toBe(0);
+  });
+
+  it('reads the board while the session is open, when the closing pass is not due yet', async () => {
+    let scraped = 0;
+    const out = await runIndexBoardPass({
+      now: pkt(MONDAY, '11:00'),
+      closing: closingNotDue,
+      scrape: async () => { scraped += 1; return emptyResult(); },
+    });
+    expect(out).toEqual({ ran: true, kind: 'intraday', result: emptyResult() });
+    expect(scraped).toBe(1);
+  });
+
+  it('reads nothing outside market hours, so a weekend tick cannot invent a session', async () => {
+    let scraped = 0;
+    const out = await runIndexBoardPass({
+      now: pkt(SUNDAY, '12:00'),
+      closing: closingNotDue,
+      scrape: async () => { scraped += 1; return emptyResult(); },
+    });
+    expect(out).toEqual({ ran: false, reason: 'outside-hours' });
+    expect(scraped).toBe(0);
+  });
+
+  it('reports the claim rather than the hours once another worker owns the session', async () => {
+    const out = await runIndexBoardPass({
+      now: pkt(MONDAY, '15:40'),
+      closing: async () => ({ ran: false, reason: 'already-claimed' }),
+      scrape: async () => emptyResult(),
+    });
+    expect(out).toEqual({ ran: false, reason: 'already-claimed' });
+  });
+});
+
+/**
+ * The board pass was written, tested and merged — and never called. `scrapeIndices` and
+ * `runIndexClosingPass` were complete while the only thing that ever ran them was an uncommitted
+ * working tree, so the pass stopped the moment the worker's `dist` was rebuilt from a clean
+ * checkout and the index rows froze mid-session. No test that calls the functions can see that,
+ * so these read the wiring itself.
+ */
+describe('the board pass is wired, not merely defined', () => {
+  const src = (rel: string) => readFileSync(join(__dirname, '..', 'src', rel), 'utf8');
+
+  it('has a repeatable job registered for it', () => {
+    const scheduler = src('jobs/scheduler.ts');
+    expect(scheduler).toContain('INDEX_BOARD_JOB');
+    expect(scheduler).toMatch(/indexQueue\.add\(\s*INDEX_BOARD_JOB/);
+  });
+
+  it('has a worker that runs the pass when that job arrives', () => {
+    const processor = src('workers/indexProcessor.ts');
+    expect(processor).toMatch(/job\.name === INDEX_BOARD_JOB/);
+    expect(processor).toContain('runIndexBoardPass');
+  });
+
+  it('names the job on the index queue, which owns the page pool the board shares', () => {
+    const queues = src('jobs/queues.ts');
+    expect(queues).toContain(`export const INDEX_BOARD_JOB = '${INDEX_BOARD_JOB}'`);
+    expect(queues).toContain("export const INDEX_QUEUE = 'index-sync'");
   });
 });
