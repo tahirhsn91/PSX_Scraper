@@ -1,0 +1,33 @@
+-- A sorted page of the dashboard's stock list was 10-20s while an unsorted one was 0.2s, and the
+-- ORDER BY was innocent. The list query reads each symbol's newest *priced* row:
+--
+--   FROM stock_prices WHERE stock_id = s.id AND current_price IS NOT NULL
+--   ORDER BY last_trade_date DESC NULLS LAST LIMIT 1
+--
+-- The index that serves it, stock_prices_stock_id_last_trade_date_idx, does not know about the
+-- `current_price IS NOT NULL` half of that predicate — only ~11 of a symbol's ~2,574 stored
+-- sessions carry a current_price — so each lookup walked all 2,574 index entries, fetched 202 heap
+-- blocks and sorted them to keep a single row: 29.6ms per symbol.
+--
+-- An unsorted page needs three of those lookups, so it stayed fast (0.03s). Ordering by volume,
+-- price, market cap or the 52-week columns requires the sort key of *every* symbol, so all 509
+-- lookups ran: 509 x 29.6ms = ~15s, plus the response. The sort was never the cost.
+--
+-- This index carries the same key plus the query's own predicate, so the newest priced row is the
+-- first entry the index can return — no heap blocks, nothing to sort. Measured per symbol: 0.011ms.
+-- Sorted pages dropped to 0.03-0.18s end to end (see the PR for the run-by-run numbers).
+--
+-- The same lookup shape backs the half-hourly market-cap gap-fill
+-- (findSymbolsWithoutLatestMarketCap), which walks every symbol too, so that job gets the same
+-- benefit.
+--
+-- Hand-written SQL because Prisma's schema language has no way to express a partial index
+-- (`WHERE ...`): `@@index` cannot carry the predicate. This database is migrated with
+-- `prisma migrate deploy` only (both API and worker entrypoints), which applies this file as
+-- written; `prisma migrate dev`/`db push` would not know about it and should not be used here.
+--
+-- The build takes ~0.6s on 1.1M stock_prices rows and runs inside the migration transaction, which
+-- `prisma migrate deploy` already guards with a Postgres advisory lock.
+CREATE INDEX IF NOT EXISTS stock_prices_stock_id_latest_priced_idx
+  ON stock_prices (stock_id, last_trade_date DESC)
+  WHERE current_price IS NOT NULL;
