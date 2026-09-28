@@ -99,6 +99,19 @@ async function fetchSeries(path: string): Promise<unknown> {
   return res.json();
 }
 
+/**
+ * How many sessions the source publishes for a symbol — the cheapest question that answers whether
+ * an index is real.
+ *
+ * Used before a row is created for an index that no board carries: an index the source does not
+ * answer for must not become a tracked one. Five sessions is enough to tell a delisted or mistyped
+ * symbol (no rows) from a live one, and it is one request.
+ */
+export async function sourcePublishesIndex(symbol: string): Promise<number> {
+  const sym = symbol.trim().toUpperCase();
+  return parseIndexHistory(await fetchSeries(`price-history/${sym}?days=5`), null).length;
+}
+
 export async function backfillIndex(symbol: string, opts: { days?: number; dryRun?: boolean } = {}): Promise<IndexBackfillStats> {
   const sym = symbol.trim().toUpperCase();
   const index = await prisma.marketIndex.findFirst({ where: { symbol: sym }, select: { id: true } });
