@@ -1,75 +1,202 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Alert,
   Box,
-  Typography,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TablePagination,
   Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
-  TextField,
-  Chip,
-  Skeleton,
-  Alert,
-  Stack,
-  Grid,
-  Card,
-  CardContent,
+  DialogContent,
+  DialogTitle,
   LinearProgress,
-  Snackbar,
+  Stack,
+  TablePagination,
+  TextField,
+  Typography,
 } from "@mui/material";
+import SyncIcon from "@mui/icons-material/SyncRounded";
+import AddIcon from "@mui/icons-material/AddRounded";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import SyncIcon from "@mui/icons-material/Sync";
-import {
-  useStocks,
-  useAddStock,
-  useSyncStatus,
-  useSyncAll,
-} from "../api/hooks";
-import { SearchBar } from "../components/SearchBar";
+import { useAddStock, useIndices, useStocks, useSyncAll, useSyncStatus } from "../api/hooks";
 import { FailuresPanel } from "../components/FailuresPanel";
+import { IndicesPanel } from "../components/IndicesPanel";
+import { PageHeader } from "../components/ui/PageHeader";
+import { SectionCard } from "../components/ui/SectionCard";
+import { StatTile } from "../components/ui/StatTile";
+import { ChangePill } from "../components/ui/ChangePill";
+import { ConfirmDialog } from "../components/ui/ConfirmDialog";
+import { DataTable, type Column } from "../components/ui/DataTable";
+import { useToast } from "../components/ui/ToastProvider";
+import { DASH, formatCount, formatDateTime, formatMarketCap, formatNumber, formatRelative, formatRupees } from "../lib/format";
+import type { StockListItem, StockSortField, SortOrder } from "../types";
 import type { ApiError } from "../api/client";
+
+/**
+ * The market board.
+ *
+ * One table for the whole tracked universe, sorted **server-side** (`sort`/`order` on the API): the
+ * list is paginated, so sorting fifty rows in the browser would reorder the page and claim an order
+ * the data does not have. Below `md` the same columns become a card list, and the change pill leads
+ * the card because direction is what a reader scans for.
+ */
+const COLUMNS: Column<StockListItem>[] = [
+  {
+    key: "symbol",
+    header: "Symbol",
+    width: 110,
+    sortKey: "symbol",
+    mobileRole: "title",
+    render: (s) => s.symbol,
+  },
+  {
+    key: "company",
+    header: "Company",
+    mobileRole: "subtitle",
+    render: (s) => s.companyName ?? DASH,
+  },
+  {
+    key: "sector",
+    header: "Sector",
+    width: 190,
+    hideBelow: "md",
+    mobileRole: "meta",
+    // One line per row: an unpacked sector name ("INV. BANKS / INV. COS. / SECURITIES COS.") doubles
+    // the row height and the full text stays available on hover.
+    render: (s) => (
+      <Typography variant="body2" noWrap title={s.sector ?? undefined} sx={{ maxWidth: 190 }}>
+        {s.sector ?? DASH}
+      </Typography>
+    ),
+  },
+  {
+    key: "price",
+    header: "Price",
+    align: "right",
+    width: 100,
+    sortKey: "price",
+    mobileRole: "meta",
+    render: (s) => formatNumber(s.currentPrice),
+  },
+  {
+    key: "change",
+    header: "Change",
+    align: "right",
+    width: 110,
+    sortKey: "changePercent",
+    mobileRole: "value",
+    render: (s) => (
+      <ChangePill
+        value={s.changePercent}
+        // Tinted rather than solid: twenty filled red pills in one column shout, and the sign plus
+        // the glyph already carry the direction.
+        variant="soft"
+        title={s.change != null ? `${s.change > 0 ? "+" : ""}${s.change}` : undefined}
+      />
+    ),
+  },
+  {
+    key: "volume",
+    header: "Volume",
+    align: "right",
+    width: 110,
+    sortKey: "volume",
+    hideBelow: "sm",
+    mobileRole: "meta",
+    render: (s) => formatCount(s.volume),
+  },
+  {
+    key: "marketCap",
+    header: "Mkt cap",
+    align: "right",
+    width: 110,
+    sortKey: "marketCap",
+    hideBelow: "sm",
+    mobileRole: "meta",
+    render: (s) => {
+      const abbreviated = formatMarketCap(s.marketCap);
+      if (!abbreviated) return DASH;
+      // The unabbreviated figure stays one hover away.
+      return <span title={formatRupees(s.marketCap as number)}>{abbreviated}</span>;
+    },
+  },
+  {
+    key: "week52Low",
+    header: "52W low",
+    align: "right",
+    width: 100,
+    sortKey: "week52Low",
+    hideBelow: "md",
+    mobileRole: "hidden",
+    render: (s) => formatNumber(s.week52Low),
+  },
+  {
+    key: "week52High",
+    header: "52W high",
+    align: "right",
+    width: 100,
+    sortKey: "week52High",
+    hideBelow: "md",
+    mobileRole: "hidden",
+    render: (s) => formatNumber(s.week52High),
+  },
+  {
+    key: "lastSyncedAt",
+    header: "Last synced",
+    hideBelow: "md",
+    mobileRole: "meta",
+    render: (s) =>
+      s.lastSyncedAt ? (
+        <span title={formatDateTime(s.lastSyncedAt)}>{formatRelative(s.lastSyncedAt)}</span>
+      ) : (
+        "never"
+      ),
+  },
+];
 
 export function Dashboard() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const { notify } = useToast();
   const addStock = useAddStock();
   const syncAll = useSyncAll();
-  const [open, setOpen] = useState(false);
-  const [confirmSyncAll, setConfirmSyncAll] = useState(false);
+
+  const [addOpen, setAddOpen] = useState(false);
   const [symbol, setSymbol] = useState("");
+  const [confirmSyncAll, setConfirmSyncAll] = useState(false);
   const [justTriggered, setJustTriggered] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
+  const [slowSort, setSlowSort] = useState(false);
   // The universe worker (#41) puts every listed security on this dashboard, so the table is
   // paged rather than cut off at the first N symbols.
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [sort, setSort] = useState<{ key: StockSortField; direction: SortOrder }>({
+    key: "symbol",
+    direction: "asc",
+  });
 
-  // Poll queue status continuously; also while a "sync all" just fired so the
-  // active/waiting counts (and the progress bar) reflect the fan-out in real time.
+  // Poll queue status continuously; also while a "sync all" just fired so the active/waiting
+  // counts (and the progress bar) reflect the fan-out in real time.
   const { data: status } = useSyncStatus(true);
   const syncCounts = status?.queues["stock-sync"];
   const inFlightCount = syncCounts?.active ?? 0;
-  const queuedCount = syncCounts?.waiting ?? 0;
+  const queuedCount = (syncCounts?.waiting ?? 0) + (syncCounts?.delayed ?? 0);
   // Failures across every queue, not just this one. The single-queue number was also BullMQ's
   // *set size*, which counts entries whose job has already been trimmed away — see FailuresPanel.
-  const failedCount = Object.values(status?.queues ?? {})
-    .reduce((n, counts) => n + (counts.failed ?? 0), 0);
+  const failedCount = Object.values(status?.queues ?? {}).reduce((n, counts) => n + (counts.failed ?? 0), 0);
   const syncingAll = justTriggered || inFlightCount > 0 || queuedCount > 0;
 
+  // The index board: PSX's own indices, scraped from the exchange's market-summary page. It was
+  // mounted on this dashboard by 51f1aaa and lost when the dashboard was rewritten — `useIndices`
+  // and the panel had no callers at all, so nothing rendered them.
+  const { data: indexBoard, isLoading: indicesLoading, isError: indicesError } = useIndices(syncingAll);
+
   // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
-  const { data, isLoading, isError } = useStocks(
+  const { data, isLoading, isError, refetch } = useStocks(
     page + 1,
     rowsPerPage,
     syncingAll,
+    sort.key,
+    sort.direction,
   );
 
   // Once the fan-out has actually started showing up in the queue, stop forcing
@@ -86,18 +213,39 @@ export function Dashboard() {
   useEffect(() => {
     if (wasSyncing.current && !syncingAll) {
       qc.invalidateQueries({ queryKey: ["stocks"] });
-      setToast("Sync complete — all stocks are up to date.");
+      notify({ message: "Sync complete — all stocks are up to date." });
     }
     wasSyncing.current = syncingAll;
-  }, [syncingAll, qc]);
+  }, [syncingAll, qc, notify]);
+
+  // A heavy sort (volume, market cap, 52-week range) takes the API ~20s — issue #96. Rather than a
+  // skeleton that looks frozen, say what is happening once it is clearly not instant.
+  useEffect(() => {
+    if (!isLoading) {
+      setSlowSort(false);
+      return;
+    }
+    const t = setTimeout(() => setSlowSort(true), 3000);
+    return () => clearTimeout(t);
+  }, [isLoading]);
+
+  const newestReading = useMemo(() => {
+    const stamps = (data?.items ?? [])
+      .map((s) => s.lastSyncedAt)
+      .filter((v): v is string => Boolean(v))
+      .map((v) => new Date(v).getTime())
+      .filter((n) => Number.isFinite(n));
+    return stamps.length > 0 ? new Date(Math.max(...stamps)) : null;
+  }, [data]);
 
   const submit = () => {
     const s = symbol.trim().toUpperCase();
     if (!/^[A-Z0-9]{1,12}$/.test(s)) return;
     addStock.mutate(s, {
       onSuccess: () => {
-        setOpen(false);
+        setAddOpen(false);
         setSymbol("");
+        notify({ message: `Added ${s} — scraping has started.` });
       },
     });
   };
@@ -107,150 +255,20 @@ export function Dashboard() {
     syncAll.mutate(undefined, {
       onSuccess: () => {
         setJustTriggered(true);
-        setToast("Sync started for all tracked stocks.");
+        notify({ message: "Sync started for all tracked stocks." });
       },
-      onError: () => setToast("Failed to start sync — please try again."),
+      onError: () => notify({ message: "Failed to start the sync — please try again.", severity: "error" }),
     });
   };
 
-  return (
+  const pager = (
     <Box>
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ sm: "center" }}
-        spacing={2}
-        mb={2}
-      >
-        <Typography variant="h4">Dashboard Scrapper</Typography>
-        <Stack direction="row" spacing={1}>
-          <Button
-            variant="outlined"
-            startIcon={<SyncIcon />}
-            disabled={syncingAll || syncAll.isPending}
-            onClick={() => setConfirmSyncAll(true)}
-          >
-            {syncingAll ? "Syncing All…" : "Sync All"}
-          </Button>
-          <Button variant="contained" onClick={() => setOpen(true)}>
-            Add Stock
-          </Button>
-        </Stack>
-      </Stack>
-
-      <Box mb={3}>
-        <SearchBar />
-      </Box>
-
-      <Grid container spacing={2} mb={1}>
-        {[
-          { label: "Tracked stocks", value: data?.total ?? "—" },
-          { label: "Active syncs", value: syncCounts?.active ?? 0 },
-          { label: "Waiting", value: syncCounts?.waiting ?? 0 },
-          { label: "Failed", value: failedCount },
-        ].map((c) => (
-          <Grid item xs={6} md={3} key={c.label}>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {c.label}
-                </Typography>
-                <Typography variant="h5">{c.value}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {syncingAll && (
-        <Box mb={2}>
-          <LinearProgress />
-          <Typography variant="caption" color="text.secondary">
-            Syncing all tracked stocks — {inFlightCount} active, {queuedCount}{" "}
-            waiting. This page updates automatically.
-          </Typography>
-        </Box>
-      )}
-
-      {isError && <Alert severity="error">Failed to load stocks.</Alert>}
-
-      <FailuresPanel status={status} />
-
-      <Paper variant="outlined">
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Symbol</TableCell>
-              <TableCell>Company</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">52W Low</TableCell>
-              <TableCell align="right">52W High</TableCell>
-              <TableCell align="right">Change %</TableCell>
-              <TableCell align="right">Volume</TableCell>
-              <TableCell>Last synced</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {isLoading &&
-              Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i}>
-                  <TableCell colSpan={8}>
-                    <Skeleton />
-                  </TableCell>
-                </TableRow>
-              ))}
-            {data?.items.length === 0 && !isLoading && (
-              <TableRow>
-                <TableCell colSpan={8} align="center">
-                  No stocks yet — add one to get started.
-                </TableCell>
-              </TableRow>
-            )}
-            {data?.items.map((s) => (
-              <TableRow
-                key={s.id}
-                hover
-                sx={{ cursor: "pointer" }}
-                onClick={() => navigate(`/stocks/${s.symbol}`)}
-              >
-                <TableCell>
-                  <strong>{s.symbol}</strong>
-                </TableCell>
-                <TableCell>{s.companyName ?? "—"}</TableCell>
-                <TableCell align="right">{s.currentPrice ?? "—"}</TableCell>
-                {/* Null means "the page had no 52-week block", so it reads as a dash rather
-                    than a zero — the API never substitutes a value here. */}
-                <TableCell align="right">{s.week52Low ?? "—"}</TableCell>
-                <TableCell align="right">{s.week52High ?? "—"}</TableCell>
-                <TableCell align="right">
-                  {s.changePercent != null ? (
-                    <Chip
-                      size="small"
-                      color={s.changePercent >= 0 ? "success" : "error"}
-                      label={`${s.changePercent.toFixed(2)}%`}
-                    />
-                  ) : (
-                    "—"
-                  )}
-                </TableCell>
-                {/* Thousands separators: session volumes run to seven figures. */}
-                <TableCell align="right">
-                  {s.volume != null ? s.volume.toLocaleString() : "—"}
-                </TableCell>
-                <TableCell>
-                  {s.lastSyncedAt
-                    ? new Date(s.lastSyncedAt).toLocaleString()
-                    : "never"}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <Box sx={{ display: { xs: "none", md: "block" } }}>
         <TablePagination
           component="div"
           count={data?.total ?? 0}
           page={page}
-          onPageChange={(_, next) => setPage(next)}
+          onPageChange={(_e, next) => setPage(next)}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={(e) => {
             setRowsPerPage(parseInt(e.target.value, 10));
@@ -258,25 +276,174 @@ export function Dashboard() {
           }}
           rowsPerPageOptions={[25, 50, 100, 250]}
         />
-      </Paper>
-
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        fullWidth
-        maxWidth="xs"
+      </Box>
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ display: { xs: "flex", md: "none" }, p: 1.5 }}
       >
-        <DialogTitle>Add Stock</DialogTitle>
+        <Button size="small" onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}>
+          Previous
+        </Button>
+        <Typography variant="caption" color="text.secondary">
+          Page {page + 1} of {Math.max(1, data?.totalPages ?? 1)}
+        </Typography>
+        <Button
+          size="small"
+          onClick={() => setPage((p) => p + 1)}
+          disabled={page + 1 >= (data?.totalPages ?? 1)}
+        >
+          Next
+        </Button>
+      </Stack>
+    </Box>
+  );
+
+  return (
+    <Box>
+      <PageHeader
+        title="Market board"
+        subtitle={`${formatCount(data?.total)} tracked securities${
+          newestReading ? ` · newest reading ${formatRelative(newestReading)}` : ""
+        }`}
+        actions={
+          <>
+            <Button
+              variant="outlined"
+              startIcon={<SyncIcon />}
+              disabled={syncingAll || syncAll.isPending}
+              onClick={() => setConfirmSyncAll(true)}
+            >
+              {syncingAll ? "Syncing…" : "Sync all"}
+            </Button>
+            <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)}>
+              Add stock
+            </Button>
+          </>
+        }
+      />
+
+      <Box
+        sx={{
+          display: "grid",
+          gap: 1.5,
+          gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", md: "repeat(4, minmax(0, 1fr))" },
+          mb: 2.5,
+        }}
+      >
+        <StatTile
+          label="Tracked stocks"
+          value={formatCount(data?.total)}
+          footer={
+            <Typography variant="caption" color="text.secondary">
+              {data ? `${data.items.length} on this page` : "loading…"}
+            </Typography>
+          }
+        />
+        <StatTile
+          label="Active syncs"
+          value={formatCount(inFlightCount)}
+          footer={
+            <Typography variant="caption" color="text.secondary">
+              {syncingAll ? "syncing now" : "idle"}
+            </Typography>
+          }
+        />
+        <StatTile
+          label="Waiting"
+          value={formatCount(queuedCount)}
+          footer={
+            <Typography variant="caption" color="text.secondary">
+              queued plus delayed
+            </Typography>
+          }
+        />
+        <StatTile
+          label="Failed"
+          value={formatCount(failedCount)}
+          tone={failedCount > 0 ? "down" : "muted"}
+          footer={
+            <Typography variant="caption" color="text.secondary">
+              {failedCount > 0 ? "see Failed jobs below" : "none"}
+            </Typography>
+          }
+        />
+      </Box>
+
+      {syncingAll && (
+        <Box sx={{ mb: 2.5 }}>
+          <LinearProgress />
+          <Typography variant="caption" color="text.secondary">
+            Syncing all tracked stocks — {inFlightCount} active, {queuedCount} waiting. This page
+            updates automatically.
+          </Typography>
+        </Box>
+      )}
+
+      <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
+
+      <FailuresPanel status={status} />
+
+      <SectionCard
+        title="Tracked securities"
+        subtitle="Click a column to sort the whole universe on the server"
+        flush
+      >
+        <DataTable
+          columns={COLUMNS}
+          rows={data?.items ?? []}
+          rowKey={(s) => s.id}
+          rowHref={(s) => `/stocks/${s.symbol}`}
+          onRowClick={(s) => navigate(`/stocks/${s.symbol}`)}
+          loading={isLoading}
+          error={isError ? "Failed to load the stock list." : undefined}
+          onRetry={() => void refetch()}
+          sort={{ key: sort.key, direction: sort.direction }}
+          onSortChange={(next) => {
+            setSort({ key: next.key as StockSortField, direction: next.direction });
+            setPage(0);
+          }}
+          emptyTitle="No stocks tracked yet"
+          emptyDescription="Add a symbol to start collecting prices for it."
+          emptyAction={
+            <Button variant="contained" onClick={() => setAddOpen(true)}>
+              Add stock
+            </Button>
+          }
+          pagination={pager}
+          skeletonRows={8}
+          maxHeight="62vh"
+          toolbar={
+            <Stack direction="row" spacing={1} alignItems="center" useFlexGap sx={{ flexWrap: "wrap" }}>
+              <Typography variant="caption" color="text.secondary">
+                Sorted by {sort.key} ({sort.direction === "asc" ? "ascending" : "descending"})
+              </Typography>
+              {slowSort && (
+                <Typography variant="caption" color="warning.main">
+                  · still sorting — heavy sorts take up to ~20 seconds (issue #96)
+                </Typography>
+              )}
+            </Stack>
+          }
+        />
+      </SectionCard>
+
+      <Dialog open={addOpen} onClose={() => setAddOpen(false)} fullWidth maxWidth="xs">
+        <DialogTitle>Add a stock</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             fullWidth
             margin="dense"
-            label="PSX Symbol"
+            label="PSX symbol"
             placeholder="FFC"
             value={symbol}
             onChange={(e) => setSymbol(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && submit()}
+            helperText="The exchange symbol, 1–12 letters or digits."
+            inputProps={{ style: { textTransform: "uppercase" } }}
           />
           {addStock.isError && (
             <Alert severity="error" sx={{ mt: 1 }}>
@@ -284,51 +451,29 @@ export function Dashboard() {
             </Alert>
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={() => setAddOpen(false)} color="inherit">
+            Cancel
+          </Button>
           <Button
             variant="contained"
             onClick={submit}
-            disabled={addStock.isPending}
+            disabled={addStock.isPending || !/^[A-Z0-9]{1,12}$/.test(symbol.trim().toUpperCase())}
           >
-            Add & Scrape
+            {addStock.isPending ? "Adding…" : "Add & scrape"}
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog
+      <ConfirmDialog
         open={confirmSyncAll}
+        title="Sync all tracked stocks?"
+        message={`This fetches the latest data for all ${formatCount(data?.total)} tracked stocks from PSX and Sarmaaya. It runs in the background — you can keep using the dashboard while it completes.`}
+        confirmLabel="Sync all"
+        pending={syncAll.isPending}
+        pendingLabel="Starting…"
+        onConfirm={runSyncAll}
         onClose={() => setConfirmSyncAll(false)}
-        fullWidth
-        maxWidth="xs"
-      >
-        <DialogTitle>Sync all stocks?</DialogTitle>
-        <DialogContent>
-          <Typography>
-            This fetches the latest data for all {data?.total ?? 0} tracked
-            stock{data?.total === 1 ? "" : "s"} from PSX and Sarmaaya. It runs
-            in the background — you can keep using the dashboard while it
-            completes.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmSyncAll(false)}>Cancel</Button>
-          <Button
-            variant="contained"
-            onClick={runSyncAll}
-            disabled={syncAll.isPending}
-          >
-            Sync All
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Snackbar
-        open={!!toast}
-        autoHideDuration={4000}
-        onClose={() => setToast(null)}
-        message={toast ?? ""}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
     </Box>
   );
