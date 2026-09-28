@@ -23,6 +23,22 @@ export const QUOTE_POLL_JOB = 'quote-poll';
 export const KSE100_MEMBERSHIP_JOB = 'kse100-membership';
 
 /**
+ * The PSX index board pass, on the index queue: one page carries every index, and the pass is
+ * browser-bound like the index syncs it shares the queue (and the page pool) with.
+ *
+ * Second job name rather than a second queue, for the same reason the membership pass is one: it
+ * is the same kind of work as its queue's owner. It rides the queue's own schedule and decides for
+ * itself whether the tick is an in-hours board read or the once-per-session closing pass.
+ *
+ * Why it exists: `scrapeIndices` and `runIndexClosingPass` were both written and neither was ever
+ * *called* — verified across every commit on develop, `git grep scrapeIndices` matched only its own
+ * definition and one injectable default. The board had only ever run from an uncommitted working
+ * tree, so it stopped the moment the worker's `dist` was rebuilt from a clean checkout, and the
+ * index rows froze mid-session with no post-close correction behind them.
+ */
+export const INDEX_BOARD_JOB = 'index-board';
+
+/**
  * The market-cap refresh, on the same queue for the same reason: schedule-driven background work
  * that reuses the worker which owns the light periodic jobs. It is not as light as they are (~150
  * requests for the whole book), so it carries its own slow cron rather than riding the tick.
@@ -39,6 +55,8 @@ export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add
 export interface SyncAllJobData { trigger: 'manual' | 'cron' }
 export interface HistoryJobData { symbol: string; range: HistoryRange }
 export interface IndexSyncJobData { symbol: string; trigger: 'manual' | 'cron' }
+/** The board pass takes no symbol: one page carries every index. */
+export interface IndexBoardJobData { trigger: 'cron' }
 export interface QuotePollJobData { trigger: 'manual' | 'cron' }
 
 const connection = createRedisConnection();
@@ -72,7 +90,7 @@ export const historyQueue = new Queue<HistoryJobData>(HISTORY_QUEUE, {
   },
 });
 
-export const indexQueue = new Queue<IndexSyncJobData>(INDEX_QUEUE, {
+export const indexQueue = new Queue<IndexSyncJobData | IndexBoardJobData>(INDEX_QUEUE, {
   connection,
   defaultJobOptions: {
     attempts: 3,
