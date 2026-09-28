@@ -37,11 +37,34 @@ afterEach(() => {
   global.fetch = originalFetch;
 });
 
-/** Serve Sarmaaya's board and/or the exchange's page, recording the URLs that were asked for. */
-function serving(sources: { sarmaaya?: unknown; page?: string | 'fail' }, urls: string[]) {
+/**
+ * Serve Sarmaaya's board and/or the exchange's page, recording the URLs that were asked for.
+ *
+ * Sarmaaya answers on two legs — the live market view and the `/indices` board — and both are served
+ * from one `sarmaaya` source, in each leg's own shape, so a test that takes Sarmaaya down takes both
+ * down. `marketView: 'fail'` takes down only the lead, which is how the `/indices` leg is tested.
+ */
+function serving(sources: { marketView?: 'fail'; sarmaaya?: unknown; page?: string | 'fail' }, urls: string[]) {
   return (async (url: unknown) => {
     const target = String(url);
     urls.push(target);
+    if (target.includes('/api/dashboard/market-view')) {
+      if (sources.marketView === 'fail' || sources.sarmaaya === undefined) {
+        return { ok: false, status: 503, json: async () => ({}) } as unknown as Response;
+      }
+      const rows = (sources.sarmaaya as Array<Record<string, unknown>>).map((r) => ({
+        symbol: r.symbol,
+        close: r.curr,
+        change: r.change,
+        changePercentage: r.changePercent,
+        updated_at: '2026-09-28T17:23:24.835Z',
+      }));
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ success: true, response: { data: rows } }),
+      } as unknown as Response;
+    }
     if (target.includes('beta-restapi.sarmaaya.pk')) {
       if (sources.sarmaaya === undefined) {
         return { ok: false, status: 503, json: async () => ({}) } as unknown as Response;
@@ -103,16 +126,28 @@ describe("Sarmaaya's board: what it carries", () => {
 });
 
 describe('the board read: Sarmaaya leads, the exchange page fills and falls back', () => {
-  it('asks Sarmaaya for the whole board, not its first page', async () => {
+  it('leads with the live market view: one call, every index, no page size to get wrong', async () => {
     const urls: string[] = [];
     global.fetch = serving({ sarmaaya: ROWS, page: carousel([['KMI30', 244101.85]]) }, urls);
 
     await fetchPsxIndices();
 
+    expect(urls[0]).toContain('/api/dashboard/market-view');
+    // The chain stops at the first read that answers, so a normal pass costs one request.
+    expect(urls.filter((u) => u.includes('beta-restapi.sarmaaya.pk'))).toHaveLength(1);
+  });
+
+  it('asks the /indices leg for the whole board, not its first page', async () => {
+    const urls: string[] = [];
+    global.fetch = serving({ marketView: 'fail', sarmaaya: ROWS, page: carousel([['KMI30', 244101.85]]) }, urls);
+
+    const parsed = await fetchPsxIndices();
+
     // The board paginates at ten rows while 17 indices are tracked, so a read without a limit is
     // short by seven — and those seven are never written.
-    const sarmaaya = urls.find((u) => u.includes('beta-restapi.sarmaaya.pk')) ?? '';
+    const sarmaaya = urls.find((u) => u.includes('/api/indices')) ?? '';
     expect(sarmaaya).toMatch(/[?&]limit=\d+/);
+    expect(parsed).toHaveLength(2);
   });
 
   it('reads Sarmaaya first and takes the board from it', async () => {

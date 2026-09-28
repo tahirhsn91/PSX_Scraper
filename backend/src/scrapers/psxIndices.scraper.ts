@@ -29,6 +29,15 @@ export interface ParsedIndex {
   /** Percent change, null when the page did not report one. */
   changePercent: number | null;
   direction: 'up' | 'down' | 'flat';
+  /**
+   * When the source itself says this reading was taken — null when it does not say.
+   *
+   * This is the field that tells a live board from a frozen one. The exchange's carousel carries no
+   * timestamp at all, which is why a reading taken at 11:29 was served at 15:17 with nothing on the
+   * record to contradict it. Sarmaaya's live board publishes `updated_at`; the guard in
+   * `scrapeIndices` refuses a stale reading during a session rather than storing it as a close.
+   */
+  readAt?: Date | null;
 }
 
 const PAGE = 'https://www.psx.com.pk/market-summary';
@@ -197,59 +206,173 @@ async function fetchPsxBoard(timeoutMs: number): Promise<ParsedIndex[]> {
 }
 
 /**
- * Fetch and parse the board: Sarmaaya's live board first, the exchange's own page behind it.
+ * The live board Sarmaaya's own `/indexes` page renders, and the read this pass leads with.
  *
- * Both sources are read on a pass, and they are not equals. Sarmaaya leads: every symbol it
- * published is taken from it, so a frozen page cannot reach a session's row. The exchange's page
- * then does two jobs, in this order — it fills any symbol Sarmaaya did not publish (a page-size or
- * listing change upstream cannot silently leave indices unwritten, which is the failure mode
- * `limit` was meant to close and nothing should depend on staying closed), and if Sarmaaya could
- * not be read at all it is the board.
+ * Two endpoints on the same host describe the same board with **the same number under two different
+ * names**, and getting the name wrong is silent — it stores a rupee figure as an index level:
  *
- * A page that cannot be read is not a failed pass: the lead's rows are already complete in the
- * normal case, and the log names what happened. When *both* fail the error carries both reasons —
- * with the order flipped, blaming the page for the Sarmaaya read would be the same mistake the
- * previous order made in the other direction.
+ *   GET /api/dashboard/market-view   -> { symbol, name, close, change, changePercentage,
+ *                                         volume, value, updated_at, … }
+ *   GET /api/indices?limit=100       -> { symbol, curr, change, changePercent, … }
+ *
+ * On 2026-09-28 both agreed on the level for all 17 tracked indices (KSE100 `close` 170425.6242,
+ * `curr` 21929.52 for ACI …), while market-view's `value` held 8,909,785,874.15 for KSE100 — a rupee
+ * amount, not a level. So: **`close` is the level here, `value` is not**, and this read maps `close`
+ * only. `curr` on the sibling endpoint is the same level under its other name.
+ *
+ * Why this is the lead: it is the read that keeps moving, and it is the read that can be *checked*.
+ * `updated_at` ticks every minute or two (17:23:24Z while the session's close was hours old), so a
+ * stale answer is distinguishable from a quiet market — which is exactly what the exchange's
+ * timestamp-less carousel cannot be. `change` and `changePercentage` are taken as published.
+ */
+export const SARMAYA_MARKET_VIEW_URL = 'https://beta-restapi.sarmaaya.pk/api/dashboard/market-view';
+
+/** A Date from an ISO string, with or without a zone suffix; null when unreadable. */
+function readTime(raw: unknown): Date | null {
+  if (typeof raw !== 'string' || !raw.trim()) return null;
+  const iso = raw.includes('T') && !/[Zz]|[+-]\d{2}:?\d{2}$/.test(raw) ? `${raw}Z` : raw;
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+/**
+ * The market-view payload, in the same shape the board is parsed into.
+ *
+ * `close` is the level (see the note above — `value` is not). A row with no readable `close` is
+ * skipped rather than zeroed: `Number(null)` is 0, and a level of zero would be stored as a close.
+ * A symbol the payload repeats is taken once. `readAt` is the payload's own `updated_at`, null when
+ * it does not carry one.
+ */
+export function parseSarmaayaMarketView(payload: unknown): ParsedIndex[] {
+  const response = (payload as { response?: unknown } | null)?.response;
+  // Measured 2026-09-28: this endpoint answers with `response` as the array itself (18 rows), while
+  // its sibling `/api/indices` nests the same rows at `response.data`. Both shapes are read, so a
+  // change upstream is a fallback rather than an empty board — reading only one would have made this
+  // leg throw, silently drop the chain to the next source, and lose the read time with it.
+  const data = Array.isArray(response) ? response : (response as { data?: unknown } | undefined)?.data;
+  if (!Array.isArray(data)) return [];
+  const bySymbol = new Map<string, ParsedIndex>();
+  for (const raw of data as Record<string, unknown>[]) {
+    const rawSymbol = typeof raw?.symbol === 'string' ? raw.symbol : null;
+    const level = numeric(raw?.close);
+    if (!rawSymbol || level === null) continue;
+    const symbol = rawSymbol.toUpperCase().replace(/\s+/g, '');
+    if (bySymbol.has(symbol)) continue;
+    const change = numeric(raw.change);
+    bySymbol.set(symbol, {
+      symbol,
+      level,
+      change,
+      changePercent: numeric(raw.changePercentage),
+      direction: change !== null && change > 0 ? 'up' : change !== null && change < 0 ? 'down' : 'flat',
+      readAt: readTime(raw.updated_at),
+    });
+  }
+  return [...bySymbol.values()];
+}
+
+/** Fetch and parse Sarmaaya's market view. Throws when it cannot be read at all. */
+export async function fetchSarmaayaMarketView(timeoutMs = 15000): Promise<ParsedIndex[]> {
+  let res: Response;
+  try {
+    res = await fetch(SARMAYA_MARKET_VIEW_URL, {
+      headers: { 'User-Agent': SARMAYA_UA, Accept: 'application/json', Referer: 'https://sarmaaya.pk/' },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch (e) {
+    throw new SiteUnavailableError(`sarmaaya market-view unreachable: ${(e as Error).message.slice(0, 80)}`);
+  }
+  if (!res.ok) throw new SiteUnavailableError(`sarmaaya market-view http ${res.status}`);
+  const indices = parseSarmaayaMarketView(await res.json());
+  // An answer with no index rows is a parse failure, not an empty market.
+  if (indices.length === 0) throw new SiteUnavailableError('sarmaaya market-view carried no index rows');
+  return indices;
+}
+
+/**
+ * Fetch and parse the board, newest-shaped read first: Sarmaaya's live market view, then Sarmaaya's
+ * `/indices` board (the same series under its other key, kept as a second leg on the same host),
+ * then the exchange's own page.
+ *
+ * They are not equals. The Sarmaaya reads lead: every symbol either publishes is taken from it, so a
+ * frozen page cannot reach a session's row, and each carries a read time the guard can check. The
+ * exchange's page then does two jobs — it fills any symbol Sarmaaya did not publish (a page-size or
+ * listing change upstream cannot silently leave indices unwritten, the failure mode `limit` was meant
+ * to close and nothing should depend on staying closed), and it is the board if Sarmaaya could not be
+ * read at all. Its rows carry no read time, so `scrapeIndices` will not treat them as live in-session.
+ *
+ * A page that cannot be read is not a failed pass: the lead's rows are already complete in the normal
+ * case, and the log names what happened. When every source fails the error names each reason.
  */
 export async function fetchPsxIndices(timeoutMs = 20000): Promise<ParsedIndex[]> {
   const log = childLogger({ op: 'psx-indices' });
 
+  const legs: Array<{ name: string; read: () => Promise<ParsedIndex[]> }> = [
+    { name: 'sarmaaya market-view', read: () => fetchSarmaayaMarketView(timeoutMs) },
+    { name: 'sarmaaya indices', read: () => fetchSarmaayaIndices(timeoutMs) },
+    { name: 'psx market-summary', read: () => fetchPsxBoard(timeoutMs) },
+  ];
+
+  const failures: string[] = [];
   let lead: ParsedIndex[] | null = null;
-  let leadError: unknown = null;
-  try {
-    lead = await fetchSarmaayaIndices(timeoutMs);
-  } catch (e) {
-    leadError = e;
+  let leadName = '';
+
+  for (const leg of legs.slice(0, 2)) {
+    try {
+      const rows = await leg.read();
+      if (rows.length > 0) {
+        lead = rows;
+        leadName = leg.name;
+        // The chain stops at the first read that answers: a second request to the same host would be
+        // read only to be discarded, and this pass runs every five minutes.
+        break;
+      }
+    } catch (e) {
+      failures.push(`${leg.name}: ${(e as Error).message}`);
+      log.warn('psx-indices.leg-unavailable', { source: leg.name, reason: String((e as Error).message).slice(0, 120) });
+    }
   }
+
+  if (lead !== null) logLead(log, lead, leadName);
 
   try {
     const page = await fetchPsxBoard(timeoutMs);
     if (lead === null) {
-      log.warn('psx-indices.fallback', {
-        source: 'psx market-summary',
-        reason: String((leadError as Error).message).slice(0, 120),
-        count: page.length,
-      });
+      log.warn('psx-indices.fallback', { source: 'psx market-summary', reasons: failures, count: page.length });
       return page;
     }
-    const gaps = page.filter((row) => !lead.some((seen) => seen.symbol === row.symbol));
+    const gaps = page.filter((row) => !lead!.some((seen) => seen.symbol === row.symbol));
     if (gaps.length > 0) {
       log.warn('psx-indices.page-gap-fill', { symbols: gaps.map((row) => row.symbol), count: gaps.length });
+      // Gap-filled rows keep `readAt: null`: the page cannot say when it was read, and the guard
+      // must be able to tell them from the lead's rows.
       return [...lead, ...gaps];
     }
     return lead;
   } catch (pageError) {
     if (lead !== null) {
       log.warn('psx-indices.page-unavailable', {
+        source: leadName,
         reason: String((pageError as Error).message).slice(0, 120),
         count: lead.length,
       });
       return lead;
     }
     throw new SiteUnavailableError(
-      `${(leadError as Error).message}; psx market-summary also failed: ${(pageError as Error).message}`,
+      `${failures.join('; ')}; psx market-summary also failed: ${(pageError as Error).message}`,
     );
   }
+}
+
+/** Which source this pass read, and when that source says the reading was taken. */
+function logLead(log: ReturnType<typeof childLogger>, lead: ParsedIndex[], source: string): void {
+  log.info('psx-indices.lead', {
+    source,
+    count: lead.length,
+    // Null means the source could not say — the exchange's page always lands here, and the in-session
+    // guard in `scrapeIndices` reads this absence as "not provably live".
+    readAt: lead.find((row) => row.readAt)?.readAt?.toISOString() ?? null,
+  });
 }
 
 /**

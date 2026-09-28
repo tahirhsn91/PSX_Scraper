@@ -137,6 +137,39 @@ export function repairedValueFor(args: {
   return args.impliedClose;
 }
 
+/**
+ * The oldest a board reading may be and still be written as a live session's value.
+ *
+ * Sarmaaya's board `updated_at` ticks every minute or two, so a quarter of an hour is generous for a
+ * pass that runs every five. The point is not the exact number: it is that a reading older than the
+ * session's own progress is refused rather than stored, so a frozen source cannot present itself as a
+ * quiet market. Measured 2026-09-28: the exchange's carousel served an 11:29 PKT reading at 15:17 PKT
+ * with no timestamp on it at all, and that reading reached the dashboard as KSE-100's close.
+ */
+export const BOARD_MAX_AGE_MS = 15 * 60_000;
+
+/**
+ * Whether a reading may be treated as live *now*.
+ *
+ * Outside a session the question is meaningless — an hours-old reading is the close, and that is
+ * what the session's row should hold. Inside a session it is the whole question, and a reading that
+ * cannot say when it was taken fails it: "no read time" is not evidence of freshness, it is the
+ * absence of evidence, which is how the exchange page's rows arrive (`readAt` null on purpose).
+ */
+export function boardFreshness(args: {
+  now: Date;
+  readAt: Date | null | undefined;
+  inSession: boolean;
+}): { ok: true } | { ok: false; reason: string } {
+  if (!args.inSession) return { ok: true };
+  if (!args.readAt) return { ok: false, reason: 'reading carries no read time' };
+  const ageMs = args.now.getTime() - args.readAt.getTime();
+  if (ageMs > BOARD_MAX_AGE_MS) {
+    return { ok: false, reason: `reading is ${Math.round(ageMs / 60_000)}m old` };
+  }
+  return { ok: true };
+}
+
 export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult> {
   const log = childLogger({ op: 'index-scrape' });
   const parsed = await fetchPsxIndices();
@@ -171,6 +204,8 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
   let updated = 0;
   let valuesWritten = 0;
   let repaired = 0;
+  const refused: Array<{ symbol: string; reason: string }> = [];
+  const newSymbols: string[] = [];
 
   // `level - change` is the previous session's close only while the page describes a live session.
   // Over a weekend or a holiday the carousel still answers, with the last session's figures, and the
@@ -183,6 +218,20 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
       where: { symbol: index.symbol },
       select: { id: true, name: true },
     });
+
+    // A reading that cannot prove it is live may not become a session's value, and may not become the
+    // index's live reading either — that is the field the dashboard's board renders. Nothing is
+    // written for it: no level, no live reading, no row. During a session, `readAt` is null on
+    // exactly the sources that cannot be checked (the exchange's page and its gap-fills), so this is
+    // the line that keeps a frozen carousel out of the database.
+    const freshness = boardFreshness({ now, readAt: index.readAt, inSession: canRepair });
+    if (!freshness.ok) {
+      refused.push({ symbol: index.symbol, reason: freshness.reason });
+      continue;
+    }
+
+    if (!existing) newSymbols.push(index.symbol);
+
     // Keep a real description once we have one; only replace the placeholder (the bare symbol).
     const name =
       existing && existing.name && existing.name !== index.symbol ? existing.name : names[index.symbol] ?? index.symbol;
@@ -268,6 +317,21 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     sessionDay,
     sessionRowWritten: writeSessionRow,
   };
+  if (refused.length > 0) {
+    // Named, not counted: a pass that writes nothing because the source could not prove freshness is
+    // a different event from a quiet market, and this is the line that says which one happened.
+    log.warn('index-scrape.reading_refused', {
+      count: refused.length,
+      symbols: refused.map((r) => r.symbol),
+      reason: refused[0]?.reason,
+      sessionDay,
+    });
+  }
+  if (newSymbols.length > 0) {
+    // A symbol the board published that we did not track before this pass. Named so a listing change
+    // upstream is a logged event rather than a silent addition to the universe.
+    log.warn('index-scrape.new-symbols', { symbols: newSymbols, count: newSymbols.length });
+  }
   log.info('index-scrape.done', { ...result, stamp: stamp.toISOString() });
   return result;
 }
