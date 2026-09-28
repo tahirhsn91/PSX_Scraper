@@ -221,5 +221,15 @@ export function CandleChart({
     );
   }
 
-  return <Box ref={boxRef} sx={{ width: '100%', height }} />;
+  // The chart is drawn into a canvas: give assistive tech the shape of the series, since the
+  // picture itself carries no text. The page's caption underneath stays the full description.
+  const label = data
+    ? `${data.symbol} price chart — ${data.items.length} sessions, ${
+        data.from ?? 'unknown start'
+      } to ${data.to ?? 'unknown end'}, ${
+        range === 'MAX' ? 'all stored sessions' : `showing ${range}`
+      }`
+    : 'Price chart';
+
+  return <Box ref={boxRef} role="img" aria-label={label} sx={{ width: '100%', height }} />;
 }

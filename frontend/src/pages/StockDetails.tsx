@@ -1,21 +1,53 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
-  Box, Typography, Button, Grid, Card, CardContent, Tabs, Tab, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Chip, LinearProgress, Alert, Skeleton, Stack, Divider,
-  ToggleButton, ToggleButtonGroup, useMediaQuery, useTheme,
+  Box,
+  Button,
+  Chip,
+  Grid,
+  LinearProgress,
+  Skeleton,
+  Stack,
+  Tab,
+  Tabs,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import SyncIcon from '@mui/icons-material/Sync';
 import DownloadIcon from '@mui/icons-material/Download';
 import { LineChart } from '@mui/x-charts/LineChart';
+import { useQueryClient } from '@tanstack/react-query';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
-import { useQueryClient } from '@tanstack/react-query';
+import { ChangePill } from '../components/ui/ChangePill';
+import { DataTable, type Column } from '../components/ui/DataTable';
+import { PageHeader } from '../components/ui/PageHeader';
+import { SectionCard } from '../components/ui/SectionCard';
+import { StatTile } from '../components/ui/StatTile';
+import { StatePanel } from '../components/ui/StatePanel';
 import {
-  useStock, useHistory, useSyncStock, useSyncStatus, useFetchHistory, useHistoryStatus,
-  useCandles, keys,
+  DASH,
+  formatCount,
+  formatDate,
+  formatDateTime,
+  formatMarketCap,
+  formatNumber,
+  formatVolume,
+} from '../lib/format';
+import {
+  keys,
+  useCandles,
+  useFetchHistory,
+  useHistory,
+  useHistoryStatus,
+  useStock,
+  useSyncStatus,
+  useSyncStock,
 } from '../api/hooks';
-import type { HistoryRange } from '../types';
+import type { HistoryRange, StockDetail } from '../types';
 
 const RANGES: { value: HistoryRange; label: string }[] = [
   { value: '1W', label: '1W' },
@@ -27,24 +59,98 @@ const RANGES: { value: HistoryRange; label: string }[] = [
   { value: 'MAX', label: 'Max' },
 ];
 
-function Stat({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <Grid item xs={6} sm={4} md={3}>
-      <Card variant="outlined"><CardContent sx={{ py: 1.5 }}>
-        <Typography variant="caption" color="text.secondary">{label}</Typography>
-        <Typography variant="h6">{value ?? '—'}</Typography>
-      </CardContent></Card>
-    </Grid>
-  );
-}
-
 /** Candles are ours; the TradingView tab is their widget; the line view is the older chart. */
 type ChartMode = 'candles' | 'line' | 'tradingview';
 
+const SECTIONS = ['History', 'Financials', 'Ratios', 'Dividends'] as const;
+
 /** Spelled-out form of a range preset, for the caption above the chart. */
 const rangeLabel = (r: HistoryRange): string =>
-  ({ '1W': 'past 1 week', '1M': 'past 1 month', '6M': 'past 6 months', '1Y': 'past 1 year',
-     '3Y': 'past 3 years', '5Y': 'past 5 years', MAX: 'all stored sessions' } as Record<HistoryRange, string>)[r];
+  ({
+    '1W': 'past 1 week',
+    '1M': 'past 1 month',
+    '6M': 'past 6 months',
+    '1Y': 'past 1 year',
+    '3Y': 'past 3 years',
+    '5Y': 'past 5 years',
+    MAX: 'all stored sessions',
+  })[r];
+
+type Financial = StockDetail['financials'][number];
+type Dividend = StockDetail['dividends'][number];
+
+const financialColumns: Column<Financial>[] = [
+  { key: 'year', header: 'Year', render: (f) => f.year, mobileRole: 'title' },
+  { key: 'quarter', header: 'Qtr', render: (f) => f.quarter ?? DASH, mobileRole: 'subtitle' },
+  {
+    key: 'eps',
+    header: 'EPS',
+    align: 'right',
+    mobileRole: 'meta',
+    render: (f) => formatNumber(f.eps),
+  },
+  {
+    key: 'sales',
+    header: 'Sales',
+    align: 'right',
+    hideBelow: 'md',
+    mobileRole: 'meta',
+    render: (f) => formatNumber(f.sales),
+  },
+  {
+    key: 'pat',
+    header: 'PAT',
+    align: 'right',
+    mobileRole: 'meta',
+    render: (f) => formatNumber(f.profitAfterTax),
+  },
+  {
+    key: 'equity',
+    header: 'Equity',
+    align: 'right',
+    hideBelow: 'md',
+    mobileRole: 'meta',
+    render: (f) => formatNumber(f.equity),
+  },
+];
+
+const dividendColumns: Column<Dividend>[] = [
+  {
+    key: 'announced',
+    header: 'Announced',
+    render: (d) => formatDate(d.announcementDate),
+    mobileRole: 'title',
+  },
+  {
+    key: 'bookClosure',
+    header: 'Book closure',
+    render: (d) => formatDate(d.bookClosure),
+    mobileRole: 'meta',
+  },
+  {
+    key: 'payment',
+    header: 'Payment',
+    hideBelow: 'md',
+    render: (d) => formatDate(d.paymentDate),
+    mobileRole: 'meta',
+  },
+  {
+    key: 'dividend',
+    header: 'Dividend',
+    align: 'right',
+    mobileRole: 'value',
+    render: (d) => formatNumber(d.dividend),
+  },
+];
+
+const RATIO_TILES: { key: keyof NonNullable<StockDetail['ratios']>; label: string; suffix?: string }[] = [
+  { key: 'peRatio', label: 'P/E' },
+  { key: 'pbRatio', label: 'P/B' },
+  { key: 'roe', label: 'ROE', suffix: '%' },
+  { key: 'roa', label: 'ROA', suffix: '%' },
+  { key: 'dividendYield', label: 'Dividend yield', suffix: '%' },
+  { key: 'beta', label: 'Beta' },
+];
 
 export function StockDetails() {
   const { symbol = '' } = useParams();
@@ -89,209 +195,431 @@ export function StockDetails() {
 
   const syncing = syncStock.isPending || (status?.inFlight ?? []).includes(symbol.toUpperCase());
 
-  if (isLoading) return <Box><Skeleton height={60} /><Skeleton height={240} /></Box>;
-  if (isError || !data) return <Alert severity="error">Could not load {symbol}. It may not be tracked yet.</Alert>;
+  if (isLoading) {
+    return (
+      <Box>
+        <Skeleton height={44} width="40%" />
+        <Skeleton height={24} width="60%" sx={{ mb: 2 }} />
+        <Grid container spacing={1.5}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Grid item xs={6} md={3} key={i}>
+              <Skeleton variant="rounded" height={92} />
+            </Grid>
+          ))}
+        </Grid>
+        <Skeleton variant="rounded" height={340} sx={{ mt: 2 }} />
+      </Box>
+    );
+  }
 
+  if (isError || !data) {
+    return (
+      <StatePanel
+        kind="error"
+        title={`Could not load ${symbol}`}
+        description="It may not be tracked yet, or the symbol is not on the exchange."
+        action={
+          <Stack direction="row" spacing={1}>
+            <Button variant="contained" component={RouterLink} to="/">
+              Back to the market board
+            </Button>
+            <Button component={RouterLink} to="/search">
+              Search symbols
+            </Button>
+          </Stack>
+        }
+      />
+    );
+  }
+
+  const price = data.price;
   const chart = (history?.items ?? [])
     .filter((p) => p.close != null && p.lastTradeDate)
     .slice()
     .reverse();
 
+  // Where today's price sits inside the 52-week range — a bar says it faster than two numbers.
+  const rangePct = (() => {
+    if (!price || price.currentPrice == null) return null;
+    const { week52Low: low, week52High: high } = price;
+    if (low == null || high == null || high <= low) return null;
+    return Math.min(100, Math.max(0, ((price.currentPrice - low) / (high - low)) * 100));
+  })();
+
   return (
     <Box>
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={2} mb={2}>
-        <Box>
-          <Typography variant="h4">{data.symbol}</Typography>
-          <Typography color="text.secondary">{data.companyName ?? '—'}{data.sector ? ` · ${data.sector}` : ''}</Typography>
-        </Box>
-        <Stack alignItems="flex-end" spacing={1}>
-          <Button variant="contained" startIcon={<SyncIcon />} disabled={syncing} onClick={() => syncStock.mutate(symbol)}>
-            {syncing ? 'Syncing…' : 'Sync Latest Data'}
-          </Button>
-          {data.lastSync && (
-            <Chip size="small" label={`Last sync: ${data.lastSync.status}`} color={data.lastSync.status === 'SUCCESS' ? 'success' : data.lastSync.status === 'FAILED' ? 'error' : 'warning'} />
-          )}
-        </Stack>
-      </Stack>
-      {syncing && <LinearProgress sx={{ mb: 2 }} />}
-
-      <Grid container spacing={2} mb={3}>
-        <Stat label="Price" value={data.price?.currentPrice} />
-        <Stat label="Change %" value={data.price?.changePercent != null ? `${data.price.changePercent}%` : null} />
-        <Stat label="Open" value={data.price?.open} />
-        <Stat label="High" value={data.price?.high} />
-        <Stat label="Low" value={data.price?.low} />
-        <Stat label="Volume" value={data.price?.volume} />
-        <Stat label="Market Cap" value={data.price?.marketCap} />
-        <Stat label="Last trade" value={data.price?.lastTradeDate ? new Date(data.price.lastTradeDate).toLocaleDateString() : null} />
-      </Grid>
-
-      <Tabs value={tab} onChange={(_e, v) => setTab(v)} sx={{ mb: 2 }} variant="scrollable">
-        <Tab label="History" /><Tab label="Financials" /><Tab label="Ratios" /><Tab label="Dividends" />
-      </Tabs>
-
-      {tab === 0 && (
-        <Box>
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            spacing={2}
-            justifyContent="space-between"
-            alignItems={{ md: 'center' }}
-            mb={2}
-          >
-            <ToggleButtonGroup
-              size="small"
-              exclusive
-              value={range}
-              onChange={(_e, v) => v && setRange(v)}
-              aria-label="history range"
-            >
-              {RANGES.map((r) => (
-                <ToggleButton key={r.value} value={r.value}>{r.label}</ToggleButton>
-              ))}
-            </ToggleButtonGroup>
-            <Button
-              variant="contained"
-              startIcon={<DownloadIcon />}
-              disabled={fetching}
-              onClick={startFetch}
-            >
-              {fetching ? 'Fetching…' : 'Fetch Historical Data'}
-            </Button>
-          </Stack>
-
-          {fetching && (
-            <Box mb={2}>
-              <LinearProgress
-                variant={progressPct != null ? 'determinate' : 'indeterminate'}
-                value={progressPct ?? undefined}
+      <PageHeader
+        title={data.symbol}
+        subtitle={
+          [data.companyName, data.sector].filter(Boolean).join(' · ') || 'No company record scraped yet'
+        }
+        crumbs={[{ label: 'Market board', to: '/' }, { label: data.symbol }]}
+        meta={
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center">
+            {data.lastSync && (
+              <Chip
+                size="small"
+                label={`Last sync ${data.lastSync.status.toLowerCase()}`}
+                color={
+                  data.lastSync.status === 'SUCCESS'
+                    ? 'success'
+                    : data.lastSync.status === 'FAILED'
+                      ? 'error'
+                      : 'warning'
+                }
+                variant="outlined"
               />
-              <Typography variant="caption" color="text.secondary">
-                {progressPct != null ? `${progressPct}% ` : ''}
-                {(histJob?.progress && typeof histJob.progress === 'object' && histJob.progress.note) || 'starting…'}
-              </Typography>
-            </Box>
-          )}
-          {fetchHistory.isError && <Alert severity="error" sx={{ mb: 2 }}>Failed to start history fetch.</Alert>}
-          {histJob?.state === 'failed' && !fetching && (
-            <Alert severity="error" sx={{ mb: 2 }}>History fetch failed: {histJob.failedReason ?? 'unknown error'}</Alert>
-          )}
-          {!fetching && histJob?.state === 'completed' && histJob.returnValue && (
-            <Alert severity="success" sx={{ mb: 2 }}>
-              Fetched {histJob.returnValue.persisted ?? 0} data points for {RANGES.find((r) => r.value === range)?.label}.
-            </Alert>
-          )}
-
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ sm: 'center' }} sx={{ mb: 1 }}>
-            <ToggleButtonGroup
-              size="small"
-              exclusive
-              value={chartMode}
-              onChange={(_e, v: ChartMode | null) => v && setChartMode(v)}
-              aria-label="chart type"
-            >
-              <ToggleButton value="candles">Candles</ToggleButton>
-              <ToggleButton value="line">Line</ToggleButton>
-              <ToggleButton value="tradingview">TradingView</ToggleButton>
-            </ToggleButtonGroup>
+            )}
             <Typography variant="caption" color="text.secondary">
-              {chartMode === 'tradingview'
-                ? 'TradingView data, rendered by their widget'
-                : chartMode === 'candles'
-                  ? `Daily candles · showing ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
-                  : `Our stored sessions, ${rangeLabel(range)}`}
+              {price?.lastTradeDate
+                ? `Last trade ${formatDate(price.lastTradeDate)}`
+                : 'No price row stored yet'}
             </Typography>
           </Stack>
+        }
+        actions={
+          <Button
+            variant="contained"
+            startIcon={<SyncIcon />}
+            disabled={syncing}
+            onClick={() => syncStock.mutate(symbol)}
+          >
+            {syncing ? 'Syncing…' : 'Sync latest data'}
+          </Button>
+        }
+      />
 
-          {chartMode === 'candles' ? (
-            candlesLoading ? (
-              <Skeleton height={340} />
-            ) : (
-              <>
-                <CandleChart data={candles} range={range} height={isMobile ? 260 : 380} />
-                {candles && (
+      {syncing && <LinearProgress sx={{ mb: 2 }} />}
+
+      <Grid container spacing={1.5} sx={{ mb: 3 }}>
+        <Grid item xs={6} sm={4} md={3}>
+          <StatTile
+            label="Price"
+            value={formatNumber(price?.currentPrice)}
+            valueTitle={price?.currentPrice != null ? `Rs ${price.currentPrice}` : undefined}
+            footer={
+              <Stack direction="row" spacing={1} alignItems="center">
+                <ChangePill value={price?.changePercent} variant="soft" />
+                <Typography variant="caption" color="text.secondary">
+                  {price?.change != null
+                    ? `${price.change > 0 ? '+' : ''}${price.change}`
+                    : DASH}
+                </Typography>
+              </Stack>
+            }
+          />
+        </Grid>
+        <Grid item xs={6} sm={4} md={3}>
+          <StatTile
+            label="Volume"
+            value={formatVolume(price?.volume) ?? DASH}
+            valueTitle={price?.volume != null ? `${formatCount(price.volume)} shares` : undefined}
+          />
+        </Grid>
+        <Grid item xs={6} sm={4} md={3}>
+          <StatTile
+            label="Market cap"
+            value={formatMarketCap(price?.marketCap) ?? DASH}
+            valueTitle={price?.marketCap != null ? `Rs ${formatCount(price.marketCap)}` : undefined}
+          />
+        </Grid>
+        <Grid item xs={6} sm={4} md={3}>
+          <StatTile
+            label="52-week range"
+            value={
+              price?.week52Low == null && price?.week52High == null
+                ? DASH
+                : `${formatNumber(price?.week52Low)} – ${formatNumber(price?.week52High)}`
+            }
+            footer={
+              rangePct == null ? null : (
+                <Box>
+                  <LinearProgress
+                    variant="determinate"
+                    value={rangePct}
+                    sx={{ height: 6, borderRadius: 1 }}
+                  />
                   <Typography variant="caption" color="text.secondary">
-                    {candles.count} daily candles stored ({candles.from ?? '—'} → {candles.to ?? '—'}) ·
-                    {' '}showing {range === 'MAX' ? 'all of them' : rangeLabel(range)} — drag or scroll back for earlier sessions
-                    {candles.sanitised > 0 && ` · ${candles.sanitised} readings with impossible fields ignored`}
-                    {candles.skipped > 0 && ` · ${candles.skipped} readings discarded as impossible`}
+                    Today at {rangePct.toFixed(0)}% of the range
                   </Typography>
-                )}
-              </>
-            )
-          ) : chartMode === 'tradingview' ? (
-            <>
-              <TradingViewChart symbol={symbol} height={isMobile ? 360 : 460} />
-              <Typography variant="caption" color="text.secondary">
-                Embedded from TradingView — nothing scraped, nothing stored.
+                </Box>
+              )
+            }
+          />
+        </Grid>
+        <Grid item xs={6} sm={4} md={3}>
+          <StatTile label="Open" value={formatNumber(price?.open)} />
+        </Grid>
+        <Grid item xs={6} sm={4} md={3}>
+          <StatTile label="Day high" value={formatNumber(price?.high)} />
+        </Grid>
+        <Grid item xs={6} sm={4} md={3}>
+          <StatTile label="Day low" value={formatNumber(price?.low)} />
+        </Grid>
+        <Grid item xs={6} sm={4} md={3}>
+          <StatTile
+            label="Last trade"
+            value={formatDate(price?.lastTradeDate)}
+            footer={
+              price?.lastTradeDate ? (
+                <Typography variant="caption" color="text.secondary">
+                  {formatDateTime(price.lastTradeDate)}
+                </Typography>
+              ) : null
+            }
+          />
+        </Grid>
+      </Grid>
+
+      <Tabs
+        value={tab}
+        onChange={(_e, v) => setTab(v)}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="Stock detail sections"
+        sx={{ mb: 2 }}
+      >
+        {SECTIONS.map((label, i) => (
+          <Tab key={label} label={label} id={`stock-tab-${i}`} aria-controls={`stock-tabpanel-${i}`} />
+        ))}
+      </Tabs>
+
+      <Box role="tabpanel" id={`stock-tabpanel-${tab}`} aria-labelledby={`stock-tab-${tab}`}>
+        {tab === 0 && (
+          <SectionCard
+            title="Price history"
+            subtitle={
+              chartMode === 'tradingview'
+                ? 'TradingView data, rendered by their widget — nothing scraped, nothing stored.'
+                : chartMode === 'candles'
+                  ? `Daily candles · showing ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
+                  : `Our stored sessions, ${rangeLabel(range)}`
+            }
+            action={
+              <Button
+                variant="outlined"
+                startIcon={<DownloadIcon />}
+                disabled={fetching}
+                onClick={startFetch}
+              >
+                {fetching ? 'Fetching…' : 'Fetch historical data'}
+              </Button>
+            }
+          >
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={1.5}
+              justifyContent="space-between"
+              alignItems={{ md: 'center' }}
+              sx={{ mb: 2 }}
+            >
+              <ToggleButtonGroup
+                size="small"
+                exclusive
+                value={range}
+                onChange={(_e, v) => v && setRange(v)}
+                aria-label="History range"
+                sx={{ flexWrap: 'wrap' }}
+              >
+                {RANGES.map((r) => (
+                  <ToggleButton key={r.value} value={r.value}>
+                    {r.label}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+              <ToggleButtonGroup
+                size="small"
+                exclusive
+                value={chartMode}
+                onChange={(_e, v: ChartMode | null) => v && setChartMode(v)}
+                aria-label="Chart type"
+              >
+                <ToggleButton value="candles">Candles</ToggleButton>
+                <ToggleButton value="line">Line</ToggleButton>
+                <ToggleButton value="tradingview">TradingView</ToggleButton>
+              </ToggleButtonGroup>
+            </Stack>
+
+            {fetching && (
+              <Box sx={{ mb: 2 }}>
+                <LinearProgress
+                  variant={progressPct != null ? 'determinate' : 'indeterminate'}
+                  value={progressPct ?? undefined}
+                  aria-label="History fetch progress"
+                />
+                <Typography variant="caption" color="text.secondary">
+                  {progressPct != null ? `${progressPct}% ` : ''}
+                  {(histJob?.progress &&
+                    typeof histJob.progress === 'object' &&
+                    histJob.progress.note) ||
+                    'starting…'}
+                </Typography>
+              </Box>
+            )}
+            {fetchHistory.isError && (
+              <StatePanel
+                kind="error"
+                compact
+                title="Could not start the history fetch"
+                action={
+                  <Button size="small" onClick={startFetch}>
+                    Try again
+                  </Button>
+                }
+              />
+            )}
+            {histJob?.state === 'failed' && !fetching && (
+              <StatePanel
+                kind="error"
+                compact
+                title="History fetch failed"
+                description={histJob.failedReason ?? 'The job did not report why.'}
+                action={
+                  <Button size="small" onClick={startFetch}>
+                    Retry
+                  </Button>
+                }
+              />
+            )}
+            {!fetching && histJob?.state === 'completed' && histJob.returnValue && (
+              <Typography variant="body2" color="success.main" sx={{ mb: 2 }}>
+                Fetched {histJob.returnValue.persisted ?? 0} data points for{' '}
+                {RANGES.find((r) => r.value === range)?.label}.
               </Typography>
-            </>
-          ) : historyLoading ? (
-            <Skeleton height={320} />
-          ) : chart.length > 1 ? (
-            <LineChart
-              height={isMobile ? 240 : 340}
-              xAxis={[{
-                scaleType: 'point',
-                data: chart.map((p) => new Date(p.lastTradeDate!).toLocaleDateString()),
-                tickLabelStyle: { fontSize: 10 },
-              }]}
-              series={[{ data: chart.map((p) => p.close as number), label: 'Close', color: '#0b8457', showMark: false }]}
+            )}
+
+            {chartMode === 'candles' ? (
+              candlesLoading ? (
+                <Skeleton variant="rounded" height={340} />
+              ) : (
+                <>
+                  <CandleChart data={candles} range={range} height={isMobile ? 260 : 380} />
+                  {candles && (
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      component="p"
+                      sx={{ mt: 1 }}
+                    >
+                      {candles.count} daily candles stored ({candles.from ?? DASH} →{' '}
+                      {candles.to ?? DASH}) · showing{' '}
+                      {range === 'MAX' ? 'all of them' : rangeLabel(range)} — drag or scroll back for
+                      earlier sessions
+                      {candles.sanitised > 0 &&
+                        ` · ${candles.sanitised} readings with impossible fields ignored`}
+                      {candles.skipped > 0 &&
+                        ` · ${candles.skipped} readings discarded as impossible`}
+                    </Typography>
+                  )}
+                </>
+              )
+            ) : chartMode === 'tradingview' ? (
+              <TradingViewChart symbol={symbol} height={isMobile ? 360 : 460} />
+            ) : historyLoading ? (
+              <Skeleton variant="rounded" height={320} />
+            ) : chart.length > 1 ? (
+              <LineChart
+                height={isMobile ? 240 : 340}
+                xAxis={[
+                  {
+                    scaleType: 'point',
+                    data: chart.map((p) => formatDate(p.lastTradeDate)),
+                    tickLabelStyle: { fontSize: 10 },
+                  },
+                ]}
+                series={[
+                  {
+                    data: chart.map((p) => p.close as number),
+                    label: 'Close',
+                    color: theme.palette.primary.main,
+                    showMark: false,
+                  },
+                ]}
+              />
+            ) : (
+              <StatePanel
+                kind="empty"
+                compact
+                title="No stored history for this range"
+                description="Fetch it from PSX to fill the chart and the range controls."
+                action={
+                  <Button size="small" variant="contained" disabled={fetching} onClick={startFetch}>
+                    Fetch historical data
+                  </Button>
+                }
+              />
+            )}
+          </SectionCard>
+        )}
+
+        {tab === 1 && (
+          <SectionCard
+            title="Financials"
+            subtitle={`${data.financials.length} period${data.financials.length === 1 ? '' : 's'} on record`}
+            flush
+          >
+            <DataTable
+              columns={financialColumns}
+              rows={data.financials}
+              ariaLabel="Financials"
+              rowKey={(f) => `${f.year}-${f.quarter ?? 'FY'}`}
+              emptyTitle="No financials recorded"
+              emptyDescription="The company page has not been scraped yet, or it publishes no quarterly accounts."
             />
-          ) : (
-            <Alert severity="info">
-              No price history for this range yet. Click <strong>Fetch Historical Data</strong> to pull it from PSX.
-            </Alert>
-          )}
-        </Box>
-      )}
+          </SectionCard>
+        )}
 
-      {tab === 1 && (
-        <TableContainer>
-        <Table size="small">
-          <TableHead><TableRow><TableCell>Year</TableCell><TableCell>Qtr</TableCell><TableCell align="right">EPS</TableCell><TableCell align="right">Sales</TableCell><TableCell align="right">PAT</TableCell><TableCell align="right">Equity</TableCell></TableRow></TableHead>
-          <TableBody>
-            {data.financials.length === 0 && <TableRow><TableCell colSpan={6}>No financials recorded.</TableCell></TableRow>}
-            {data.financials.map((f, i) => (
-              <TableRow key={i}><TableCell>{f.year}</TableCell><TableCell>{f.quarter ?? '—'}</TableCell><TableCell align="right">{f.eps ?? '—'}</TableCell><TableCell align="right">{f.sales ?? '—'}</TableCell><TableCell align="right">{f.profitAfterTax ?? '—'}</TableCell><TableCell align="right">{f.equity ?? '—'}</TableCell></TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        </TableContainer>
-      )}
+        {tab === 2 && (
+          <SectionCard
+            title="Ratios"
+            subtitle="As published on the company page · blank means the field was not on the page we read"
+          >
+            {data.ratios ? (
+              <Grid container spacing={1.5}>
+                {RATIO_TILES.map((r) => {
+                  const raw = data.ratios?.[r.key];
+                  const digits = r.suffix === '%' ? 1 : 2;
+                  return (
+                    <Grid item xs={6} sm={4} md={2} key={String(r.key)}>
+                      <StatTile
+                        label={r.label}
+                        value={raw == null ? DASH : `${formatNumber(raw, {
+                          minimumFractionDigits: digits,
+                          maximumFractionDigits: digits,
+                        })}${r.suffix ?? ''}`}
+                      />
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            ) : (
+              <StatePanel
+                kind="empty"
+                compact
+                title="No ratios recorded"
+                description="Sync the company page to pick up P/E, P/B, ROE and the rest."
+              />
+            )}
+          </SectionCard>
+        )}
 
-      {tab === 2 && (
-        data.ratios ? (
-          <Grid container spacing={2}>
-            <Stat label="P/E" value={data.ratios.peRatio} />
-            <Stat label="P/B" value={data.ratios.pbRatio} />
-            <Stat label="ROE" value={data.ratios.roe} />
-            <Stat label="ROA" value={data.ratios.roa} />
-            <Stat label="Div. Yield" value={data.ratios.dividendYield} />
-            <Stat label="Beta" value={data.ratios.beta} />
-          </Grid>
-        ) : <Alert severity="info">No ratios recorded.</Alert>
-      )}
-
-      {tab === 3 && (
-        <TableContainer>
-        <Table size="small">
-          <TableHead><TableRow><TableCell>Announced</TableCell><TableCell>Book closure</TableCell><TableCell>Payment</TableCell><TableCell align="right">Dividend</TableCell></TableRow></TableHead>
-          <TableBody>
-            {data.dividends.length === 0 && <TableRow><TableCell colSpan={4}>No dividends recorded.</TableCell></TableRow>}
-            {data.dividends.map((d, i) => (
-              <TableRow key={i}>
-                <TableCell>{d.announcementDate ? new Date(d.announcementDate).toLocaleDateString() : '—'}</TableCell>
-                <TableCell>{d.bookClosure ? new Date(d.bookClosure).toLocaleDateString() : '—'}</TableCell>
-                <TableCell>{d.paymentDate ? new Date(d.paymentDate).toLocaleDateString() : '—'}</TableCell>
-                <TableCell align="right">{d.dividend ?? '—'}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        </TableContainer>
-      )}
-      <Divider sx={{ mt: 4 }} />
+        {tab === 3 && (
+          <SectionCard
+            title="Dividends"
+            subtitle={`${data.dividends.length} announcement${data.dividends.length === 1 ? '' : 's'} on record`}
+            flush
+          >
+            <DataTable
+              columns={dividendColumns}
+              rows={data.dividends}
+              ariaLabel="Dividends"
+              rowKey={(d) => `${d.announcementDate ?? 'x'}-${d.dividend ?? 'x'}`}
+              emptyTitle="No dividends recorded"
+              emptyDescription="Nothing announced for this symbol in the periods we have scraped."
+            />
+          </SectionCard>
+        )}
+      </Box>
     </Box>
   );
 }

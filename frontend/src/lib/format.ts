@@ -152,3 +152,19 @@ export function formatVolume(shares: number | null | undefined): string | null {
   }
   return shares.toLocaleString();
 }
+
+/**
+ * A job duration for a table cell: `0.8s`, `12.4s`, `3m 05s`. Null-safe, and never invents a
+ * duration for a job that has not finished — the caller renders the dash instead.
+ */
+export function formatDuration(ms: number | null | undefined): string {
+  if (ms == null || !Number.isFinite(ms) || ms < 0) return DASH;
+  if (ms < 1000) return `${Math.round(ms)}ms`;
+  const seconds = ms / 1000;
+  if (seconds < 60) return `${seconds.toFixed(1)}s`;
+  const minutes = Math.floor(seconds / 60);
+  const rest = Math.round(seconds % 60);
+  if (minutes < 60) return `${minutes}m ${String(rest).padStart(2, '0')}s`;
+  const hours = Math.floor(minutes / 60);
+  return `${hours}h ${String(minutes % 60).padStart(2, '0')}m`;
+}
