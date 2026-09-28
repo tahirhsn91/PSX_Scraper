@@ -9,6 +9,7 @@ import {
   QUOTE_POLL_JOB,
   KSE100_MEMBERSHIP_JOB,
   MARKET_CAP_JOB,
+  SESSION_CANDLE_JOB,
   UNIVERSE_PASS_JOB,
   universeQueue,
 } from "./queues";
@@ -174,6 +175,28 @@ async function registerUniversePassSchedule(): Promise<void> {
  * pattern because its cost profile differs — ~150 requests for the whole book, against one for the
  * ticker — and because its window is the session rather than every minute of the day.
  */
+async function registerSessionCandleSchedule(): Promise<void> {
+  const queued = await quoteQueue.getRepeatableJobs();
+  for (const job of queued) {
+    if (job.name !== SESSION_CANDLE_JOB || job.pattern === env.SESSION_CANDLE_CRON) continue;
+    // A changed cron must not leave the previous pattern ticking alongside the new one.
+    await quoteQueue.removeRepeatableByKey(job.key);
+  }
+  if (!env.SESSION_CANDLE_ENABLED) {
+    logger.info('scheduler.session_candle_disabled');
+    return;
+  }
+  const existing = queued.find((j) => j.name === SESSION_CANDLE_JOB && j.pattern === env.SESSION_CANDLE_CRON);
+  if (!existing) {
+    await quoteQueue.add(
+      SESSION_CANDLE_JOB,
+      { trigger: 'cron' },
+      { repeat: { pattern: env.SESSION_CANDLE_CRON }, jobId: 'scheduled-session-candle' },
+    );
+  }
+  logger.info('scheduler.session_candle_registered', { cron: env.SESSION_CANDLE_CRON });
+}
+
 async function registerMarketCapSchedule(): Promise<void> {
   if (!env.MARKET_CAP_REFRESH_ENABLED) {
     // Switched off: drop a registration left by an earlier configuration, so an upgrade that
@@ -206,6 +229,7 @@ export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
   await registerKse100MembershipSchedule();
   await registerMarketCapSchedule();
+  await registerSessionCandleSchedule();
   await registerUniversePassSchedule();
   await registerIndexBoardSchedule();
 
