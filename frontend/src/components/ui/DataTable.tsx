@@ -62,7 +62,16 @@ export interface DataTableProps<T> {
   /** Server-side pagination controls (rendered under the table, outside its scroll area). */
   pagination?: ReactNode;
   skeletonRows?: number;
-  /** Let long tables scroll inside the card instead of stretching the page. */
+  /**
+   * Caps the container's height and thereby makes the table its own vertical scroll box —
+   * `stickyHeader` follows it, and MUI's `TableContainer` is `overflow: auto`.
+   *
+   * Pass this only where an inner scroller is the intended interaction. A mouse wheel over such a
+   * box scrolls *the box*, not the page, which reads as "the page will not scroll" — and a
+   * trackpad's finer gesture moves the box enough to hide the cause, so the two inputs disagree.
+   * When the page should scroll, leave this unset: the table keeps its horizontal scroll and
+   * pagination keeps it short.
+   */
   maxHeight?: number | string;
   /** Extra content above the rows, rendered inside the card body. */
   toolbar?: ReactNode;
