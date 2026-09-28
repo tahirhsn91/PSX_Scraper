@@ -415,7 +415,6 @@ export function Dashboard() {
           }
           pagination={pager}
           skeletonRows={8}
-          maxHeight="62vh"
           toolbar={
             <Stack direction="row" spacing={1} alignItems="center" useFlexGap sx={{ flexWrap: "wrap" }}>
               <Typography variant="caption" color="text.secondary">
