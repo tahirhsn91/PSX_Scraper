@@ -1,5 +1,4 @@
 import { childLogger, logger } from '../utils/logger';
-import { sessionStamp } from '../scrapers/parse.utils';
 import { fetchTradingViewCandles, type TradingViewCandle } from '../scrapers/tradingViewCandles.scraper';
 import { indexRepository } from '../repositories/index.repository';
 import { listTrackedWithSessionRow, setSessionCandle } from '../repositories/stockPrice.repository';
@@ -34,6 +33,39 @@ import { listTrackedWithSessionRow, setSessionCandle } from '../repositories/sto
 
 /** How far a candle's close may sit from the value we trust before the whole candle is refused. */
 export const CANDLE_MAX_DEVIATION = 0.005;
+
+const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
+/** The first trade of a session, in minutes past PKT midnight — `OPEN_CAPTURE_OPEN_MINUTES`. */
+const SESSION_OPEN_MINUTES = 9 * 60 + 30;
+
+/**
+ * The session a candle read *now* belongs to, as the marker every writer keys its row on.
+ *
+ * `sessionStamp` maps an instant to the PKT calendar date it falls on. That is right for a reading
+ * that carries the exchange's own session timestamp — the quote path passes one, and a pre-open quote
+ * then correctly maps to the session it belongs to — but wrong for this read, which carries no
+ * timestamp at all. Measured on 2026-09-28 at 00:38 PKT the scanner was still answering with the
+ * candle that closed at 15:35 that afternoon, while `sessionStamp(now)` stamped it **the next day's**
+ * session: the sync then found no row for that session and wrote nothing, eleven indices and 508
+ * stocks reported as `noRow`.
+ *
+ * So the rule here is the candle's own: before the open it is the previous trading day's, from the
+ * open onwards it is today's. Weekend days step back to Friday. A market holiday cannot be known here
+ * — that needs the published calendar — but a wrong stamp is safe by construction: the session it
+ * names has no row, so nothing is written and the run reports it as `noRow` rather than writing a
+ * candle onto the wrong session.
+ */
+export function candleSessionStamp(now: Date): Date {
+  const pkt = new Date(now.getTime() + PKT_OFFSET_MS);
+  const minutesPastMidnight = pkt.getUTCHours() * 60 + pkt.getUTCMinutes();
+  // The PKT calendar date, held as UTC midnight — the same convention `sessionStamp` uses.
+  const day = new Date(Date.UTC(pkt.getUTCFullYear(), pkt.getUTCMonth(), pkt.getUTCDate()));
+  if (minutesPastMidnight < SESSION_OPEN_MINUTES) day.setUTCDate(day.getUTCDate() - 1);
+  while (day.getUTCDay() === 0 || day.getUTCDay() === 6) day.setUTCDate(day.getUTCDate() - 1);
+  // 16:00 PKT of that date is the marker every writer keys on: the PKT date held as UTC midnight,
+  // plus eleven hours (UTC+5 means 11:00Z is 16:00 PKT) — the same arithmetic `sessionStamp` uses.
+  return new Date(day.getTime() + 11 * 60 * 60 * 1000);
+}
 
 /**
  * Whether a candle's close may be believed, given the value we already hold for the symbol.
@@ -79,8 +111,7 @@ const emptyTally = (): CandleTally => ({ written: 0, unmatched: 0, noRow: 0, ref
  */
 export async function syncSessionCandles(): Promise<SessionCandleSummary> {
   const log = childLogger({ op: 'session-candle' });
-  const stamp = sessionStamp(new Date().toISOString());
-  const tradeDate = new Date(stamp ?? Date.now());
+  const tradeDate = candleSessionStamp(new Date());
 
   const indices = await indexRepository.findAll();
   const stocks = await listTrackedWithSessionRow(tradeDate);
