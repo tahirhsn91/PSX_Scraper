@@ -2,8 +2,42 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PSX Stock Scraper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Pakistan Stock Exchange prices, indices and sync status." />
+    <meta name="theme-color" content="#F5F7FA" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F5F7FA" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <title>PSX Scraper</title>
+    <script>
+      // Resolve the theme before first paint: without this the page flashes light-mode surfaces
+      // before React mounts. Mirrors the logic in src/providers/ColorModeContext.tsx.
+      (function () {
+        try {
+          var stored = localStorage.getItem('color-mode');
+          var mode =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          var root = document.documentElement;
+          root.dataset.theme = mode;
+          root.style.colorScheme = mode;
+          root.style.backgroundColor = mode === 'dark' ? '#0B1220' : '#F5F7FA';
+          var meta = document.querySelector('meta[name="theme-color"]:not([media])');
+          if (meta) meta.setAttribute('content', mode === 'dark' ? '#0B1220' : '#F5F7FA');
+        } catch (e) {
+          /* storage blocked: fall back to the media-based theme-color metas */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
