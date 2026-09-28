@@ -1,46 +1,68 @@
-import { ReactNode } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Box, Container, Button } from '@mui/material';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useColorMode } from '../providers/ColorModeContext';
+import { ReactNode, useState } from 'react';
+import { Box } from '@mui/material';
+import { AppHeader } from './shell/AppHeader';
+import { BottomNav } from './shell/BottomNav';
+import { SearchSheet } from './shell/SearchSheet';
 import { EnvBanner } from './EnvBanner';
+import { layout } from '../theme/tokens';
 
-const NAV = [
-  { label: 'Dashboard', to: '/' },
-  { label: 'Sync Logs', to: '/logs' },
-];
-
+/**
+ * The app shell: sticky banner + header, main content, mobile bottom navigation, search sheet.
+ *
+ * The red dev banner and the app bar still share one sticky wrapper — the banner is pinned by its
+ * parent rather than by a hard-coded header offset, which is what keeps it visible on every route
+ * in this checkout.
+ */
 export function Layout({ children }: { children: ReactNode }) {
-  const { mode, toggle } = useColorMode();
-  const loc = useLocation();
+  const [searchOpen, setSearchOpen] = useState(false);
+  const openSearch = () => setSearchOpen(true);
+
   return (
-    <Box sx={{ minHeight: '100vh' }}>
-      {/* Banner + app bar share one sticky wrapper so the dev strip stays pinned
-          above the header without hard-coding the banner's height as an offset. */}
+    <Box sx={{ minHeight: '100dvh', bgcolor: 'background.default' }}>
+      <Box
+        component="a"
+        href="#main"
+        sx={{
+          position: 'absolute',
+          left: -9999,
+          '&:focus': {
+            left: 8,
+            top: 8,
+            zIndex: (theme) => theme.zIndex.tooltip + 1,
+            bgcolor: 'background.paper',
+            color: 'text.primary',
+            px: 2,
+            py: 1,
+            borderRadius: 1,
+            boxShadow: 2,
+          },
+        }}
+      >
+        Skip to content
+      </Box>
+
       <Box sx={{ position: 'sticky', top: 0, zIndex: (theme) => theme.zIndex.appBar }}>
         <EnvBanner />
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" component={RouterLink} to="/" sx={{ flexGrow: 0, mr: 3, color: 'inherit', textDecoration: 'none' }}>
-              PSX Scraper
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>
-              {NAV.map((n) => (
-                <Button key={n.to} component={RouterLink} to={n.to} color="inherit" variant={loc.pathname === n.to ? 'outlined' : 'text'}>
-                  {n.label}
-                </Button>
-              ))}
-            </Box>
-            <IconButton color="inherit" onClick={toggle} aria-label="toggle theme">
-              {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+        <AppHeader onOpenSearch={openSearch} />
       </Box>
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+
+      <Box
+        component="main"
+        id="main"
+        sx={{
+          maxWidth: layout.contentMaxWidth,
+          mx: 'auto',
+          px: { xs: 2, md: 3 },
+          py: { xs: 2, md: 3 },
+          // Clearance for the fixed bottom navigation on phones.
+          pb: { xs: 9, md: 4 },
+        }}
+      >
         {children}
-      </Container>
+      </Box>
+
+      <BottomNav onOpenSearch={openSearch} />
+      <SearchSheet open={searchOpen} onClose={() => setSearchOpen(false)} />
     </Box>
   );
 }
