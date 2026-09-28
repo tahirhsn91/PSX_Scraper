@@ -48,6 +48,10 @@ const envSchema = z.object({
     .enum(['true', 'false'])
     .default('true')
     .transform((v) => v === 'true'),
+  SESSION_CANDLE_ENABLED: z.coerce.boolean().default(true),
+  // UTC, like every cron here: */5 4-11 covers 09:00-16:30 PKT, which is the session plus the settle
+  // that follows it — the post-close ticks are what leave the row holding the session's real close.
+  SESSION_CANDLE_CRON: z.string().default('*/5 4-11 * * 1-5'),
   MARKET_CAP_REFRESH_CRON: z.string().default('*/30 4-11 * * 1-5'),
   /**
    * The exchange's published market holidays - the gate the index session stamp reads. One request

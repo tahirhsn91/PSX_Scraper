@@ -120,6 +120,23 @@ export class IndexRepository {
     });
   }
 
+  /**
+   * The session's opening level, from a source that publishes the real open rather than a capture.
+   *
+   * Narrow on purpose: it writes `open` and nothing else, so it cannot disturb the row's `value`, its
+   * `value_at`, or the previous close derived from them. The update only matches the session's own row
+   * — a query that matches nothing returns false, which is the caller's cue that this session has no
+   * row yet and there is nothing to attach an open to. Only a real reading is ever passed in; the
+   * capture at 09:31 (`openingLevelFor`) is what covers the symbols no open-publishing source carries.
+   */
+  async setSessionOpen(indexId: string, tradeDate: Date, open: number): Promise<boolean> {
+    const result = await prisma.indexValue.updateMany({
+      where: { indexId, tradeDate },
+      data: { open: new Prisma.Decimal(open) },
+    });
+    return result.count > 0;
+  }
+
   async upsertValues(
     indexId: string,
     points: IndexPoint[],
