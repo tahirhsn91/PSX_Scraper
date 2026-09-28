@@ -394,6 +394,7 @@ export function Dashboard() {
         <DataTable
           columns={COLUMNS}
           rows={data?.items ?? []}
+          ariaLabel="Tracked securities"
           rowKey={(s) => s.id}
           rowHref={(s) => `/stocks/${s.symbol}`}
           onRowClick={(s) => navigate(`/stocks/${s.symbol}`)}

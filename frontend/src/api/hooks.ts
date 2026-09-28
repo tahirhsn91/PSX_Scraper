@@ -168,10 +168,15 @@ export const useSyncStatus = (poll = false) =>
     refetchInterval: poll ? 3000 : false,
   });
 
-export const useSyncLogs = (params: { page?: number; limit?: number; status?: string; symbol?: string }) =>
+export const useSyncLogs = (
+  params: { page?: number; limit?: number; status?: string; symbol?: string },
+  /** `refetchInterval` keeps a live view live; the logs page polls only while it is switched on. */
+  options?: { refetchInterval?: number | false },
+) =>
   useQuery({
     queryKey: keys.syncLogs(params),
     queryFn: async () => (await api.get<Paginated<SyncLog>>('/sync/logs', { params })).data,
+    refetchInterval: options?.refetchInterval ?? false,
   });
 
 export const useAddStock = () => {

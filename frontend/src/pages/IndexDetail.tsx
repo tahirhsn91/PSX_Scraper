@@ -1,126 +1,212 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
-  Alert, Box, Button, Card, CardContent, Grid, Skeleton, Stack, ToggleButton, ToggleButtonGroup, Typography,
+  Box,
+  Button,
+  Grid,
+  Skeleton,
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
 } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { ChangePill } from '../components/ui/ChangePill';
+import { PageHeader } from '../components/ui/PageHeader';
+import { SectionCard } from '../components/ui/SectionCard';
+import { StatTile } from '../components/ui/StatTile';
+import { StatePanel } from '../components/ui/StatePanel';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { useIndex, useIndexCandles } from '../api/hooks';
+import { DASH, formatCount, formatDateTime, formatNumber } from '../lib/format';
 import type { HistoryRange } from '../types';
 
 const RANGES: { value: HistoryRange; label: string }[] = [
-  { value: '1W', label: '1W' }, { value: '1M', label: '1M' }, { value: '6M', label: '6M' },
-  { value: '1Y', label: '1Y' }, { value: '3Y', label: '3Y' }, { value: '5Y', label: '5Y' },
+  { value: '1W', label: '1W' },
+  { value: '1M', label: '1M' },
+  { value: '6M', label: '6M' },
+  { value: '1Y', label: '1Y' },
+  { value: '3Y', label: '3Y' },
+  { value: '5Y', label: '5Y' },
   { value: 'MAX', label: 'Max' },
 ];
 
 const rangeLabel = (r: HistoryRange): string =>
-  ({ '1W': 'past 1 week', '1M': 'past 1 month', '6M': 'past 6 months', '1Y': 'past 1 year',
-     '3Y': 'past 3 years', '5Y': 'past 5 years', MAX: 'all stored sessions' } as Record<HistoryRange, string>)[r];
-
-function Stat({ label, value, tone }: { label: string; value: React.ReactNode; tone?: string }) {
-  return (
-    <Grid item xs={6} sm={4} md={3}>
-      <Card variant="outlined">
-        <CardContent sx={{ py: 1, '&:last-child': { pb: 1 } }}>
-          <Typography variant="caption" color="text.secondary">{label}</Typography>
-          <Typography variant="h6" sx={{ fontSize: 17, color: tone }}>{value}</Typography>
-        </CardContent>
-      </Card>
-    </Grid>
-  );
-}
-
-const fmt = (v: number | null | undefined, dp = 2): string =>
-  v === null || v === undefined ? '—' : v.toLocaleString(undefined, { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  ({
+    '1W': 'past 1 week',
+    '1M': 'past 1 month',
+    '6M': 'past 6 months',
+    '1Y': 'past 1 year',
+    '3Y': 'past 3 years',
+    '5Y': 'past 5 years',
+    MAX: 'all stored sessions',
+  })[r];
 
 /**
  * One index: the exchange's board figures, and its own chart.
  *
  * The candles come from our stored sessions (`/indices/:symbol/candles`), which for KSE-100
- * means five years and for the indices we started tracking today means a single bar — the
- * caption says how many rather than implying more. The TradingView tab embeds their chart, which
+ * means five years and for the indices we started tracking later means a single bar — the
+ * caption says how many rather than implying more. The TradingView view embeds their chart, which
  * has the full history of a PSX index today, so a thin series is not a dead end.
  */
 export function IndexDetail() {
   const { symbol = '' } = useParams();
-  const navigate = useNavigate();
   const [range, setRange] = useState<HistoryRange>('1Y');
   const [mode, setMode] = useState<'candles' | 'tradingview'>('candles');
   const { data, isLoading, isError } = useIndex(symbol);
   const { data: candles, isLoading: candlesLoading } = useIndexCandles(symbol);
 
-  if (isLoading) return <Box><Skeleton height={60} /><Skeleton height={240} /></Box>;
-  if (isError || !data) return <Alert severity="error">Could not load index {symbol}. It may not be tracked yet.</Alert>;
+  if (isLoading) {
+    return (
+      <Box>
+        <Skeleton height={44} width="45%" />
+        <Skeleton height={24} width="30%" sx={{ mb: 2 }} />
+        <Grid container spacing={1.5}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Grid item xs={6} md={3} key={i}>
+              <Skeleton variant="rounded" height={92} />
+            </Grid>
+          ))}
+        </Grid>
+        <Skeleton variant="rounded" height={360} sx={{ mt: 2 }} />
+      </Box>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <StatePanel
+        kind="error"
+        title={`Could not load index ${symbol}`}
+        description="It may not be tracked yet — the indices list shows every one the exchange publishes."
+        action={
+          <Button variant="contained" href="/#indices">
+            Back to the market board
+          </Button>
+        }
+      />
+    );
+  }
 
   const change = data.change;
   // Sessions the source gave only a level for: drawn as a line, and worth saying out loud rather
   // than letting the chart look like it is missing something.
   const closeOnly = candles?.items.filter((c) => c.open === null).length ?? 0;
-  const tone = change === null ? undefined : change > 0 ? 'success.main' : change < 0 ? 'error.main' : undefined;
 
   return (
     <Box>
-      <Stack direction="row" spacing={1} alignItems="center" mb={1}>
-        <Button size="small" startIcon={<ArrowBackIcon />} onClick={() => navigate('/')}>Dashboard</Button>
-      </Stack>
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={1} mb={2}>
-        <Box>
-          <Typography variant="h4">{data.symbol}</Typography>
-          <Typography variant="body2" color="text.secondary">{data.name}</Typography>
-        </Box>
-        <Box textAlign={{ sm: 'right' }}>
-          <Typography variant="h5">{fmt(data.value)}</Typography>
-          <Typography variant="body2" sx={{ color: tone }}>
-            {change === null ? '—' : `${change > 0 ? '▲' : change < 0 ? '▼' : '·'} ${fmt(change)}${data.changePercent === null ? '' : ` (${data.changePercent.toFixed(2)}%)`}`}
+      <PageHeader
+        title={data.symbol}
+        subtitle={data.name}
+        crumbs={[{ label: 'Market board', to: '/' }, { label: data.symbol }]}
+        meta={
+          <Typography variant="caption" color="text.secondary">
+            {data.lastTradeDate
+              ? `Exchange figures as of ${formatDateTime(data.lastTradeDate)}`
+              : 'No board row stored yet'}
           </Typography>
-        </Box>
-      </Stack>
+        }
+      />
 
-      <Grid container spacing={1} mb={2}>
-        <Stat label="Previous close" value={fmt(data.previousClose)} />
-        <Stat label="Open" value={fmt(data.open)} />
-        <Stat label="Day high" value={fmt(data.high)} />
-        <Stat label="Day low" value={fmt(data.low)} />
-        <Stat label="Volume" value={data.volume === null ? '—' : data.volume.toLocaleString()} />
-        <Stat label="Change %" value={data.changePercent === null ? '—' : `${data.changePercent.toFixed(2)}%`} tone={tone} />
-        <Stat label="Last updated" value={data.lastTradeDate ? new Date(data.lastTradeDate).toLocaleString() : '—'} />
+      <Grid container spacing={1.5} sx={{ mb: 3 }}>
+        <Grid item xs={12} sm={6} md={4}>
+          <StatTile
+            label="Level"
+            value={formatNumber(data.value)}
+            footer={
+              <Stack direction="row" spacing={1} alignItems="center">
+                <ChangePill value={data.changePercent} variant="soft" />
+                <Typography variant="caption" color="text.secondary">
+                  {change == null ? DASH : `${change > 0 ? '+' : ''}${formatNumber(change)}`}
+                </Typography>
+              </Stack>
+            }
+          />
+        </Grid>
+        <Grid item xs={6} sm={3} md={2}>
+          <StatTile label="Previous close" value={formatNumber(data.previousClose)} />
+        </Grid>
+        <Grid item xs={6} sm={3} md={2}>
+          <StatTile label="Open" value={formatNumber(data.open)} />
+        </Grid>
+        <Grid item xs={6} sm={3} md={2}>
+          <StatTile label="Day high" value={formatNumber(data.high)} />
+        </Grid>
+        <Grid item xs={6} sm={3} md={2}>
+          <StatTile label="Day low" value={formatNumber(data.low)} />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <StatTile
+            label="Volume"
+            value={formatCount(data.volume)}
+            valueTitle={data.volume != null ? `${formatCount(data.volume)} shares` : undefined}
+          />
+        </Grid>
       </Grid>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ sm: 'center' }} sx={{ mb: 1 }}>
-        <ToggleButtonGroup size="small" exclusive value={mode} onChange={(_e, v: 'candles' | 'tradingview' | null) => v && setMode(v)} aria-label="chart type">
-          <ToggleButton value="candles">Candles</ToggleButton>
-          <ToggleButton value="tradingview">TradingView</ToggleButton>
-        </ToggleButtonGroup>
-        {mode === 'candles' && (
-          <ToggleButtonGroup size="small" exclusive value={range} onChange={(_e, v: HistoryRange | null) => v && setRange(v)} aria-label="history range">
-            {RANGES.map((r) => <ToggleButton key={r.value} value={r.value}>{r.label}</ToggleButton>)}
+      <SectionCard
+        title="Index chart"
+        subtitle={
+          mode === 'tradingview'
+            ? 'TradingView data, rendered by their widget — nothing scraped, nothing stored.'
+            : `Daily candles · showing ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
+        }
+      >
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={1.5}
+          alignItems={{ md: 'center' }}
+          sx={{ mb: 2 }}
+        >
+          <ToggleButtonGroup
+            size="small"
+            exclusive
+            value={mode}
+            onChange={(_e, v: 'candles' | 'tradingview' | null) => v && setMode(v)}
+            aria-label="Chart type"
+          >
+            <ToggleButton value="candles">Candles</ToggleButton>
+            <ToggleButton value="tradingview">TradingView</ToggleButton>
           </ToggleButtonGroup>
-        )}
-        <Typography variant="caption" color="text.secondary">
-          {mode === 'tradingview' ? 'TradingView data, rendered by their widget' : `Daily candles · showing ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`}
-        </Typography>
-      </Stack>
-
-      {mode === 'tradingview' ? (
-        <TradingViewChart symbol={data.symbol} height={460} />
-      ) : candlesLoading ? (
-        <Skeleton height={380} />
-      ) : (
-        <>
-          <CandleChart data={candles} range={range} height={380} />
-          {candles && (
-            <Typography variant="caption" color="text.secondary">
-              {candles.count} daily sessions stored
-              {candles.items.length > 0 && ` (${candles.items[0]!.time} → ${candles.items[candles.items.length - 1]!.time})`}
-              {closeOnly > 0
-                ? ` — ${closeOnly} of them close-only, drawn as a line: the exchange publishes no open/high/low for those sessions and no reachable source carries it, so none is invented`
-                : ' — full open/high/low candles'}
-            </Typography>
+          {mode === 'candles' && (
+            <ToggleButtonGroup
+              size="small"
+              exclusive
+              value={range}
+              onChange={(_e, v: HistoryRange | null) => v && setRange(v)}
+              aria-label="History range"
+              sx={{ flexWrap: 'wrap' }}
+            >
+              {RANGES.map((r) => (
+                <ToggleButton key={r.value} value={r.value}>
+                  {r.label}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
           )}
-        </>
-      )}
+        </Stack>
+
+        {mode === 'tradingview' ? (
+          <TradingViewChart symbol={data.symbol} height={460} />
+        ) : candlesLoading ? (
+          <Skeleton variant="rounded" height={380} />
+        ) : (
+          <>
+            <CandleChart data={candles} range={range} height={380} />
+            {candles && (
+              <Typography variant="caption" color="text.secondary" component="p" sx={{ mt: 1 }}>
+                {candles.count} daily sessions stored
+                {candles.items.length > 0 &&
+                  ` (${candles.items[0]!.time} → ${candles.items[candles.items.length - 1]!.time})`}
+                {closeOnly > 0
+                  ? ` — ${closeOnly} of them close-only, drawn as a line: the exchange publishes no open/high/low for those sessions and no reachable source carries it, so none is invented`
+                  : ' — full open/high/low candles'}
+              </Typography>
+            )}
+          </>
+        )}
+      </SectionCard>
     </Box>
   );
 }

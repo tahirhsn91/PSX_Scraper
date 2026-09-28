@@ -46,6 +46,8 @@ export interface DataTableProps<T> {
   columns: Column<T>[];
   rows: T[];
   rowKey: (row: T) => string;
+  /** Accessible name for the table — "Results" tells a screen-reader user nothing. */
+  ariaLabel?: string;
   /** Row destination: rendered as a real link in the first cell, so rows are keyboard reachable. */
   rowHref?: (row: T) => string;
   loading?: boolean;
@@ -82,6 +84,7 @@ export function DataTable<T>({
   columns,
   rows,
   rowKey,
+  ariaLabel,
   rowHref,
   loading = false,
   error,
@@ -162,7 +165,7 @@ export function DataTable<T>({
         </Stack>
       ) : (
         <TableContainer>
-          <Table size="small" aria-busy="true">
+          <Table size="small" aria-busy="true" aria-label={ariaLabel ?? 'Results'}>
             {headRow()}
             <TableBody>
               {Array.from({ length: skeletonRows }).map((_, r) => (
@@ -201,7 +204,7 @@ export function DataTable<T>({
       </Box>
     ) : (
       <TableContainer sx={{ maxHeight }}>
-        <Table size="small" stickyHeader={Boolean(maxHeight)} aria-label="Results" aria-busy={stale || undefined}>
+        <Table size="small" stickyHeader={Boolean(maxHeight)} aria-label={ariaLabel ?? 'Results'} aria-busy={stale || undefined}>
           {headRow()}
           <TableBody sx={stale ? { opacity: 0.55, transition: 'opacity 150ms' } : undefined}>
             {rows.map((row) => {
