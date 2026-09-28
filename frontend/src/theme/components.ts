@@ -26,6 +26,13 @@ export const componentsFor = (theme: Theme): Components<Theme> => {
         },
         '*': { boxSizing: 'border-box' },
         '::selection': { backgroundColor: t.selectedWash },
+        // Keyboard focus has to be visible on every control, including the ones MUI renders without
+        // a ring (table sort labels, chips, links inside cards). Mouse clicks stay quiet.
+        ':focus-visible': {
+          outline: `2px solid ${t.primary.main}`,
+          outlineOffset: 2,
+          borderRadius: 4,
+        },
         '@media (prefers-reduced-motion: reduce)': {
           '*': {
             animationDuration: '0.01ms !important',
