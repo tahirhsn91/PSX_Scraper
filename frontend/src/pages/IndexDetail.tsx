@@ -124,8 +124,14 @@ export function IndexDetail() {
             }
           />
         </Grid>
+        {/*
+          The tile row leads with the session's close — the level the index is actually quoted at —
+          because the previous close sitting under that first tile reads as the index's price while
+          being a session out of date. The previous close is still what `change` is measured against
+          and the API still serves it; it is just not the headline stat here.
+        */}
         <Grid item xs={6} sm={3} md={2}>
-          <StatTile label="Previous close" value={formatNumber(data.previousClose)} />
+          <StatTile label="Close" value={formatNumber(data.value)} />
         </Grid>
         <Grid item xs={6} sm={3} md={2}>
           <StatTile label="Open" value={formatNumber(data.open)} />
