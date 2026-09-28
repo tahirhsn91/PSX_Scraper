@@ -1,33 +1,45 @@
-import { Queue } from "bullmq";
-import { createRedisConnection } from "./connection";
-import type { HistoryRange } from "../utils/range";
+import { Queue } from 'bullmq';
+import { createRedisConnection } from './connection';
+import type { HistoryRange } from '../utils/range';
+import type { MonitoredQueueName } from '../utils/queueNames';
 
-export const SYNC_QUEUE = "stock-sync";
-export const SYNC_ALL_QUEUE = "stock-sync-all";
-export const HISTORY_QUEUE = "stock-history-sync";
-export const INDEX_QUEUE = "index-sync";
-export const QUOTE_QUEUE = "quote-sync";
+export const SYNC_QUEUE = 'stock-sync';
+export const SYNC_ALL_QUEUE = 'stock-sync-all';
+export const HISTORY_QUEUE = 'stock-history-sync';
+export const INDEX_QUEUE = 'index-sync';
+export const QUOTE_QUEUE = 'quote-sync';
 /** Job name shared by the scheduler and the manual enqueue helper. */
-export const QUOTE_POLL_JOB = "quote-poll";
+export const QUOTE_POLL_JOB = 'quote-poll';
+/**
+ * The index membership pass, on the quote queue: a handful of requests a day that decide what the
+ * dashboard's index filter and its KSE-100 page show. A second job name rather than a second queue
+ * — it is the same kind of work as the poll (light, schedule-driven, no fan-out) and reuses the
+ * worker that owns it.
+ *
+ * The name still says KSE100 because the job *id* and the schedule's name are what operators and
+ * Redis already hold; what the handler does is sync every published index (see
+ * `indexMembership.service`).
+ */
+export const KSE100_MEMBERSHIP_JOB = 'kse100-membership';
 
-export interface SyncJobData {
-  symbol: string;
-  trigger: "manual" | "cron" | "add";
-}
-export interface SyncAllJobData {
-  trigger: "manual" | "cron";
-}
-export interface HistoryJobData {
-  symbol: string;
-  range: HistoryRange;
-}
-export interface IndexSyncJobData {
-  symbol: string;
-  trigger: "manual" | "cron";
-}
-export interface QuotePollJobData {
-  trigger: "manual" | "cron";
-}
+/**
+ * The market-cap refresh, on the same queue for the same reason: schedule-driven background work
+ * that reuses the worker which owns the light periodic jobs. It is not as light as they are (~150
+ * requests for the whole book), so it carries its own slow cron rather than riding the tick.
+ */
+export const MARKET_CAP_JOB = 'market-cap-refresh';
+
+/**
+ * PSX's published holiday calendar. It rides the quote queue because the other session-cadence
+ * refresh jobs live there and its cost is one request a day.
+ */
+export const MARKET_HOLIDAYS_JOB = 'market-holidays-refresh';
+
+export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add' }
+export interface SyncAllJobData { trigger: 'manual' | 'cron' }
+export interface HistoryJobData { symbol: string; range: HistoryRange }
+export interface IndexSyncJobData { symbol: string; trigger: 'manual' | 'cron' }
+export interface QuotePollJobData { trigger: 'manual' | 'cron' }
 
 const connection = createRedisConnection();
 
@@ -35,7 +47,7 @@ export const syncQueue = new Queue<SyncJobData>(SYNC_QUEUE, {
   connection,
   defaultJobOptions: {
     attempts: 3,
-    backoff: { type: "exponential", delay: 5000 },
+    backoff: { type: 'exponential', delay: 5000 },
     removeOnComplete: { age: 3600, count: 500 },
     removeOnFail: { age: 86400, count: 1000 },
   },
@@ -54,7 +66,7 @@ export const historyQueue = new Queue<HistoryJobData>(HISTORY_QUEUE, {
   connection,
   defaultJobOptions: {
     attempts: 3,
-    backoff: { type: "exponential", delay: 5000 },
+    backoff: { type: 'exponential', delay: 5000 },
     removeOnComplete: { age: 3600, count: 200 },
     removeOnFail: { age: 86400, count: 500 },
   },
@@ -64,7 +76,7 @@ export const indexQueue = new Queue<IndexSyncJobData>(INDEX_QUEUE, {
   connection,
   defaultJobOptions: {
     attempts: 3,
-    backoff: { type: "exponential", delay: 5000 },
+    backoff: { type: 'exponential', delay: 5000 },
     removeOnComplete: { age: 3600, count: 200 },
     removeOnFail: { age: 86400, count: 200 },
   },
@@ -89,14 +101,12 @@ export const quoteQueue = new Queue<QuotePollJobData>(QUOTE_QUEUE, {
 
 /** Deterministic jobId → de-duplicates concurrent syncs for the same symbol.
  *  NOTE: BullMQ forbids ':' in custom job ids, so use '-'. */
-export const syncJobId = (symbol: string): string =>
-  `sync-${symbol.toUpperCase()}`;
-export const historyJobId = (symbol: string): string =>
-  `history-${symbol.toUpperCase()}`;
+export const syncJobId = (symbol: string): string => `sync-${symbol.toUpperCase()}`;
+export const historyJobId = (symbol: string): string => `history-${symbol.toUpperCase()}`;
 
 export async function enqueueHistorySync(symbol: string, range: HistoryRange) {
   return historyQueue.add(
-    "history",
+    'history',
     { symbol: symbol.toUpperCase(), range },
     { jobId: historyJobId(symbol) },
   );
@@ -107,38 +117,27 @@ export async function findExistingHistoryJob(symbol: string) {
 }
 
 /** Deterministic index job id, so a queued/active index sync is de-duplicated. */
-export const indexJobId = (symbol: string): string =>
-  `index-${symbol.toUpperCase()}`;
+export const indexJobId = (symbol: string): string => `index-${symbol.toUpperCase()}`;
 
-export async function enqueueIndexSync(
-  symbol: string,
-  trigger: IndexSyncJobData["trigger"],
-) {
+export async function enqueueIndexSync(symbol: string, trigger: IndexSyncJobData['trigger']) {
   const jobId = indexJobId(symbol);
   // Same reasoning as enqueueSync: a finished job keeps its id and would silently
   // absorb the next request, so clear it before re-adding.
   const existing = await indexQueue.getJob(jobId);
   if (existing) {
     const state = await existing.getState();
-    if (state === "completed" || state === "failed") {
+    if (state === 'completed' || state === 'failed') {
       await existing.remove().catch(() => undefined);
     }
   }
-  return indexQueue.add(
-    "index-sync",
-    { symbol: symbol.toUpperCase(), trigger },
-    { jobId },
-  );
+  return indexQueue.add('index-sync', { symbol: symbol.toUpperCase(), trigger }, { jobId });
 }
 
 export async function findExistingIndexJob(symbol: string) {
   return indexQueue.getJob(indexJobId(symbol));
 }
 
-export async function enqueueSync(
-  symbol: string,
-  trigger: SyncJobData["trigger"],
-) {
+export async function enqueueSync(symbol: string, trigger: SyncJobData['trigger']) {
   const jobId = syncJobId(symbol);
   // The jobId is deterministic (for de-dupe), so a job that already finished
   // (completed or failed) still occupies that id — BullMQ's `.add()` would
@@ -149,15 +148,11 @@ export async function enqueueSync(
   const existing = await syncQueue.getJob(jobId);
   if (existing) {
     const state = await existing.getState();
-    if (state === "completed" || state === "failed") {
+    if (state === 'completed' || state === 'failed') {
       await existing.remove().catch(() => undefined);
     }
   }
-  return syncQueue.add(
-    "sync",
-    { symbol: symbol.toUpperCase(), trigger },
-    { jobId },
-  );
+  return syncQueue.add('sync', { symbol: symbol.toUpperCase(), trigger }, { jobId });
 }
 
 /**
@@ -184,17 +179,17 @@ export async function cancelSyncJob(symbol: string): Promise<string | null> {
   const job = await syncQueue.getJob(syncJobId(symbol));
   if (!job) return null;
 
-  if ((await job.getState()) === "active") {
+  if ((await job.getState()) === 'active') {
     const deadline = Date.now() + ACTIVE_JOB_WAIT_MS;
     while (Date.now() < deadline) {
       await new Promise((r) => setTimeout(r, ACTIVE_JOB_POLL_MS));
       const state = await job.getState();
-      if (state !== "active") {
+      if (state !== 'active') {
         await job.remove().catch(() => undefined);
         return state;
       }
     }
-    return "active";
+    return 'active';
   }
 
   const state = await job.getState();
@@ -202,18 +197,14 @@ export async function cancelSyncJob(symbol: string): Promise<string | null> {
   return state;
 }
 
-export async function enqueueSyncAll(trigger: SyncAllJobData["trigger"]) {
-  return syncAllQueue.add(
-    "sync-all",
-    { trigger },
-    { jobId: `sync-all-${Date.now()}` },
-  );
+export async function enqueueSyncAll(trigger: SyncAllJobData['trigger']) {
+  return syncAllQueue.add('sync-all', { trigger }, { jobId: `sync-all-${Date.now()}` });
 }
 
-export const UNIVERSE_QUEUE = "universe-sync";
+export const UNIVERSE_QUEUE = 'universe-sync';
 /** The pass job: discovers the board and hands out one job per symbol. */
-export const UNIVERSE_PASS_JOB = "universe-pass";
-export const UNIVERSE_SYMBOL_JOB = "universe-symbol";
+export const UNIVERSE_PASS_JOB = 'universe-pass';
+export const UNIVERSE_SYMBOL_JOB = 'universe-symbol';
 
 export interface UniverseJobData {
   /**
@@ -221,7 +212,7 @@ export interface UniverseJobData {
    * and the runner decides from the PKT clock whether that means an in-hours pass, the
    * once-per-session closing pass, or nothing at all.
    */
-  kind: "auto" | "intraday" | "close";
+  kind: 'auto' | 'intraday' | 'close';
   symbol?: string;
 }
 
@@ -242,6 +233,23 @@ export const universeQueue = new Queue<UniverseJobData>(UNIVERSE_QUEUE, {
 });
 
 /**
+ * Every queue the dashboard reports on, keyed by the name it is displayed under.
+ *
+ * One map, two consumers: `GET /sync/status` reports each queue's counts and failures from it,
+ * and the clear-failed action resolves its target through it. Typing it as
+ * `Record<MonitoredQueueName, Queue>` means adding a name to the list without wiring a queue
+ * here does not compile, so a new queue cannot end up invisible on the dashboard.
+ */
+export const monitoredQueues: Record<MonitoredQueueName, Queue> = {
+  [SYNC_QUEUE]: syncQueue,
+  [SYNC_ALL_QUEUE]: syncAllQueue,
+  [HISTORY_QUEUE]: historyQueue,
+  [INDEX_QUEUE]: indexQueue,
+  [QUOTE_QUEUE]: quoteQueue,
+  [UNIVERSE_QUEUE]: universeQueue,
+};
+
+/**
  * Enqueue one job per symbol, each delayed by its position in the list.
  *
  * The delay is the pacing: the worker runs one at a time, so a 500-symbol pass spreads over
@@ -257,7 +265,7 @@ export const universeQueue = new Queue<UniverseJobData>(UNIVERSE_QUEUE, {
  */
 export async function enqueueUniverseSymbols(
   symbols: string[],
-  kind: UniverseJobData["kind"],
+  kind: UniverseJobData['kind'],
   pacingMs: number,
 ): Promise<void> {
   const jobs = symbols.map((symbol, i) => ({
@@ -266,7 +274,7 @@ export async function enqueueUniverseSymbols(
     opts: {
       delay: i * pacingMs,
       attempts: 2,
-      backoff: { type: "exponential" as const, delay: 10_000 },
+      backoff: { type: 'exponential' as const, delay: 10_000 },
       removeOnComplete: { age: 3600, count: 2000 },
       removeOnFail: { age: 86400, count: 2000 },
     },
@@ -278,12 +286,20 @@ export async function enqueueUniverseSymbols(
  * Queue one quote-poll tick. The id is timestamped rather than fixed: a tick that is still
  * running should not swallow the next one, and stale finish-state can't block a re-add.
  */
-export async function enqueueQuotePoll(trigger: QuotePollJobData["trigger"]) {
-  return quoteQueue.add(
-    QUOTE_POLL_JOB,
-    { trigger },
-    { jobId: `quote-poll-${Date.now()}` },
-  );
+export async function enqueueQuotePoll(trigger: QuotePollJobData['trigger']) {
+  return quoteQueue.add(QUOTE_POLL_JOB, { trigger }, { jobId: `quote-poll-${Date.now()}` });
+}
+
+/**
+ * Queue the index membership pass on demand — the same job the daily schedule runs, which syncs
+ * every published index (the KSE-100 from the exchange's member site, the rest from the ticker).
+ *
+ * Idempotent by design: a second request while one is queued is a no-op (fixed job id), because a
+ * membership pass has no per-call argument. Used by the dev recipe to fill the group on a fresh
+ * database without waiting for the nightly run.
+ */
+export async function enqueueKse100Membership(trigger: QuotePollJobData['trigger'] = 'manual') {
+  return quoteQueue.add(KSE100_MEMBERSHIP_JOB, { trigger }, { jobId: 'kse100-membership-manual' });
 }
 
 /** Return an existing queued/active job for a symbol, if any. */
