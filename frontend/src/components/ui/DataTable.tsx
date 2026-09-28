@@ -64,6 +64,8 @@ export interface DataTableProps<T> {
   maxHeight?: number | string;
   /** Extra content above the rows, rendered inside the card body. */
   toolbar?: ReactNode;
+  /** Whole-row click on desktop, for parity with the card list. The row link stays for keyboards. */
+  onRowClick?: (row: T) => void;
   /** Stacked cards below this breakpoint. Defaults to `md`. */
   cardsBelow?: 'sm' | 'md';
 }
@@ -93,14 +95,65 @@ export function DataTable<T>({
   skeletonRows = 6,
   maxHeight,
   toolbar,
+  onRowClick,
   cardsBelow = 'md',
 }: DataTableProps<T>) {
   const theme = useTheme();
   const isCardView = useMediaQuery(theme.breakpoints.down(cardsBelow));
 
+  /** Columns hidden below a breakpoint stop taking part in the layout at that width. */
+  const cellSx = (c: Column<T>) =>
+    c.hideBelow
+      ? { display: { xs: 'none', sm: c.hideBelow === 'sm' ? 'table-cell' : 'none', md: 'table-cell' } }
+      : undefined;
+
+  /**
+   * The header row, shared by the loading and the loaded states — so a sort the reader just clicked
+   * stays visible (and announced) while the new page is in flight, instead of the table turning
+   * into an unlabelled skeleton with no sort state.
+   */
+  const headRow = () => (
+    <TableHead>
+      <TableRow>
+        {columns.map((c) => {
+          const sorted = Boolean(sort && c.sortKey && sort.key === c.sortKey);
+          const canSort = Boolean(c.sortKey && onSortChange);
+          return (
+            <TableCell
+              key={c.key}
+              align={c.align}
+              width={c.width}
+              aria-sort={sorted ? (sort?.direction === 'asc' ? 'ascending' : 'descending') : undefined}
+              sx={cellSx(c)}
+            >
+              {canSort ? (
+                <TableSortLabel
+                  active={sorted}
+                  direction={sorted ? sort?.direction : 'asc'}
+                  onClick={() =>
+                    onSortChange?.({
+                      key: c.sortKey as string,
+                      direction: sorted && sort?.direction === 'asc' ? 'desc' : 'asc',
+                    })
+                  }
+                  sx={{ '& .MuiTableSortLabel-icon': { opacity: sorted ? 1 : 0.3 } }}
+                >
+                  {c.header}
+                </TableSortLabel>
+              ) : (
+                c.header
+              )}
+            </TableCell>
+          );
+        })}
+      </TableRow>
+    </TableHead>
+  );
+
   const body = () => {
     if (error) return <ErrorPanel message={error} onRetry={onRetry} compact />;
-    if (loading) {
+    // First load for this query (no rows yet): skeleton rows underneath the real header.
+    if (loading && rows.length === 0) {
       return isCardView ? (
         <Stack spacing={1} sx={{ p: 1.5 }}>
           {Array.from({ length: Math.min(skeletonRows, 5) }).map((_, i) => (
@@ -109,16 +162,8 @@ export function DataTable<T>({
         </Stack>
       ) : (
         <TableContainer>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                {columns.map((c) => (
-                  <TableCell key={c.key} align={c.align} width={c.width}>
-                    {c.header}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
+          <Table size="small" aria-busy="true">
+            {headRow()}
             <TableBody>
               {Array.from({ length: skeletonRows }).map((_, r) => (
                 <TableRow key={r}>
@@ -145,55 +190,29 @@ export function DataTable<T>({
         />
       );
     }
+    // Refetching while rows are already on screen: keep them and dim them, never blank the table.
+    const stale = loading;
     return isCardView ? (
-      <MobileCards columns={columns} rows={rows} rowKey={rowKey} rowHref={rowHref} />
+      <Box
+        sx={stale ? { opacity: 0.55, pointerEvents: 'none', transition: 'opacity 150ms' } : undefined}
+        aria-busy={stale || undefined}
+      >
+        <MobileCards columns={columns} rows={rows} rowKey={rowKey} rowHref={rowHref} />
+      </Box>
     ) : (
       <TableContainer sx={{ maxHeight }}>
-        <Table size="small" stickyHeader={Boolean(maxHeight)} aria-label="Results">
-          <TableHead>
-            <TableRow>
-              {columns.map((c) => {
-                const sorted = Boolean(sort && c.sortKey && sort.key === c.sortKey);
-                const canSort = Boolean(c.sortKey && onSortChange);
-                return (
-                  <TableCell
-                    key={c.key}
-                    align={c.align}
-                    width={c.width}
-                    aria-sort={sorted ? (sort?.direction === 'asc' ? 'ascending' : 'descending') : undefined}
-                    sx={
-                      c.hideBelow
-                        ? { display: { xs: 'none', sm: c.hideBelow === 'sm' ? 'table-cell' : 'none', md: 'table-cell' } }
-                        : undefined
-                    }
-                  >
-                    {canSort ? (
-                      <TableSortLabel
-                        active={sorted}
-                        direction={sorted ? sort?.direction : 'asc'}
-                        onClick={() =>
-                          onSortChange?.({
-                            key: c.sortKey as string,
-                            direction: sorted && sort?.direction === 'asc' ? 'desc' : 'asc',
-                          })
-                        }
-                        sx={{ '& .MuiTableSortLabel-icon': { opacity: sorted ? 1 : 0.3 } }}
-                      >
-                        {c.header}
-                      </TableSortLabel>
-                    ) : (
-                      c.header
-                    )}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
+        <Table size="small" stickyHeader={Boolean(maxHeight)} aria-label="Results" aria-busy={stale || undefined}>
+          {headRow()}
+          <TableBody sx={stale ? { opacity: 0.55, transition: 'opacity 150ms' } : undefined}>
             {rows.map((row) => {
               const href = rowHref?.(row);
               return (
-                <TableRow key={rowKey(row)} hover>
+                <TableRow
+                  key={rowKey(row)}
+                  hover
+                  onClick={onRowClick ? () => onRowClick(row) : undefined}
+                  sx={onRowClick ? { cursor: 'pointer' } : undefined}
+                >
                   {columns.map((c, index) => (
                     <TableCell
                       key={c.key}
