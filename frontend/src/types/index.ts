@@ -115,6 +115,8 @@ export interface SearchResult {
   companyName: string | null;
   currentPrice: number | null;
   lastSyncedAt: string | null;
+  /** Served by the API but previously untyped and unrendered. */
+  sector?: string | null;
   lastTradeDate: string | null;
 }
 
