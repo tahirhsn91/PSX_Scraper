@@ -1,17 +1,28 @@
 import { fetchPsxIndices, parseSarmaayaIndices } from '../src/scrapers/psxIndices.scraper';
 
 /**
- * The board read must not be skippable, and one unreachable page must not be able to freeze it.
+ * The board read must not be skippable, and no single source may freeze it.
  *
- * Measured on 2026-09-28: the exchange's market-summary page could not be read by the running
- * worker between 11:29 PKT and the close, so all 17 index rows kept that intraday reading and the
- * dashboard served KSE-100 as 170,300.62 against a published close of 170,425.62 — a level
- * presented as a close, with nothing on the row to say so. The fallback below is the second path.
+ * Measured on 2026-09-28: the exchange's market-summary page served an 11:29 PKT reading at 15:17
+ * PKT, so the rows kept that intraday level and the dashboard served KSE-100 as 170,300.62 against
+ * a published close of 170,425.62 — a level presented as a close, with nothing on the row to say
+ * so. Sarmaaya's board is the read that keeps moving, so it leads; the exchange's page is the
+ * fallback, and fills any symbol the lead did not publish.
  *
  * The payload shape is the live one, captured from https://beta-restapi.sarmaaya.pk/api/indices.
  */
 const board = (rows: unknown) =>
   JSON.stringify({ success: true, message: 'Success', response: { data: rows } });
+
+/** The exchange carousel's markup, as the page serves it. */
+const carousel = (rows: Array<[string, number]>) =>
+  rows
+    .map(
+      ([symbol, level]) =>
+        `<div class="item indices-single"><div class="col-xs-6"><h3>${symbol}</h3><h4>${level}</h4></div>` +
+        `<div class="col-xs-6"><h5 class="up">1.00</h5><h6 class="up">(0.01%)</h6></div></div>`,
+    )
+    .join('');
 
 const ROWS = [
   { symbol: 'KSE100', curr: 170425.62, change: -339.6, changePercent: -0.2 },
@@ -26,7 +37,28 @@ afterEach(() => {
   global.fetch = originalFetch;
 });
 
-describe("Sarmaaya's board as the index fallback", () => {
+/** Serve Sarmaaya's board and/or the exchange's page, recording the URLs that were asked for. */
+function serving(sources: { sarmaaya?: unknown; page?: string | 'fail' }, urls: string[]) {
+  return (async (url: unknown) => {
+    const target = String(url);
+    urls.push(target);
+    if (target.includes('beta-restapi.sarmaaya.pk')) {
+      if (sources.sarmaaya === undefined) {
+        return { ok: false, status: 503, json: async () => ({}) } as unknown as Response;
+      }
+      return { ok: true, status: 200, json: async () => JSON.parse(board(sources.sarmaaya)) } as unknown as Response;
+    }
+    if (target.includes('psx.com.pk')) {
+      if (sources.page === 'fail') {
+        return { ok: false, status: 503, text: async () => '' } as unknown as Response;
+      }
+      return { ok: true, status: 200, text: async () => sources.page ?? '' } as unknown as Response;
+    }
+    throw new Error(`unexpected url ${target}`);
+  }) as unknown as typeof global.fetch;
+}
+
+describe("Sarmaaya's board: what it carries", () => {
   it('reads symbol, level, change and percent from the payload', () => {
     const parsed = parseSarmaayaIndices(JSON.parse(board(ROWS)));
 
@@ -68,35 +100,79 @@ describe("Sarmaaya's board as the index fallback", () => {
     expect(parseSarmaayaIndices({})).toEqual([]);
     expect(parseSarmaayaIndices({ response: { data: 'nope' } })).toEqual([]);
   });
+});
 
-  it('falls back to Sarmaaya when the exchange page cannot be read', async () => {
+describe('the board read: Sarmaaya leads, the exchange page fills and falls back', () => {
+  it('asks Sarmaaya for the whole board, not its first page', async () => {
     const urls: string[] = [];
-    global.fetch = (async (url: unknown) => {
-      const target = String(url);
-      urls.push(target);
-      if (target.includes('psx.com.pk')) {
-        return { ok: false, status: 503, text: async () => '' } as unknown as Response;
-      }
-      if (target.includes('beta-restapi.sarmaaya.pk')) {
-        return { ok: true, status: 200, json: async () => JSON.parse(board(ROWS)) } as unknown as Response;
-      }
-      throw new Error(`unexpected url ${target}`);
-    }) as unknown as typeof global.fetch;
+    global.fetch = serving({ sarmaaya: ROWS, page: carousel([['KMI30', 244101.85]]) }, urls);
+
+    await fetchPsxIndices();
+
+    // The board paginates at ten rows while 17 indices are tracked, so a read without a limit is
+    // short by seven — and those seven are never written.
+    const sarmaaya = urls.find((u) => u.includes('beta-restapi.sarmaaya.pk')) ?? '';
+    expect(sarmaaya).toMatch(/[?&]limit=\d+/);
+  });
+
+  it('reads Sarmaaya first and takes the board from it', async () => {
+    const urls: string[] = [];
+    global.fetch = serving({ sarmaaya: ROWS, page: carousel([['KSE100', 170999.99]]) }, urls);
 
     const parsed = await fetchPsxIndices();
 
-    // The exchange is tried first, and only then the fallback.
-    expect(urls[0]).toContain('psx.com.pk');
-    expect(urls.some((u) => u.includes('beta-restapi.sarmaaya.pk'))).toBe(true);
-    expect(parsed.find((i) => i.symbol === 'KSE100')?.level).toBe(170425.62);
+    expect(urls[0]).toContain('beta-restapi.sarmaaya.pk');
     expect(parsed).toHaveLength(2);
+    // The lead's value wins for a symbol both sources carry.
+    expect(parsed.find((i) => i.symbol === 'KSE100')?.level).toBe(170425.62);
+    expect(parsed.find((i) => i.symbol === 'KMI30')?.level).toBe(244101.85);
   });
 
-  it("reports the exchange's own failure when both paths fail", async () => {
+  it('takes a symbol the lead did not publish from the exchange page', async () => {
+    const urls: string[] = [];
+    global.fetch = serving(
+      {
+        sarmaaya: [{ symbol: 'KSE100', curr: 170425.62, change: -339.6, changePercent: -0.2 }],
+        page: carousel([['KMI30', 244101.85]]),
+      },
+      urls,
+    );
+
+    const parsed = await fetchPsxIndices();
+
+    expect(parsed.map((i) => i.symbol)).toEqual(['KSE100', 'KMI30']);
+    expect(parsed[1]?.level).toBe(244101.85);
+    expect(urls.some((u) => u.includes('psx.com.pk'))).toBe(true);
+  });
+
+  it("serves the lead's board when the exchange page cannot be read", async () => {
+    const urls: string[] = [];
+    global.fetch = serving({ sarmaaya: ROWS, page: 'fail' }, urls);
+
+    const parsed = await fetchPsxIndices();
+
+    expect(parsed).toHaveLength(2);
+    expect(parsed.find((i) => i.symbol === 'KMI30')?.level).toBe(244101.85);
+  });
+
+  it('falls back to the exchange page when Sarmaaya cannot be read', async () => {
+    const urls: string[] = [];
+    global.fetch = serving({ page: carousel([['KSE100', 170425.62], ['KMI30', 244101.85]]) }, urls);
+
+    const parsed = await fetchPsxIndices();
+
+    // Sarmaaya is tried first even when it is the source that is down.
+    expect(urls[0]).toContain('beta-restapi.sarmaaya.pk');
+    expect(parsed.map((i) => i.symbol)).toEqual(['KSE100', 'KMI30']);
+    expect(parsed[0]?.level).toBe(170425.62);
+  });
+
+  it('reports both reasons when neither source can be read', async () => {
     global.fetch = (async () => {
       throw new Error('ENETUNREACH');
     }) as unknown as typeof global.fetch;
 
-    await expect(fetchPsxIndices()).rejects.toThrow(/psx market-summary unreachable/);
+    await expect(fetchPsxIndices()).rejects.toThrow(/sarmaaya indices unreachable/);
+    await expect(fetchPsxIndices()).rejects.toThrow(/psx market-summary also failed/);
   });
 });

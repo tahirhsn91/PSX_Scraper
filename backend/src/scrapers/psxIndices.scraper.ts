@@ -95,24 +95,29 @@ export function parseIndices(html: string): ParsedIndex[] {
 }
 
 /**
- * Sarmaaya's whole index board — the fallback when the exchange's own page cannot be read.
+ * Sarmaaya's whole index board — the *lead* read of the board, with the exchange's page behind it.
  *
- * Why a fallback at all: this read is the *only* writer of a session's index row, so a page that
- * refuses us does not leave the row empty, it freezes it. Measured on 2026-09-28: all 17 rows held
- * an 11:29 PKT reading while the session had closed, and the dashboard served KSE-100 as
- * 170,300.62 against a published close of 170,425.62. One unreachable page must not be able to
- * leave the board presenting an intraday level as a close.
+ * Why this read leads: it is the live one. The exchange's carousel freezes without saying so —
+ * measured on 2026-09-28 it served an 11:29 PKT reading at 15:17 PKT, and the dashboard presented
+ * 170,300.62 as KSE-100's close against a published 170,425.62. A frozen read looks exactly like a
+ * quiet market, and this read is the only writer of a session's index row, so the source that keeps
+ * moving is the one the pass must read first.
  *
- * The series is the same one behind our stored history — Sarmaaya's `price-history` endpoint
- * reproduced the stored 24 Sep row for all 17 indices to the paisa (170498.95 against our
- * 170498.94) and 23 Sep exactly — so this is a fallback, not a second opinion. `change` and
- * `changePercent` are taken as published; when the source reports none the field stays null rather
- * than being recomputed into a number we would then have to defend.
+ * The series is the same one behind our stored history: Sarmaaya's `price-history` reproduced the
+ * stored 24 Sep row for all 17 indices to the paisa (170498.95 against our 170498.94) and 23 Sep
+ * exactly. So this is not a second opinion, it is the same source of record read from the endpoint
+ * that is alive. `change` and `changePercent` are taken as published; when the source reports none
+ * the field stays null rather than being recomputed into a number we would then have to defend.
  *
- * Endpoint: https://beta-restapi.sarmaaya.pk/api/indices
- * Response: { success, response: { data: [{ symbol, curr, change, changePercent, … }, …] } }
+ * `limit` is not decoration: the board **paginates at ten rows**, so without it this endpoint
+ * answers with 10 of the 17 indices we track and the other seven (NBPPGI, NITPGI, MZNPI, UPP9,
+ * OGTI, PSXDIV20, MII30) are never written — measured 2026-09-28, `?limit=100` returns all 17 and
+ * `response.total` says 17. A page-size default is not a board size.
+ *
+ * Endpoint: https://beta-restapi.sarmaaya.pk/api/indices?limit=100
+ * Response: { success, response: { data: [{ symbol, curr, change, changePercent, … }, … ] } }
  */
-export const SARMAYA_BOARD_URL = 'https://beta-restapi.sarmaaya.pk/api/indices';
+export const SARMAYA_BOARD_URL = 'https://beta-restapi.sarmaaya.pk/api/indices?limit=100';
 
 const SARMAYA_UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36';
@@ -192,27 +197,58 @@ async function fetchPsxBoard(timeoutMs: number): Promise<ParsedIndex[]> {
 }
 
 /**
- * Fetch and parse the board: the exchange's page first, Sarmaaya's board when that cannot be read.
+ * Fetch and parse the board: Sarmaaya's live board first, the exchange's own page behind it.
  *
- * The exchange's own error is what surfaces when both paths fail — the fallback must not hide the
- * original failure behind its own reason, or the log would blame Sarmaaya for the PSX page.
+ * Both sources are read on a pass, and they are not equals. Sarmaaya leads: every symbol it
+ * published is taken from it, so a frozen page cannot reach a session's row. The exchange's page
+ * then does two jobs, in this order — it fills any symbol Sarmaaya did not publish (a page-size or
+ * listing change upstream cannot silently leave indices unwritten, which is the failure mode
+ * `limit` was meant to close and nothing should depend on staying closed), and if Sarmaaya could
+ * not be read at all it is the board.
+ *
+ * A page that cannot be read is not a failed pass: the lead's rows are already complete in the
+ * normal case, and the log names what happened. When *both* fail the error carries both reasons —
+ * with the order flipped, blaming the page for the Sarmaaya read would be the same mistake the
+ * previous order made in the other direction.
  */
 export async function fetchPsxIndices(timeoutMs = 20000): Promise<ParsedIndex[]> {
   const log = childLogger({ op: 'psx-indices' });
+
+  let lead: ParsedIndex[] | null = null;
+  let leadError: unknown = null;
   try {
-    return await fetchPsxBoard(timeoutMs);
-  } catch (primary) {
-    try {
-      const indices = await fetchSarmaayaIndices(timeoutMs);
+    lead = await fetchSarmaayaIndices(timeoutMs);
+  } catch (e) {
+    leadError = e;
+  }
+
+  try {
+    const page = await fetchPsxBoard(timeoutMs);
+    if (lead === null) {
       log.warn('psx-indices.fallback', {
-        source: 'sarmaaya',
-        reason: (primary as Error).message.slice(0, 120),
-        count: indices.length,
+        source: 'psx market-summary',
+        reason: String((leadError as Error).message).slice(0, 120),
+        count: page.length,
       });
-      return indices;
-    } catch {
-      throw primary;
+      return page;
     }
+    const gaps = page.filter((row) => !lead.some((seen) => seen.symbol === row.symbol));
+    if (gaps.length > 0) {
+      log.warn('psx-indices.page-gap-fill', { symbols: gaps.map((row) => row.symbol), count: gaps.length });
+      return [...lead, ...gaps];
+    }
+    return lead;
+  } catch (pageError) {
+    if (lead !== null) {
+      log.warn('psx-indices.page-unavailable', {
+        reason: String((pageError as Error).message).slice(0, 120),
+        count: lead.length,
+      });
+      return lead;
+    }
+    throw new SiteUnavailableError(
+      `${(leadError as Error).message}; psx market-summary also failed: ${(pageError as Error).message}`,
+    );
   }
 }
 
