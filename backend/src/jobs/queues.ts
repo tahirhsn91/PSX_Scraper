@@ -49,6 +49,7 @@ export const MARKET_CAP_JOB = 'market-cap-refresh';
  * PSX's published holiday calendar. It rides the quote queue because the other session-cadence
  * refresh jobs live there and its cost is one request a day.
  */
+export const SESSION_CANDLE_JOB = 'session-candle';
 export const MARKET_HOLIDAYS_JOB = 'market-holidays-refresh';
 
 export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add' }

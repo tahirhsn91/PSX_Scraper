@@ -56,6 +56,60 @@ export function median(values: number[]): number | null {
   return sorted.length % 2 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
 }
 
+/**
+ * Tracked symbols with the row for `tradeDate` and the live price on it.
+ *
+ * The candle sync needs both halves in one read: a symbol with no row for the session has nothing to
+ * write a candle onto (the quote poll creates those rows; this source only fills them in), and the
+ * live price is the reference a candle's close is checked against before any of it is trusted.
+ */
+export async function listTrackedWithSessionRow(tradeDate: Date): Promise<{
+  tracked: number;
+  rows: Array<{ id: string; symbol: string; currentPrice: number | null }>;
+}> {
+  // `stocks` holds the tracked universe: deleting a symbol removes the row, so there is no second
+  // flag to filter on. `tracked` is reported alongside the rows so the caller can say how many
+  // symbols had no row for this session rather than silently syncing a subset.
+  const tracked = await prisma.stock.count();
+  const prices = await prisma.stockPrice.findMany({
+    where: { lastTradeDate: tradeDate },
+    select: { stockId: true, currentPrice: true, close: true, stock: { select: { symbol: true } } },
+  });
+  return {
+    tracked,
+    rows: prices.map((price) => {
+      const reference = price.currentPrice ?? price.close ?? null;
+      return {
+        id: price.stockId,
+        symbol: price.stock.symbol,
+        currentPrice: reference === null ? null : Number(reference),
+      };
+    }),
+  };
+}
+
+/**
+ * The session's open and close from a source that publishes the candle.
+ *
+ * Writes only the fields this source owns, and only when it has a reading: `open` and `close`. `high`,
+ * `low` and `marketCap` belong to the company-page scrape and the live `currentPrice` to the quote
+ * poll — both are left exactly as they are. A null leg is not written at all, so a source that stops
+ * answering cannot blank a good row (the rule `upsertQuoteSnapshot` documents). Returns false when the
+ * session has no row, matching `IndexRepository.setSessionOpen`.
+ */
+export async function setSessionCandle(
+  stockId: string,
+  tradeDate: Date,
+  candle: { open: number | null; close: number | null },
+): Promise<boolean> {
+  const data: Prisma.StockPriceUpdateManyMutationInput = {};
+  if (candle.open !== null) data.open = new Prisma.Decimal(candle.open);
+  if (candle.close !== null) data.close = new Prisma.Decimal(candle.close);
+  if (Object.keys(data).length === 0) return false;
+  const result = await prisma.stockPrice.updateMany({ where: { stockId, lastTradeDate: tradeDate }, data });
+  return result.count > 0;
+}
+
 export async function upsertQuoteSnapshot(snapshot: QuoteSnapshot): Promise<boolean> {
   const stock = await prisma.stock.findUnique({
     where: { symbol: snapshot.symbol.toUpperCase() },
