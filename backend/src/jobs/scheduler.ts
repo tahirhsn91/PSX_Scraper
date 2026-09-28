@@ -3,6 +3,7 @@ import { logger } from "../utils/logger";
 import {
   syncAllQueue,
   indexQueue,
+  INDEX_BOARD_JOB,
   quoteQueue,
   enqueueIndexSync,
   QUOTE_POLL_JOB,
@@ -113,6 +114,30 @@ async function registerKse100MembershipSchedule(): Promise<void> {
  * clock and decides whether this is an in-hours pass, the once-per-session closing pass, or
  * nothing. That is what makes the passes never idle without a second schedule to keep in sync.
  */
+/**
+ * The index board tick.
+ *
+ * `INDEX_SCRAPE_INTERVAL_MS` (default 300000) is the cadence the board pass was written against; a
+ * repeatable job asks in cron, so this is that interval as the nearest minute step. The tick is
+ * cheap when it should do nothing — one Redis call to be told the closing pass is not due yet.
+ */
+const INDEX_BOARD_CRON = '*/5 * * * *';
+
+async function registerIndexBoardSchedule(): Promise<void> {
+  // Same re-registration discipline as the universe pass: drain the existing keys first, so a
+  // pattern or payload change cannot leave the old job running beside the new one.
+  for (const job of await indexQueue.getRepeatableJobs()) {
+    if (job.name !== INDEX_BOARD_JOB) continue;
+    await indexQueue.removeRepeatableByKey(job.key);
+  }
+  await indexQueue.add(
+    INDEX_BOARD_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: INDEX_BOARD_CRON }, jobId: 'scheduled-index-board' },
+  );
+  logger.info('scheduler.index_board_registered', { cron: INDEX_BOARD_CRON });
+}
+
 async function registerUniversePassSchedule(): Promise<void> {
   if (!env.UNIVERSE_ENABLED) {
     logger.info("scheduler.universe_pass_disabled");
@@ -182,6 +207,7 @@ export async function registerScheduler(): Promise<void> {
   await registerKse100MembershipSchedule();
   await registerMarketCapSchedule();
   await registerUniversePassSchedule();
+  await registerIndexBoardSchedule();
 
   await syncAllQueue.add(
     "scheduled-sync-all",

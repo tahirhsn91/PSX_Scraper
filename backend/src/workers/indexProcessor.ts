@@ -1,5 +1,6 @@
 import { Job, UnrecoverableError } from 'bullmq';
-import { IndexSyncJobData } from '../jobs/queues';
+import { INDEX_BOARD_JOB, IndexBoardJobData, IndexSyncJobData } from '../jobs/queues';
+import { runIndexBoardPass } from '../services/indexScrape.service';
 import { runIndexSync } from '../services/indexSync.service';
 import { psxHistoricalScraper } from '../scrapers/historical.scraper';
 import { childLogger } from '../utils/logger';
@@ -21,7 +22,15 @@ export interface IndexSyncSkip {
  * failed member and no `sync_logs` row — the run never happened — and the next tick after the
  * cooldown probes the source again.
  */
-export async function processIndexJob(job: Job<IndexSyncJobData>): Promise<unknown> {
+export async function processIndexJob(job: Job<IndexSyncJobData | IndexBoardJobData>): Promise<unknown> {
+  // The board pass shares this queue (and therefore the page pool) but takes no symbol: one page
+  // carries every index. Its own tick decides intraday board read vs the post-close closing pass.
+  if (job.name === INDEX_BOARD_JOB) {
+    return runIndexBoardPass({});
+  }
+  if (!('symbol' in job.data)) {
+    throw new UnrecoverableError(`index job ${job.name} carries no symbol`);
+  }
   const { symbol } = job.data;
   const source = psxHistoricalScraper.source;
 
