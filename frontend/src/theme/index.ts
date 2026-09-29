@@ -7,7 +7,9 @@ import {
   shadowsFor,
   tokensFor,
   typeScale,
+  type ChartColors,
   type ModeTokens,
+  type NavColors,
   type SoftColor,
   type TrendColors,
 } from './tokens';
@@ -46,6 +48,8 @@ declare module '@mui/material/styles' {
     up: TrendColors;
     down: TrendColors;
     accent: SoftColor;
+    nav: NavColors;
+    chart: ChartColors;
   }
   interface PaletteOptions {
     surfaceElevated?: string;
@@ -57,6 +61,8 @@ declare module '@mui/material/styles' {
     up?: TrendColors;
     down?: TrendColors;
     accent?: SoftColor;
+    nav?: NavColors;
+    chart?: ChartColors;
   }
   interface Theme {
     app: AppThemeExtras;
@@ -90,7 +96,9 @@ const fontFamily = [
 function buildOptions(mode: PaletteMode): ThemeOptions {
   const t = tokensFor(mode);
   const isDark = mode === 'dark';
-  const onTrend = isDark ? '#04231A' : '#FFFFFF';
+  // Ink that sits on a saturated trend fill: dark in dark mode (the fills there are pastels),
+  // white in light mode.
+  const onTrend = isDark ? t.onPrimary : '#FFFFFF';
 
   return {
     palette: {
@@ -103,17 +111,17 @@ function buildOptions(mode: PaletteMode): ThemeOptions {
       },
       secondary: {
         main: t.info.main,
-        contrastText: isDark ? '#041F33' : '#FFFFFF',
+        contrastText: isDark ? t.onPrimary : '#FFFFFF',
       },
       success: { main: t.up.main, soft: t.up.soft, onSoft: t.up.onSoft, contrastText: onTrend },
       error: {
         main: t.down.main,
         soft: t.down.soft,
         onSoft: t.down.onSoft,
-        contrastText: isDark ? '#2B0A0A' : '#FFFFFF',
+        contrastText: onTrend,
       },
-      warning: { main: t.warning.main, soft: t.warning.soft, contrastText: isDark ? '#2A1B02' : '#FFFFFF' },
-      info: { main: t.info.main, soft: t.info.soft, contrastText: isDark ? '#041F33' : '#FFFFFF' },
+      warning: { main: t.warning.main, soft: t.warning.soft, contrastText: isDark ? '#E8E2D2' : '#FFFFFF' },
+      info: { main: t.info.main, soft: t.info.soft, contrastText: isDark ? t.onPrimary : '#FFFFFF' },
       background: { default: t.bg, paper: t.surface },
       text: { primary: t.text, secondary: t.textSecondary, disabled: t.textMuted },
       divider: t.border,
@@ -133,6 +141,8 @@ function buildOptions(mode: PaletteMode): ThemeOptions {
       up: t.up,
       down: t.down,
       accent: t.accent,
+      nav: t.nav,
+      chart: t.chart,
     },
     typography: {
       fontFamily,
