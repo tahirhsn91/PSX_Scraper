@@ -1,5 +1,6 @@
-import { AppBar, Box, Button, Container, IconButton, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Container, IconButton, Stack, Toolbar, Typography, alpha } from '@mui/material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
 import { ThemeMenu } from './ThemeMenu';
@@ -9,6 +10,25 @@ const NAV = [
   { label: 'Dashboard', to: '/' },
   { label: 'Sync Logs', to: '/logs' },
 ];
+
+/**
+ * Where the portfolio manager lives.
+ *
+ * Overridable per environment so a dev stack can point at a dev manager, but it defaults to the live
+ * one on purpose: a link that only works once someone has filled in an `.env` entry is a link that
+ * breaks on the next fresh clone. Read at build time by Vite, like `VITE_API_URL`.
+ */
+const PORTFOLIO_URL = (import.meta.env.VITE_PORTFOLIO_URL as string) || 'https://manager.myportfolio365.com/';
+
+/** Shared by the labelled button and the icon-only phone twin, so they can never drift apart. */
+const portfolioLink = (): { component: 'a'; href: string; target: string; rel: string } => ({
+  component: 'a',
+  href: PORTFOLIO_URL,
+  target: '_blank',
+  // `noopener` blocks the new tab from reaching back through `window.opener`; `noreferrer` also drops
+  // the referrer, so the manager's analytics cannot read this app's URL — including a dev host.
+  rel: 'noopener noreferrer',
+});
 
 /**
  * Top bar: brand, primary navigation, global search (desktop), theme control.
@@ -66,6 +86,54 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Stack direction="row" spacing={0.5} sx={{ ml: { xs: 'auto', md: 0 }, alignItems: 'center' }}>
             <IconButton onClick={onOpenSearch} aria-label="Search stocks" sx={{ display: { md: 'none' } }}>
               <SearchRoundedIcon />
+            </IconButton>
+            {/* The one control that leaves the app, so it carries the brand colour instead of sitting
+                quietly beside the theme control. Labelled from `sm` up; below that the header is brand
+                plus icons only, and a full label would push the theme control off-screen — so it
+                collapses to its icon rather than disappearing. */}
+            <Button
+              {...portfolioLink()}
+              color="primary"
+              variant="contained"
+              disableElevation
+              startIcon={<AccountBalanceWalletRoundedIcon />}
+              sx={{
+                display: { xs: 'none', sm: 'inline-flex' },
+                borderRadius: 999,
+                px: 1.75,
+                minHeight: 36,
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+                whiteSpace: 'nowrap',
+                boxShadow: 1,
+              }}
+            >
+              Track your portfolio
+              <Box
+                component="span"
+                sx={{
+                  ml: 0.75,
+                  px: 0.5,
+                  py: 0.125,
+                  borderRadius: 999,
+                  fontSize: '0.625rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.04em',
+                  lineHeight: 1.4,
+                  // Tinted from the button's own contrast colour, so it stays legible in light mode
+                  // (dark ink on dark green) and in dark mode (light ink on mint).
+                  bgcolor: (theme) => alpha(theme.palette.primary.contrastText, 0.18),
+                }}
+              >
+                NEW
+              </Box>
+            </Button>
+            <IconButton
+              {...portfolioLink()}
+              aria-label="Track your portfolio"
+              sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
+            >
+              <AccountBalanceWalletRoundedIcon fontSize="small" />
             </IconButton>
             <ThemeMenu />
           </Stack>
