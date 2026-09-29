@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import {
   createChart, ColorType, type IChartApi, type ISeriesApi, type UTCTimestamp,
 } from 'lightweight-charts';
@@ -57,6 +57,23 @@ export function CandleChart({
   const appliedRef = useRef<HistoryRange | null>(null);
   dataRef.current = data;
 
+  /**
+   * Series colours come from the theme, not from constants. Until now this chart was the one place
+   * that ignored the palette — it carried TradingView's teal and red as literals, so it looked the
+   * same in both colour modes and did not move when the palette did. Destructured to plain strings
+   * so the build effect below can depend on them: an object would be a new identity every render
+   * and rebuild the chart continuously.
+   */
+  const {
+    up: chartUp,
+    down: chartDown,
+    gold: chartGold,
+    grid: chartGrid,
+    text: chartText,
+    volumeUp,
+    volumeDown,
+  } = useTheme().palette.chart;
+
   /** Days of history a preset should show. MAX means the whole series. */
   const daysFor = (preset: HistoryRange): number | null =>
     ({ '1W': 7, '1M': 30, '6M': 182, '1Y': 365, '3Y': 1095, '5Y': 1825, MAX: null } as Record<HistoryRange, number | null>)[preset];
@@ -99,7 +116,7 @@ export function CandleChart({
 
     const chart = chartRef.current;
     while (lineRefs.current.length < runs.length) {
-      lineRefs.current.push(chart.addLineSeries({ color: '#26a69a', lineWidth: 1, priceLineVisible: false, lastValueVisible: false }));
+      lineRefs.current.push(chart.addLineSeries({ color: chartGold, lineWidth: 1, priceLineVisible: false, lastValueVisible: false }));
     }
     while (lineRefs.current.length > runs.length) {
       const spare = lineRefs.current.pop();
@@ -120,7 +137,7 @@ export function CandleChart({
     volumeRef.current.setData(items.map((c) => ({
       time: c.time as unknown as UTCTimestamp,
       value: c.volume ?? 0,
-      color: c.close >= (c.open ?? c.close) ? 'rgba(38,166,154,0.45)' : 'rgba(239,83,80,0.45)',
+      color: c.close >= (c.open ?? c.close) ? volumeUp : volumeDown,
     })));
     if (items.length === 0) return;
 
@@ -152,12 +169,12 @@ export function CandleChart({
       height,
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
-        textColor: '#9e9e9e',
+        textColor: chartText,
         fontSize: 11,
       },
       grid: {
-        vertLines: { color: 'rgba(128,128,128,0.12)' },
-        horzLines: { color: 'rgba(128,128,128,0.12)' },
+        vertLines: { color: chartGrid },
+        horzLines: { color: chartGrid },
       },
       rightPriceScale: { borderVisible: false },
       timeScale: {
@@ -176,9 +193,9 @@ export function CandleChart({
       handleScale: { mouseWheel: true, pinch: true, axisPressedMouseMove: true },
     });
     candleRef.current = chart.addCandlestickSeries({
-      upColor: '#26a69a', downColor: '#ef5350',
-      borderUpColor: '#26a69a', borderDownColor: '#ef5350',
-      wickUpColor: '#26a69a', wickDownColor: '#ef5350',
+      upColor: chartUp, downColor: chartDown,
+      borderUpColor: chartUp, borderDownColor: chartDown,
+      wickUpColor: chartUp, wickDownColor: chartDown,
     });
     volumeRef.current = chart.addHistogramSeries({
       priceFormat: { type: 'volume' },
@@ -199,7 +216,7 @@ export function CandleChart({
       lineRefs.current = [];
       appliedRef.current = null;
     };
-  }, [height]);
+  }, [height, chartUp, chartDown, chartGold, chartGrid, chartText, volumeUp, volumeDown]);
 
   // Data arriving (or a refresh) redraws the series but leaves the viewport where it is.
   useEffect(() => {
