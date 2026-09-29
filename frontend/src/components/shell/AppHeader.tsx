@@ -41,7 +41,19 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
   const { pathname } = useLocation();
 
   return (
-    <AppBar position="static" component="header" sx={{ zIndex: (theme) => theme.zIndex.appBar }}>
+    <AppBar
+      position="static"
+      component="header"
+      sx={{
+        zIndex: (theme) => theme.zIndex.appBar,
+        // A dark navigation bar is part of the PSX identity and stays dark in both colour modes,
+        // so the header must not inherit the theme's surface colour.
+        bgcolor: 'nav.bg',
+        color: 'nav.text',
+        borderBottom: '1px solid',
+        borderColor: 'nav.hover',
+      }}
+    >
       <Container maxWidth={false} sx={{ maxWidth: layout.contentMaxWidth, px: { xs: 2, md: 3 } }}>
         <Toolbar disableGutters sx={{ gap: 1.5 }}>
           <Box
@@ -79,9 +91,9 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                     minHeight: 34,
                     borderRadius: 999,
                     fontSize: '0.875rem',
-                    color: active ? 'primary.main' : 'text.secondary',
-                    bgcolor: active ? 'action.selected' : 'transparent',
-                    '&:hover': { bgcolor: 'action.hover', color: 'text.primary' },
+                    color: active ? 'nav.active' : 'nav.textMuted',
+                    bgcolor: active ? 'nav.hover' : 'transparent',
+                    '&:hover': { bgcolor: 'nav.hover', color: 'nav.text' },
                   }}
                 >
                   {item.label}
@@ -90,12 +102,39 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
             })}
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' }, maxWidth: 420, ml: 'auto', mr: 1 }}>
+          {/* The field is its own surface on top of the dark bar. Left to inherit, an outlined input
+              would draw a near-black border on a near-black bar. */}
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'none', md: 'block' },
+              maxWidth: 420,
+              ml: 'auto',
+              mr: 1,
+              '& .MuiOutlinedInput-root': {
+                bgcolor: 'nav.field',
+                '& fieldset': { borderColor: 'nav.fieldBorder' },
+                '&:hover fieldset': { borderColor: 'nav.fieldBorder' },
+                '&.Mui-focused fieldset': { borderColor: 'nav.active' },
+              },
+              '& .MuiInputBase-input': { color: 'nav.fieldText' },
+              '& .MuiInputLabel-root': { color: 'nav.textMuted' },
+              '& .MuiInputAdornment-root .MuiSvgIcon-root': { color: 'nav.textMuted' },
+            }}
+          >
             <GlobalSearch />
           </Box>
 
           <Stack direction="row" spacing={0.5} sx={{ ml: { xs: 'auto', md: 0 }, alignItems: 'center' }}>
-            <IconButton onClick={onOpenSearch} aria-label="Search stocks" sx={{ display: { md: 'none' } }}>
+            <IconButton
+              onClick={onOpenSearch}
+              aria-label="Search stocks"
+              sx={{
+                display: { md: 'none' },
+                color: 'nav.textMuted',
+                '&:hover': { color: 'nav.text', bgcolor: 'nav.hover' },
+              }}
+            >
               <SearchRoundedIcon />
             </IconButton>
             {/* The one control that leaves the app, so it carries the brand colour instead of sitting
@@ -104,8 +143,6 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                 collapses to its icon rather than disappearing. */}
             <Button
               {...portfolioLink()}
-              color="primary"
-              variant="contained"
               disableElevation
               startIcon={<AccountBalanceWalletRoundedIcon />}
               sx={{
@@ -116,7 +153,11 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                 fontSize: '0.8125rem',
                 fontWeight: 600,
                 whiteSpace: 'nowrap',
-                boxShadow: 1,
+                // Its own colour pair rather than the page's primary: on the dark bar a dark green
+                // fill separates from the bar at only 1.89:1, so this button inverts instead.
+                bgcolor: 'nav.cta',
+                color: 'nav.ctaText',
+                '&:hover': { bgcolor: 'nav.cta', filter: 'brightness(0.95)' },
               }}
             >
               Track your portfolio
@@ -131,9 +172,9 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                   fontWeight: 700,
                   letterSpacing: '0.04em',
                   lineHeight: 1.4,
-                  // Tinted from the button's own contrast colour, so it stays legible in light mode
-                  // (dark ink on dark green) and in dark mode (light ink on mint).
-                  bgcolor: (theme) => alpha(theme.palette.primary.contrastText, 0.18),
+                  // Tinted from the button's own label colour, so it stays legible whichever way the
+                  // button is inverted.
+                  bgcolor: (theme) => alpha(theme.palette.nav.ctaText, 0.16),
                 }}
               >
                 NEW
@@ -142,11 +183,24 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
             <IconButton
               {...portfolioLink()}
               aria-label="Track your portfolio"
-              sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
+              sx={{
+                display: { xs: 'inline-flex', sm: 'none' },
+                bgcolor: 'nav.cta',
+                color: 'nav.ctaText',
+              }}
             >
               <AccountBalanceWalletRoundedIcon fontSize="small" />
             </IconButton>
-            <ThemeMenu />
+            {/* The theme control inherits `action.active`, which is tuned for a light surface. */}
+            <Box
+              sx={{
+                display: 'flex',
+                '& .MuiIconButton-root': { color: 'nav.textMuted' },
+                '& .MuiIconButton-root:hover': { color: 'nav.text', bgcolor: 'nav.hover' },
+              }}
+            >
+              <ThemeMenu />
+            </Box>
           </Stack>
         </Toolbar>
       </Container>

@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, R
 import { ThemeProvider, CssBaseline, PaletteMode } from '@mui/material';
 import { createAppTheme, tokensFor } from '../theme';
 
-/** What the user chose. `system` follows the OS and is the default on a first visit. */
+/** What the user chose. `light` is the default on a first visit; `system` follows the OS and is opt-in. */
 export type ThemePreference = 'light' | 'dark' | 'system';
 
 interface ColorModeCtx {
@@ -18,7 +18,7 @@ const STORAGE_KEY = 'color-mode';
 
 const ColorModeContext = createContext<ColorModeCtx>({
   mode: 'light',
-  preference: 'system',
+  preference: 'light',
   toggle: () => {},
   setPreference: () => {},
 });
@@ -33,9 +33,12 @@ const readPreference = (): ThemePreference => {
     const s = localStorage.getItem(STORAGE_KEY);
     if (s === 'light' || s === 'dark' || s === 'system') return s;
   } catch {
-    /* private mode / storage disabled: fall through to system */
+    /* private mode / storage disabled: fall through to the default */
   }
-  return 'system';
+  // Light, not the OS: a first visit to a market data app should land on the light interface, which
+  // is the one the design system describes. `system` stays available, but it is a choice, not a
+  // default imposed from the operating system.
+  return 'light';
 };
 
 const resolveMode = (preference: ThemePreference, sys: PaletteMode): PaletteMode =>
@@ -78,8 +81,12 @@ export function ColorModeProvider({ children }: { children: ReactNode }) {
     root.dataset.theme = mode;
     root.style.colorScheme = mode;
     root.style.backgroundColor = t.bg;
-    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    if (meta) meta.content = t.bg;
+    // The bar is the topmost surface, so it — not the page — is the colour the browser paints around
+    // the page. The static metas in index.html say the same thing; this keeps them in step across a
+    // mode switch. It targets the media-less meta, because the other two are prefers-color-scheme
+    // scoped and would be clobbered otherwise.
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]:not([media])');
+    if (meta) meta.content = t.nav.bg;
   }, [mode]);
 
   const theme = useMemo(() => createAppTheme(mode), [mode]);
