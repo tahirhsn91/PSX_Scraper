@@ -268,14 +268,14 @@ export const componentsFor = (theme: Theme): Components<Theme> => {
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: isDark ? t.surfaceElevated ?? t.background.paper : '#0F172A',
-          color: '#FFFFFF',
+          backgroundColor: t.nav.bg,
+          color: t.nav.text,
           borderRadius: radius.sm,
           fontSize: '0.75rem',
           paddingBlock: 6,
           paddingInline: 10,
         },
-        arrow: { color: isDark ? t.surfaceElevated ?? t.background.paper : '#0F172A' },
+        arrow: { color: t.nav.bg },
       },
     },
 
@@ -293,8 +293,8 @@ export const componentsFor = (theme: Theme): Components<Theme> => {
       styleOverrides: {
         root: {
           borderRadius: radius.md,
-          backgroundColor: isDark ? t.surfaceElevated ?? t.background.paper : '#0F172A',
-          color: '#FFFFFF',
+          backgroundColor: t.nav.bg,
+          color: t.nav.text,
           border: `1px solid ${t.divider}`,
         },
       },

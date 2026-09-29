@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Pakistan Stock Exchange prices, indices and sync status." />
-    <meta name="theme-color" content="#F5F7FA" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#F5F7FA" />
+    <meta name="theme-color" content="#3F4140" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#3A3F3D" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#3F4140" />
     <!-- The brand mark. The tab icon and the header logo are the same artwork on purpose: the old
          hand-drawn SVG chart was a second, drifting identity for the same product.
          A 32px file is what the tab needs — pointing the icon at the 512px master made every page
@@ -26,19 +26,21 @@
       // before React mounts. Mirrors the logic in src/providers/ColorModeContext.tsx.
       (function () {
         try {
+          // Light is the default: the OS preference is only followed once the user has explicitly
+          // chosen "system".
           var stored = localStorage.getItem('color-mode');
-          var mode =
-            stored === 'light' || stored === 'dark'
-              ? stored
-              : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light';
+          var prefersDark = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var mode = stored === 'dark' || (stored === 'system' && prefersDark) ? 'dark' : 'light';
+          // The navigation bar is the topmost surface, so it is the colour the browser paints
+          // around the page. These two values mirror nav.bg in src/theme/tokens.ts — they cannot be
+          // imported here, because this runs before the bundle loads.
+          var chrome = mode === 'dark' ? '#3A3F3D' : '#3F4140';
           var root = document.documentElement;
           root.dataset.theme = mode;
           root.style.colorScheme = mode;
-          root.style.backgroundColor = mode === 'dark' ? '#0B1220' : '#F5F7FA';
+          root.style.backgroundColor = mode === 'dark' ? '#161817' : '#F1F1F1';
           var meta = document.querySelector('meta[name="theme-color"]:not([media])');
-          if (meta) meta.setAttribute('content', mode === 'dark' ? '#0B1220' : '#F5F7FA');
+          if (meta) meta.setAttribute('content', chrome);
         } catch (e) {
           /* storage blocked: fall back to the media-based theme-color metas */
         }
