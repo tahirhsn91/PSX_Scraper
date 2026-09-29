@@ -44,14 +44,25 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
     <AppBar position="static" component="header" sx={{ zIndex: (theme) => theme.zIndex.appBar }}>
       <Container maxWidth={false} sx={{ maxWidth: layout.contentMaxWidth, px: { xs: 2, md: 3 } }}>
         <Toolbar disableGutters sx={{ gap: 1.5 }}>
-          <Typography
+          <Box
             component={RouterLink}
             to="/"
-            variant="h6"
-            sx={{ fontWeight: 700, color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'inherit', textDecoration: 'none' }}
           >
-            PSX Scraper
-          </Typography>
+            {/* Decorative — the brand name sits right beside it, so an empty alt stops screen readers
+                announcing the mark as well. 28px rendered from a 64px file so it stays crisp at 2x;
+                the artwork is dense, and below about 26 the candlesticks inside the arc stop reading. */}
+            <Box
+              component="img"
+              src="/logo-64.png"
+              alt=""
+              aria-hidden
+              sx={{ width: 28, height: 28, display: 'block', flexShrink: 0 }}
+            />
+            <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+              PSX Scraper
+            </Typography>
+          </Box>
 
           <Box component="nav" aria-label="Primary" sx={{ display: { xs: 'none', md: 'flex' }, gap: 0.5, ml: 1 }}>
             {NAV.map((item) => {
