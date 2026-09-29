@@ -7,7 +7,13 @@
     <meta name="theme-color" content="#F5F7FA" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#F5F7FA" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- The brand mark. The tab icon and the header logo are the same artwork on purpose: the old
+         hand-drawn SVG chart was a second, drifting identity for the same product.
+         A 32px file is what the tab needs — pointing the icon at the 512px master made every page
+         load fetch 147 KB for it. `logo.png` stays in `public/` as the master to derive new sizes
+         from, and is referenced by nothing at runtime. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
