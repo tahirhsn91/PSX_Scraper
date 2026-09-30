@@ -89,8 +89,15 @@ export interface DataTableProps<T> {
   toolbar?: ReactNode;
   /** Whole-row click on desktop, for parity with the card list. The row link stays for keyboards. */
   onRowClick?: (row: T) => void;
-  /** Stacked cards below this breakpoint. Defaults to `md`. */
-  cardsBelow?: 'sm' | 'md';
+  /**
+   * Stacked cards below this breakpoint. Defaults to `md`.
+   *
+   * `'never'` keeps the table at every width, which is what a caller wants when the row-wise layout
+   * *is* the design and a phone should get the same rows as a desktop rather than a card list. The
+   * caller then owns the horizontal scroll: give the table a `minTableWidth` so the columns stay
+   * legible and the scroll stays inside the table's container.
+   */
+  cardsBelow?: 'sm' | 'md' | 'never';
   /**
    * `table-layout: fixed`, so the column widths are the ones the page asked for instead of whatever
    * the content demands.
@@ -104,6 +111,14 @@ export interface DataTableProps<T> {
    * table still fits a narrower desktop window instead of scrolling sideways.
    */
   fixed?: boolean;
+  /**
+   * A floor for the table's own width, in CSS pixels.
+   *
+   * With `fixed` the column widths are proportional, so a narrow viewport would squeeze every column
+   * down to a few characters. This keeps them legible and hands the overflow to the table's
+   * container — the table scrolls, the page never does. Pair it with `cardsBelow="never"`.
+   */
+  minTableWidth?: number;
 }
 
 /**
@@ -135,9 +150,18 @@ export function DataTable<T>({
   onRowClick,
   cardsBelow = 'md',
   fixed = false,
+  minTableWidth,
 }: DataTableProps<T>) {
   const theme = useTheme();
-  const isCardView = useMediaQuery(theme.breakpoints.down(cardsBelow));
+  // `'never'` is not a breakpoint: it means no width renders the card list at all.
+  const cardQuery = useMediaQuery(theme.breakpoints.down(cardsBelow === 'never' ? 'sm' : cardsBelow));
+  const isCardView = cardsBelow === 'never' ? false : cardQuery;
+
+  /** Column widths stay the page's own, and a floor keeps them legible when the container is narrow. */
+  const tableSx = {
+    ...(fixed ? { tableLayout: 'fixed' as const } : {}),
+    ...(minTableWidth ? { minWidth: minTableWidth } : {}),
+  };
 
   /** Columns hidden below a breakpoint stop taking part in the layout at that width. */
   const cellSx = (c: Column<T>) =>
@@ -200,7 +224,7 @@ export function DataTable<T>({
         </Stack>
       ) : (
         <TableContainer>
-          <Table size="small" aria-busy="true" aria-label={ariaLabel ?? 'Results'} sx={fixed ? { tableLayout: 'fixed' } : undefined}>
+          <Table size="small" aria-busy="true" aria-label={ariaLabel ?? 'Results'} sx={tableSx}>
             {headRow()}
             <TableBody>
               {Array.from({ length: skeletonRows }).map((_, r) => (
@@ -244,7 +268,7 @@ export function DataTable<T>({
           stickyHeader={Boolean(maxHeight)}
           aria-label={ariaLabel ?? 'Results'}
           aria-busy={stale || undefined}
-          sx={fixed ? { tableLayout: 'fixed' } : undefined}
+          sx={tableSx}
         >
           {headRow()}
           <TableBody sx={stale ? { opacity: 0.55, transition: 'opacity 150ms' } : undefined}>
