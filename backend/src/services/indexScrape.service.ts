@@ -110,6 +110,34 @@ export function isPostCloseReading(valueAt: Date | null, tradeDate: Date): boole
   return valueAt !== null && valueAt.getTime() > sessionCloseAt(tradeDate).getTime();
 }
 
+/**
+ * How old a reading may be and still be treated as live. Sarmaaya's board ticks every minute or two,
+ * so a quarter of an hour is slack for a slow pass — not a licence to serve the morning's number.
+ */
+export const READING_MAX_AGE_MS = 15 * 60 * 1000;
+
+/**
+ * Whether a reading taken mid-session may be written at all.
+ *
+ * Only while the market is open: then a reading with no timestamp, or one older than
+ * `READING_MAX_AGE_MS`, is refused and the row is left as it stands, keeping its own `value_at` —
+ * which is what makes a frozen board detectable rather than invisible (#107). The exchange's
+ * carousel carries no timestamp at all, which is how a board frozen at 11:29 PKT could serve
+ * 170,300.62 as KSE-100's close at 15:17 PKT and look like a quiet market.
+ *
+ * Outside a session nothing is refused: the close is the close, and the fallback legs are its
+ * authority, so refusing there could lose a session's close entirely.
+ */
+export function readingIsWritable(args: {
+  readAt: Date | null | undefined;
+  now: Date;
+  marketOpen: boolean;
+}): boolean {
+  if (!args.marketOpen) return true;
+  if (!args.readAt) return false;
+  return args.now.getTime() - args.readAt.getTime() <= READING_MAX_AGE_MS;
+}
+
 /** A paisa: closer than this and two index levels are the same number, not a correction. */
 const LEVEL_EPSILON = 0.005;
 
@@ -175,12 +203,17 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
   let updated = 0;
   let valuesWritten = 0;
   let repaired = 0;
+  const refused: string[] = [];
+
+  // Read once: both the repair gate and the freshness check below need it, and a pass that crosses
+  // 09:30 PKT mid-loop must not judge its own readings by two different clocks.
+  const marketOpen = isMarketOpen(now);
 
   // `level - change` is the previous session's close only while the page describes a live session.
   // Over a weekend or a holiday the carousel still answers, with the last session's figures, and the
   // same arithmetic would "correct" that session's row to its own previous close — so repair is
   // confined to the sessions a pass can legitimately be about.
-  const canRepair = isMarketOpen(now) || isClosingPassDue(now);
+  const canRepair = marketOpen || isClosingPassDue(now);
 
   for (const index of parsed) {
     const existing = await prisma.marketIndex.findUnique({
@@ -227,11 +260,29 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
       existingOpen: dayRow?.open == null ? null : dayRow.open.toNumber(),
     });
 
+    // A reading must be able to prove it is live while a session is open — see `readingIsWritable`.
+    // The live panel above still moves: it is the *session row* that is left alone, so its existing
+    // `value_at` keeps saying when it was really read instead of being overwritten by a fresh stamp
+    // on a stale number.
+    if (!readingIsWritable({ readAt: index.readAt, now, marketOpen })) {
+      refused.push(index.symbol);
+      continue;
+    }
+
     if (writeSessionRow) {
       valuesWritten += await indexRepository.upsertValues(row.id, [
         // `valueAt` is when this reading was taken: the only thing on the row that can say whether the
-        // value it lands on is a close (see `isPostCloseReading`).
-        { date: stamp.toISOString(), close: index.level, open, volume: null, valueAt: now },
+        // value it lands on is a close (see `isPostCloseReading`). The source's own stamp when it
+        // publishes one, so the row records the upstream tick rather than our fetch time.
+        {
+          date: stamp.toISOString(),
+          close: index.level,
+          open,
+          // Published by Sarmaaya for every index it lists, and by the exchange for none since
+          // 2026-09-22. Null stays null: a figure nobody published is not a zero.
+          volume: index.volume ?? null,
+          valueAt: index.readAt ?? now,
+        },
       ]);
     }
 
@@ -260,6 +311,16 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
         }
       }
     }
+  }
+
+  // A board that cannot prove it is live writes nothing rather than a number it cannot stand behind.
+  // One line, with the symbols and the reason, so a refusal is visible as a refusal.
+  if (refused.length > 0) {
+    log.warn('index-scrape.reading_refused', {
+      count: refused.length,
+      symbols: refused.slice(0, 20),
+      reason: 'no timestamp, or older than 15 minutes, while the market is open',
+    });
   }
 
   // Indices no board carries, registered from the source that publishes them and filled from it:
