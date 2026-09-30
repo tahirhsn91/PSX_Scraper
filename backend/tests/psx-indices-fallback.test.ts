@@ -6,7 +6,8 @@ import { fetchPsxIndices, parseSarmaayaIndices } from '../src/scrapers/psxIndice
  * Measured on 2026-09-28: the exchange's market-summary page could not be read by the running
  * worker between 11:29 PKT and the close, so all 17 index rows kept that intraday reading and the
  * dashboard served KSE-100 as 170,300.62 against a published close of 170,425.62 — a level
- * presented as a close, with nothing on the row to say so. The fallback below is the second path.
+ * presented as a close, with nothing on the row to say so. The chain below is what replaced it:
+ * the source that stamps its readings leads, and the page that cannot is the last resort (#107).
  *
  * The payload shape is the live one, captured from https://beta-restapi.sarmaaya.pk/api/indices.
  */
@@ -69,12 +70,12 @@ describe("Sarmaaya's board as the index fallback", () => {
     expect(parseSarmaayaIndices({ response: { data: 'nope' } })).toEqual([]);
   });
 
-  it('falls back to Sarmaaya when the exchange page cannot be read', async () => {
+  it('leads with the board that can prove when it read, and never reaches the exchange’s page when a Sarmaaya source answers', async () => {
     const urls: string[] = [];
     global.fetch = (async (url: unknown) => {
       const target = String(url);
       urls.push(target);
-      if (target.includes('psx.com.pk')) {
+      if (target.includes('/api/dashboard/market-view')) {
         return { ok: false, status: 503, text: async () => '' } as unknown as Response;
       }
       if (target.includes('beta-restapi.sarmaaya.pk')) {
@@ -85,18 +86,21 @@ describe("Sarmaaya's board as the index fallback", () => {
 
     const parsed = await fetchPsxIndices();
 
-    // The exchange is tried first, and only then the fallback.
-    expect(urls[0]).toContain('psx.com.pk');
-    expect(urls.some((u) => u.includes('beta-restapi.sarmaaya.pk'))).toBe(true);
+    // In order: the live board, then the sibling board, and the exchange's page only if both refuse —
+    // it is the one source that cannot say when it read (#107).
+    expect(urls[0]).toContain('/api/dashboard/market-view');
+    expect(urls[1]).toContain('/api/indices');
+    expect(urls.some((u) => u.includes('psx.com.pk'))).toBe(false);
     expect(parsed.find((i) => i.symbol === 'KSE100')?.level).toBe(170425.62);
     expect(parsed).toHaveLength(2);
   });
 
-  it("reports the exchange's own failure when both paths fail", async () => {
+  it('reports the leading source’s own failure when every source fails', async () => {
     global.fetch = (async () => {
       throw new Error('ENETUNREACH');
     }) as unknown as typeof global.fetch;
 
-    await expect(fetchPsxIndices()).rejects.toThrow(/psx market-summary unreachable/);
+    // The lead's reason, not the last leg's: a fallback must not hide the original failure.
+    await expect(fetchPsxIndices()).rejects.toThrow(/sarmaaya market-view unreachable/);
   });
 });
