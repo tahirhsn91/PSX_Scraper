@@ -38,12 +38,20 @@ import type { ApiError } from "../api/client";
  * list is paginated, so sorting fifty rows in the browser would reorder the page and claim an order
  * the data does not have. Below `md` the same columns become a card list, and the change pill leads
  * the card because direction is what a reader scans for.
+ *
+ * The ten columns share the ~1215px the container gives them, which is why the widths below are
+ * percentages that add up to 77%: the table is laid out `fixed` (see `DataTable`) and the Company
+ * column, the only one without a width, takes what is left (measured 277px). Each column is at least
+ * as wide as its own `nowrap` header label, whatever its data — a column narrower than its label
+ * pushes the table past the container and puts a scrollbar under it, which is how the last three
+ * widths were chosen. What still does not fit is clipped by its own cell with a `title` for the full
+ * value, rather than wrapping and making every row two lines tall.
  */
 const COLUMNS: Column<StockListItem>[] = [
   {
     key: "symbol",
     header: "Symbol",
-    width: 110,
+    width: "8%",
     sortKey: "symbol",
     mobileRole: "title",
     render: (s) => s.symbol,
@@ -52,18 +60,28 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "company",
     header: "Company",
     mobileRole: "subtitle",
-    render: (s) => s.companyName ?? DASH,
+    // One line per row: a full name ("Abbott Laboratories (Pakistan) Limited") wraps to a second
+    // line, and one wrapped cell sets the height of every row in the table — measured 49.4px against
+    // the 34.2px of a row that fits. `noWrap` clips the cell and the full name stays one hover away.
+    // No `width`: this is the column that takes what the rationed ones leave (see `fixed` below).
+    noWrap: true,
+    render: (s) => (
+      <Typography variant="body2" title={s.companyName ?? undefined}>
+        {s.companyName ?? DASH}
+      </Typography>
+    ),
   },
   {
     key: "sector",
     header: "Sector",
-    width: 190,
+    // The longest sector is 40 characters of upper case ("INV. BANKS / INV. COS. / SECURITIES
+    // COS."), which is more than this column can hold beside the nine others — so it clips with an
+    // ellipsis and the full text stays one hover away, rather than wrapping and doubling the row.
+    width: "15%",
     hideBelow: "md",
     mobileRole: "meta",
-    // One line per row: an unpacked sector name ("INV. BANKS / INV. COS. / SECURITIES COS.") doubles
-    // the row height and the full text stays available on hover.
     render: (s) => (
-      <Typography variant="body2" noWrap title={s.sector ?? undefined} sx={{ maxWidth: 190 }}>
+      <Typography variant="body2" noWrap title={s.sector ?? undefined}>
         {s.sector ?? DASH}
       </Typography>
     ),
@@ -72,7 +90,7 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "price",
     header: "Price",
     align: "right",
-    width: 100,
+    width: "6.8%",
     sortKey: "price",
     mobileRole: "meta",
     render: (s) => formatNumber(s.currentPrice),
@@ -81,7 +99,7 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "change",
     header: "Change",
     align: "right",
-    width: 110,
+    width: "8.1%",
     sortKey: "changePercent",
     mobileRole: "value",
     render: (s) => (
@@ -98,7 +116,7 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "volume",
     header: "Volume",
     align: "right",
-    width: 110,
+    width: "8%",
     sortKey: "volume",
     hideBelow: "sm",
     mobileRole: "meta",
@@ -108,7 +126,7 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "marketCap",
     header: "Mkt cap",
     align: "right",
-    width: 110,
+    width: "8.1%",
     sortKey: "marketCap",
     hideBelow: "sm",
     mobileRole: "meta",
@@ -123,25 +141,30 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "week52Low",
     header: "52W low",
     align: "right",
-    width: 100,
+    // The header labels are `nowrap` (theme), so a column narrower than its own label pushes the
+    // table past the container and puts a scrollbar under it — these three carry their labels.
+    width: "7.7%",
     sortKey: "week52Low",
     hideBelow: "md",
-    mobileRole: "hidden",
+    // Shown on a phone too: the card list is this table's other view, not a summary of it, so it
+    // carries all ten fields. `hideBelow` only rations the table's own columns.
+    mobileRole: "meta",
     render: (s) => formatNumber(s.week52Low),
   },
   {
     key: "week52High",
     header: "52W high",
     align: "right",
-    width: 100,
+    width: "8%",
     sortKey: "week52High",
     hideBelow: "md",
-    mobileRole: "hidden",
+    mobileRole: "meta",
     render: (s) => formatNumber(s.week52High),
   },
   {
     key: "lastSyncedAt",
     header: "Last synced",
+    width: "7.6%",
     hideBelow: "md",
     mobileRole: "meta",
     render: (s) =>
@@ -395,6 +418,9 @@ export function Dashboard() {
           columns={COLUMNS}
           rows={data?.items ?? []}
           ariaLabel="Tracked securities"
+          /* Rationed widths: nine columns carry a share and Company takes the rest, so one long
+           * name or sector clips instead of wrapping and setting the height of every row. */
+          fixed
           rowKey={(s) => s.id}
           rowHref={(s) => `/stocks/${s.symbol}`}
           onRowClick={(s) => navigate(`/stocks/${s.symbol}`)}

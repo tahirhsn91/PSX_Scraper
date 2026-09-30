@@ -28,6 +28,18 @@ export interface Column<T> {
   /** Present when the server can sort by this column (enables the sortable header). */
   sortKey?: string;
   width?: number | string;
+  /**
+   * Keep this cell on one line: `white-space: nowrap` with `overflow: hidden`, so text too long for
+   * the column is clipped with an ellipsis instead of wrapping.
+   *
+   * A wrapped cell sets the height of its whole row — one long company name made every row 49.4px
+   * against the 34.2px of a row that fits. Pair it with `fixed` on the table and a `title` (or
+   * `aria-label`) on the content, so the clipped value is still reachable.
+   *
+   * Table only: the mobile card list renders `render(row)` in its own layout, so a phone still shows
+   * the full value on as many lines as it needs.
+   */
+  noWrap?: boolean;
   /** Hide this column below the given breakpoint. */
   hideBelow?: 'sm' | 'md';
   /**
@@ -79,6 +91,19 @@ export interface DataTableProps<T> {
   onRowClick?: (row: T) => void;
   /** Stacked cards below this breakpoint. Defaults to `md`. */
   cardsBelow?: 'sm' | 'md';
+  /**
+   * `table-layout: fixed`, so the column widths are the ones the page asked for instead of whatever
+   * the content demands.
+   *
+   * Auto layout sizes a column by its longest cell, so one long company name — or one long sector —
+   * wraps to a second line and every row in the table grows with it (measured: 49.4px against the
+   * 34.2px of a row that fits). With fixed layout the widths below hold, cells that are set `noWrap`
+   * clip with an ellipsis instead of wrapping, and every row is one line tall.
+   *
+   * Prefer percentage widths with this, and leave one column unsized: it takes what is left, so the
+   * table still fits a narrower desktop window instead of scrolling sideways.
+   */
+  fixed?: boolean;
 }
 
 /**
@@ -109,6 +134,7 @@ export function DataTable<T>({
   toolbar,
   onRowClick,
   cardsBelow = 'md',
+  fixed = false,
 }: DataTableProps<T>) {
   const theme = useTheme();
   const isCardView = useMediaQuery(theme.breakpoints.down(cardsBelow));
@@ -174,7 +200,7 @@ export function DataTable<T>({
         </Stack>
       ) : (
         <TableContainer>
-          <Table size="small" aria-busy="true" aria-label={ariaLabel ?? 'Results'}>
+          <Table size="small" aria-busy="true" aria-label={ariaLabel ?? 'Results'} sx={fixed ? { tableLayout: 'fixed' } : undefined}>
             {headRow()}
             <TableBody>
               {Array.from({ length: skeletonRows }).map((_, r) => (
@@ -213,7 +239,13 @@ export function DataTable<T>({
       </Box>
     ) : (
       <TableContainer sx={{ maxHeight }}>
-        <Table size="small" stickyHeader={Boolean(maxHeight)} aria-label={ariaLabel ?? 'Results'} aria-busy={stale || undefined}>
+        <Table
+          size="small"
+          stickyHeader={Boolean(maxHeight)}
+          aria-label={ariaLabel ?? 'Results'}
+          aria-busy={stale || undefined}
+          sx={fixed ? { tableLayout: 'fixed' } : undefined}
+        >
           {headRow()}
           <TableBody sx={stale ? { opacity: 0.55, transition: 'opacity 150ms' } : undefined}>
             {rows.map((row) => {
@@ -229,11 +261,12 @@ export function DataTable<T>({
                     <TableCell
                       key={c.key}
                       align={c.align}
-                      sx={
-                        c.hideBelow
+                      sx={{
+                        ...(c.hideBelow
                           ? { display: { xs: 'none', sm: c.hideBelow === 'sm' ? 'table-cell' : 'none', md: 'table-cell' } }
-                          : undefined
-                      }
+                          : {}),
+                        ...(c.noWrap ? { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } : {}),
+                      }}
                     >
                       {index === 0 && href ? (
                         <MuiLink component={RouterLink} to={href} sx={{ fontWeight: 600, color: 'inherit' }}>
