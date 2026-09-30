@@ -1,6 +1,11 @@
 import { Page } from "puppeteer";
 import { browserPool } from "./browserPool";
-import { toNumber, toIsoDate, parseWeek52Range } from "./parse.utils";
+import {
+  toNumber,
+  toIsoDate,
+  parseWeek52Range,
+  toMarketCapRupees,
+} from "./parse.utils";
 import { logger } from "../utils/logger";
 import { IStockScraper } from "../types/scraper";
 import { ScrapeResult } from "../types/dto";
@@ -47,50 +52,80 @@ export interface PsxPageData {
  *
  * Object-literal shorthand methods (`{ text() {} }`) and inline anonymous
  * callbacks (`.find((n) => …)`) are left alone by the transform and are safe.
+ *
+ * Every stats field is read from the labelled item that owns it, never by
+ * scanning the page for a label. The old page-wide sweep matched the first node
+ * whose text merely *contained* a word, so an outer container's concatenated
+ * text was parsed as the value and every symbol stored the same figures — high
+ * 48401, low 7, volume -74000 — for BUXL, FFC and NESTLE alike (#21). Market cap
+ * carried the same defect on top of a second one: the published figure is in
+ * thousands, so it also needed scaling on the way in (#71).
  */
 export function extractPsxPageData(): PsxPageData {
   const H = {
     text(sel: string): string | null {
       return document.querySelector(sel)?.textContent?.trim() ?? null;
     },
-    byLabel(label: string): string | null {
-      const nodes = Array.from(
-        document.querySelectorAll(
-          ".stats_item, .quote__item, .company__title, td, div",
-        ),
+    /**
+     * The value from the stats item whose own label matches `pattern` — read out of
+     * that item's subtree, and only that item's.
+     *
+     * Scoped on purpose. A page-wide search for the label returns whichever
+     * container happens to contain the word, and its whole concatenated text then
+     * parses as the number, which is how every symbol ended up with one company's
+     * figures. Null when no item carries the label: a missing stat has to stay
+     * missing rather than borrow a neighbour's value.
+     */
+    labelledValue(pattern: RegExp): string | null {
+      const items = Array.from(document.querySelectorAll('.stats_item'));
+      const hit = items.find((item) =>
+        pattern.test(item.querySelector('.stats_label')?.textContent ?? ''),
       );
-      const hit = nodes.find((n) =>
-        n.textContent?.toLowerCase().includes(label.toLowerCase()),
-      );
-      return hit?.textContent?.trim() ?? null;
+      return hit?.querySelector('.stats_value')?.textContent?.trim() ?? null;
+    },
+    /**
+     * The company name with PSX's trailing status badge stripped. The page publishes
+     * the name and the badge as one run of text — `Engro Corporation LimitedDELISTED`
+     * is what the API served and the app displayed.
+     *
+     * A name is never truncated to nothing: if stripping would empty it, the
+     * unstripped text is returned instead, so a badge-only title still yields a name.
+     */
+    companyName(sel: string): string | null {
+      const raw = document.querySelector(sel)?.textContent?.trim() ?? null;
+      if (!raw) return null;
+      const stripped = raw
+        .replace(/\s*(DELISTED|SUSPENDED|DEFAULTED|HALTED)\s*$/i, '')
+        .trim();
+      return stripped || raw;
     },
     /**
      * The low/high pair from the stats item whose label matches `pattern` — the
      * "52-WEEK RANGE" box. Reads the machine-readable data-low/data-high attributes of the
      * inner `.numRange` node, falling back to splitting the displayed "441.70 — 685.00".
      *
-     * Scoped to the labelled item on purpose: `byLabel()` above matches the first node whose
-     * text merely *contains* a word, which is how the day high/low currently pick up a whole
-     * concatenated stats block (#21). Null when the page has no such item — a missing range
-     * must stay missing instead of borrowing a number from a neighbouring box.
+     * Scoped to the labelled item for the same reason as `labelledValue` above: a
+     * page-wide label search is how the day high/low picked up a whole concatenated
+     * stats block (#21). Null when the page has no such item — a missing range must
+     * stay missing instead of borrowing a number from a neighbouring box.
      */
     labelledRange(
       pattern: RegExp,
     ): { low: string | null; high: string | null } | null {
-      const items = Array.from(document.querySelectorAll(".stats_item"));
+      const items = Array.from(document.querySelectorAll('.stats_item'));
       const hit = items.find((item) =>
-        pattern.test(item.querySelector(".stats_label")?.textContent ?? ""),
+        pattern.test(item.querySelector('.stats_label')?.textContent ?? ''),
       );
       if (!hit) return null;
 
-      const num = hit.querySelector(".numRange");
-      const attrLow = num?.getAttribute("data-low") ?? null;
-      const attrHigh = num?.getAttribute("data-high") ?? null;
+      const num = hit.querySelector('.numRange');
+      const attrLow = num?.getAttribute('data-low') ?? null;
+      const attrHigh = num?.getAttribute('data-high') ?? null;
       if (attrLow !== null || attrHigh !== null)
         return { low: attrLow, high: attrHigh };
 
       const parts = (
-        hit.querySelector(".stats_value")?.textContent ?? ""
+        hit.querySelector('.stats_value')?.textContent ?? ''
       ).split(/[—–]/);
       return { low: parts[0]?.trim() || null, high: parts[1]?.trim() || null };
     },
@@ -100,20 +135,19 @@ export function extractPsxPageData(): PsxPageData {
 
   // Missing fields => null (never fabricated).
   return {
-    company:
-      H.text(".quote__name") ?? H.text("h1") ?? H.text(".company__title"),
-    sector: H.text(".quote__sector") ?? H.byLabel("sector"),
+    company: H.companyName('.quote__name') ?? H.text('h1') ?? H.text('.company__title'),
+    sector: H.text('.quote__sector') ?? H.labelledValue(/sector/i),
     week52Low: week52?.low ?? null,
     week52High: week52?.high ?? null,
-    price: H.text(".quote__close") ?? H.text('[data-field="price"]'),
-    change: H.text(".quote__change"),
+    price: H.text('.quote__close') ?? H.text('[data-field="price"]'),
+    change: H.text('.quote__change'),
     changePercent:
-      H.text(".quote__change_percent") ?? H.text(".change__percent"),
-    volume: H.byLabel("volume"),
-    high: H.byLabel("high"),
-    low: H.byLabel("low"),
-    open: H.byLabel("open"),
-    marketCap: H.byLabel("market cap"),
+      H.text('.quote__change_percent') ?? H.text('.change__percent'),
+    volume: H.labelledValue(/volume/i),
+    high: H.labelledValue(/high/i),
+    low: H.labelledValue(/low/i),
+    open: H.labelledValue(/open/i),
+    marketCap: H.labelledValue(/market cap/i),
   };
 }
 
@@ -167,7 +201,9 @@ export class PSXScraper implements IStockScraper {
         low: toNumber(data.low),
         open: toNumber(data.open),
         close: toNumber(data.price),
-        marketCap: toNumber(data.marketCap),
+        // PSX publishes this as `Market Cap (000's)`, so it is scaled to rupees here rather
+        // than stored a thousand times small (#71).
+        marketCap: toMarketCapRupees(data.marketCap),
         week52High: week52.high,
         week52Low: week52.low,
         lastTradeDate: toIsoDate(new Date().toISOString()),
