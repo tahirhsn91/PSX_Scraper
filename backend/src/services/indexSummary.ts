@@ -92,8 +92,8 @@ export interface IndexCandle {
  * Index value rows as candles, oldest session first.
  *
  * `value` is the close and `open` is carried when the row has one (the historical DPS series
- * did). High and low are always null: no index series we hold reports them, and the chart draws
- * a body-only candle rather than inventing a wick. Sessions are deduped with the newest reading
+ * did). High and low are always null: no index series we hold reports them — see the note in
+ * `buildIndexSummary` — and the chart draws a body-only candle rather than inventing a wick. Sessions are deduped with the newest reading
  * for a day winning, and a row with no value yields no candle at all — a bar with no price would
  * be fabricated.
  */
@@ -178,7 +178,12 @@ export function buildIndexSummary(input: IndexSummaryInput) {
     change,
     changePercent,
     open: toNum(sameDay?.open) ?? toNum(latest?.open),
-    // Not provided by the DPS index series (only close/open/volume per day).
+    // No source we can reach publishes a per-session index high/low, so these stay null and the
+    // tiles read `—` rather than borrowing a number that means something else: measured 2026-09-30,
+    // Sarmaaya's market-view rows key on {change, changePercentage, close, history, name, sort_order,
+    // symbol, updated_at, value, volume} and `/api/indices` on {change, changePercent, curr, high52,
+    // isShariah, logo, low52, marketCap, points, symbol, volume, weights} — the only high/low either
+    // carries is the 52-week pair, which is not this. The exchange's page carries neither.
     high: null,
     low: null,
     previousClose,

@@ -29,6 +29,19 @@ export interface ParsedIndex {
   /** Percent change, null when the page did not report one. */
   changePercent: number | null;
   direction: 'up' | 'down' | 'flat';
+  /**
+   * When the source says the reading was taken — only Sarmaaya's market-view says at all; the
+   * exchange's page carries no timestamp, which is why a frozen board cannot be told from a quiet
+   * one there. Null means "this source cannot say", and a reading that cannot point at a time
+   * cannot prove it is live (see the in-session refusal in indexScrape.service).
+   */
+  readAt?: Date | null;
+  /**
+   * Shares traded in the session, when the source publishes a figure. Null means "not published",
+   * never zero — the exchange stopped serving index volume on 2026-09-22 and its carousel never
+   * carried one.
+   */
+  volume?: number | null;
 }
 
 const PAGE = 'https://www.psx.com.pk/market-summary';
@@ -147,6 +160,10 @@ export function parseSarmaayaIndices(payload: unknown): ParsedIndex[] {
       change,
       changePercent,
       direction: change !== null && change > 0 ? 'up' : change !== null && change < 0 ? 'down' : 'flat',
+      // This endpoint publishes no timestamp — measured 2026-09-30, there is no `updated_at` key on
+      // its rows (market-view has one). Null, not "now": the source cannot say when it read.
+      readAt: null,
+      volume: numeric(raw.volume),
     });
   }
   return [...bySymbol.values()];
@@ -168,6 +185,94 @@ export async function fetchSarmaayaIndices(timeoutMs = 15000): Promise<ParsedInd
   // An answer with no index rows is a parse failure, not an empty market.
   if (indices.length === 0) throw new SiteUnavailableError('sarmaaya indices carried no index rows');
   return indices;
+}
+
+/**
+ * Sarmaaya's live index board — the endpoint the `/indexes` page itself renders.
+ *
+ * This leads the chain because it is the only source that says *when* it read: every row carries
+ * `updated_at`, so a reading can prove it is live. The exchange's carousel carries no timestamp at
+ * all, which is what let a board frozen at 11:29 PKT serve 170,300.62 as KSE-100's close at 15:17
+ * PKT on 2026-09-28 without anything being able to tell that apart from a quiet market (#107).
+ *
+ * Endpoint: https://beta-restapi.sarmaaya.pk/api/dashboard/market-view
+ * Response: { success, message, response: [{ symbol, name, close, change, changePercentage,
+ *                                             volume, value, updated_at, history }, …] }
+ *
+ * `close` is the level and `value` is not: the same row carries `value` as a rupee amount
+ * (KSE-100: 11,230,807,201.72 beside a close of 169,969.3266). Only `close` is read.
+ */
+export const SARMAYA_MARKET_VIEW_URL = 'https://beta-restapi.sarmaaya.pk/api/dashboard/market-view';
+
+/** A timestamp the source published, or null when it is missing or unparseable. */
+function readAt(raw: unknown): Date | null {
+  if (typeof raw !== 'string' || raw.trim() === '') return null;
+  const d = new Date(raw);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+export function parseSarmaayaMarketView(payload: unknown): ParsedIndex[] {
+  const response = (payload as { response?: unknown } | null)?.response;
+  // Measured 2026-09-30: this endpoint answers with `response` as the array itself, while its
+  // sibling `/api/indices` nests its rows one level deeper at `response.data`. Both are read, so an
+  // upstream shape change is a fallback rather than an empty board.
+  const data = Array.isArray(response)
+    ? response
+    : (response as { data?: unknown } | undefined)?.data;
+  if (!Array.isArray(data)) return [];
+  const bySymbol = new Map<string, ParsedIndex>();
+  for (const raw of data as Record<string, unknown>[]) {
+    const rawSymbol = typeof raw?.symbol === 'string' ? raw.symbol : null;
+    const level = numeric(raw?.close);
+    if (!rawSymbol || level === null) continue;
+    const symbol = rawSymbol.toUpperCase().replace(/\s+/g, '');
+    if (bySymbol.has(symbol)) continue;
+    const change = numeric(raw.change);
+    const changePercent = numeric(raw.changePercentage);
+    bySymbol.set(symbol, {
+      symbol,
+      level,
+      change,
+      changePercent,
+      direction: change !== null && change > 0 ? 'up' : change !== null && change < 0 ? 'down' : 'flat',
+      readAt: readAt(raw.updated_at),
+      volume: numeric(raw.volume),
+    });
+  }
+  return [...bySymbol.values()];
+}
+
+/** Fetch and parse Sarmaaya's live board. Throws when it cannot be read at all. */
+export async function fetchSarmaayaMarketView(timeoutMs = 15000): Promise<ParsedIndex[]> {
+  let res: Response;
+  try {
+    res = await fetch(SARMAYA_MARKET_VIEW_URL, {
+      headers: { 'User-Agent': SARMAYA_UA, Accept: 'application/json', Referer: 'https://sarmaaya.pk/' },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch (e) {
+    throw new SiteUnavailableError(`sarmaaya market-view unreachable: ${(e as Error).message.slice(0, 80)}`);
+  }
+  if (!res.ok) throw new SiteUnavailableError(`sarmaaya market-view http ${res.status}`);
+  const indices = parseSarmaayaMarketView(await res.json());
+  if (indices.length === 0) throw new SiteUnavailableError('sarmaaya market-view carried no index rows');
+  return indices;
+}
+
+/**
+ * The pass says what it read, how much of it, and when the source says it was read — so a log alone
+ * can show a board that is live rather than merely answering.
+ */
+export function logLead(source: string, rows: ParsedIndex[]): void {
+  const log = childLogger({ op: 'psx-indices' });
+  const stamped = rows.filter((r) => r.readAt);
+  log.info('psx-indices.lead', {
+    source,
+    count: rows.length,
+    readAt: stamped[0]?.readAt?.toISOString() ?? null,
+    stamped: stamped.length,
+    withVolume: rows.filter((r) => r.volume != null).length,
+  });
 }
 
 /** The exchange's own market-summary carousel. Throws when the page cannot be read at all. */
@@ -192,28 +297,43 @@ async function fetchPsxBoard(timeoutMs: number): Promise<ParsedIndex[]> {
 }
 
 /**
- * Fetch and parse the board: the exchange's page first, Sarmaaya's board when that cannot be read.
+ * Fetch and parse the board, in order of what each source can prove:
  *
- * The exchange's own error is what surfaces when both paths fail — the fallback must not hide the
- * original failure behind its own reason, or the log would blame Sarmaaya for the PSX page.
+ *   1. Sarmaaya's market-view — the `/indexes` page's own endpoint. All 18 indices, `close` as the
+ *      level, and the only source that stamps each reading, so a stale board is detectable (#107).
+ *   2. Sarmaaya's `/api/indices` — same host, 10 indices, no timestamp, but it carries volume.
+ *   3. The exchange's market-summary carousel — the exchange's own page, which cannot say when it
+ *      read, and is why a frozen board used to look exactly like a quiet one.
+ *
+ * Each leg is tried only when the one before it fails, and the *first* leg's error is what surfaces
+ * when all of them do: a fallback must not hide the original failure behind its own reason.
  */
 export async function fetchPsxIndices(timeoutMs = 20000): Promise<ParsedIndex[]> {
   const log = childLogger({ op: 'psx-indices' });
-  try {
-    return await fetchPsxBoard(timeoutMs);
-  } catch (primary) {
+  const legs: Array<{ source: string; read: () => Promise<ParsedIndex[]> }> = [
+    { source: 'sarmaaya market-view', read: () => fetchSarmaayaMarketView(timeoutMs) },
+    { source: 'sarmaaya indices', read: () => fetchSarmaayaIndices(timeoutMs) },
+    { source: 'psx market-summary', read: () => fetchPsxBoard(timeoutMs) },
+  ];
+
+  let firstError: unknown = null;
+  for (const leg of legs) {
     try {
-      const indices = await fetchSarmaayaIndices(timeoutMs);
-      log.warn('psx-indices.fallback', {
-        source: 'sarmaaya',
-        reason: (primary as Error).message.slice(0, 120),
-        count: indices.length,
-      });
-      return indices;
-    } catch {
-      throw primary;
+      const rows = await leg.read();
+      if (leg !== legs[0]) {
+        log.warn('psx-indices.fallback', {
+          source: leg.source,
+          reason: (firstError as Error | null)?.message?.slice(0, 120) ?? null,
+          count: rows.length,
+        });
+      }
+      logLead(leg.source, rows);
+      return rows;
+    } catch (e) {
+      if (firstError === null) firstError = e;
     }
   }
+  throw firstError instanceof Error ? firstError : new SiteUnavailableError('no index source answered');
 }
 
 /**
