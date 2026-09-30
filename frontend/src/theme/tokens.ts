@@ -75,6 +75,13 @@ export interface NavColors {
   ctaText: string;
   field: string;
   fieldText: string;
+  /**
+   * The label and the search icon, which are drawn *inside* the field rather than on the bar. The
+   * field is its own surface — white in light, a near-black cavity in dark — so these cannot borrow
+   * `textMuted`: `#C9CCCB` on the light field measures 1.50:1, which is why the placeholder read as
+   * invisible on the white theme.
+   */
+  fieldLabel: string;
   fieldBorder: string;
 }
 
@@ -138,7 +145,8 @@ export const lightTokens: ModeTokens = {
     cta: '#FFFFFF', // 10.29:1 against the bar
     ctaText: '#007A42', // 5.44:1 on the button
     field: '#FFFFFF',
-    fieldText: '#333333',
+    fieldText: '#333333', // 12.63:1 on the field
+    fieldLabel: '#6B6B6B', // 5.33:1 on the field — a step below the input text, and still AA
     fieldBorder: 'rgba(255, 255, 255, 0.28)',
   },
   chart: {
@@ -195,6 +203,7 @@ export const darkTokens: ModeTokens = {
     ctaText: '#0F2118', // 6.52:1 on the button
     field: '#1C1F1E', // an inset cavity in the bar, read by its outline
     fieldText: '#F1F1F1',
+    fieldLabel: '#A8ADAB', // 7.55:1 on the field
     fieldBorder: 'rgba(241, 241, 241, 0.45)', // 4.30:1 composited over the bar
   },
   chart: {
