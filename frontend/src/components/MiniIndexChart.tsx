@@ -110,7 +110,9 @@ export function MiniIndexChart({
   fullWidth?: boolean;
 }) {
   const theme = useTheme();
-  const { data, isLoading } = useIndexHistory(symbol, sessions);
+  // One row more than the chart draws, so the oldest candle still knows the close it is toned
+  // against; `toCandles` drops the spare. See `toCandles`.
+  const { data, isLoading } = useIndexHistory(symbol, sessions + 1);
   const candles = useMemo(() => toCandles(data?.items ?? [], sessions), [data, sessions]);
 
   /**
@@ -163,7 +165,9 @@ export function MiniIndexChart({
 
   const last = candles[candles.length - 1];
   const slot = box.w / candles.length;
-  const colour = ink(toneOf(last, flat));
+  /** Today's tone, from the same helper and the same reference the exchange's change figure uses. */
+  const lastTone = toneOf(last, flat);
+  const colour = ink(lastTone);
 
   /**
    * The latest-close marker is a positioned DOM dot rather than an SVG circle: the chart's viewBox
@@ -183,7 +187,7 @@ export function MiniIndexChart({
         preserveAspectRatio="none"
         role="img"
         aria-label={`${symbol}: ${candles.length} sessions, latest session ${
-          flat ? 'unchanged' : last.close >= last.open ? 'up' : 'down'
+          lastTone === 'success.main' ? 'up' : lastTone === 'error.main' ? 'down' : 'unchanged'
         }`}
         sx={{ display: 'block', width: '100%', height: '100%', overflow: 'visible' }}
       >
