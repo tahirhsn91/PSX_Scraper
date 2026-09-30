@@ -36,8 +36,9 @@ import type { ApiError } from "../api/client";
  *
  * One table for the whole tracked universe, sorted **server-side** (`sort`/`order` on the API): the
  * list is paginated, so sorting fifty rows in the browser would reorder the page and claim an order
- * the data does not have. Below `md` the same columns become a card list, and the change pill leads
- * the card because direction is what a reader scans for.
+ * the data does not have. The row-wise layout is the design at **every** width — a phone gets the
+ * same ten columns as a desktop, not a card list, so the table carries a width floor and its own
+ * container takes the horizontal scroll (the page never scrolls sideways).
  *
  * The ten columns share the ~1215px the container gives them, which is why the widths below are
  * percentages that add up to 77%: the table is laid out `fixed` (see `DataTable`) and the Company
@@ -78,7 +79,6 @@ const COLUMNS: Column<StockListItem>[] = [
     // COS."), which is more than this column can hold beside the nine others — so it clips with an
     // ellipsis and the full text stays one hover away, rather than wrapping and doubling the row.
     width: "15%",
-    hideBelow: "md",
     mobileRole: "meta",
     render: (s) => (
       <Typography variant="body2" noWrap title={s.sector ?? undefined}>
@@ -118,7 +118,6 @@ const COLUMNS: Column<StockListItem>[] = [
     align: "right",
     width: "8%",
     sortKey: "volume",
-    hideBelow: "sm",
     mobileRole: "meta",
     render: (s) => formatCount(s.volume),
   },
@@ -128,7 +127,6 @@ const COLUMNS: Column<StockListItem>[] = [
     align: "right",
     width: "8.1%",
     sortKey: "marketCap",
-    hideBelow: "sm",
     mobileRole: "meta",
     render: (s) => {
       const abbreviated = formatMarketCap(s.marketCap);
@@ -145,9 +143,8 @@ const COLUMNS: Column<StockListItem>[] = [
     // table past the container and puts a scrollbar under it — these three carry their labels.
     width: "7.7%",
     sortKey: "week52Low",
-    hideBelow: "md",
-    // Shown on a phone too: the card list is this table's other view, not a summary of it, so it
-    // carries all ten fields. `hideBelow` only rations the table's own columns.
+    // Shown on a phone too: the row-wise layout is the design at every width here, so no column is
+    // rationed away — the table keeps its own scroll instead.
     mobileRole: "meta",
     render: (s) => formatNumber(s.week52Low),
   },
@@ -157,7 +154,6 @@ const COLUMNS: Column<StockListItem>[] = [
     align: "right",
     width: "8%",
     sortKey: "week52High",
-    hideBelow: "md",
     mobileRole: "meta",
     render: (s) => formatNumber(s.week52High),
   },
@@ -165,7 +161,6 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "lastSyncedAt",
     header: "Last synced",
     width: "7.6%",
-    hideBelow: "md",
     mobileRole: "meta",
     render: (s) =>
       s.lastSyncedAt ? (
@@ -418,6 +413,10 @@ export function Dashboard() {
           columns={COLUMNS}
           rows={data?.items ?? []}
           ariaLabel="Tracked securities"
+          /* Row-wise at every width, as asked: a phone gets the same rows as a desktop rather than
+           * the card list, so the table carries a floor and its container takes the scroll. */
+          cardsBelow="never"
+          minTableWidth={1024}
           /* Rationed widths: nine columns carry a share and Company takes the rest, so one long
            * name or sector clips instead of wrapping and setting the height of every row. */
           fixed
