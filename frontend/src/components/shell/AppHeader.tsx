@@ -118,16 +118,10 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                 '&.Mui-focused fieldset': { borderColor: 'nav.active' },
               },
               '& .MuiInputBase-input': { color: 'nav.fieldText' },
-              // The field is its own surface, so its contents cannot borrow the bar's colours — and the
-              // label is always *inside* it here, in every state. Measured in the browser rather than
-              // reasoned about: Autocomplete keeps the label shrunk even while the field is empty, and
-              // MUI's outlined fill extends behind the notch, so the label sits on the field's own
-              // #FFFFFF in light mode. Coloured from the bar it measured 1.62:1 — the text was there
-              // and effectively invisible, which is the report this fixes.
-              '& .MuiInputLabel-root': { color: 'nav.fieldLabel' },
-              // Focus has to pass on the field too: the bar's active green measures 1.9:1 on white, so
-              // this uses the brand's primary, which clears AA on the field in both modes.
-              '& .MuiInputLabel-root.Mui-focused': { color: 'primary.main' },
+              // No label rule: the field carries no visible label, because an MUI label here straddles
+              // the field's fill and the bar behind it — two backgrounds, and no single colour passes
+              // against both. The icon and the placeholder are inside the field, on its fill alone.
+              '& .MuiInputBase-input::placeholder': { color: 'nav.fieldLabel', opacity: 1 },
               '& .MuiInputAdornment-root .MuiSvgIcon-root': { color: 'nav.fieldLabel' },
             }}
           >

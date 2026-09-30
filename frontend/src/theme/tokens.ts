@@ -76,10 +76,11 @@ export interface NavColors {
   field: string;
   fieldText: string;
   /**
-   * The label and the search icon, which are drawn *inside* the field rather than on the bar. The
-   * field is its own surface — white in light, a near-black cavity in dark — so these cannot borrow
-   * `textMuted`: `#C9CCCB` on the light field measures 1.50:1, which is why the placeholder read as
-   * invisible on the white theme.
+   * Everything drawn on the field's own fill rather than on the bar: the magnifier icon and the
+   * placeholder. The field is its own surface (white in light, a near-black cavity in dark), so
+   * these cannot borrow `textMuted` — `#C9CCCB` on the light field measures 1.62:1. The field
+   * carries no visible label at all, because an MUI label straddles the fill and the bar behind it,
+   * and no single colour passes against both.
    */
   fieldLabel: string;
   fieldBorder: string;
