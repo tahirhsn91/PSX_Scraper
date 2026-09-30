@@ -10,7 +10,13 @@ export interface GlobalSearchProps {
   size?: 'small' | 'medium';
   /** Called after a navigation is triggered (the mobile sheet closes itself with this). */
   onNavigate?: () => void;
-  placeholder?: string;
+  /**
+   * The control's accessible name — not visible text. There is deliberately no visible label: this
+   * field sits on the header bar, so an MUI label straddles the field's fill *and* the bar behind
+   * it. Two backgrounds, and no single colour passes against both. The field says what it is with
+   * its placeholder and its magnifier icon; this keeps it announced by screen readers.
+   */
+  ariaLabel?: string;
 }
 
 /**
@@ -25,7 +31,7 @@ export function GlobalSearch({
   autoFocus = false,
   size = 'small',
   onNavigate,
-  placeholder = 'Search symbol or company',
+  ariaLabel = 'Search symbol or company',
 }: GlobalSearchProps) {
   const [input, setInput] = useState('');
   const [debounced, setDebounced] = useState('');
@@ -81,9 +87,10 @@ export function GlobalSearch({
       renderInput={(params) => (
         <TextField
           {...params}
-          label={placeholder}
           placeholder="e.g. OGDC"
           autoFocus={autoFocus}
+          // Merged, not replaced: `params` carries the combobox wiring Autocomplete needs.
+          inputProps={{ ...params.inputProps, 'aria-label': ariaLabel }}
           InputProps={{
             ...params.InputProps,
             startAdornment: (
