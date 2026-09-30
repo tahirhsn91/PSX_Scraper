@@ -15,7 +15,7 @@ export function SearchSheet({ open, onClose }: { open: boolean; onClose: () => v
       <AppBar position="static" component="div">
         <Toolbar sx={{ gap: 1 }}>
           <Stack direction="row" alignItems="center" sx={{ flex: 1, gap: 1 }}>
-            <GlobalSearch autoFocus size="small" onNavigate={onClose} placeholder="Search stocks" />
+            <GlobalSearch autoFocus size="small" onNavigate={onClose} ariaLabel="Search stocks" />
           </Stack>
           <IconButton onClick={onClose} aria-label="Close search">
             <CloseRoundedIcon />
