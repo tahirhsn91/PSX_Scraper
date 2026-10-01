@@ -83,7 +83,8 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
               {/* The product line. Small on purpose — it qualifies the name rather than competing with
                   it — but not dim: `nav.textMuted` is the bar's own muted token, measured at 6.36:1
                   against the light bar and 6.63:1 against the dark one, so a 12px label is still
-                  readable rather than decorative. */}
+                  readable rather than decorative. Centred under the name it qualifies: the column is
+                  as wide as the wordmark, so `center` puts it on the name's axis, not the bar's. */}
               <Typography
                 component="span"
                 sx={{
@@ -94,6 +95,7 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                   letterSpacing: '0.08em',
                   color: 'nav.textMuted',
                   whiteSpace: 'nowrap',
+                  textAlign: 'center',
                 }}
               >
                 Market
