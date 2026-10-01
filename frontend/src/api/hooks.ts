@@ -42,7 +42,12 @@ export const keys = {
 export const useStocks = (
   page = 1,
   limit = 20,
-  poll = false,
+  /**
+   * How often to re-read: `false` for a one-off read, `true` for the fast 4s cadence a sync fan-out
+   * wants, or a number of milliseconds for a slower live cadence — the dashboard passes one while the
+   * exchange is open, so a `points` order keeps up with contributions that are still moving.
+   */
+  poll: boolean | number = false,
   sort?: StockSortField,
   order: SortOrder = 'asc',
   group?: StockListGroup,
@@ -60,8 +65,14 @@ export const useStocks = (
           params: { page, limit, sort, order, group, index },
         })
       ).data,
-    // Poll while a sync-all fan-out is in flight so prices / "last synced" update live.
-    refetchInterval: poll ? 4000 : false,
+    // Poll while a sync-all fan-out is in flight so prices / "last synced" update live, or at the
+    // slower live cadence the caller asks for (a number) while there is something to keep up with.
+    refetchInterval: typeof poll === 'number' ? poll : poll ? 4000 : false,
+    // A live cadence needs `staleTime: 0`: React Query skips a scheduled refetch while the cached data
+    // is still fresh, so the app-wide 30s stale time silently halves a 30s interval — measured as 2
+    // refreshes over 2 minutes instead of 4 (the timer fires at the stale boundary and is skipped,
+    // then takes the next tick). Everything else keeps the provider's default.
+    ...(typeof poll === 'number' ? { staleTime: 0 } : {}),
   });
 
 /**

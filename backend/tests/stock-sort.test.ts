@@ -15,6 +15,10 @@ describe('buildOrderBy', () => {
     expect(buildOrderBy('changePercent', 'desc')).toBe('p.change_percent DESC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('week52Low', 'asc')).toBe('p.week52_low ASC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('week52High', 'asc')).toBe('p.week52_high ASC NULLS LAST, s.symbol ASC');
+    // The contribution column, which the dashboard opens on descending: the join's resolved value,
+    // so the order matches the figure on screen.
+    expect(buildOrderBy('points', 'desc')).toBe('pt.points DESC NULLS LAST, s.symbol ASC');
+    expect(buildOrderBy('points', 'asc')).toBe('pt.points ASC NULLS LAST, s.symbol ASC');
   });
 
   it('defaults to symbol ascending, which is what the dashboard showed before sorting existed', () => {
@@ -27,6 +31,10 @@ describe('buildOrderBy', () => {
     // and descending must not hide five hundred real rows behind them.
     expect(buildOrderBy('price', 'asc')).toContain('NULLS LAST');
     expect(buildOrderBy('price', 'desc')).toContain('NULLS LAST');
+    // Same rule for the contribution, where it carries the most weight: the dashboard opens on
+    // `points` descending ("who moved the index most"), and the symbols in neither index have no
+    // contribution at all — they must not head that list.
+    expect(buildOrderBy('points', 'desc')).toContain('NULLS LAST');
   });
 
   it('breaks ties on symbol so a page is stable when many rows share a value', () => {
@@ -39,7 +47,7 @@ describe('buildOrderBy', () => {
     // Every identifier in the clause is one of those two literals — nothing was interpolated.
     expect(clause.split(/\s+/).filter((t) => t.includes('.'))).toEqual(['p.volume', 's.symbol']);
     expect(STOCK_SORT_FIELDS).toEqual([
-      'symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap',
+      'symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points',
     ]);
   });
 });
