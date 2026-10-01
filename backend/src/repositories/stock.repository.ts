@@ -61,6 +61,17 @@ export const SORTABLE_COLUMNS = {
   changePercent: 'p.change_percent',
   volume: 'p.volume',
   marketCap: 'p.market_cap',
+  /**
+   * The stock's contribution to its index. `pt` is the list query's own LATERAL join, which has
+   * already resolved *which* index a row's figure belongs to (KSE-100 where it is a member, ALLSHR
+   * otherwise), so ordering on its `points` orders on exactly the number the column shows — one
+   * order over the mixed column rather than an order that disagrees with what is on screen.
+   *
+   * `NULLS LAST` (from buildOrderBy) is what makes the descending default useful: the 57 symbols in
+   * neither index have no contribution, and they belong at the bottom of "biggest contributor first",
+   * not on top of it.
+   */
+  points: 'pt.points',
 } as const;
 
 export type StockSortField = keyof typeof SORTABLE_COLUMNS;

@@ -30,6 +30,7 @@ import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { DataTable, type Column } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
 import { DASH, formatCount, formatDateTime, formatMarketCap, formatNumber, formatRelative, formatRupees, formatSigned } from "../lib/format";
+import { isPsxSessionOpen } from "../lib/session";
 import type { StockListItem, StockListGroup, StockSortField, SortOrder } from "../types";
 import type { ApiError } from "../api/client";
 
@@ -41,6 +42,14 @@ const INDEX_LABELS: Record<string, string> = {
   KSE100: "KSE-100",
   ALLSHR: "ALLSHR market",
 };
+
+/**
+ * How often the table re-reads itself while the exchange is open.
+ *
+ * The contributions behind `points` are re-read on the backend every two minutes, so half a minute
+ * keeps the order current without asking more often than the figures can change.
+ */
+const SESSION_POLL_MS = 30_000;
 
 /**
  * The market board.
@@ -96,8 +105,10 @@ const COLUMNS: Column<StockListItem>[] = [
     ),
     align: "right",
     width: "7%",
-    // Deliberately not sortable. The server has no sort field for a figure that is overwritten every
-    // couple of minutes, and an order across two different indices would not mean anything anyway.
+    // Sortable on the server — and the order the board opens on (the initial `sort` state below):
+    // biggest contributor first. The ORDER BY is on the same resolved value the cell shows, with
+    // `NULLS LAST` so the symbols in neither index fall to the bottom rather than heading that list.
+    sortKey: "points",
     mobileRole: "meta",
     render: (s) => (
       <Typography
@@ -254,9 +265,12 @@ export function Dashboard() {
   // opens the board for, and the rest of the universe is one click away.
   const [universe, setUniverse] = useState<Universe>("kse100");
   const group: StockListGroup | undefined = universe === "all" ? undefined : universe;
+  // The board opens on the biggest contributors: `points` descending, sorted on the server, so the
+  // first row is the stock that has moved its index the most. The list re-reads itself on the cadence
+  // below, so the order arrives with the figures rather than drifting behind them.
   const [sort, setSort] = useState<{ key: StockSortField; direction: SortOrder }>({
-    key: "symbol",
-    direction: "asc",
+    key: "points",
+    direction: "desc",
   });
 
   // Poll queue status continuously; also while a "sync all" just fired so the active/waiting
@@ -275,11 +289,17 @@ export function Dashboard() {
   // and the panel had no callers at all, so nothing rendered them.
   const { data: indexBoard, isLoading: indicesLoading, isError: indicesError } = useIndices(syncingAll);
 
-  // Keep the stock table itself fresh (prices, last-synced) while a sync is running.
+  // How often the table re-reads itself. A sync fan-out keeps its fast 4s cadence; otherwise the
+  // cadence follows the exchange — while it is open the contributions behind `points` are moving, and
+  // while it is closed they are not, so a closed market costs no requests at all. The sync-status poll
+  // above re-renders this component every few seconds, so the flag flips by itself when the session
+  // opens or closes under an open page.
+  const pollMs: boolean | number = syncingAll ? 4000 : isPsxSessionOpen() ? SESSION_POLL_MS : false;
+
   const { data, isLoading, isError, refetch } = useStocks(
     page + 1,
     rowsPerPage,
-    syncingAll,
+    pollMs,
     sort.key,
     sort.direction,
     group,
