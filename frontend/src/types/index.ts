@@ -78,6 +78,17 @@ export interface StockListItem {
   /** 52-week range (issue #25); null until the company page has been scraped. */
   week52High: number | null;
   week52Low: number | null;
+  /**
+   * Index points this stock contributed, signed, re-read every couple of minutes through the session.
+   * Absent when the stock is in neither index we read contributions for — a symbol the index does not
+   * carry has no contribution, and `0.00` would claim it moved the index by nothing.
+   */
+  points?: number | null;
+  /**
+   * Which index `points` is measured against — `KSE100` where the stock is a member, `ALLSHR`
+   * otherwise. Always shown beside the figure, because the two are different scales.
+   */
+  pointsIndex?: string;
   lastTradeDate: string | null;
   lastSyncedAt: string | null;
 }
