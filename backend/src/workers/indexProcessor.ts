@@ -1,6 +1,7 @@
 import { Job, UnrecoverableError } from 'bullmq';
-import { INDEX_BOARD_JOB, IndexBoardJobData, IndexSyncJobData } from '../jobs/queues';
+import { INDEX_BOARD_JOB, INDEX_CONTRIBUTION_JOB, IndexBoardJobData, IndexContributionJobData, IndexSyncJobData } from '../jobs/queues';
 import { runIndexBoardPass } from '../services/indexScrape.service';
+import { syncIndexContributions } from '../services/indexContribution.service';
 import { runIndexSync } from '../services/indexSync.service';
 import { psxHistoricalScraper } from '../scrapers/historical.scraper';
 import { childLogger } from '../utils/logger';
@@ -22,11 +23,17 @@ export interface IndexSyncSkip {
  * failed member and no `sync_logs` row — the run never happened — and the next tick after the
  * cooldown probes the source again.
  */
-export async function processIndexJob(job: Job<IndexSyncJobData | IndexBoardJobData>): Promise<unknown> {
+export async function processIndexJob(job: Job<IndexSyncJobData | IndexBoardJobData | IndexContributionJobData>): Promise<unknown> {
   // The board pass shares this queue (and therefore the page pool) but takes no symbol: one page
   // carries every index. Its own tick decides intraday board read vs the post-close closing pass.
   if (job.name === INDEX_BOARD_JOB) {
     return runIndexBoardPass({});
+  }
+  // The contribution capture shares it for the same reason and also takes no symbol: one index's
+  // whole constituent list arrives per request. It is the only job here that is *expected* to run
+  // many times a session, because what it stores is a live figure rather than a published level.
+  if (job.name === INDEX_CONTRIBUTION_JOB) {
+    return syncIndexContributions();
   }
   if (!('symbol' in job.data)) {
     throw new UnrecoverableError(`index job ${job.name} carries no symbol`);

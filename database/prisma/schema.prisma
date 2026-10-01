@@ -32,6 +32,8 @@ model Stock {
   // Membership of a published index (KSE-100 today). A join rather than a column: the exchange
   // publishes each index's own member list, and the dashboard's first page is driven by it.
   constituents IndexConstituent[]
+  // The same members' *live* contribution to their index, refreshed through the session.
+  contributions IndexContribution[]
 
   @@index([companyName])
   @@map("stocks")
@@ -161,6 +163,9 @@ model MarketIndex {
   values      IndexValue[]
   /// The index's published member list, newest pass wins.
   constituents IndexConstituent[]
+  /// Its members' latest contribution to this index, one row per constituent, overwritten on
+  /// every pass rather than appended (the board shows today's contribution, not a history).
+  contributions IndexContribution[]
 
   @@map("market_indices")
 }
@@ -188,6 +193,42 @@ model IndexConstituent {
   @@unique([indexId, stockId])
   @@index([stockId])
   @@map("index_constituents")
+}
+
+/// One constituent's **live** contribution to one index, as the source publishes it.
+///
+/// `points` is the exchange's own contribution figure — how much this stock moved the index's level
+/// — and `weight` its share of the index. Both are *readings*, not history: the row is overwritten
+/// on every pass (every couple of minutes through the session), because the dashboard shows what the
+/// stock is contributing now, and appending would put ~500 rows in the table every tick for no one.
+///
+/// `level` is the constituent's own last price in the same payload, kept so a stored contribution can
+/// be checked against the price it was measured at rather than trusted on its own.
+///
+/// Absence is meaningful and is stored as NULL, never 0: the source carries constituents it has not
+/// published a reading for, and a `0.00` there would read as "this stock moved the index by nothing"
+/// when the truth is "nobody said". See the `isPublished` guard in the service.
+model IndexContribution {
+  id         String   @id @default(uuid())
+  indexId    String   @map("index_id")
+  stockId    String   @map("stock_id")
+  /// Index points this stock contributed, signed. Null when the source published no reading.
+  points     Decimal? @db.Decimal(20, 4)
+  /// Share of the index, in percent (KTML: 0.23). Null when the source published no reading.
+  weight     Decimal? @db.Decimal(12, 4)
+  /// The constituent's own price in the same reading, for reconciliation.
+  level      Decimal? @db.Decimal(20, 4)
+  /// When the reading was taken (our clock, not the source's — it publishes none per row).
+  capturedAt DateTime @map("captured_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  index MarketIndex @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  stock Stock       @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([indexId, stockId])
+  @@index([stockId])
+  @@map("index_contributions")
 }
 
 model SyncLog {

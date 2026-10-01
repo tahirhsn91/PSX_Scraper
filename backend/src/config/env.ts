@@ -39,6 +39,14 @@ const envSchema = z.object({
     .transform((v) => v === 'true'),
   KSE100_MEMBERSHIP_CRON: z.string().default('15 1 * * *'),
   /**
+   * The per-constituent contribution capture behind the dashboard's `POINTS` column. Every two
+   * minutes through the PSX session in UTC (09:30-15:30 PKT), weekdays — a contribution is a live
+   * figure, so it cannot ride a daily pass, and the window keeps ~14 requests a pass from running all
+   * night against a feed that is not moving. Off-session the last reading stands, which is what the
+   * close left behind.
+   */
+  INDEX_CONTRIBUTION_CRON: z.string().default('*/2 4-11 * * 1-5'),
+  /**
    * The market-cap refresh. Two batched scanner POSTs cover most of the book and the leftovers cost
    * one spaced request each (~150 requests for 508 symbols), so it sits on its own slow schedule
    * rather than the poll's minute tick: a cap moves with price, not with the tick. The window is
