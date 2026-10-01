@@ -27,6 +27,22 @@ export interface StockListItem {
   week52Low: number | null;
   lastTradeDate: Date | null;
   lastSyncedAt: Date | null;
+  /**
+   * Index points this stock is contributing, signed — the dashboard's `POINTS` column. Optional and
+   * absent when the stock is in neither index we read contributions for: a symbol the index does not
+   * carry has no contribution, and `0.00` would claim it moved the index by nothing.
+   *
+   * A genuine zero (the stock is in the index and did not move it) is set, and is distinguishable
+   * from an absent value by `pointsIndex` being present.
+   */
+  points?: number | null;
+  /**
+   * Which index `points` belongs to — `KSE100` where the stock is a member, `ALLSHR` otherwise. It
+   * travels with the number rather than being implied, because the two are not the same scale: the
+   * KSE-100 stands at ~168,600 points and the ALLSHR at ~102,100, so a figure is only meaningful
+   * beside the index it moved.
+   */
+  pointsIndex?: string;
 }
 
 /**
@@ -131,6 +147,9 @@ type RawStockListRow = {
   week52_low: Prisma.Decimal | null;
   last_trade_date: Date | null;
   last_synced_at: Date | null;
+  /** Null for a stock with no stored contribution (an all-zero source placeholder stores null). */
+  points?: Prisma.Decimal | null;
+  points_index_symbol?: string | null;
 };
 
 /** One mapping for both list and search — they read the same columns and must agree. */
@@ -154,6 +173,13 @@ function toListItem(r: RawStockListRow): StockListItem {
   if (r.change != null) item.change = Number(r.change);
   // Same additive rule: a row with no cap keeps the key absent rather than reporting a zero.
   if (r.market_cap != null) item.marketCap = Number(r.market_cap);
+  // And again for the index contribution: absent when the stock is in neither index, present —
+  // with the index it belongs to — when the source has published a reading. `!= null` on purpose,
+  // so a real `0.00` (in the index, moved it by nothing) survives where a missing reading does not.
+  if (r.points != null) {
+    item.points = Number(r.points);
+    if (r.points_index_symbol) item.pointsIndex = r.points_index_symbol;
+  }
   return item;
 }
 
@@ -337,7 +363,8 @@ export class StockRepository {
                p.current_price, p.change, p.change_percent, p.volume, p.market_cap,
                p.week52_high, p.week52_low,
                p.last_trade_date,
-               sl.completed_at AS last_synced_at
+               sl.completed_at AS last_synced_at,
+               pt.points, pt.index_symbol AS points_index_symbol
         FROM stocks s
         LEFT JOIN LATERAL (
           SELECT current_price, change, change_percent, volume, market_cap, week52_high,
@@ -350,6 +377,18 @@ export class StockRepository {
           WHERE stock_id = s.id
           ORDER BY started_at DESC LIMIT 1
         ) sl ON true
+        -- The stock's index contribution, KSE-100 preferred: that is the index the board is read
+        -- against, and the broad market (ALLSHR) figure is the fallback for the ~350 symbols the
+        -- KSE-100 does not carry. A reading is overwritten rather than appended, so this is one row
+        -- either way — no row multiplication, and the ORDER BY above is untouched by it.
+        LEFT JOIN LATERAL (
+          SELECT ic.points, mi.symbol AS index_symbol
+          FROM index_contributions ic
+          JOIN market_indices mi ON mi.id = ic.index_id
+          WHERE ic.stock_id = s.id AND mi.symbol IN ('KSE100', 'ALLSHR')
+          ORDER BY (mi.symbol = 'KSE100') DESC, ic.captured_at DESC
+          LIMIT 1
+        ) pt ON true
         ${filter}
         -- Prisma.raw, not a bound parameter: ORDER BY cannot take one. The string is safe by
         -- construction — it is assembled from the SORTABLE_COLUMNS literals above and an enum
@@ -401,7 +440,8 @@ export class StockRepository {
              p.current_price, p.change, p.change_percent, p.volume, p.market_cap,
              p.week52_high, p.week52_low,
              p.last_trade_date,
-             sl.completed_at AS last_synced_at
+             sl.completed_at AS last_synced_at,
+             pt.points, pt.index_symbol AS points_index_symbol
       FROM stocks s
       LEFT JOIN LATERAL (
         SELECT current_price, change, change_percent, volume, market_cap, week52_high,
@@ -414,6 +454,16 @@ export class StockRepository {
         WHERE stock_id = s.id AND status IN ('SUCCESS','PARTIAL')
         ORDER BY started_at DESC LIMIT 1
       ) sl ON true
+      -- The same contribution lookup the list uses, so a searched row shows the same POINTS figure
+      -- rather than losing it: search renders through the same table and mapper.
+      LEFT JOIN LATERAL (
+        SELECT ic.points, mi.symbol AS index_symbol
+        FROM index_contributions ic
+        JOIN market_indices mi ON mi.id = ic.index_id
+        WHERE ic.stock_id = s.id AND mi.symbol IN ('KSE100', 'ALLSHR')
+        ORDER BY (mi.symbol = 'KSE100') DESC, ic.captured_at DESC
+        LIMIT 1
+      ) pt ON true
       WHERE s.symbol ILIKE ${'%' + term + '%'}
          OR s.company_name ILIKE ${'%' + term + '%'}
          OR similarity(s.symbol, ${term}) > 0.2

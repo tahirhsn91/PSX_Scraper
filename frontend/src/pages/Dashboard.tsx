@@ -29,9 +29,18 @@ import { ChangePill } from "../components/ui/ChangePill";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { DataTable, type Column } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
-import { DASH, formatCount, formatDateTime, formatMarketCap, formatNumber, formatRelative, formatRupees } from "../lib/format";
+import { DASH, formatCount, formatDateTime, formatMarketCap, formatNumber, formatRelative, formatRupees, formatSigned } from "../lib/format";
 import type { StockListItem, StockListGroup, StockSortField, SortOrder } from "../types";
 import type { ApiError } from "../api/client";
+
+/**
+ * How each index is named in a tooltip. The board's own tiles say `KSE 100`, so a contribution is
+ * described with the same name the reader sees above it rather than the payload's `KSE100`.
+ */
+const INDEX_LABELS: Record<string, string> = {
+  KSE100: "KSE-100",
+  ALLSHR: "ALLSHR market",
+};
 
 /**
  * The market board.
@@ -39,12 +48,12 @@ import type { ApiError } from "../api/client";
  * One table for the whole tracked universe, sorted **server-side** (`sort`/`order` on the API): the
  * list is paginated, so sorting fifty rows in the browser would reorder the page and claim an order
  * the data does not have. The row-wise layout is the design at **every** width — a phone gets the
- * same ten columns as a desktop, not a card list, so the table carries a width floor and its own
+ * same eleven columns as a desktop, not a card list, so the table carries a width floor and its own
  * container takes the horizontal scroll (the page never scrolls sideways).
  *
- * The ten columns share the ~1215px the container gives them, which is why the widths below are
- * percentages that add up to 77%: the table is laid out `fixed` (see `DataTable`) and the Company
- * column, the only one without a width, takes what is left (measured 277px). Each column is at least
+ * The eleven columns share the ~1215px the container gives them, which is why the widths below are
+ * percentages that add up to 79%: the table is laid out `fixed` (see `DataTable`) and the Company
+ * column, the only one without a width, takes what is left (measured 252px). Each column is at least
  * as wide as its own `nowrap` header label, whatever its data — a column narrower than its label
  * pushes the table past the container and puts a scrollbar under it, which is how the last three
  * widths were chosen. What still does not fit is clipped by its own cell with a `title` for the full
@@ -75,12 +84,54 @@ const COLUMNS: Column<StockListItem>[] = [
     ),
   },
   {
+    key: "points",
+    // The caveat lives on the header, because this column mixes two indices and must not be read as
+    // one scale: a KSE-100 member's contribution is measured against a ~168,600-point index, and
+    // everything else against the ~102,100-point market index (ALLSHR). The cell names its own index
+    // for the same reason, so a figure is never read without knowing what it moved.
+    header: (
+      <span title="Index points this stock contributed: to the KSE-100 for its members, to the ALLSHR market index for everything else">
+        Points
+      </span>
+    ),
+    align: "right",
+    width: "7%",
+    // Deliberately not sortable. The server has no sort field for a figure that is overwritten every
+    // couple of minutes, and an order across two different indices would not mean anything anyway.
+    mobileRole: "meta",
+    render: (s) => (
+      <Typography
+        variant="body2"
+        title={
+          s.pointsIndex
+            ? `Contribution to the ${INDEX_LABELS[s.pointsIndex] ?? s.pointsIndex}`
+            : undefined
+        }
+        // Direction is carried by the sign as well as the colour: colour alone never says it here.
+        sx={{
+          color:
+            s.points == null
+              ? 'text.secondary'
+              : s.points > 0
+                ? 'up.main'
+                : s.points < 0
+                  ? 'down.main'
+                  : 'text.secondary',
+        }}
+      >
+        {formatSigned(s.points)}
+      </Typography>
+    ),
+  },
+  {
     key: "sector",
     header: "Sector",
     // The longest sector is 40 characters of upper case ("INV. BANKS / INV. COS. / SECURITIES
-    // COS."), which is more than this column can hold beside the nine others — so it clips with an
+    // COS."), which is more than this column can hold beside the ten others — so it clips with an
     // ellipsis and the full text stays one hover away, rather than wrapping and doubling the row.
-    width: "15%",
+    // Narrowed from 15% when Points arrived: it was already the most clipped column, so the eleven
+    // columns still leave the Company column what it had (measured 252px).
+    width: "10%",
     mobileRole: "meta",
     render: (s) => (
       <Typography variant="body2" noWrap title={s.sector ?? undefined}>
