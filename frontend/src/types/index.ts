@@ -3,7 +3,7 @@
  * enum: the server sorts (the table is paginated, so sorting in the browser would only reorder
  * the fifty rows on screen).
  */
-export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume' | 'marketCap' | 'points';
+export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume' | 'marketCap' | 'points' | 'weight';
 
 /**
  * One daily candle. `open`/`high`/`low` are null when the source did not report them — the
@@ -89,6 +89,12 @@ export interface StockListItem {
    * otherwise. Always shown beside the figure, because the two are different scales.
    */
   pointsIndex?: string;
+  /**
+   * The stock's share of that same index, in percent — `8.94` is 8.94% of the index — re-read on the
+   * same cadence as `points` and shown beside it. Absent for exactly the symbols `points` is absent
+   * for, because it comes off the same stored reading rather than a second source.
+   */
+  weight?: number | null;
   lastTradeDate: string | null;
   lastSyncedAt: string | null;
 }
