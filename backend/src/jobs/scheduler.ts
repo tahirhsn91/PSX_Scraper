@@ -4,6 +4,7 @@ import {
   syncAllQueue,
   indexQueue,
   INDEX_BOARD_JOB,
+  INDEX_CONTRIBUTION_JOB,
   quoteQueue,
   enqueueIndexSync,
   QUOTE_POLL_JOB,
@@ -139,6 +140,29 @@ async function registerIndexBoardSchedule(): Promise<void> {
   logger.info('scheduler.index_board_registered', { cron: INDEX_BOARD_CRON });
 }
 
+/**
+ * The contribution capture tick.
+ *
+ * Separate from the board's tick rather than an extra job in it: the board is a once-per-session read
+ * and a post-close pass, while this is a live reading. A tick every two minutes through the session is
+ * what the `POINTS` column needs to be current; the env cron carries the session window so it is not
+ * asking a sleeping feed for news all night.
+ */
+async function registerIndexContributionSchedule(): Promise<void> {
+  // Same re-registration discipline as every schedule here: drain first, so a pattern change cannot
+  // leave the old tick running beside the new one.
+  for (const job of await indexQueue.getRepeatableJobs()) {
+    if (job.name !== INDEX_CONTRIBUTION_JOB) continue;
+    await indexQueue.removeRepeatableByKey(job.key);
+  }
+  await indexQueue.add(
+    INDEX_CONTRIBUTION_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: env.INDEX_CONTRIBUTION_CRON }, jobId: 'scheduled-index-contributions' },
+  );
+  logger.info('scheduler.index_contributions_registered', { cron: env.INDEX_CONTRIBUTION_CRON });
+}
+
 async function registerUniversePassSchedule(): Promise<void> {
   if (!env.UNIVERSE_ENABLED) {
     logger.info("scheduler.universe_pass_disabled");
@@ -232,6 +256,7 @@ export async function registerScheduler(): Promise<void> {
   await registerSessionCandleSchedule();
   await registerUniversePassSchedule();
   await registerIndexBoardSchedule();
+  await registerIndexContributionSchedule();
 
   await syncAllQueue.add(
     "scheduled-sync-all",

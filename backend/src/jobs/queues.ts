@@ -39,6 +39,18 @@ export const KSE100_MEMBERSHIP_JOB = 'kse100-membership';
 export const INDEX_BOARD_JOB = 'index-board';
 
 /**
+ * The per-constituent contribution capture — how many index points each stock is contributing.
+ *
+ * It shares the board's queue for the board's reason (same kind of work, same worker, no symbol: one
+ * index's whole constituent list arrives per request) but it cannot share the board's *tick*. The
+ * board is a once-per-session read plus a post-close pass; a contribution is a live figure, and the
+ * column it feeds exists precisely because a daily number is not good enough. So it runs every couple
+ * of minutes through the session, which is affordable here: 1 request per 100 constituents, ~14 for
+ * the two indices the column reads.
+ */
+export const INDEX_CONTRIBUTION_JOB = 'index-contributions';
+
+/**
  * The market-cap refresh, on the same queue for the same reason: schedule-driven background work
  * that reuses the worker which owns the light periodic jobs. It is not as light as they are (~150
  * requests for the whole book), so it carries its own slow cron rather than riding the tick.
@@ -58,6 +70,8 @@ export interface HistoryJobData { symbol: string; range: HistoryRange }
 export interface IndexSyncJobData { symbol: string; trigger: 'manual' | 'cron' }
 /** The board pass takes no symbol: one page carries every index. */
 export interface IndexBoardJobData { trigger: 'cron' }
+/** The contribution capture takes no symbol either: the index's constituents all arrive together. */
+export interface IndexContributionJobData { trigger: 'cron' }
 export interface QuotePollJobData { trigger: 'manual' | 'cron' }
 
 const connection = createRedisConnection();
