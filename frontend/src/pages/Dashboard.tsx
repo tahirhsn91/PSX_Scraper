@@ -31,7 +31,7 @@ import { DataTable, type Column } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
 import { DASH, formatCount, formatDateTime, formatMarketCap, formatNumber, formatRelative, formatRupees, formatSigned } from "../lib/format";
 import { isPsxSessionOpen } from "../lib/session";
-import type { StockListItem, StockListGroup, StockSortField, SortOrder } from "../types";
+import type { StockListItem, StockSortField, SortOrder } from "../types";
 import type { ApiError } from "../api/client";
 
 /**
@@ -235,13 +235,24 @@ const COLUMNS: Column<StockListItem>[] = [
   },
 ];
 /**
- * How many rows each list is read in. The index's members fit on a single page (the exchange publishes
- * 99 of them, and the API's `limit` ceiling is 200), while the rest of the universe — everything
- * tracked, 508 symbols — is read 50 at a time. Same split the API's `group` parameter documents.
+ * The two lists the switch offers: the KSE-100's members, or every tracked share in the broad market.
+ * Both are *published index member lists* rather than slices of the tracked universe — the 22 tracked
+ * securities that belong to neither index are on neither list (the tile still counts them).
  */
-/** The two lists the switch offers: the index's members, or everything tracked. */
-type Universe = "kse100" | "all";
-const PAGE_SIZE: Record<Universe, number> = { kse100: 100, all: 50 };
+type Universe = "kse100" | "allshr";
+/**
+ * How many rows each list is read in. The KSE-100 is one page — the exchange publishes 100 members, 99
+ * of them tracked here, and the API's `limit` ceiling is 200 — while the broad market's 486 tracked
+ * members are read 50 at a time.
+ */
+const PAGE_SIZE: Record<Universe, number> = { kse100: 100, allshr: 50 };
+/**
+ * The published index whose member list a list shows. `index` is the parameter for this, not `group`:
+ * it narrows the rows to one index's tracked members (KSE-100 through the exchange's own member site,
+ * ALLSHR through Sarmaaya's ticker API), and a response scoped that way still carries both group
+ * counts — so the "Tracked stocks" tile keeps describing the universe rather than the list.
+ */
+const INDEX_FOR: Record<Universe, string> = { kse100: "KSE100", allshr: "ALLSHR" };
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -259,12 +270,11 @@ export function Dashboard() {
   // paged rather than cut off at the first N symbols.
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(PAGE_SIZE.kse100);
-  // Which list the table shows, and the only thing the `group` parameter is asked for. The API
-  // filters, so the rows, the count and the pager all belong to the chosen list: the arrows walk the
-  // KSE-100's members and never step out of them. KSE-100 is the default — it is the list a reader
-  // opens the board for, and the rest of the universe is one click away.
+  // Which list the table shows. The API filters by index membership, so the rows, the count and the
+  // pager all belong to the chosen list: the arrows walk the KSE-100's 99 members — or every tracked
+  // share in the broad market — and never step out of them. KSE-100 is the default: it is the list a
+  // reader opens the board for, and the rest of the market is one click away.
   const [universe, setUniverse] = useState<Universe>("kse100");
-  const group: StockListGroup | undefined = universe === "all" ? undefined : universe;
   // The board opens on the biggest contributors: `points` descending, sorted on the server, so the
   // first row is the stock that has moved its index the most. The list re-reads itself on the cadence
   // below, so the order arrives with the figures rather than drifting behind them.
@@ -302,7 +312,11 @@ export function Dashboard() {
     pollMs,
     sort.key,
     sort.direction,
-    group,
+    // No `group`: `index` names the list's membership outright, and `group` would answer only the
+    // KSE-100 half. The broad market is ALLSHR's member list as published — not "everything that is
+    // not in the KSE-100", which is a different set (it would carry the 22 in no index at all).
+    undefined,
+    INDEX_FOR[universe],
   );
 
   // Three places count the *universe* rather than the list: the page header, the "Tracked stocks"
@@ -513,21 +527,25 @@ export function Dashboard() {
         title="Tracked securities"
         subtitle={
           universe === "kse100"
-            ? "The KSE-100's members. Click a column to sort them on the server"
-            : "Everything tracked. Click a column to sort it on the server"
+            ? "The KSE-100's published members, 99 of them tracked here. Click a column to sort them on the server"
+            : "The broad market: every tracked share in ALLSHR, the All Share Index. Click a column to sort them on the server"
         }
         action={
-          // Two lists, one table: the switch says which one the rows below belong to, and the pager
-          // counts only that one. `exclusive` keeps a single choice, and the group is what pages.
+          // Two lists, one table: the switch says which published member list the rows below belong
+          // to, and the pager counts only that one. `exclusive` keeps a single choice.
           <ToggleButtonGroup
             size="small"
             exclusive
             value={universe}
             onChange={(_e, next) => chooseUniverse(next)}
-            aria-label="Which stocks the table lists"
+            aria-label="Which list the table shows"
           >
-            <ToggleButton value="kse100">KSE-100</ToggleButton>
-            <ToggleButton value="all">All stocks</ToggleButton>
+            <ToggleButton value="kse100" title="The KSE-100's members — the exchange's own list">
+              KSE-100
+            </ToggleButton>
+            <ToggleButton value="allshr" title="ALLSHR, the All Share Index — the whole tracked market">
+              Broad market
+            </ToggleButton>
           </ToggleButtonGroup>
         }
         flush
@@ -555,23 +573,20 @@ export function Dashboard() {
             setPage(0);
           }}
           emptyTitle={
-            universe === "kse100" ? "No KSE-100 members tracked" : "No stocks tracked yet"
+            universe === "kse100"
+              ? "No KSE-100 members tracked"
+              : "No All Share Index members tracked"
           }
           emptyDescription={
             universe === "kse100"
-              ? "The index's published member list is refreshed daily, and nothing in it is tracked here yet. Everything tracked is under All stocks."
-              : "Add a symbol to start collecting prices for it."
+              ? "The index's published member list is refreshed daily, and nothing in it is tracked here yet. The broad market is the other list."
+              : "ALLSHR's published member list is refreshed daily, and nothing in it is tracked here yet. The KSE-100 is the other list."
           }
           emptyAction={
-            universe === "kse100" ? (
-              <Button variant="outlined" onClick={() => chooseUniverse("all")}>
-                Show all stocks
-              </Button>
-            ) : (
-              <Button variant="contained" onClick={() => setAddOpen(true)}>
-                Add stock
-              </Button>
-            )
+            // Either way the useful move is the other list; "Add stock" is in the header above.
+            <Button variant="outlined" onClick={() => chooseUniverse(universe === "kse100" ? "allshr" : "kse100")}>
+              {universe === "kse100" ? "Show the broad market" : "Show the KSE-100"}
+            </Button>
           }
           pagination={pager}
           skeletonRows={8}
