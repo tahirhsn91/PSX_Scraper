@@ -24,7 +24,7 @@ export const paginationQuery = z.object({
  */
 export const stocksQuery = paginationQuery.extend({
   sort: z
-    .enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points'])
+    .enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points', 'weight'])
     .optional(),
   order: z.enum(['asc', 'desc']).default('asc'),
   /**

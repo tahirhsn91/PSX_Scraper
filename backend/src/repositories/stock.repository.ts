@@ -37,6 +37,17 @@ export interface StockListItem {
    */
   points?: number | null;
   /**
+   * The stock's share of its index, in percent — the dashboard's `WEIGHT` column, so `8.94` means
+   * 8.94% of the index. It is read from the *same* `index_contributions` row as `points`, which means
+   * it belongs to the index named by `pointsIndex` and is absent for exactly the same symbols: a stock
+   * the index does not carry has no weight, and `0.00` would claim it is in the index with none of it.
+   *
+   * A *published* zero is kept as `0` — `PGLC`, the smallest KSE-100 constituent, is published as
+   * `0.0000` because it rounds below 0.005%. That is a reading: the column sums to 99.99 across the
+   * hundred members, so nothing is missing, and `0.00%` is the honest way to show it.
+   */
+  weight?: number | null;
+  /**
    * Which index `points` belongs to — `KSE100` where the stock is a member, `ALLSHR` otherwise. It
    * travels with the number rather than being implied, because the two are not the same scale: the
    * KSE-100 stands at ~168,600 points and the ALLSHR at ~102,100, so a figure is only meaningful
@@ -72,6 +83,12 @@ export const SORTABLE_COLUMNS = {
    * not on top of it.
    */
   points: 'pt.points',
+  /**
+   * The stock's share of its index — same lateral join, same reasoning as `points` above: the
+   * weight on screen is the weight that is ordered on, over the mixed column, with the symbols in
+   * neither index at the bottom (`NULLS LAST`).
+   */
+  weight: 'pt.weight',
 } as const;
 
 export type StockSortField = keyof typeof SORTABLE_COLUMNS;
@@ -160,6 +177,8 @@ type RawStockListRow = {
   last_synced_at: Date | null;
   /** Null for a stock with no stored contribution (an all-zero source placeholder stores null). */
   points?: Prisma.Decimal | null;
+  /** Read from the same row as `points`, so it is null for exactly the same symbols. */
+  weight?: Prisma.Decimal | null;
   points_index_symbol?: string | null;
 };
 
@@ -191,6 +210,9 @@ function toListItem(r: RawStockListRow): StockListItem {
     item.points = Number(r.points);
     if (r.points_index_symbol) item.pointsIndex = r.points_index_symbol;
   }
+  // The weight comes off that same row, so it needs no second decision: same index, same presence,
+  // same `!= null` rule that lets a published `0.00` through where a missing reading stays absent.
+  if (r.weight != null) item.weight = Number(r.weight);
   return item;
 }
 
@@ -375,7 +397,7 @@ export class StockRepository {
                p.week52_high, p.week52_low,
                p.last_trade_date,
                sl.completed_at AS last_synced_at,
-               pt.points, pt.index_symbol AS points_index_symbol
+               pt.points, pt.weight, pt.index_symbol AS points_index_symbol
         FROM stocks s
         LEFT JOIN LATERAL (
           SELECT current_price, change, change_percent, volume, market_cap, week52_high,
@@ -393,7 +415,7 @@ export class StockRepository {
         -- KSE-100 does not carry. A reading is overwritten rather than appended, so this is one row
         -- either way — no row multiplication, and the ORDER BY above is untouched by it.
         LEFT JOIN LATERAL (
-          SELECT ic.points, mi.symbol AS index_symbol
+          SELECT ic.points, ic.weight, mi.symbol AS index_symbol
           FROM index_contributions ic
           JOIN market_indices mi ON mi.id = ic.index_id
           WHERE ic.stock_id = s.id AND mi.symbol IN ('KSE100', 'ALLSHR')
@@ -452,7 +474,7 @@ export class StockRepository {
              p.week52_high, p.week52_low,
              p.last_trade_date,
              sl.completed_at AS last_synced_at,
-             pt.points, pt.index_symbol AS points_index_symbol
+             pt.points, pt.weight, pt.index_symbol AS points_index_symbol
       FROM stocks s
       LEFT JOIN LATERAL (
         SELECT current_price, change, change_percent, volume, market_cap, week52_high,
@@ -468,7 +490,7 @@ export class StockRepository {
       -- The same contribution lookup the list uses, so a searched row shows the same POINTS figure
       -- rather than losing it: search renders through the same table and mapper.
       LEFT JOIN LATERAL (
-        SELECT ic.points, mi.symbol AS index_symbol
+        SELECT ic.points, ic.weight, mi.symbol AS index_symbol
         FROM index_contributions ic
         JOIN market_indices mi ON mi.id = ic.index_id
         WHERE ic.stock_id = s.id AND mi.symbol IN ('KSE100', 'ALLSHR')
