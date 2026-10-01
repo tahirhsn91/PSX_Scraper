@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import {
   Alert, Box, Button, Card, CardActionArea, Chip, Grid, LinearProgress, Skeleton, Stack,
-  ToggleButton, ToggleButtonGroup, Typography, alpha,
+  ToggleButton, ToggleButtonGroup, Typography, alpha, useMediaQuery,
 } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import type { IndexSummary } from '../types';
 import { MiniIndexChart } from './MiniIndexChart';
@@ -245,6 +246,9 @@ export function IndicesPanel({
   isLoading?: boolean;
   isError?: boolean;
 }) {
+  const theme = useTheme();
+  // The same definition of "a phone" the rest of the app uses (`StockDetails`): below sm.
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [sort, setSort] = useState<SortMode>('size');
   const [showAll, setShowAll] = useState(false);
 
@@ -296,7 +300,20 @@ export function IndicesPanel({
   const rest = ordered.filter((i) => i !== featured);
   // The board opens as a summary — the featured index plus the next two, in whatever order the
   // reader picked — and the rest stay behind an explicit "see all" rather than behind a scroll.
-  const visible = showAll ? rest : rest.slice(0, TOP - 1);
+  //
+  // On a phone that summary is the headline index on its own: a full-width tile is tall, so two of
+  // them plus the headline is more scrolling than the board is worth there, and the index a reader
+  // opens the app for is the one already on screen. The rest are one tap away, same control.
+  const visible = isMobile
+    ? showAll
+      ? rest
+      : []
+    : showAll
+      ? rest
+      : rest.slice(0, TOP - 1);
+  // The disclosure belongs on the page exactly when it has something to reveal — which is the
+  // headline plus two on a desktop, and anything at all behind the headline on a phone.
+  const hasHiddenIndices = isMobile ? rest.length > 0 : rest.length > TOP - 1;
 
   return (
     <Box sx={{ mb: 3 }}>
@@ -396,7 +413,7 @@ export function IndicesPanel({
 
           {/* A disclosure, not a second page: the tiles behind this button are the same list the
               reader is already scanning, so they open in place instead of becoming a page number. */}
-          {rest.length > TOP - 1 && (
+          {hasHiddenIndices && (
             <Stack direction="row" justifyContent="center" sx={{ mt: 1.5 }}>
               <Button
                 size="small"
@@ -404,7 +421,7 @@ export function IndicesPanel({
                 onClick={() => setShowAll((shown) => !shown)}
                 aria-expanded={showAll}
               >
-                {showAll ? `Show top ${TOP} only` : 'See all indices'}
+                {showAll ? (isMobile ? 'Show headline only' : `Show top ${TOP} only`) : 'See all indices'}
               </Button>
             </Stack>
           )}
