@@ -71,9 +71,34 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
               aria-hidden
               sx={{ width: 28, height: 28, display: 'block', flexShrink: 0 }}
             />
-            <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-              PSX Scraper
-            </Typography>
+            {/* The brand block: the name, with the product line under it. The mark is decorative and
+                sits centred against both lines, so the pair reads as one unit. */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 700, letterSpacing: '-0.02em', whiteSpace: 'nowrap', lineHeight: 1.2 }}
+              >
+                MyPortfolio365
+              </Typography>
+              {/* The product line. Small on purpose — it qualifies the name rather than competing with
+                  it — but not dim: `nav.textMuted` is the bar's own muted token, measured at 6.36:1
+                  against the light bar and 6.63:1 against the dark one, so a 12px label is still
+                  readable rather than decorative. */}
+              <Typography
+                component="span"
+                sx={{
+                  mt: 0.25,
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  lineHeight: 1.2,
+                  letterSpacing: '0.08em',
+                  color: 'nav.textMuted',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Market
+              </Typography>
+            </Box>
           </Box>
 
           <Box component="nav" aria-label="Primary" sx={{ display: { xs: 'none', md: 'flex' }, gap: 0.5, ml: 1 }}>
