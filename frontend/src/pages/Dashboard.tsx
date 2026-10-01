@@ -11,6 +11,8 @@ import {
   Stack,
   TablePagination,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 import SyncIcon from "@mui/icons-material/SyncRounded";
@@ -28,7 +30,7 @@ import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { DataTable, type Column } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
 import { DASH, formatCount, formatDateTime, formatMarketCap, formatNumber, formatRelative, formatRupees } from "../lib/format";
-import type { StockListItem, StockSortField, SortOrder } from "../types";
+import type { StockListItem, StockListGroup, StockSortField, SortOrder } from "../types";
 import type { ApiError } from "../api/client";
 
 /**
@@ -170,6 +172,14 @@ const COLUMNS: Column<StockListItem>[] = [
       ),
   },
 ];
+/**
+ * How many rows each list is read in. The index's members fit on a single page (the exchange publishes
+ * 99 of them, and the API's `limit` ceiling is 200), while the rest of the universe — everything
+ * tracked, 508 symbols — is read 50 at a time. Same split the API's `group` parameter documents.
+ */
+/** The two lists the switch offers: the index's members, or everything tracked. */
+type Universe = "kse100" | "all";
+const PAGE_SIZE: Record<Universe, number> = { kse100: 100, all: 50 };
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -186,7 +196,13 @@ export function Dashboard() {
   // The universe worker (#41) puts every listed security on this dashboard, so the table is
   // paged rather than cut off at the first N symbols.
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [rowsPerPage, setRowsPerPage] = useState(PAGE_SIZE.kse100);
+  // Which list the table shows, and the only thing the `group` parameter is asked for. The API
+  // filters, so the rows, the count and the pager all belong to the chosen list: the arrows walk the
+  // KSE-100's members and never step out of them. KSE-100 is the default — it is the list a reader
+  // opens the board for, and the rest of the universe is one click away.
+  const [universe, setUniverse] = useState<Universe>("kse100");
+  const group: StockListGroup | undefined = universe === "all" ? undefined : universe;
   const [sort, setSort] = useState<{ key: StockSortField; direction: SortOrder }>({
     key: "symbol",
     direction: "asc",
@@ -215,7 +231,14 @@ export function Dashboard() {
     syncingAll,
     sort.key,
     sort.direction,
+    group,
   );
+
+  // Three places count the *universe* rather than the list: the page header, the "Tracked stocks"
+  // tile, and the sync-all question (which syncs every tracked symbol, whatever the table shows).
+  // A scoped request reports both group sizes, so they sum to the universe without a second request
+  // — `data.total` is the scoped count, and it belongs to the pager alone.
+  const universeCount = data?.groups ? data.groups.kse100 + data.groups.rest : data?.total;
 
   // Once the fan-out has actually started showing up in the queue, stop forcing
   // the "just triggered" state — the real counts take over.
@@ -268,6 +291,16 @@ export function Dashboard() {
     });
   };
 
+  const chooseUniverse = (next: Universe | null) => {
+    if (!next || next === universe) return;
+    setUniverse(next);
+    // Each list is read at its own page size, and both go back to page one: page 4 of the whole
+    // universe has no counterpart in the KSE-100, and the pager must never show a page that belongs
+    // to the list you just left.
+    setRowsPerPage(PAGE_SIZE[next]);
+    setPage(0);
+  };
+
   const runSyncAll = () => {
     setConfirmSyncAll(false);
     syncAll.mutate(undefined, {
@@ -282,6 +315,7 @@ export function Dashboard() {
   const pager = (
     <Box>
       <Box sx={{ display: { xs: "none", md: "block" } }}>
+        {/* 250 was offered here and could never work: the API caps `limit` at 200 and answers 400. */}
         <TablePagination
           component="div"
           count={data?.total ?? 0}
@@ -292,7 +326,7 @@ export function Dashboard() {
             setRowsPerPage(parseInt(e.target.value, 10));
             setPage(0);
           }}
-          rowsPerPageOptions={[25, 50, 100, 250]}
+          rowsPerPageOptions={[25, 50, 100, 200]}
         />
       </Box>
       <Stack
@@ -323,7 +357,7 @@ export function Dashboard() {
     <Box>
       <PageHeader
         title="Market board"
-        subtitle={`${formatCount(data?.total)} tracked securities${
+        subtitle={`${formatCount(universeCount)} tracked securities${
           newestReading ? ` · newest reading ${formatRelative(newestReading)}` : ""
         }`}
         actions={
@@ -353,7 +387,7 @@ export function Dashboard() {
       >
         <StatTile
           label="Tracked stocks"
-          value={formatCount(data?.total)}
+          value={formatCount(universeCount)}
           footer={
             <Typography variant="caption" color="text.secondary">
               {data ? `${data.items.length} on this page` : "loading…"}
@@ -406,7 +440,25 @@ export function Dashboard() {
 
       <SectionCard
         title="Tracked securities"
-        subtitle="Click a column to sort the whole universe on the server"
+        subtitle={
+          universe === "kse100"
+            ? "The KSE-100's members. Click a column to sort them on the server"
+            : "Everything tracked. Click a column to sort it on the server"
+        }
+        action={
+          // Two lists, one table: the switch says which one the rows below belong to, and the pager
+          // counts only that one. `exclusive` keeps a single choice, and the group is what pages.
+          <ToggleButtonGroup
+            size="small"
+            exclusive
+            value={universe}
+            onChange={(_e, next) => chooseUniverse(next)}
+            aria-label="Which stocks the table lists"
+          >
+            <ToggleButton value="kse100">KSE-100</ToggleButton>
+            <ToggleButton value="all">All stocks</ToggleButton>
+          </ToggleButtonGroup>
+        }
         flush
       >
         <DataTable
@@ -431,12 +483,24 @@ export function Dashboard() {
             setSort({ key: next.key as StockSortField, direction: next.direction });
             setPage(0);
           }}
-          emptyTitle="No stocks tracked yet"
-          emptyDescription="Add a symbol to start collecting prices for it."
+          emptyTitle={
+            universe === "kse100" ? "No KSE-100 members tracked" : "No stocks tracked yet"
+          }
+          emptyDescription={
+            universe === "kse100"
+              ? "The index's published member list is refreshed daily, and nothing in it is tracked here yet. Everything tracked is under All stocks."
+              : "Add a symbol to start collecting prices for it."
+          }
           emptyAction={
-            <Button variant="contained" onClick={() => setAddOpen(true)}>
-              Add stock
-            </Button>
+            universe === "kse100" ? (
+              <Button variant="outlined" onClick={() => chooseUniverse("all")}>
+                Show all stocks
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={() => setAddOpen(true)}>
+                Add stock
+              </Button>
+            )
           }
           pagination={pager}
           skeletonRows={8}
@@ -493,7 +557,7 @@ export function Dashboard() {
       <ConfirmDialog
         open={confirmSyncAll}
         title="Sync all tracked stocks?"
-        message={`This fetches the latest data for all ${formatCount(data?.total)} tracked stocks from PSX and Sarmaaya. It runs in the background — you can keep using the dashboard while it completes.`}
+        message={`This fetches the latest data for all ${formatCount(universeCount)} tracked stocks from PSX and Sarmaaya. It runs in the background — you can keep using the dashboard while it completes.`}
         confirmLabel="Sync all"
         pending={syncAll.isPending}
         pendingLabel="Starting…"
