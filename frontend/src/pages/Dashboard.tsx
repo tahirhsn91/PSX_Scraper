@@ -137,6 +137,32 @@ const COLUMNS: Column<StockListItem>[] = [
     ),
   },
   {
+    key: "weight",
+    header: (
+      <span title="This stock's share of its index, in percent — the same index the Points column is measured against">
+        Weight
+      </span>
+    ),
+    align: "right",
+    width: "7%",
+    // Sortable on the server like every other figure here: "which stocks dominate the index" is the
+    // question this column exists to answer. Ordered on the same resolved value the cell shows, with
+    // `NULLS LAST` so the symbols in neither index fall to the bottom and a published `0.00%` — a real
+    // reading, the smallest KSE-100 constituent — sorts as the smallest weight rather than as a gap.
+    sortKey: "weight",
+    mobileRole: "meta",
+    render: (s) => (
+      <Typography
+        variant="body2"
+        title={
+          s.pointsIndex ? `Share of the ${INDEX_LABELS[s.pointsIndex] ?? s.pointsIndex}` : undefined
+        }
+      >
+        {s.weight == null ? DASH : `${formatNumber(s.weight)}%`}
+      </Typography>
+    ),
+  },
+  {
     key: "price",
     header: "Price",
     align: "right",
@@ -536,7 +562,7 @@ export function Dashboard() {
            * the card list, so the table carries a floor and its container takes the scroll. */
           cardsBelow="never"
           minTableWidth={1024}
-          /* Rationed widths: eight columns carry a share and Company takes the rest, so one long
+          /* Rationed widths: nine columns carry a share and Company takes the rest, so one long
            * name clips instead of wrapping and setting the height of every row. */
           fixed
           rowKey={(s) => s.id}
