@@ -29,7 +29,7 @@ import { ChangePill } from "../components/ui/ChangePill";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { DataTable, type Column } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
-import { DASH, formatCount, formatDateTime, formatMarketCap, formatNumber, formatRelative, formatRupees, formatSigned } from "../lib/format";
+import { DASH, formatCount, formatMarketCap, formatNumber, formatRelative, formatRupees, formatSigned } from "../lib/format";
 import { isPsxSessionOpen } from "../lib/session";
 import type { StockListItem, StockSortField, SortOrder } from "../types";
 import type { ApiError } from "../api/client";
@@ -57,16 +57,18 @@ const SESSION_POLL_MS = 30_000;
  * One table for the whole tracked universe, sorted **server-side** (`sort`/`order` on the API): the
  * list is paginated, so sorting fifty rows in the browser would reorder the page and claim an order
  * the data does not have. The row-wise layout is the design at **every** width — a phone gets the
- * same eleven columns as a desktop, not a card list, so the table carries a width floor and its own
+ * same nine columns as a desktop, not a card list, so the table carries a width floor and its own
  * container takes the horizontal scroll (the page never scrolls sideways).
  *
- * The eleven columns share the ~1215px the container gives them, which is why the widths below are
- * percentages that add up to 79%: the table is laid out `fixed` (see `DataTable`) and the Company
- * column, the only one without a width, takes what is left (measured 252px). Each column is at least
- * as wide as its own `nowrap` header label, whatever its data — a column narrower than its label
- * pushes the table past the container and puts a scrollbar under it, which is how the last three
- * widths were chosen. What still does not fit is clipped by its own cell with a `title` for the full
- * value, rather than wrapping and making every row two lines tall.
+ * The nine columns share the width the container gives them (measured 1390px at 1440), which is why
+ * the widths below are percentages that add up to 63%: the table is laid out `fixed` (see `DataTable`)
+ * and the Company column, the only one without a width, takes what is left (measured 516px). Sector
+ * and Last synced used to hold 17.6% of that between them; the freed width went to Company, and to
+ * Price, which at the 1024px floor measured 70px against the 74px its widest figure needs. Each column
+ * is at least as wide as its own `nowrap` header label, whatever its data — a column narrower than its
+ * label pushes the table past the container and puts a scrollbar under it. What still does not fit is
+ * clipped by its own cell with a `title` for the full value, rather than wrapping and making every row
+ * two lines tall.
  */
 const COLUMNS: Column<StockListItem>[] = [
   {
@@ -135,26 +137,14 @@ const COLUMNS: Column<StockListItem>[] = [
     ),
   },
   {
-    key: "sector",
-    header: "Sector",
-    // The longest sector is 40 characters of upper case ("INV. BANKS / INV. COS. / SECURITIES
-    // COS."), which is more than this column can hold beside the ten others — so it clips with an
-    // ellipsis and the full text stays one hover away, rather than wrapping and doubling the row.
-    // Narrowed from 15% when Points arrived: it was already the most clipped column, so the eleven
-    // columns still leave the Company column what it had (measured 252px).
-    width: "10%",
-    mobileRole: "meta",
-    render: (s) => (
-      <Typography variant="body2" noWrap title={s.sector ?? undefined}>
-        {s.sector ?? DASH}
-      </Typography>
-    ),
-  },
-  {
     key: "price",
     header: "Price",
     align: "right",
-    width: "6.8%",
+    // 8%, up from 6.8%: with Sector and Last synced gone this much was free, and at the table's 1024px
+    // floor the column measured 70px against the 74px its widest figure needs ("25,499.00"), so the
+    // number was being cut. A clipped figure reads as a wrong figure — this is the one place the freed
+    // width had to go rather than to Company.
+    width: "8%",
     sortKey: "price",
     mobileRole: "meta",
     render: (s) => formatNumber(s.currentPrice),
@@ -220,18 +210,6 @@ const COLUMNS: Column<StockListItem>[] = [
     sortKey: "week52High",
     mobileRole: "meta",
     render: (s) => formatNumber(s.week52High),
-  },
-  {
-    key: "lastSyncedAt",
-    header: "Last synced",
-    width: "7.6%",
-    mobileRole: "meta",
-    render: (s) =>
-      s.lastSyncedAt ? (
-        <span title={formatDateTime(s.lastSyncedAt)}>{formatRelative(s.lastSyncedAt)}</span>
-      ) : (
-        "never"
-      ),
   },
 ];
 /**
@@ -558,8 +536,8 @@ export function Dashboard() {
            * the card list, so the table carries a floor and its container takes the scroll. */
           cardsBelow="never"
           minTableWidth={1024}
-          /* Rationed widths: nine columns carry a share and Company takes the rest, so one long
-           * name or sector clips instead of wrapping and setting the height of every row. */
+          /* Rationed widths: eight columns carry a share and Company takes the rest, so one long
+           * name clips instead of wrapping and setting the height of every row. */
           fixed
           rowKey={(s) => s.id}
           rowHref={(s) => `/stocks/${s.symbol}`}
