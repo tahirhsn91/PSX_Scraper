@@ -198,7 +198,9 @@ export const darkTokens: ModeTokens = {
     bg: '#3A3F3D',
     hover: '#454B48',
     text: '#FFFFFF', // 10.40:1 on the bar
-    textMuted: '#C9CCCB', // 7.60:1
+    // 6.63:1 against the current bar. The 7.60 written here earlier belonged to the darker bar this
+    // one replaced and stayed behind when the bar was lightened.
+    textMuted: '#C9CCCB',
     active: '#45D89A', // 6.40:1
     cta: '#32CE8A', // 4.60:1 against the bar
     ctaText: '#0F2118', // 6.52:1 on the button
