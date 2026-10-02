@@ -216,13 +216,59 @@ describe('one tick of the board timer', () => {
     expect(scraped).toBe(0);
   });
 
-  it('reports the claim rather than the hours once another worker owns the session', async () => {
+  it('keeps reading through the settle window after the close, even once the session is claimed', async () => {
+    let scraped = 0;
     const out = await runIndexBoardPass({
-      now: pkt(MONDAY, '15:40'),
-      closing: async () => ({ ran: false, reason: 'already-claimed' }),
-      scrape: async () => emptyResult(),
+      now: pkt(MONDAY, '15:45'),
+      closing: async () => ({ ran: false, reason: 'already-claimed' as const }),
+      scrape: async () => {
+        scraped += 1;
+        return emptyResult();
+      },
+    });
+    // The regular close is not the end of trading: the post-close session and rectification run to
+    // 16:30 PKT, so the board must keep reading to capture the settled close — the claim alone must
+    // not stop it.
+    expect(out).toEqual({ ran: true, kind: 'intraday', result: emptyResult() });
+    expect(scraped).toBe(1);
+  });
+
+  it('stops reading once the settle window has passed', async () => {
+    let scraped = 0;
+    const out = await runIndexBoardPass({
+      now: pkt(MONDAY, '16:35'),
+      closing: async () => ({ ran: false, reason: 'already-claimed' as const }),
+      scrape: async () => {
+        scraped += 1;
+        return emptyResult();
+      },
     });
     expect(out).toEqual({ ran: false, reason: 'already-claimed' });
+    expect(scraped).toBe(0);
+  });
+
+  it('reads at the settle boundary (16:30 PKT) but not a minute past it', async () => {
+    const closingClaimed = async () => ({ ran: false, reason: 'already-claimed' as const });
+    let scraped = 0;
+    await runIndexBoardPass({
+      now: pkt(MONDAY, '16:30'),
+      closing: closingClaimed,
+      scrape: async () => {
+        scraped += 1;
+        return emptyResult();
+      },
+    });
+    expect(scraped).toBe(1); // the settle minute itself is still in the window
+    const out = await runIndexBoardPass({
+      now: pkt(MONDAY, '16:31'),
+      closing: closingClaimed,
+      scrape: async () => {
+        scraped += 1;
+        return emptyResult();
+      },
+    });
+    expect(out).toEqual({ ran: false, reason: 'already-claimed' });
+    expect(scraped).toBe(1); // and no further read past it
   });
 });
 
