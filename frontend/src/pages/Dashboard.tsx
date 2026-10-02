@@ -60,21 +60,21 @@ const SESSION_POLL_MS = 30_000;
  * same nine columns as a desktop, not a card list, so the table carries a width floor and its own
  * container takes the horizontal scroll (the page never scrolls sideways).
  *
- * The nine columns share the width the container gives them (measured 1390px at 1440), which is why
- * the widths below are percentages that add up to 63%: the table is laid out `fixed` (see `DataTable`)
- * and the Company column, the only one without a width, takes what is left (measured 516px). Sector
- * and Last synced used to hold 17.6% of that between them; the freed width went to Company, and to
- * Price, which at the 1024px floor measured 70px against the 74px its widest figure needs. Each column
- * is at least as wide as its own `nowrap` header label, whatever its data — a column narrower than its
- * label pushes the table past the container and puts a scrollbar under it. What still does not fit is
- * clipped by its own cell with a `title` for the full value, rather than wrapping and making every row
- * two lines tall.
+ * The nine sortable columns share the width the container gives them, and each is sized for its own
+ * `nowrap` header label: the label renders uppercase with letter-spacing and carries a sort arrow, so
+ * a six-letter word like "Weight" needs ~74px, not the ~48px its bare letters take. The widths below
+ * add up to 78.3% for that reason — the table is laid out `fixed` (see `DataTable`) and the Company
+ * column, the only one without a width, takes what is left. A column narrower than its label clips the
+ * label behind the next sticky header (which is how "WEIGHT" read as "WEIGH"), so the floor below is
+ * the width at which every label still fits; anything narrower scrolls the table inside its container
+ * instead of squeezing a column past its label. What still does not fit is clipped by its own cell with
+ * a `title` for the full value, rather than wrapping and making every row two lines tall.
  */
 const COLUMNS: Column<StockListItem>[] = [
   {
     key: "symbol",
     header: "Symbol",
-    width: "8%",
+    width: "8.7%",
     sortKey: "symbol",
     mobileRole: "title",
     render: (s) => s.symbol,
@@ -106,7 +106,7 @@ const COLUMNS: Column<StockListItem>[] = [
       </span>
     ),
     align: "right",
-    width: "7%",
+    width: "8.1%",
     // Sortable on the server — and the order the board opens on (the initial `sort` state below):
     // biggest contributor first. The ORDER BY is on the same resolved value the cell shows, with
     // `NULLS LAST` so the symbols in neither index fall to the bottom rather than heading that list.
@@ -144,7 +144,7 @@ const COLUMNS: Column<StockListItem>[] = [
       </span>
     ),
     align: "right",
-    width: "7%",
+    width: "8.4%",
     // Sortable on the server like every other figure here: "which stocks dominate the index" is the
     // question this column exists to answer. Ordered on the same resolved value the cell shows, with
     // `NULLS LAST` so the symbols in neither index fall to the bottom and a published `0.00%` — a real
@@ -166,11 +166,11 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "price",
     header: "Price",
     align: "right",
-    // 8%, up from 6.8%: with Sector and Last synced gone this much was free, and at the table's 1024px
-    // floor the column measured 70px against the 74px its widest figure needs ("25,499.00"), so the
-    // number was being cut. A clipped figure reads as a wrong figure — this is the one place the freed
-    // width had to go rather than to Company.
-    width: "8%",
+    // 8.4%, up from 6.8%: with Sector and Last synced gone this much was free, and at the table's old
+    // 1024px floor the column measured 70px against the 74px its widest figure needs ("25,499.00"), so
+    // the number was being cut. A clipped figure reads as a wrong figure — this is the one place the
+    // freed width had to go rather than to Company.
+    width: "8.4%",
     sortKey: "price",
     mobileRole: "meta",
     render: (s) => formatNumber(s.currentPrice),
@@ -179,7 +179,7 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "change",
     header: "Change",
     align: "right",
-    width: "8.1%",
+    width: "8.7%",
     sortKey: "changePercent",
     mobileRole: "value",
     render: (s) => (
@@ -196,7 +196,7 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "volume",
     header: "Volume",
     align: "right",
-    width: "8%",
+    width: "8.6%",
     sortKey: "volume",
     mobileRole: "meta",
     render: (s) => formatCount(s.volume),
@@ -205,7 +205,7 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "marketCap",
     header: "Mkt cap",
     align: "right",
-    width: "8.1%",
+    width: "8.8%",
     sortKey: "marketCap",
     mobileRole: "meta",
     render: (s) => {
@@ -221,7 +221,7 @@ const COLUMNS: Column<StockListItem>[] = [
     align: "right",
     // The header labels are `nowrap` (theme), so a column narrower than its own label pushes the
     // table past the container and puts a scrollbar under it — these three carry their labels.
-    width: "7.7%",
+    width: "9.2%",
     sortKey: "week52Low",
     // Shown on a phone too: the row-wise layout is the design at every width here, so no column is
     // rationed away — the table keeps its own scroll instead.
@@ -232,7 +232,7 @@ const COLUMNS: Column<StockListItem>[] = [
     key: "week52High",
     header: "52W high",
     align: "right",
-    width: "8%",
+    width: "9.4%",
     sortKey: "week52High",
     mobileRole: "meta",
     render: (s) => formatNumber(s.week52High),
@@ -561,7 +561,7 @@ export function Dashboard() {
           /* Row-wise at every width, as asked: a phone gets the same rows as a desktop rather than
            * the card list, so the table carries a floor and its container takes the scroll. */
           cardsBelow="never"
-          minTableWidth={1024}
+          minTableWidth={1180}
           /* Rationed widths: nine columns carry a share and Company takes the rest, so one long
            * name clips instead of wrapping and setting the height of every row. */
           fixed
