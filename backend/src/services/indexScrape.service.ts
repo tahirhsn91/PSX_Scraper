@@ -399,6 +399,18 @@ export async function runIndexClosingPass(
   return { ran: true, reason: 'ran', result: await scrape(now) };
 }
 
+/**
+ * How late the board pass keeps reading after the regular close, as minutes past midnight PKT.
+ *
+ * PSX's regular session closes at 15:30 PKT, but the post-close session (15:35–15:50) and the
+ * trade-rectification window (15:50–16:30) follow it, and a mirror like Sarmaaya only publishes
+ * the settled close once those have run. The board therefore keeps polling through 16:30 PKT so
+ * the session's final reading is the settled close rather than the last intraday level — the bug
+ * that froze KSE-100 at its 15:32 intraday value (168,499.75) while the settled close sat 344
+ * points lower (168,155.49) with nothing able to tell the two apart.
+ */
+export const INDEX_BOARD_CLOSE_MINUTES = 16 * 60 + 30; // 16:30 PKT
+
 export type IndexBoardPassResult =
   | { ran: true; kind: 'closing' | 'intraday'; result: IndexScrapeResult }
   | { ran: false; reason: 'outside-hours' | 'not-due' | 'already-claimed' };
@@ -406,11 +418,14 @@ export type IndexBoardPassResult =
 /**
  * One tick of the index board timer.
  *
- * The board snapshot itself only runs while the market is open, so after 15:35 PKT a tick has
- * nothing to read — and that is precisely when the session's close has to be read. So the closing
+ * The board snapshot runs while the market is open *and* through the settle window that follows
+ * it — up to `INDEX_BOARD_CLOSE_MINUTES` (16:30 PKT). The regular close is not the end of trading:
+ * the post-close session and trade rectification run to 16:30, so a board that stopped at 15:35
+ * would freeze the session's row at its last intraday level and miss the settled close. The closing
  * pass goes first: it self-gates on `isClosingPassDue` and claims the session, which means an
  * in-hours tick spends one Redis call and is told `not-due`, while the first tick after the settle
  * performs the pass that makes the session's row its close rather than its last in-session reading.
+ * Ticks after the claim keep reading through the settle window, so the settled close still lands.
  *
  * `scrapeIndices` guards itself — it decides whether a session row may exist at all, and gates the
  * previous-session repair on the market being open — so an off-hours call cannot fabricate a row.
@@ -425,7 +440,7 @@ export async function runIndexBoardPass(args: {
   const now = args.now ?? new Date();
   const closing = await (args.closing ?? runIndexClosingPass)({ now });
   if (closing.result) return { ran: true, kind: 'closing', result: closing.result };
-  if (!isMarketOpen(now)) {
+  if (!isMarketOpen(now, { closeMinutes: INDEX_BOARD_CLOSE_MINUTES })) {
     return { ran: false, reason: closing.reason === 'already-claimed' ? 'already-claimed' : 'outside-hours' };
   }
   const scrape = args.scrape ?? scrapeIndices;
