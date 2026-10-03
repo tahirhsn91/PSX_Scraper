@@ -113,7 +113,11 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: ${VITE_API_URL:-http://localhost:4000/api/v1}
+        # SAME-ORIGIN path by default (see frontend/nginx.conf): the frontend container
+        # proxies /api/ to the `backend` service, so one image works on
+        # http://<host>:5100 and on any domain routed here. An absolute URL at this
+        # point pins the bundle to one origin and breaks it everywhere else.
+        VITE_API_URL: ${VITE_API_URL:-/api/v1}
     restart: unless-stopped
     # Static nginx — light. The dev overlay raises these caps, because the dev frontend is
     # a Vite dev server (esbuild + HMR) rather than a static file server.
