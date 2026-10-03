@@ -34,6 +34,11 @@ export interface MarketCapRefreshSummary {
   discarded: string[];
 }
 
+export interface MarketCapCarrySummary {
+  /** Newest rows just filled from an earlier known cap. */
+  carried: number;
+}
+
 /**
  * Refresh the market cap on every tracked symbol's newest price row.
  *
@@ -115,5 +120,19 @@ export const marketCapService = {
       errors: gapFill.errors,
     });
     return summary;
+  },
+
+  /**
+   * Copy each symbol's most recent known cap onto its newest row where that row has none.
+   *
+   * `refresh` runs on a session-bound cron, but a new price row can be written at any hour — the
+   * post-close pass runs overnight and into the weekend — so this cheap, idempotent pass rides its
+   * own always-on schedule (`MARKET_CAP_CARRY_CRON`) and keeps the column from flickering to a dash
+   * between refreshes.
+   */
+  async carryForward(): Promise<MarketCapCarrySummary> {
+    const carried = await carryForwardLatestMarketCaps();
+    logger.info('marketcap.carry_forward_done', { carried });
+    return { carried };
   },
 };
