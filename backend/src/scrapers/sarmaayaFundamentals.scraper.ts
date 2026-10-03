@@ -73,12 +73,23 @@ export function asNumber(raw: unknown): number | null {
   return Number.isFinite(value) ? value : null;
 }
 
+/**
+ * The source publishes D/E as a percentage ("Debt to Equity (%)"); the app stores and scores it as
+ * the ratio it names (0.63, not 63.3), which is what "D/E ≤ 1" means in the scoring benchmark.
+ */
+function pctToRatio(raw: number | null): number | null {
+  return raw === null ? null : raw / 100;
+}
+
 /** The metric codes this module reads, so an unexpected one cannot leak into a column. */
 const METRIC = {
   pe: 'FF_PE',
   pb: 'FF_PBK',
   dividendYield: 'FF_DIV_YLD',
   eps: 'FF_EPS',
+  netProfitMargin: 'FF_NET_MGN',
+  freeFloatShares: 'FF_SHS_FLOAT',
+  freeFloatPercent: 'FF_SHS_FLOAT_PERCENT',
 } as const;
 
 export interface SarmaayaDetails {
@@ -88,6 +99,9 @@ export interface SarmaayaDetails {
   pbRatio: number | null;
   dividendYield: number | null;
   eps: number | null;
+  netProfitMargin: number | null;
+  freeFloatShares: number | null;
+  freeFloatPercent: number | null;
 }
 
 /**
@@ -100,7 +114,10 @@ export interface SarmaayaDetails {
 export function parseSarmaayaDetails(payload: unknown): SarmaayaDetails {
   const rows = (payload as { response?: unknown } | null)?.response;
   if (!Array.isArray(rows)) {
-    return { isin: null, peRatio: null, pbRatio: null, dividendYield: null, eps: null };
+    return {
+      isin: null, peRatio: null, pbRatio: null, dividendYield: null, eps: null,
+      netProfitMargin: null, freeFloatShares: null, freeFloatPercent: null,
+    };
   }
 
   // One entry per code today (measured across eight symbols: all distinct), but a repeated code
@@ -124,6 +141,9 @@ export function parseSarmaayaDetails(payload: unknown): SarmaayaDetails {
     pbRatio: asNumber(byCode.get(METRIC.pb)?.raw),
     dividendYield: asNumber(byCode.get(METRIC.dividendYield)?.raw),
     eps: asNumber(byCode.get(METRIC.eps)?.raw),
+    netProfitMargin: asNumber(byCode.get(METRIC.netProfitMargin)?.raw),
+    freeFloatShares: asNumber(byCode.get(METRIC.freeFloatShares)?.raw),
+    freeFloatPercent: asNumber(byCode.get(METRIC.freeFloatPercent)?.raw),
   };
 }
 
@@ -131,17 +151,30 @@ export interface SarmaayaRatioSeries {
   bookValue: number | null;
   roe: number | null;
   roa: number | null;
+  payoutRatio: number | null;
+  roic: number | null;
+  debtToEquity: number | null;
+  currentRatio: number | null;
+  revenueGrowth: number | null;
+  epsGrowth: number | null;
   /** `asOf` of the row the book value came from (`YYYY-MM-DD`), for the log. */
   bookValueAsOf: string | null;
   /** Which periodicity answered — `LTM` normally, `ANN` when TTM published no book value. */
   periodicity: 'LTM' | 'ANN' | null;
 }
 
-/** The source's own keys for the three series we read. */
+/** The source's own keys for the series we read. */
 const SERIES = {
   bookValue: 'Book Value Per Share',
   roe: 'Return on Common Equity (%)',
   roa: 'Return on Average Assets (%)',
+  payoutRatio: 'Dividend Payout Ratio',
+  roic: 'Return on Average Invested Capital (%)',
+  // Published as "Debt to Equity (%)"; converted to a ratio (÷100) by `parseSarmaayaRatioSeries`.
+  debtToEquity: 'Debt to Equity (%)',
+  currentRatio: 'Current Ratio (x)',
+  revenueGrowth: 'Net Sales YoY Growth (%)',
+  epsGrowth: 'EPS Basic YoY Growth (%)',
 } as const;
 
 /**
@@ -165,7 +198,7 @@ export function seriesLatest(payload: unknown, name: string): { value: number | 
   return { value: asNumber(head.value), asOf: date };
 }
 
-/** Book value per share, ROE and ROA out of one ratio-series response. */
+/** Book value per share, ROE, ROA and the six fundamental ratios out of one ratio-series response. */
 export function parseSarmaayaRatioSeries(
   payload: unknown,
   periodicity: 'LTM' | 'ANN',
@@ -175,6 +208,12 @@ export function parseSarmaayaRatioSeries(
     bookValue: book.value,
     roe: seriesLatest(payload, SERIES.roe).value,
     roa: seriesLatest(payload, SERIES.roa).value,
+    payoutRatio: seriesLatest(payload, SERIES.payoutRatio).value,
+    roic: seriesLatest(payload, SERIES.roic).value,
+    debtToEquity: pctToRatio(seriesLatest(payload, SERIES.debtToEquity).value),
+    currentRatio: seriesLatest(payload, SERIES.currentRatio).value,
+    revenueGrowth: seriesLatest(payload, SERIES.revenueGrowth).value,
+    epsGrowth: seriesLatest(payload, SERIES.epsGrowth).value,
     bookValueAsOf: book.asOf,
     periodicity,
   };
@@ -186,6 +225,12 @@ export function mergeRatioSeries(a: SarmaayaRatioSeries, b: SarmaayaRatioSeries)
     bookValue: a.bookValue ?? b.bookValue,
     roe: a.roe ?? b.roe,
     roa: a.roa ?? b.roa,
+    payoutRatio: a.payoutRatio ?? b.payoutRatio,
+    roic: a.roic ?? b.roic,
+    debtToEquity: a.debtToEquity ?? b.debtToEquity,
+    currentRatio: a.currentRatio ?? b.currentRatio,
+    revenueGrowth: a.revenueGrowth ?? b.revenueGrowth,
+    epsGrowth: a.epsGrowth ?? b.epsGrowth,
     bookValueAsOf: a.bookValue !== null ? a.bookValueAsOf : b.bookValueAsOf,
     periodicity: a.bookValue !== null || a.roe !== null || a.roa !== null ? a.periodicity : b.periodicity,
   };
@@ -298,11 +343,18 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
     // breaker throws before a request leaves the process.
     sourceBreaker.assertAvailable(this.source);
 
-    let details: SarmaayaDetails = { isin: null, peRatio: null, pbRatio: null, dividendYield: null, eps: null };
+    let details: SarmaayaDetails = {
+      isin: null, peRatio: null, pbRatio: null, dividendYield: null, eps: null,
+      netProfitMargin: null, freeFloatShares: null, freeFloatPercent: null,
+    };
     let detailsLeg: Leg = { ok: true, transport: false };
     let seriesLeg: Leg = { ok: true, transport: false };
     let dividendsLeg: Leg = { ok: true, transport: false };
-    let series: SarmaayaRatioSeries = { bookValue: null, roe: null, roa: null, bookValueAsOf: null, periodicity: null };
+    let series: SarmaayaRatioSeries = {
+      bookValue: null, roe: null, roa: null, bookValueAsOf: null, periodicity: null,
+      payoutRatio: null, roic: null, debtToEquity: null, currentRatio: null,
+      revenueGrowth: null, epsGrowth: null,
+    };
     let dividends: DividendDTO[] = [];
 
     try {
@@ -355,7 +407,9 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
     const transportFailures = failed.filter(([, l]) => l.transport);
     const producedSomething = details.peRatio !== null || details.pbRatio !== null
       || details.dividendYield !== null || details.eps !== null
-      || series.bookValue !== null || dividends.length > 0;
+      || details.netProfitMargin !== null || details.freeFloatShares !== null
+      || series.bookValue !== null || series.roe !== null || series.roic !== null
+      || dividends.length > 0;
     if (transportFailures.length > 0 && !producedSomething) {
       sourceBreaker.recordFailure(this.source, transportFailures[0]?.[1].error ?? 'transport failure');
     } else {
@@ -377,6 +431,22 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
       // Beta is computed from our own history against the index (#79, criterion 7), never borrowed
       // from this payload — it carries no beta at all.
       beta: null,
+      // Fundamentals (#131): the details payload carries the margin and the free-float pair, the
+      // ratio series carries the six operating ratios. A source that publishes none (a bank, an ETF,
+      // a preference share) stays null and renders as the dash.
+      netProfitMargin: details.netProfitMargin,
+      freeFloatShares: details.freeFloatShares,
+      freeFloatPercent: details.freeFloatPercent,
+      // DPS is the newest announced per-share dividend, not the annualised sum: the dividends
+      // endpoint is the universal source for it (the ratio series's `Dividends Per Share` is absent
+      // for banks), and a symbol with no dividend on record stays null.
+      dps: dividends[0]?.dividend ?? null,
+      payoutRatio: series.payoutRatio,
+      roic: series.roic,
+      debtToEquity: series.debtToEquity,
+      currentRatio: series.currentRatio,
+      revenueGrowth: series.revenueGrowth,
+      epsGrowth: series.epsGrowth,
     };
 
     log.info('sarmaaya-fundamentals.parsed', {
