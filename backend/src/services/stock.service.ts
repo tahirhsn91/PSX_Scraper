@@ -9,6 +9,8 @@ import { betaService } from './beta.service';
 import {
   getStockDetail, getPriceHistory, getCandles, type Candle,
 } from '../repositories/stockDetail.repository';
+import { getSectorRatioRows } from '../repositories/fundamentals.repository';
+import { scoreFundamentals, mediansOf } from './fundamentals.service';
 import { enqueueSync, cancelSyncJob } from '../jobs/queues';
 import { ConflictError, NotFoundError, ValidationError } from '../types/errors';
 import { rangeToFrom, HistoryRange } from '../utils/range';
@@ -80,6 +82,24 @@ export const stockService = {
     // the card says so in a note rather than presenting one as the other. Both stay null for a
     // symbol with no dividend on record: a dash, never a zero and never a borrowed figure.
     const newestDividend = s.dividends[0];
+    // Fundamentals insights (#131): score the stock's ratios against its sector's medians and the
+    // fixed benchmarks. A stock with no ratios, or whose sector is missing or the data defect
+    // `"undefined"`, gets `null` (the UI hides the block rather than inventing a score).
+    const ratioMap: Record<string, number | null> | null = ratio
+      ? {
+          eps: num(ratio.eps), peRatio: num(ratio.peRatio), bookValue: num(ratio.bookValue),
+          pbRatio: num(ratio.pbRatio), dividendYield: num(ratio.dividendYield),
+          dps: num(ratio.dps), payoutRatio: num(ratio.payoutRatio), roe: num(ratio.roe),
+          roa: num(ratio.roa), roic: num(ratio.roic), debtToEquity: num(ratio.debtToEquity),
+          currentRatio: num(ratio.currentRatio), netProfitMargin: num(ratio.netProfitMargin),
+          revenueGrowth: num(ratio.revenueGrowth), epsGrowth: num(ratio.epsGrowth),
+          freeFloatShares: num(ratio.freeFloatShares), freeFloatPercent: num(ratio.freeFloatPercent),
+        }
+      : null;
+    const insights =
+      ratioMap && s.sector && s.sector !== 'undefined'
+        ? scoreFundamentals(ratioMap, mediansOf(await getSectorRatioRows(s.sector)))
+        : null;
     return {
       id: s.id,
       symbol: s.symbol,
@@ -112,6 +132,17 @@ export const stockService = {
             // Beta: our own measurement (see `beta` below), so the card and the dedicated block
             // cannot disagree. Null — the dash — when the history is too thin to measure one.
             beta: beta.value,
+            // Fundamentals (#131). Absent reads null — the dash, never a zero.
+            netProfitMargin: num(ratio.netProfitMargin),
+            freeFloatShares: num(ratio.freeFloatShares),
+            freeFloatPercent: num(ratio.freeFloatPercent),
+            dps: num(ratio.dps),
+            payoutRatio: num(ratio.payoutRatio),
+            roic: num(ratio.roic),
+            debtToEquity: num(ratio.debtToEquity),
+            currentRatio: num(ratio.currentRatio),
+            revenueGrowth: num(ratio.revenueGrowth),
+            epsGrowth: num(ratio.epsGrowth),
           }
         : null,
       // Beta, with the window it was measured over (#79, criterion 7). Reported here as its own
@@ -142,6 +173,8 @@ export const stockService = {
         announcementDate: d.announcementDate, bookClosure: d.bookClosure,
         paymentDate: d.paymentDate, dividend: num(d.dividend),
       })),
+      // Fundamentals scoring (#131): 0-100 split into current and future, plus the outlook verdict.
+      insights,
       lastSync: s.syncLogs[0]
         ? { status: s.syncLogs[0].status, completedAt: s.syncLogs[0].completedAt, startedAt: s.syncLogs[0].startedAt }
         : null,

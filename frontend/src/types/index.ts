@@ -163,6 +163,26 @@ export interface StockDetail {
     roa: number | null;
     dividendYield: number | null;
     beta: number | null;
+    bookValue: number | null;
+    eps: number | null;
+    netProfitMargin: number | null;
+    freeFloatShares: number | null;
+    freeFloatPercent: number | null;
+    dps: number | null;
+    payoutRatio: number | null;
+    roic: number | null;
+    debtToEquity: number | null;
+    currentRatio: number | null;
+    revenueGrowth: number | null;
+    epsGrowth: number | null;
+  } | null;
+  /** Fundamentals scoring (#131): null when there are no ratios or the sector is missing. */
+  insights: {
+    overall: number | null;
+    verdict: 'strong' | 'fair' | 'weak' | null;
+    current: { score: number | null; assessed: number };
+    future: { score: number | null; assessed: number };
+    outlook: 'positive' | 'neutral' | 'cautious' | null;
   } | null;
   financials: Array<{
     year: number;

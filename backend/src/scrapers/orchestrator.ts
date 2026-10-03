@@ -37,6 +37,16 @@ export function mergeRatios(...blocks: Array<RatioDTO | null | undefined>): Rati
     bookValue: pick(...present.map((b) => b.bookValue)),
     eps: pick(...present.map((b) => b.eps)),
     beta: pick(...present.map((b) => b.beta)),
+    netProfitMargin: pick(...present.map((b) => b.netProfitMargin)),
+    freeFloatShares: pick(...present.map((b) => b.freeFloatShares)),
+    freeFloatPercent: pick(...present.map((b) => b.freeFloatPercent)),
+    dps: pick(...present.map((b) => b.dps)),
+    payoutRatio: pick(...present.map((b) => b.payoutRatio)),
+    roic: pick(...present.map((b) => b.roic)),
+    debtToEquity: pick(...present.map((b) => b.debtToEquity)),
+    currentRatio: pick(...present.map((b) => b.currentRatio)),
+    revenueGrowth: pick(...present.map((b) => b.revenueGrowth)),
+    epsGrowth: pick(...present.map((b) => b.epsGrowth)),
   };
 }
 
