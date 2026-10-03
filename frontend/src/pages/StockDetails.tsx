@@ -22,6 +22,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { useQueryClient } from '@tanstack/react-query';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
+import { FundamentalsPanel } from '../components/FundamentalsPanel';
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { PageHeader } from '../components/ui/PageHeader';
@@ -62,7 +63,7 @@ const RANGES: { value: HistoryRange; label: string }[] = [
 /** Candles are ours; the TradingView tab is their widget; the line view is the older chart. */
 type ChartMode = 'candles' | 'line' | 'tradingview';
 
-const SECTIONS = ['History', 'Financials', 'Ratios', 'Dividends'] as const;
+const SECTIONS = ['History', 'Fundamentals', 'Financials', 'Ratios', 'Dividends'] as const;
 
 /** Spelled-out form of a range preset, for the caption above the chart. */
 const rangeLabel = (r: HistoryRange): string =>
@@ -552,7 +553,9 @@ export function StockDetails() {
           </SectionCard>
         )}
 
-        {tab === 1 && (
+        {tab === 1 && <FundamentalsPanel ratios={data.ratios} insights={data.insights} />}
+
+        {tab === 2 && (
           <SectionCard
             title="Financials"
             subtitle={`${data.financials.length} period${data.financials.length === 1 ? '' : 's'} on record`}
@@ -569,7 +572,7 @@ export function StockDetails() {
           </SectionCard>
         )}
 
-        {tab === 2 && (
+        {tab === 3 && (
           <SectionCard
             title="Ratios"
             subtitle="As published on the company page · blank means the field was not on the page we read"
@@ -603,7 +606,7 @@ export function StockDetails() {
           </SectionCard>
         )}
 
-        {tab === 3 && (
+        {tab === 4 && (
           <SectionCard
             title="Dividends"
             subtitle={`${data.dividends.length} announcement${data.dividends.length === 1 ? '' : 's'} on record`}

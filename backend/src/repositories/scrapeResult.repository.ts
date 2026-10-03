@@ -120,6 +120,9 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
       const values = [
         result.ratios.peRatio, result.ratios.pbRatio, result.ratios.roe, result.ratios.roa,
         result.ratios.dividendYield, result.ratios.bookValue, result.ratios.eps, result.ratios.beta,
+        result.ratios.netProfitMargin, result.ratios.freeFloatShares, result.ratios.freeFloatPercent,
+        result.ratios.dps, result.ratios.payoutRatio, result.ratios.roic, result.ratios.debtToEquity,
+        result.ratios.currentRatio, result.ratios.revenueGrowth, result.ratios.epsGrowth,
       ];
       // A ratio row with nothing in it is not a reading, and writing one is worse than useless:
       // the detail read path serves the *newest* ratio row, so an all-null row shadows the real
@@ -139,6 +142,18 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
             // Earnings per share, from the source's snapshot (migration 0012). Absent reads null.
             eps: dec(result.ratios.eps),
             beta: dec(result.ratios.beta),
+            // Fundamentals (#131, migration 0015). Absent reads null — a bank, ETF or preference
+            // share publishes none of these and must render as the dash, never 0.
+            netProfitMargin: dec(result.ratios.netProfitMargin),
+            freeFloatShares: dec(result.ratios.freeFloatShares),
+            freeFloatPercent: dec(result.ratios.freeFloatPercent),
+            dps: dec(result.ratios.dps),
+            payoutRatio: dec(result.ratios.payoutRatio),
+            roic: dec(result.ratios.roic),
+            debtToEquity: dec(result.ratios.debtToEquity),
+            currentRatio: dec(result.ratios.currentRatio),
+            revenueGrowth: dec(result.ratios.revenueGrowth),
+            epsGrowth: dec(result.ratios.epsGrowth),
           },
         });
       }

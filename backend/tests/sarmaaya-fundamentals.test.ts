@@ -35,6 +35,8 @@ const DETAILS_EFERT = {
     { isin: 'PK0099701010', metricName: 'Dividend Yield (%)', metricMetric: 'FF_DIV_YLD', afValue: '6.16' },
     { isin: 'PK0099701010', metricName: 'Earnings Per Share', metricMetric: 'FF_EPS', afValue: '15.94' },
     { isin: 'PK0099701010', metricName: 'Net Income Margin (%)', metricMetric: 'FF_NET_MGN', afValue: '9.36' },
+    { isin: 'PK0099701010', metricName: 'Free float shares', metricMetric: 'FF_SHS_FLOAT', afValue: '340284886.00' },
+    { isin: 'PK0099701010', metricName: 'Free Float %', metricMetric: 'FF_SHS_FLOAT_PERCENT', afValue: '25.00' },
     { isin: 'PK0099701010', metricName: 'Price to Book Value', metricMetric: 'FF_PBK', afValue: '5.95' },
     { isin: 'PK0099701010', metricName: 'Price to Earnings', metricMetric: 'FF_PE', afValue: '12.48' },
     { isin: 'PK0099701010', metricName: 'PEG Ratio', metricMetric: 'FF_PEG', afValue: '-1.62' },
@@ -135,6 +137,10 @@ describe('parseSarmaayaDetails', () => {
     expect(d.pbRatio).toBeCloseTo(5.95, 4);
     expect(d.dividendYield).toBeCloseTo(6.16, 4);
     expect(d.eps).toBeCloseTo(15.94, 4);
+    // The #131 additions: net margin and the free-float pair come from the same metric table.
+    expect(d.netProfitMargin).toBeCloseTo(9.36, 4);
+    expect(d.freeFloatShares).toBeCloseTo(340284886, 0);
+    expect(d.freeFloatPercent).toBeCloseTo(25, 2);
   });
 
   it('answers null for a metric the payload does not carry, never zero', () => {
@@ -191,6 +197,26 @@ describe('parseSarmaayaRatioSeries', () => {
     expect(both.bookValue).toBeCloseTo(32.842, 3);
     expect(both.periodicity).toBe('LTM');
   });
+
+  it('reads the six operating ratios and converts D/E from the source percentage to a ratio', () => {
+    const s = parseSarmaayaRatioSeries({
+      response: {
+        'Dividend Payout Ratio': { data: [{ value: 33.824, date: '2026-06-30T00:00:00.000Z' }] },
+        'Return on Average Invested Capital (%)': { data: [{ value: 6.444, date: '2025-03-31T05:00:00.000Z' }] },
+        // The source's "Debt to Equity (%)" is a percentage; the app stores the ratio.
+        'Debt to Equity (%)': { data: [{ value: 63.338, date: '2026-06-30T00:00:00.000Z' }] },
+        'Current Ratio (x)': { data: [{ value: 1.091, date: '2026-06-30T00:00:00.000Z' }] },
+        'Net Sales YoY Growth (%)': { data: [{ value: 12.16, date: '2026-06-30T00:00:00.000Z' }] },
+        'EPS Basic YoY Growth (%)': { data: [{ value: 364.862, date: '2026-06-30T00:00:00.000Z' }] },
+      },
+    }, 'LTM');
+    expect(s.payoutRatio).toBeCloseTo(33.824, 3);
+    expect(s.roic).toBeCloseTo(6.444, 3);
+    expect(s.debtToEquity).toBeCloseTo(0.63338, 5);
+    expect(s.currentRatio).toBeCloseTo(1.091, 3);
+    expect(s.revenueGrowth).toBeCloseTo(12.16, 3);
+    expect(s.epsGrowth).toBeCloseTo(364.862, 3);
+  });
 });
 
 describe('parseSarmaayaDividends', () => {
@@ -216,6 +242,9 @@ describe('mergeRatios', () => {
   const none: RatioDTO = {
     peRatio: null, pbRatio: null, roe: null, roa: null,
     dividendYield: null, bookValue: null, beta: null, eps: null,
+    netProfitMargin: null, freeFloatShares: null, freeFloatPercent: null,
+    dps: null, payoutRatio: null, roic: null, debtToEquity: null,
+    currentRatio: null, revenueGrowth: null, epsGrowth: null,
   };
 
   it('fills each field from the first provider that actually stated it', () => {

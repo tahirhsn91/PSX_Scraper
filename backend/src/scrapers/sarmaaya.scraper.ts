@@ -237,6 +237,18 @@ export class SarmaayaScraper implements IStockScraper {
         // nulls for the whole board — see #79), so the merge takes the fundamentals scraper's figure.
         eps: null,
         beta: toNumber(data.beta),
+        // Fundamentals (#131) all come from the JSON fundamentals scraper, never this page extractor
+        // — null here lets the field-wise merge in the orchestrator fill them from that leg.
+        netProfitMargin: null,
+        freeFloatShares: null,
+        freeFloatPercent: null,
+        dps: null,
+        payoutRatio: null,
+        roic: null,
+        debtToEquity: null,
+        currentRatio: null,
+        revenueGrowth: null,
+        epsGrowth: null,
       },
     };
     logger.debug('sarmaaya.scraped', { symbol, hasRatios: !!result.ratios });
