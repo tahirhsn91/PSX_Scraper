@@ -943,6 +943,38 @@ export const openapiSpec = {
           roa: { type: "number", nullable: true },
           dividendYield: { type: "number", nullable: true },
           beta: { type: "number", nullable: true },
+          netProfitMargin: { type: "number", nullable: true },
+          freeFloatShares: { type: "number", nullable: true },
+          freeFloatPercent: { type: "number", nullable: true },
+          dps: { type: "number", nullable: true },
+          payoutRatio: { type: "number", nullable: true },
+          roic: { type: "number", nullable: true },
+          debtToEquity: { type: "number", nullable: true },
+          currentRatio: { type: "number", nullable: true },
+          revenueGrowth: { type: "number", nullable: true },
+          epsGrowth: { type: "number", nullable: true },
+        },
+      },
+      FundamentalsInsights: {
+        type: "object",
+        properties: {
+          overall: { type: "number", nullable: true },
+          verdict: { type: "string", nullable: true, enum: ["strong", "fair", "weak"] },
+          current: {
+            type: "object",
+            properties: {
+              score: { type: "number", nullable: true },
+              assessed: { type: "integer" },
+            },
+          },
+          future: {
+            type: "object",
+            properties: {
+              score: { type: "number", nullable: true },
+              assessed: { type: "integer" },
+            },
+          },
+          outlook: { type: "string", nullable: true, enum: ["positive", "neutral", "cautious"] },
         },
       },
       Financial: {
@@ -984,6 +1016,10 @@ export const openapiSpec = {
           },
           ratios: {
             allOf: [{ $ref: "#/components/schemas/Ratios" }],
+            nullable: true,
+          },
+          insights: {
+            allOf: [{ $ref: "#/components/schemas/FundamentalsInsights" }],
             nullable: true,
           },
           financials: {

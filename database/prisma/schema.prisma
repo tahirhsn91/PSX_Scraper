@@ -116,6 +116,29 @@ model Ratio {
   /// stock page shows). Null means "the source published none" and renders as a dash -- never 0 and
   /// never derived from price / (price-to-earnings). Migration 0012.
   eps           Decimal? @db.Decimal(12, 4)
+  /// Net profit margin, as the source's details payload publishes it (`FF_NET_MGN`). Null = the
+  /// source published none, renders as a dash. Migration 0015.
+  netProfitMargin  Decimal? @map("net_profit_margin") @db.Decimal(12, 4)
+  /// Free-float share count, as the source's details payload publishes it (`FF_SHS_FLOAT`).
+  /// A count (hundreds of millions), so a wider scale than the ratio columns. Migration 0015.
+  freeFloatShares  Decimal? @map("free_float_shares") @db.Decimal(24, 2)
+  /// Free float as a percentage of shares outstanding (`FF_SHS_FLOAT_PERCENT`). Migration 0015.
+  freeFloatPercent Decimal? @map("free_float_percent") @db.Decimal(12, 4)
+  /// Dividend per share -- the newest announced per-share dividend from the dividends endpoint.
+  /// Null = no dividend on record, renders as a dash. Migration 0015.
+  dps              Decimal? @db.Decimal(12, 4)
+  /// Dividend payout ratio, from the ratio series ("Dividend Payout Ratio"). Migration 0015.
+  payoutRatio      Decimal? @map("payout_ratio") @db.Decimal(12, 4)
+  /// Return on average invested capital (%), from the ratio series. Migration 0015.
+  roic             Decimal? @db.Decimal(12, 4)
+  /// Debt to equity (%), from the ratio series ("Debt to Equity (%)"). Migration 0015.
+  debtToEquity     Decimal? @map("debt_to_equity") @db.Decimal(12, 4)
+  /// Current ratio (x), from the ratio series ("Current Ratio (x)"). Banks publish none -- null. Migration 0015.
+  currentRatio     Decimal? @map("current_ratio") @db.Decimal(12, 4)
+  /// Net sales year-over-year growth (%), from the ratio series ("Net Sales YoY Growth (%)"). Migration 0015.
+  revenueGrowth    Decimal? @map("revenue_growth") @db.Decimal(12, 4)
+  /// Basic EPS year-over-year growth (%), from the ratio series ("EPS Basic YoY Growth (%)"). Migration 0015.
+  epsGrowth        Decimal? @map("eps_growth") @db.Decimal(12, 4)
   createdAt     DateTime @default(now()) @map("created_at")
 
   stock         Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)

@@ -46,6 +46,26 @@ export interface RatioDTO {
    *  P/E: the source's P/E and its EPS do not divide into one another exactly, so a computed value
    *  would be a different number wearing this row's label. Null = the dash. */
   eps: number | null;
+  /** Net profit margin (%), from the source's details payload (`FF_NET_MGN`). */
+  netProfitMargin: number | null;
+  /** Free-float share count, from the source's details payload (`FF_SHS_FLOAT`). A count, not a %. */
+  freeFloatShares: number | null;
+  /** Free float as a percentage of shares outstanding (`FF_SHS_FLOAT_PERCENT`). */
+  freeFloatPercent: number | null;
+  /** Dividend per share — the newest announced per-share dividend from the dividends endpoint. */
+  dps: number | null;
+  /** Dividend payout ratio, from the ratio series ("Dividend Payout Ratio"). */
+  payoutRatio: number | null;
+  /** Return on average invested capital (%), from the ratio series. */
+  roic: number | null;
+  /** Debt to equity (%), from the ratio series ("Debt to Equity (%)"). */
+  debtToEquity: number | null;
+  /** Current ratio (x), from the ratio series ("Current Ratio (x)"). Banks publish none — null. */
+  currentRatio: number | null;
+  /** Net sales year-over-year growth (%), from the ratio series ("Net Sales YoY Growth (%)"). */
+  revenueGrowth: number | null;
+  /** Basic EPS year-over-year growth (%), from the ratio series ("EPS Basic YoY Growth (%)"). */
+  epsGrowth: number | null;
 }
 
 export interface ScrapeResult {
