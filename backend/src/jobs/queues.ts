@@ -58,6 +58,17 @@ export const INDEX_CONTRIBUTION_JOB = 'index-contributions';
 export const MARKET_CAP_JOB = 'market-cap-refresh';
 
 /**
+ * The carry-forward that copies a symbol's latest cap onto a newly-created price row.
+ *
+ * It rides the quote queue for the same reason as the refresh it belongs to, but it is split from
+ * the refresh because their cost profiles differ completely: the refresh costs ~150 requests and
+ * runs inside the session, while this is one idempotent UPDATE that must run *whenever* a new row
+ * can appear — including overnight and at the weekend, when the closing pass is still writing rows
+ * and the refresh is not scheduled to run.
+ */
+export const MARKET_CAP_CARRY_JOB = 'market-cap-carry-forward';
+
+/**
  * PSX's published holiday calendar. It rides the quote queue because the other session-cadence
  * refresh jobs live there and its cost is one request a day.
  */

@@ -62,6 +62,14 @@ const envSchema = z.object({
   SESSION_CANDLE_CRON: z.string().default('*/5 4-11 * * 1-5'),
   MARKET_CAP_REFRESH_CRON: z.string().default('*/30 4-11 * * 1-5'),
   /**
+   * The carry-forward that copies a symbol's latest cap onto a newly-created price row, so the
+   * column does not flicker to a dash between refreshes. One idempotent UPDATE (it only touches
+   * empty newest rows), so it is cheap enough to run all day, every day — the fetch above is bound
+   * to the session, but a new row can appear at any hour (the post-close pass writes overnight),
+   * and without this the weekend leaves every fresh row a dash until Monday's refresh.
+   */
+  MARKET_CAP_CARRY_CRON: z.string().default('*/5 * * * *'),
+  /**
    * The exchange's published market holidays - the gate the index session stamp reads. One request
    * to `www.psx.com.pk` a day, so a daily pre-open tick rather than a session cadence: PSX
    * republishes the table rarely, and 02:15 UTC is 07:15 PKT, ahead of the 09:30 open.
