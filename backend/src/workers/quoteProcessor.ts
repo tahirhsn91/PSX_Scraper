@@ -1,6 +1,6 @@
 import { Job } from 'bullmq';
 import { env } from '../config';
-import { QuotePollJobData, KSE100_MEMBERSHIP_JOB, MARKET_CAP_JOB, MARKET_HOLIDAYS_JOB, SESSION_CANDLE_JOB } from '../jobs/queues';
+import { QuotePollJobData, KSE100_MEMBERSHIP_JOB, MARKET_CAP_JOB, MARKET_CAP_CARRY_JOB, MARKET_HOLIDAYS_JOB, SESSION_CANDLE_JOB } from '../jobs/queues';
 import { syncSessionCandles } from '../services/sessionCandle.service';
 import type { SessionCandleSummary } from '../services/sessionCandle.service';
 import { syncAllIndexMembership } from '../services/indexMembership.service';
@@ -8,7 +8,7 @@ import { marketCapService } from '../services/marketCap.service';
 import { refreshMarketHolidays } from '../services/marketCalendar.service';
 import type { HolidayRefreshStats } from '../services/marketCalendar.service';
 import type { AllIndexMembershipSummary } from '../services/indexMembership.service';
-import type { MarketCapRefreshSummary } from '../services/marketCap.service';
+import type { MarketCapRefreshSummary, MarketCapCarrySummary } from '../services/marketCap.service';
 import { stockRepository } from '../repositories/stock.repository';
 import { upsertQuoteSnapshot } from '../repositories/stockPrice.repository';
 import { psxQuoteScraper } from '../scrapers/psxQuotes.scraper';
@@ -65,13 +65,14 @@ let perSymbolCursor = 0;
  */
 export async function processQuotePollJob(
   job: Job<QuotePollJobData>,
-): Promise<QuotePollSummary | AllIndexMembershipSummary | MarketCapRefreshSummary | HolidayRefreshStats | SessionCandleSummary> {
+): Promise<QuotePollSummary | AllIndexMembershipSummary | MarketCapRefreshSummary | MarketCapCarrySummary | HolidayRefreshStats | SessionCandleSummary> {
   // The index membership pass rides this queue because it is the same kind of work — a light,
   // schedule-driven refresh with no per-symbol fan-out — and page one of the dashboard depends on
   // it being current. It covers every published index now (not just the KSE-100), and its own job
   // name keeps the two summaries apart in the logs.
   if (job.name === KSE100_MEMBERSHIP_JOB) return syncAllIndexMembership();
   if (job.name === MARKET_CAP_JOB) return marketCapService.refresh();
+  if (job.name === MARKET_CAP_CARRY_JOB) return marketCapService.carryForward();
   if (job.name === MARKET_HOLIDAYS_JOB) return refreshMarketHolidays();
   if (job.name === SESSION_CANDLE_JOB) return syncSessionCandles();
 

@@ -10,6 +10,7 @@ import {
   QUOTE_POLL_JOB,
   KSE100_MEMBERSHIP_JOB,
   MARKET_CAP_JOB,
+  MARKET_CAP_CARRY_JOB,
   SESSION_CANDLE_JOB,
   UNIVERSE_PASS_JOB,
   universeQueue,
@@ -249,10 +250,37 @@ async function registerMarketCapSchedule(): Promise<void> {
   logger.info('scheduler.market_cap_registered', { cron: env.MARKET_CAP_REFRESH_CRON });
 }
 
+/**
+ * Register the market-cap carry-forward.
+ *
+ * Its own always-on schedule, not the refresh's: the refresh's ~150 requests bind it to the
+ * session, but the carry-forward is one idempotent UPDATE and must run whenever a new price row
+ * can appear — the post-close pass writes overnight and into the weekend, when the refresh does
+ * not tick. Same pattern reconciliation as the refresh above.
+ */
+async function registerMarketCapCarrySchedule(): Promise<void> {
+  for (const job of await quoteQueue.getRepeatableJobs()) {
+    if (job.name !== MARKET_CAP_CARRY_JOB || job.pattern === env.MARKET_CAP_CARRY_CRON) continue;
+    await quoteQueue.removeRepeatableByKey(job.key);
+    logger.info('scheduler.market_cap_carry_pattern_replaced', {
+      was: job.pattern,
+      now: env.MARKET_CAP_CARRY_CRON,
+    });
+  }
+
+  await quoteQueue.add(
+    MARKET_CAP_CARRY_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: env.MARKET_CAP_CARRY_CRON }, jobId: 'scheduled-market-cap-carry-forward' },
+  );
+  logger.info('scheduler.market_cap_carry_registered', { cron: env.MARKET_CAP_CARRY_CRON });
+}
+
 export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
   await registerKse100MembershipSchedule();
   await registerMarketCapSchedule();
+  await registerMarketCapCarrySchedule();
   await registerSessionCandleSchedule();
   await registerUniversePassSchedule();
   await registerIndexBoardSchedule();
