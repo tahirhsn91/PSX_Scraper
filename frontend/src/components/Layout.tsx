@@ -41,7 +41,7 @@ export function Layout({ children }: { children: ReactNode }) {
         Skip to content
       </Box>
 
-      <Box sx={{ position: 'sticky', top: 0, zIndex: (theme) => theme.zIndex.appBar }}>
+      <Box id="app-header" sx={{ position: 'sticky', top: 0, zIndex: (theme) => theme.zIndex.appBar }}>
         <EnvBanner />
         <AppHeader onOpenSearch={openSearch} />
       </Box>
