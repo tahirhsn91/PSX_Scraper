@@ -117,7 +117,7 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
         {ratios ? (
           <Grid container spacing={1.5}>
             {METRICS.map((m) => (
-              <Grid item xs={6} sm={4} md={2} key={m.key}>
+              <Grid item xs={12} sm={4} md={2} key={m.key}>
                 <StatTile
                   label={m.label}
                   value={formatMetric(ratios[m.key], m.kind)}
