@@ -8,8 +8,6 @@ import {
   LinearProgress,
   Skeleton,
   Stack,
-  Tab,
-  Tabs,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -23,6 +21,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { FundamentalsPanel } from '../components/FundamentalsPanel';
+import { QuickJumpNav, type QuickJumpSection } from '../components/QuickJumpNav';
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { PageHeader } from '../components/ui/PageHeader';
@@ -63,7 +62,14 @@ const RANGES: { value: HistoryRange; label: string }[] = [
 /** Candles are ours; the TradingView tab is their widget; the line view is the older chart. */
 type ChartMode = 'candles' | 'line' | 'tradingview';
 
-const SECTIONS = ['History', 'Fundamentals', 'Financials', 'Ratios', 'Dividends'] as const;
+/** The page's sections, in reading order. `id` is the anchor the sticky quick-jump scrolls to. */
+const SECTIONS: QuickJumpSection[] = [
+  { id: 'section-history', label: 'History' },
+  { id: 'section-fundamentals', label: 'Fundamentals' },
+  { id: 'section-financials', label: 'Financials' },
+  { id: 'section-ratios', label: 'Ratios' },
+  { id: 'section-dividends', label: 'Dividends' },
+];
 
 /** Spelled-out form of a range preset, for the caption above the chart. */
 const rangeLabel = (r: HistoryRange): string =>
@@ -167,7 +173,8 @@ export function StockDetails() {
   const { data: candles, isLoading: candlesLoading } = useCandles(symbol);
   const syncStock = useSyncStock();
   const { data: status } = useSyncStatus(syncStock.isPending);
-  const [tab, setTab] = useState(0);
+  // Sticky header + quick-jump nav height, reported by the nav so anchors scroll below both bars.
+  const [scrollOffset, setScrollOffset] = useState(0);
 
   // Historical fetch job + live progress
   const fetchHistory = useFetchHistory(symbol);
@@ -372,21 +379,10 @@ export function StockDetails() {
         </Grid>
       </Grid>
 
-      <Tabs
-        value={tab}
-        onChange={(_e, v) => setTab(v)}
-        variant="scrollable"
-        scrollButtons="auto"
-        aria-label="Stock detail sections"
-        sx={{ mb: 2 }}
-      >
-        {SECTIONS.map((label, i) => (
-          <Tab key={label} label={label} id={`stock-tab-${i}`} aria-controls={`stock-tabpanel-${i}`} />
-        ))}
-      </Tabs>
+      <QuickJumpNav sections={SECTIONS} onOffsetChange={setScrollOffset} />
 
-      <Box role="tabpanel" id={`stock-tabpanel-${tab}`} aria-labelledby={`stock-tab-${tab}`}>
-        {tab === 0 && (
+      <Stack spacing={3} sx={{ mt: 2 }}>
+        <Box component="section" id="section-history" sx={{ scrollMarginTop: scrollOffset }}>
           <SectionCard
             title="Price history"
             subtitle={
@@ -551,11 +547,13 @@ export function StockDetails() {
               />
             )}
           </SectionCard>
-        )}
+        </Box>
 
-        {tab === 1 && <FundamentalsPanel ratios={data.ratios} insights={data.insights} />}
+        <Box component="section" id="section-fundamentals" sx={{ scrollMarginTop: scrollOffset }}>
+          <FundamentalsPanel ratios={data.ratios} insights={data.insights} />
+        </Box>
 
-        {tab === 2 && (
+        <Box component="section" id="section-financials" sx={{ scrollMarginTop: scrollOffset }}>
           <SectionCard
             title="Financials"
             subtitle={`${data.financials.length} period${data.financials.length === 1 ? '' : 's'} on record`}
@@ -570,9 +568,9 @@ export function StockDetails() {
               emptyDescription="The company page has not been scraped yet, or it publishes no quarterly accounts."
             />
           </SectionCard>
-        )}
+        </Box>
 
-        {tab === 3 && (
+        <Box component="section" id="section-ratios" sx={{ scrollMarginTop: scrollOffset }}>
           <SectionCard
             title="Ratios"
             subtitle="As published on the company page · blank means the field was not on the page we read"
@@ -604,9 +602,9 @@ export function StockDetails() {
               />
             )}
           </SectionCard>
-        )}
+        </Box>
 
-        {tab === 4 && (
+        <Box component="section" id="section-dividends" sx={{ scrollMarginTop: scrollOffset }}>
           <SectionCard
             title="Dividends"
             subtitle={`${data.dividends.length} announcement${data.dividends.length === 1 ? '' : 's'} on record`}
@@ -621,8 +619,8 @@ export function StockDetails() {
               emptyDescription="Nothing announced for this symbol in the periods we have scraped."
             />
           </SectionCard>
-        )}
-      </Box>
+        </Box>
+      </Stack>
     </Box>
   );
 }
