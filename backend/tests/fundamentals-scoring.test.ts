@@ -21,14 +21,21 @@ describe('fundamentals scoring (#131)', () => {
     ]));
   });
 
-  test('current and future groups partition the scored metrics, free float is informational only', () => {
+  test('current and future groups overlap on trajectory metrics, free float is informational only', () => {
     const neutral = FUNDAMENTAL_METRICS.filter((m) => m.direction === 'neutral').map((m) => m.key);
     expect(neutral).toEqual(['freeFloatShares', 'freeFloatPercent']);
-    const scored = [...CURRENT_KEYS, ...FUTURE_KEYS];
-    // debtToEquity is deliberately in both groups.
-    expect(scored).toContain('debtToEquity');
-    expect(new Set(CURRENT_KEYS).has('debtToEquity')).toBe(true);
-    expect(new Set(FUTURE_KEYS).has('debtToEquity')).toBe(true);
+    // Leverage and profitability are both a current state AND a forward-looking trajectory signal.
+    const currentSet = new Set(CURRENT_KEYS);
+    const futureSet = new Set(FUTURE_KEYS);
+    for (const key of ['debtToEquity', 'roe', 'roic', 'netProfitMargin']) {
+      expect(currentSet.has(key)).toBe(true);
+      expect(futureSet.has(key)).toBe(true);
+    }
+    // Growth is forward-only.
+    for (const key of ['revenueGrowth', 'epsGrowth']) {
+      expect(futureSet.has(key)).toBe(true);
+      expect(currentSet.has(key)).toBe(false);
+    }
   });
 
   test('metricCredit: higher-better earns full credit only by beating both signals', () => {
@@ -99,30 +106,43 @@ describe('fundamentals scoring (#131)', () => {
     expect(ins.current.assessed).toBe(13);
     expect(ins.current.score).toBe(Math.round((10 / 13) * 100)); // 77
 
-    // Future: revenueGrowth and epsGrowth beat both (1 each); D/E (2, median 1, lower-better)
-    // misses both -> 0. Sum = 2 over 3 -> 66.7 -> 67.
-    expect(ins.future.assessed).toBe(3);
-    expect(ins.future.score).toBe(Math.round((2 / 3) * 100)); // 67
+    // Future: 6 metrics (growth + leverage + profitability). revenueGrowth, epsGrowth, roe, roic
+    // and netProfitMargin all beat both benchmark and median (1 each); D/E (2, median 1,
+    // lower-better) misses both -> 0. Sum = 5 over 6 -> 83.
+    expect(ins.future.assessed).toBe(6);
+    expect(ins.future.score).toBe(Math.round((5 / 6) * 100)); // 83
+    expect(ins.future.fallback).toBe(false);
 
-    expect(ins.overall).toBe(Math.round((77 + 67) / 2)); // 72
+    expect(ins.overall).toBe(Math.round((77 + 83) / 2)); // 80
     expect(ins.verdict).toBe('strong');
     expect(ins.outlook).toBe('positive');
   });
 
-  test('scoreFundamentals: an unpublished metric shrinks the denominator, never the score', () => {
+  test('scoreFundamentals: the outlook falls back to current metrics when no forward metric is published', () => {
     const ratios: Record<string, number | null> = {
-      roe: 20, roa: null, roic: null, peRatio: null, pbRatio: null, dividendYield: null,
+      eps: 20, roe: null, roa: null, roic: null, peRatio: null, pbRatio: null, dividendYield: null,
       dps: null, payoutRatio: null, debtToEquity: null, currentRatio: null,
-      netProfitMargin: null, eps: null, bookValue: null,
+      netProfitMargin: null, bookValue: null,
       revenueGrowth: null, epsGrowth: null, freeFloatShares: null, freeFloatPercent: null,
     };
-    const medians: Record<string, number | null> = { roe: 10 };
+    const medians: Record<string, number | null> = { eps: 10 };
     const ins = scoreFundamentals(ratios, medians);
-    // Only ROE is assessed in the current group, and it beats both -> 100.
+    // EPS is current-only: it scores in current, and the outlook falls back to that score.
     expect(ins.current.assessed).toBe(1);
     expect(ins.current.score).toBe(100);
-    // No future metric assessed.
+    expect(ins.future.assessed).toBe(0);
+    expect(ins.future.score).toBe(100); // fallback
+    expect(ins.future.fallback).toBe(true);
+    expect(ins.outlook).toBe('positive');
+  });
+
+  test('scoreFundamentals: a stock with no published metrics has no score and no outlook', () => {
+    const ins = scoreFundamentals({}, {});
+    expect(ins.current.score).toBeNull();
     expect(ins.future.score).toBeNull();
+    expect(ins.future.fallback).toBe(false);
+    expect(ins.overall).toBeNull();
+    expect(ins.verdict).toBeNull();
     expect(ins.outlook).toBeNull();
   });
 
