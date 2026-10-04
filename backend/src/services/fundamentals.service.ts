@@ -62,11 +62,16 @@ export const CURRENT_KEYS = [
 ];
 
 /**
- * Metrics scored for *future* performance: growth plus the leverage that either funds or blocks it.
- * `debtToEquity` appears in both groups on purpose — it is a balance-sheet state (current) and the
- * "leverage direction" the issue names for the forward view.
+ * Metrics scored for *future* performance. Growth is the direct forward signal; leverage and
+ * profitability (ROE / ROIC / net margin) are the "trajectory" indicators the issue means by
+ * "future performance based on current metrics", and they are published for far more stocks than
+ * the two growth series alone, so the Future Outlook is not left blank for the majority of the
+ * board. `debtToEquity` also appears in `CURRENT_KEYS` on purpose — it is both a balance-sheet
+ * state (current) and the "leverage direction" of the forward view.
  */
-export const FUTURE_KEYS = ['revenueGrowth', 'epsGrowth', 'debtToEquity'];
+export const FUTURE_KEYS = [
+  'revenueGrowth', 'epsGrowth', 'debtToEquity', 'roe', 'roic', 'netProfitMargin',
+];
 
 /** A sector-median map: metric key -> median, or null when no peer publishes the metric. */
 export type SectorMedians = Record<string, number | null>;
@@ -135,7 +140,7 @@ export interface FundamentalsInsights {
   /** Qualitative label for the overall score. */
   verdict: 'strong' | 'fair' | 'weak' | null;
   current: { score: number | null; assessed: number };
-  future: { score: number | null; assessed: number };
+  future: { score: number | null; assessed: number; fallback: boolean };
   /** The Future Outlook verdict, derived from the future sub-score alone. */
   outlook: 'positive' | 'neutral' | 'cautious' | null;
 }
@@ -168,21 +173,28 @@ export function scoreFundamentals(
   const current = subScore(CURRENT_KEYS, ratios, medians);
   const future = subScore(FUTURE_KEYS, ratios, medians);
 
+  // The Future Outlook must not go blank just because the source publishes no growth series for a
+  // stock (the common case: ~2/3 of the board has no revenue/EPS-growth figures). Per the issue,
+  // future performance is "based on current metrics", so when no forward-looking metric exists the
+  // outlook falls back to the current sub-score and is flagged as such.
+  const futureScore = future.score ?? current.score;
+  const futureFallback = future.score === null && futureScore !== null;
+
   let overall: number | null = null;
-  if (current.score !== null && future.score !== null) {
-    overall = Math.round((current.score + future.score) / 2);
+  if (current.score !== null && futureScore !== null) {
+    overall = Math.round((current.score + futureScore) / 2);
   } else if (current.score !== null) {
     overall = current.score;
-  } else if (future.score !== null) {
-    overall = future.score;
+  } else if (futureScore !== null) {
+    overall = futureScore;
   }
 
   return {
     overall,
     verdict: verdictOf(overall),
     current,
-    future,
-    outlook: outlookOf(future.score),
+    future: { score: futureScore, assessed: future.assessed, fallback: futureFallback },
+    outlook: outlookOf(futureScore),
   };
 }
 
