@@ -99,11 +99,14 @@ interface FundamentalsPanelProps {
 
 /**
  * The Fundamentals tab: the 17 per-share/ratio metrics, each with its own ⓘ, plus the two derived
- * blocks. Nothing here invents a number — an unpublished metric renders `—`, and an absent sector
- * hides the insights rather than scoring a stock against itself.
+ * blocks. Nothing here invents a number — an unpublished metric renders `—`, and a stock with no
+ * published fundamentals at all shows an explicit "not enough data" note rather than a blank.
  */
 export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) {
   const theme = useTheme();
+  const currentAssessed = insights?.current.assessed ?? 0;
+  const futureAssessed = insights?.future.assessed ?? 0;
+  const hasAnyMetric = currentAssessed + futureAssessed > 0;
 
   return (
     <Stack spacing={2}>
@@ -131,28 +134,30 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
         )}
       </SectionCard>
 
-      {insights && (
-        <SectionCard
-          title="Performance Insights"
-          subtitle={
-            insights.current.assessed + insights.future.assessed > 0
-              ? `Scored from ${insights.current.assessed} current and ${insights.future.assessed} future metrics`
-              : 'No metrics to score'
-          }
-          action={
-            <Tooltip
-              arrow
-              title={
-                <Typography variant="body2" sx={{ py: 0.5 }}>
-                  Calculated from the current Fundamentals metrics — not a forecast, not a
-                  recommendation.
-                </Typography>
-              }
-            >
-              <InfoOutlinedIcon fontSize="small" sx={{ color: 'text.secondary', cursor: 'help' }} aria-label="Performance Insights explanation" />
-            </Tooltip>
-          }
-        >
+      <SectionCard
+        title="Performance Insights"
+        subtitle={
+          hasAnyMetric
+            ? `Scored from ${currentAssessed} current${
+                futureAssessed ? ` and ${futureAssessed} forward` : ''
+              } metrics`
+            : 'No fundamentals published for this stock'
+        }
+        action={
+          <Tooltip
+            arrow
+            title={
+              <Typography variant="body2" sx={{ py: 0.5 }}>
+                Calculated from the current Fundamentals metrics — not a forecast, not a
+                recommendation.
+              </Typography>
+            }
+          >
+            <InfoOutlinedIcon fontSize="small" sx={{ color: 'text.secondary', cursor: 'help' }} aria-label="Performance Insights explanation" />
+          </Tooltip>
+        }
+      >
+        {hasAnyMetric && insights ? (
           <Stack spacing={2}>
             <Stack direction="row" spacing={2} alignItems="baseline" flexWrap="wrap" useFlexGap>
               <Typography variant="h3" sx={{ color: scoreColor(insights.overall, theme), lineHeight: 1 }}>
@@ -170,11 +175,7 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <StatTile
                 label="Current performance"
-                value={
-                  insights.current.score == null
-                    ? DASH
-                    : `${insights.current.score} / 100`
-                }
+                value={insights.current.score == null ? DASH : `${insights.current.score} / 100`}
                 valueTitle={insights.current.score == null ? undefined : `${insights.current.score} out of 100`}
                 footer={
                   <Typography variant="caption" color="text.secondary">
@@ -185,61 +186,71 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
               />
               <StatTile
                 label="Future performance"
-                value={
-                  insights.future.score == null
-                    ? DASH
-                    : `${insights.future.score} / 100`
-                }
+                value={insights.future.score == null ? DASH : `${insights.future.score} / 100`}
                 valueTitle={insights.future.score == null ? undefined : `${insights.future.score} out of 100`}
                 footer={
                   <Typography variant="caption" color="text.secondary">
-                    {insights.future.assessed} metric{insights.future.assessed === 1 ? '' : 's'} scored
+                    {insights.future.fallback
+                      ? 'from current metrics'
+                      : `${insights.future.assessed} metric${insights.future.assessed === 1 ? '' : 's'} scored`}
                   </Typography>
                 }
                 tone={insights.future.score == null ? 'muted' : insights.future.score >= 67 ? 'up' : insights.future.score >= 34 ? 'warning' : 'down'}
               />
             </Stack>
           </Stack>
-        </SectionCard>
-      )}
-
-      {insights && (
-        <SectionCard
-          title="Future Outlook"
-          subtitle="Forward-looking view from the growth metrics"
-          action={
-            <Tooltip
-              arrow
-              title={
-                <Typography variant="body2" sx={{ py: 0.5 }}>
-                  Derived from the current Fundamentals metrics — an indication of trajectory, not a
-                  guarantee of future returns.
-                </Typography>
-              }
-            >
-              <InfoOutlinedIcon fontSize="small" sx={{ color: 'text.secondary', cursor: 'help' }} aria-label="Future Outlook explanation" />
-            </Tooltip>
-          }
-        >
-          <Typography
-            variant="h5"
-            sx={{
-              color:
-                insights.outlook === 'positive'
-                  ? theme.palette.up.main
-                  : insights.outlook === 'cautious'
-                    ? theme.palette.down.main
-                    : theme.palette.warning.main,
-            }}
-          >
-            {insights.outlook ? OUTLOOK_LABEL[insights.outlook] : DASH}
-          </Typography>
+        ) : (
           <Typography variant="body2" color="text.secondary">
-            Based on revenue growth, EPS growth and leverage relative to the sector and to fixed
-            benchmarks.
+            The source publishes no fundamentals for this stock, so there is nothing to score — a
+            blank means the figure does not exist, not that it is zero.
           </Typography>
-        </SectionCard>
-      )}
+        )}
+      </SectionCard>
+
+      <SectionCard
+        title="Future Outlook"
+        subtitle="Forward-looking view from growth, profitability and leverage"
+        action={
+          <Tooltip
+            arrow
+            title={
+              <Typography variant="body2" sx={{ py: 0.5 }}>
+                Derived from the current Fundamentals metrics — an indication of trajectory, not a
+                guarantee of future returns.
+              </Typography>
+            }
+          >
+            <InfoOutlinedIcon fontSize="small" sx={{ color: 'text.secondary', cursor: 'help' }} aria-label="Future Outlook explanation" />
+          </Tooltip>
+        }
+      >
+        {insights?.outlook ? (
+          <>
+            <Typography
+              variant="h5"
+              sx={{
+                color:
+                  insights.outlook === 'positive'
+                    ? theme.palette.up.main
+                    : insights.outlook === 'cautious'
+                      ? theme.palette.down.main
+                      : theme.palette.warning.main,
+              }}
+            >
+              {OUTLOOK_LABEL[insights.outlook]}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {insights.future.fallback
+                ? 'Growth figures are not published for this stock, so the outlook is derived from its current fundamentals.'
+                : 'Based on revenue growth, EPS growth, profitability and leverage relative to the sector and to fixed benchmarks.'}
+            </Typography>
+          </>
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            Not enough published fundamentals to estimate the outlook.
+          </Typography>
+        )}
+      </SectionCard>
     </Stack>
   );
 }

@@ -972,6 +972,7 @@ export const openapiSpec = {
             properties: {
               score: { type: "number", nullable: true },
               assessed: { type: "integer" },
+              fallback: { type: "boolean" },
             },
           },
           outlook: { type: "string", nullable: true, enum: ["positive", "neutral", "cautious"] },

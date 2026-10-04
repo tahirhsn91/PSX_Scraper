@@ -181,7 +181,7 @@ export interface StockDetail {
     overall: number | null;
     verdict: 'strong' | 'fair' | 'weak' | null;
     current: { score: number | null; assessed: number };
-    future: { score: number | null; assessed: number };
+    future: { score: number | null; assessed: number; fallback: boolean };
     outlook: 'positive' | 'neutral' | 'cautious' | null;
   } | null;
   financials: Array<{
