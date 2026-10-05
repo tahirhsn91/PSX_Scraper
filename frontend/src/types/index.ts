@@ -42,6 +42,13 @@ export interface IndexSummary {
    * derived figure, which is why it is a separate key from `volume`.
    */
   constituentVolume?: number | null;
+  /** 52-week high/low and market cap from Sarmaaya's board — for the SEO meta description. */
+  week52High?: number | null;
+  week52Low?: number | null;
+  marketCap?: number | null;
+  /** 1-year and year-to-date percentage returns; null when the stored series is too short. */
+  return1y?: number | null;
+  returnYtd?: number | null;
   lastTradeDate: string | null;
 }
 
