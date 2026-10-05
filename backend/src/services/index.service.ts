@@ -81,12 +81,29 @@ export const indexService = {
     // Two rows are enough: newest close, plus the one before it for previousClose.
     const daily = await indexRepository.latestValues(index.id, 2);
     const derived = await derivedVolumes();
+    // 1-year and year-to-date return windows. The 1-year base is the latest close at or before a
+    // year ago; the YTD base is the year's *first* session (Sarmaaya's own convention — the index
+    // the user's example cites measures "year to date" from the first trading day, not the previous
+    // year's last close). A series too short to reach a window yields null and the SEO description
+    // omits that clause.
+    const now = new Date();
+    const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+    const yearStart = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+    const [yrAgoRow, jan1Row] = await Promise.all([
+      indexRepository.valueAtOrBefore(index.id, yearAgo),
+      indexRepository.valueAtOrAfter(index.id, yearStart),
+    ]);
     return buildIndexSummary({
       symbol: index.symbol,
       name: index.name,
       daily,
       live: liveReading(index.liveValue, index.liveAt, index.liveChange, index.liveChangePercent),
       constituentVolume: derived.get(index.symbol) ?? null,
+      week52High: index.week52High?.toNumber() ?? null,
+      week52Low: index.week52Low?.toNumber() ?? null,
+      marketCap: index.marketCap?.toNumber() ?? null,
+      yearAgoValue: yrAgoRow?.value != null ? Number(yrAgoRow.value) : null,
+      yearStartValue: jan1Row?.value != null ? Number(jan1Row.value) : null,
     });
   },
 

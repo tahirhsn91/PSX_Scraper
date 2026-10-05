@@ -42,6 +42,14 @@ export interface ParsedIndex {
    * carried one.
    */
   volume?: number | null;
+  /**
+   * 52-week high/low and market cap, published only by Sarmaaya's `/api/indices` board (the
+   * exchange's carousel and Sarmaaya's market-view carry neither). Nullable, and absent on rows
+   * from sources that do not publish them. For the index page's SEO meta description.
+   */
+  high52?: number | null;
+  low52?: number | null;
+  marketCap?: number | null;
 }
 
 const PAGE = 'https://www.psx.com.pk/market-summary';
@@ -164,6 +172,11 @@ export function parseSarmaayaIndices(payload: unknown): ParsedIndex[] {
       // its rows (market-view has one). Null, not "now": the source cannot say when it read.
       readAt: null,
       volume: numeric(raw.volume),
+      // The 52-week pair and market cap are this endpoint's own extra columns (absent on
+      // market-view and the exchange's carousel). Null when the row does not publish them.
+      high52: numeric(raw.high52),
+      low52: numeric(raw.low52),
+      marketCap: numeric(raw.marketCap),
     });
   }
   return [...bySymbol.values()];
@@ -185,6 +198,55 @@ export async function fetchSarmaayaIndices(timeoutMs = 15000): Promise<ParsedInd
   // An answer with no index rows is a parse failure, not an empty market.
   if (indices.length === 0) throw new SiteUnavailableError('sarmaaya indices carried no index rows');
   return indices;
+}
+
+/** The extra board columns an index's SEO meta description needs, keyed by symbol. */
+export interface IndexBoardStats {
+  high52: number | null;
+  low52: number | null;
+  marketCap: number | null;
+}
+
+/**
+ * The 52-week pair and market cap for every index, walking `/api/indices`'s pages.
+ *
+ * These three columns exist only on `/api/indices` (not market-view, not the exchange's carousel),
+ * and the endpoint pages at 10 rows by default — so the *board* read above (which prefers
+ * market-view for its timestamps) cannot be asked for them. This fetches that one endpoint
+ * separately and returns a symbol → stats map the scrape pass stores verbatim.
+ *
+ * Best-effort by design: a failure returns an empty map and the caller keeps the columns null
+ * rather than blocking the board snapshot on a cosmetic enrichment.
+ */
+export async function fetchSarmaayaIndexStats(timeoutMs = 15000): Promise<Map<string, IndexBoardStats>> {
+  const stats = new Map<string, IndexBoardStats>();
+  const perPage = 100;
+  for (let page = 1; page <= 5; page += 1) {
+    let res: Response;
+    try {
+      res = await fetch(`${SARMAYA_BOARD_URL}?page=${page}&limit=${perPage}`, {
+        headers: { 'User-Agent': SARMAYA_UA, Accept: 'application/json', Referer: 'https://sarmaaya.pk/' },
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+    } catch {
+      break;
+    }
+    if (!res.ok) break;
+    const payload = (await res.json()) as { response?: { data?: unknown } };
+    const data = payload?.response?.data;
+    if (!Array.isArray(data) || data.length === 0) break;
+    for (const raw of data as Record<string, unknown>[]) {
+      const symbol = typeof raw?.symbol === 'string' ? raw.symbol.toUpperCase().replace(/\s+/g, '') : '';
+      if (!symbol) continue;
+      stats.set(symbol, {
+        high52: numeric(raw?.high52),
+        low52: numeric(raw?.low52),
+        marketCap: numeric(raw?.marketCap),
+      });
+    }
+    if (data.length < perPage) break;
+  }
+  return stats;
 }
 
 /**

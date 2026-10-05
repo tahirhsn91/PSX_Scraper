@@ -884,6 +884,26 @@ export const openapiSpec = {
           },
           previousClose: { type: "number", nullable: true, example: 170511.85 },
           volume: { type: "number", nullable: true, example: 232943686 },
+          week52High: {
+            type: "number",
+            nullable: true,
+            example: 191032.73,
+            description: "52-week high as Sarmaaya's board publishes it. Null when no source publishes one.",
+          },
+          week52Low: { type: "number", nullable: true, example: 144119.44 },
+          marketCap: { type: "number", nullable: true, example: 4687030286923.38 },
+          return1y: {
+            type: "number",
+            nullable: true,
+            example: -1.85,
+            description: "1-year return in percent, close-to-close. Null when the stored series is too short.",
+          },
+          returnYtd: {
+            type: "number",
+            nullable: true,
+            example: -5.95,
+            description: "Year-to-date return in percent, close-to-close. Null when the stored series is too short.",
+          },
           lastTradeDate: {
             type: "string",
             format: "date-time",
