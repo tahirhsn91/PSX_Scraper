@@ -47,6 +47,13 @@ export interface IndexSummaryInput {
    * published and has been unavailable since 2026-09-22.
    */
   constituentVolume?: number | null;
+  /** 52-week high/low and market cap, as Sarmaaya's board publishes them (SEO meta). */
+  week52High?: number | null;
+  week52Low?: number | null;
+  marketCap?: number | null;
+  /** Historical closes the 1-year and year-to-date returns are measured against. */
+  yearAgoValue?: number | null;
+  yearStartValue?: number | null;
 }
 
 export interface IndexHistoryItem {
@@ -171,6 +178,17 @@ export function buildIndexSummary(input: IndexSummaryInput) {
 
   const sameDay = lastTradeDate ? daily.find((r) => dayKey(r.tradeDate) === dayKey(lastTradeDate!)) ?? null : null;
 
+  // 1-year and year-to-date returns, measured close-to-close against the stored series. Both are
+  // percentages (not points) and null when the series does not reach back far enough to say.
+  const return1y =
+    value !== null && input.yearAgoValue != null && input.yearAgoValue !== 0
+      ? round(((value - input.yearAgoValue) / input.yearAgoValue) * 100, 2)
+      : null;
+  const returnYtd =
+    value !== null && input.yearStartValue != null && input.yearStartValue !== 0
+      ? round(((value - input.yearStartValue) / input.yearStartValue) * 100, 2)
+      : null;
+
   return {
     symbol,
     name,
@@ -192,6 +210,13 @@ export function buildIndexSummary(input: IndexSummaryInput) {
     // separately as `constituentVolume`, so this key keeps one meaning.
     volume: sameDay?.volume != null ? Number(sameDay.volume) : latest?.volume != null ? Number(latest.volume) : null,
     constituentVolume: input.constituentVolume ?? null,
+    // The 52-week pair and market cap from Sarmaaya's board, for the SEO meta description. Null when
+    // the source has not published them (they are `—`, never 0).
+    week52High: input.week52High ?? null,
+    week52Low: input.week52Low ?? null,
+    marketCap: input.marketCap ?? null,
+    return1y,
+    returnYtd,
     lastTradeDate,
   };
 }

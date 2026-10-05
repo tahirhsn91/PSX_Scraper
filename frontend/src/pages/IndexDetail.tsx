@@ -19,6 +19,8 @@ import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { useIndex, useIndexCandles } from '../api/hooks';
 import { DASH, formatCount, formatDateTime, formatNumber } from '../lib/format';
+import { indexMetaDescription, indexMetaTitle } from '../lib/seo';
+import { usePageMeta } from '../lib/usePageMeta';
 import type { HistoryRange } from '../types';
 
 const RANGES: { value: HistoryRange; label: string }[] = [
@@ -56,6 +58,22 @@ export function IndexDetail() {
   const [mode, setMode] = useState<'candles' | 'tradingview'>('candles');
   const { data, isLoading, isError } = useIndex(symbol);
   const { data: candles, isLoading: candlesLoading } = useIndexCandles(symbol);
+
+  // Per-index document head: tab title + meta description for on-page SEO.
+  usePageMeta(
+    data ? indexMetaTitle(data.symbol, data.name) : undefined,
+    data
+      ? indexMetaDescription(
+          data.symbol,
+          data.value,
+          data.week52High,
+          data.week52Low,
+          data.return1y,
+          data.returnYtd,
+          data.marketCap,
+        )
+      : undefined,
+  );
 
   if (isLoading) {
     return (

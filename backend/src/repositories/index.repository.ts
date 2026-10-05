@@ -36,6 +36,24 @@ export class IndexRepository {
     return prisma.indexValue.count({ where: { indexId } });
   }
 
+  /** The latest close at or before a date, for a return window (1-year, year-to-date). */
+  async valueAtOrBefore(indexId: string, date: Date) {
+    return prisma.indexValue.findFirst({
+      where: { indexId, tradeDate: { lte: date } },
+      orderBy: { tradeDate: 'desc' },
+      select: { value: true },
+    });
+  }
+
+  /** The first close at or after a date — the opening session of a year, for the YTD return. */
+  async valueAtOrAfter(indexId: string, date: Date) {
+    return prisma.indexValue.findFirst({
+      where: { indexId, tradeDate: { gte: date } },
+      orderBy: { tradeDate: 'asc' },
+      select: { value: true },
+    });
+  }
+
   async listValues(
     indexId: string,
     opts: { from?: Date; to?: Date; limit: number; offset: number },

@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import type IORedis from 'ioredis';
 import { prisma } from '../database/prisma';
 import { indexRepository } from '../repositories/index.repository';
-import { fetchPsxIndices, fetchIndexNames } from '../scrapers/psxIndices.scraper';
+import { fetchPsxIndices, fetchIndexNames, fetchSarmaayaIndexStats } from '../scrapers/psxIndices.scraper';
 import { sessionStamp } from '../scrapers/parse.utils';
 import { createRedisConnection } from '../jobs/connection';
 import { isClosingPassDue, isMarketOpen } from '../utils/marketHours';
@@ -174,6 +174,13 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
   const parsed = await fetchPsxIndices();
   // Cosmetic only; an empty map means the symbol stays as the name.
   const names = await fetchIndexNames(parsed.map((i) => i.symbol));
+  // The 52-week pair and market cap live only on `/api/indices` (not market-view, not the
+  // exchange's carousel), so fetch them separately and best-effort: a refusal must not block the
+  // board snapshot — the columns then simply keep their previous values.
+  const boardStats = await fetchSarmaayaIndexStats().catch((error: unknown) => {
+    log.warn('index-scrape.stats_failed', { error: (error as Error).message.slice(0, 120) });
+    return new Map();
+  });
   // The same session key the rest of the pipeline uses (16:00 PKT), so an index row lines up
   // with the stock rows for that day.
   const stamp = new Date(sessionStamp(now.toISOString())!);
@@ -224,6 +231,16 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     const name =
       existing && existing.name && existing.name !== index.symbol ? existing.name : names[index.symbol] ?? index.symbol;
 
+    // 52-week pair and market cap, published only by `/api/indices`. Set only when the source
+    // published a real figure: a null must not blank what an earlier pass stored, and an index the
+    // stats endpoint does not carry keeps its previous values.
+    const stats = boardStats.get(index.symbol);
+    const seoFields = {
+      ...(stats?.high52 != null ? { week52High: new Prisma.Decimal(stats.high52) } : {}),
+      ...(stats?.low52 != null ? { week52Low: new Prisma.Decimal(stats.low52) } : {}),
+      ...(stats?.marketCap != null ? { marketCap: new Prisma.Decimal(stats.marketCap) } : {}),
+    };
+
     const row = await prisma.marketIndex.upsert({
       where: { symbol: index.symbol },
       update: {
@@ -234,6 +251,7 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
         liveChange: index.change === null ? null : new Prisma.Decimal(index.change),
         liveChangePercent: index.changePercent === null ? null : new Prisma.Decimal(index.changePercent),
         lastSyncedAt: now,
+        ...seoFields,
       },
       create: {
         symbol: index.symbol,
@@ -243,6 +261,7 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
         liveChange: index.change === null ? null : new Prisma.Decimal(index.change),
         liveChangePercent: index.changePercent === null ? null : new Prisma.Decimal(index.changePercent),
         lastSyncedAt: now,
+        ...seoFields,
       },
     });
     if (existing) updated += 1;
