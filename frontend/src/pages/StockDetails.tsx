@@ -37,6 +37,8 @@ import {
   formatNumber,
   formatVolume,
 } from '../lib/format';
+import { stockMetaDescription, stockMetaTitle } from '../lib/seo';
+import { usePageMeta } from '../lib/usePageMeta';
 import {
   keys,
   useCandles,
@@ -180,6 +182,22 @@ export function StockDetails() {
   const fetchHistory = useFetchHistory(symbol);
   const [fetching, setFetching] = useState(false);
   const { data: histJob } = useHistoryStatus(symbol, fetching);
+
+  // Per-stock document head: tab title + meta description for on-page SEO (all 508 stocks).
+  usePageMeta(
+    data
+      ? stockMetaTitle(data.symbol, data.price?.currentPrice, data.companyName)
+      : undefined,
+    data
+      ? stockMetaDescription(
+          data.symbol,
+          data.price?.currentPrice,
+          data.price?.changePercent,
+          data.price?.high,
+          data.price?.low,
+        )
+      : undefined,
+  );
 
   const progressPct = (() => {
     const p = histJob?.progress;
