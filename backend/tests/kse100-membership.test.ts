@@ -108,7 +108,8 @@ describe('syncKse100Membership', () => {
     mockedPrisma.stock.findMany.mockResolvedValue([]);
     mockedReplace.mockResolvedValue({ added: 0, removed: 0, kept: 0 });
 
-    await syncKse100Membership();
+    // The row is created (or ensured) before the empty answer is treated as a failure.
+    await expect(syncKse100Membership()).rejects.toThrow(/no members/);
 
     expect(mockedPrisma.marketIndex.upsert).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -116,6 +117,17 @@ describe('syncKse100Membership', () => {
         create: expect.objectContaining({ symbol: KSE100_SYMBOL }),
       }),
     );
+  });
+
+  it('leaves the member list untouched when the source returns nothing', async () => {
+    // scstrade answered with an empty table once (2026-10-06 pre-open); the pass must NOT replace
+    // the stored 99 members with nothing — that is exactly how page one got blanked.
+    mockedFetch.mockResolvedValue([]);
+    mockedPrisma.stock.findMany.mockResolvedValue([]);
+
+    await expect(syncKse100Membership()).rejects.toThrow(/member list left unchanged/);
+
+    expect(mockedReplace).not.toHaveBeenCalled();
   });
 
   it('reports what the pass changed, including removals', async () => {
