@@ -44,6 +44,14 @@ export async function syncKse100Membership(): Promise<Kse100MembershipSummary> {
     select: { id: true },
   });
 
+  // An empty answer here is the source saying it has no member list right now (measured 2026-10-06:
+  // scstrade returned an empty table in the pre-open window). Membership is a *replace*, so writing
+  // an empty list would silently blank page one of the dashboard — and did: one pass removed 99 rows
+  // this way. Nothing is written and the pass reports a failure instead; yesterday's list stays.
+  if (constituents.length === 0) {
+    throw new Error(`Source published no members for ${KSE100_SYMBOL} — member list left unchanged`);
+  }
+
   const symbols = constituents.map((row) => row.symbol);
   const stocks = await prisma.stock.findMany({
     where: { symbol: { in: symbols } },
