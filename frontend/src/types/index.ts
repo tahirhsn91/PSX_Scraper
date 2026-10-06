@@ -71,6 +71,8 @@ export interface StockListItem {
   symbol: string;
   companyName: string | null;
   sector: string | null;
+  /** Company logo URL for the SYMBOL column icon; null when no source published one (letter avatar then). */
+  logoUrl: string | null;
   currentPrice: number | null;
   /**
    * Absolute change for the session, in the exchange's own units. Optional: the API sets it only

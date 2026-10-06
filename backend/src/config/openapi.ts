@@ -814,6 +814,13 @@ export const openapiSpec = {
             example: "Fauji Fertilizer Company Limited",
           },
           sector: { type: "string", nullable: true, example: "Fertilizer" },
+          logoUrl: {
+            type: "string",
+            nullable: true,
+            example: "https://d1ehrfgrja6bld.cloudfront.net/company_logos/FFC.svg",
+            description:
+              "Company logo URL for the SYMBOL column icon. Null when no source published one — the client shows a letter avatar then.",
+          },
           currentPrice: { type: "number", nullable: true, example: 563.48 },
           changePercent: { type: "number", nullable: true, example: 1.24 },
           volume: {

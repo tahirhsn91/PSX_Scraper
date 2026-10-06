@@ -6,6 +6,8 @@ export interface StockListItem {
   symbol: string;
   companyName: string | null;
   sector: string | null;
+  /** Company logo URL, or null when no source published one (the frontend shows a letter avatar). */
+  logoUrl: string | null;
   currentPrice: number | null;
   /**
    * Absolute change for the session, in the exchange's own units. Optional, and only ever set
@@ -166,6 +168,7 @@ type RawStockListRow = {
   symbol: string;
   company_name: string | null;
   sector: string | null;
+  logo_url: string | null;
   current_price: Prisma.Decimal | null;
   change: Prisma.Decimal | null;
   change_percent: Prisma.Decimal | null;
@@ -189,6 +192,7 @@ function toListItem(r: RawStockListRow): StockListItem {
     symbol: r.symbol,
     companyName: r.company_name,
     sector: r.sector,
+    logoUrl: r.logo_url,
     currentPrice: r.current_price ? Number(r.current_price) : null,
     changePercent: r.change_percent ? Number(r.change_percent) : null,
     // `!= null`, not truthiness: 0 shares traded is a reading, not an absent value.
@@ -241,6 +245,30 @@ export async function updateLatestMarketCaps(
       AND sp.last_trade_date = (
         SELECT max(x.last_trade_date) FROM stock_prices x WHERE x.stock_id = s.id
       )
+  `;
+}
+
+/**
+ * Write company logo URLs onto the `stocks` rows themselves (a stock-level column, not a
+ * price-row value like a market cap). Only non-null URLs are written: a symbol the source
+ * publishes no logo for (ETFs, preference shares, rights) keeps whatever it had rather than
+ * being blanked, so a transient null cannot turn a stored logo into a broken image.
+ *
+ * `symbols` and `logoUrls` are parallel arrays; the caller builds both from the same snapshot
+ * list and filters out null logos before calling.
+ */
+export async function updateStockLogos(
+  symbols: string[],
+  logoUrls: string[],
+): Promise<number> {
+  if (symbols.length === 0) return 0;
+  return prisma.$executeRaw`
+    UPDATE stocks s
+    SET logo_url = v.logo_url
+    FROM (
+      SELECT unnest(${symbols}::text[]) AS symbol, unnest(${logoUrls}::text[]) AS logo_url
+    ) v
+    WHERE s.symbol = v.symbol
   `;
 }
 
@@ -392,7 +420,7 @@ export class StockRepository {
     const filter = buildListFilter(group, index);
     const [rows, totals] = await Promise.all([
       prisma.$queryRaw<RawStockListRow[]>(Prisma.sql`
-        SELECT s.id, s.symbol, s.company_name, s.sector,
+        SELECT s.id, s.symbol, s.company_name, s.sector, s.logo_url,
                p.current_price, p.change, p.change_percent, p.volume, p.market_cap,
                p.week52_high, p.week52_low,
                p.last_trade_date,
@@ -458,6 +486,7 @@ export class StockRepository {
         symbol: string;
         company_name: string | null;
         sector: string | null;
+        logo_url: string | null;
         current_price: Prisma.Decimal | null;
         change: Prisma.Decimal | null;
         change_percent: Prisma.Decimal | null;
@@ -469,7 +498,7 @@ export class StockRepository {
         last_synced_at: Date | null;
       }>
     >(Prisma.sql`
-      SELECT s.id, s.symbol, s.company_name, s.sector,
+      SELECT s.id, s.symbol, s.company_name, s.sector, s.logo_url,
              p.current_price, p.change, p.change_percent, p.volume, p.market_cap,
              p.week52_high, p.week52_low,
              p.last_trade_date,

@@ -4,6 +4,7 @@ import { stockService } from '../services/stock.service';
 import { betaService } from '../services/beta.service';
 import { syncService } from '../services/sync.service';
 import { marketCapService } from '../services/marketCap.service';
+import { stockLogoService } from '../services/stockLogo.service';
 import { valid } from '../middleware/validate';
 import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, candlesQuery } from '../validators/schemas';
 
@@ -56,6 +57,15 @@ export const refreshMarketCaps: RequestHandler = async (_req, res) => {
  */
 export const refreshBeta: RequestHandler = async (_req, res) => {
   res.json(await betaService.refreshAll());
+};
+
+/**
+ * Refresh company logos across the tracked universe. On demand for the same reason the market-cap
+ * refresh is: a stack that has the column but no icon should not have to wait for the schedule to
+ * see one, and this is the endpoint that fills a fresh database.
+ */
+export const refreshStockLogos: RequestHandler = async (_req, res) => {
+  res.json(await stockLogoService.refresh());
 };
 
 export const stockCandles: RequestHandler = async (req, res) => {

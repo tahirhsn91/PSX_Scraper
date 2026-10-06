@@ -69,6 +69,14 @@ export const MARKET_CAP_JOB = 'market-cap-refresh';
 export const MARKET_CAP_CARRY_JOB = 'market-cap-carry-forward';
 
 /**
+ * The company-logo refresh, on the same queue for the same reason: schedule-driven background work
+ * that reuses the worker which owns the light periodic jobs. Cheapest of the refresh jobs (five
+ * requests for the whole board), so it runs once a day — a logo changes with a rebrand, not with
+ * the price.
+ */
+export const LOGO_REFRESH_JOB = 'stock-logo-refresh';
+
+/**
  * PSX's published holiday calendar. It rides the quote queue because the other session-cadence
  * refresh jobs live there and its cost is one request a day.
  */

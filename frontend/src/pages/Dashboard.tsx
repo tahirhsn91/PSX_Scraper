@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
+  Avatar,
   Box,
   Button,
   Dialog,
@@ -63,21 +64,62 @@ const SESSION_POLL_MS = 30_000;
  * The nine sortable columns share the width the container gives them, and each is sized for its own
  * `nowrap` header label: the label renders uppercase with letter-spacing and carries a sort arrow, so
  * a six-letter word like "Weight" needs ~74px, not the ~48px its bare letters take. The widths below
- * add up to 78.3% for that reason — the table is laid out `fixed` (see `DataTable`) and the Company
+ * add up to 79.6% for that reason (the Symbol column carries a little extra for its 20px logo chip)
+ * — the table is laid out `fixed` (see `DataTable`) and the Company
  * column, the only one without a width, takes what is left. A column narrower than its label clips the
  * label behind the next sticky header (which is how "WEIGHT" read as "WEIGH"), so the floor below is
  * the width at which every label still fits; anything narrower scrolls the table inside its container
  * instead of squeezing a column past its label. What still does not fit is clipped by its own cell with
  * a `title` for the full value, rather than wrapping and making every row two lines tall.
  */
+/**
+ * A 20px company-logo chip for the SYMBOL column.
+ *
+ * The logo is an <img> inside an MUI Avatar; when the symbol has no logo URL, or the image fails
+ * to load, the avatar falls back to the symbol's first letter — so a symbol never renders a broken
+ * image or a blank chip.
+ */
+function StockLogo({ symbol, logoUrl }: { symbol: string; logoUrl: string | null }) {
+  const [failed, setFailed] = useState(false);
+  return (
+    <Avatar
+      variant="rounded"
+      src={logoUrl && !failed ? logoUrl : undefined}
+      alt=""
+      imgProps={{
+        sx: { objectFit: "contain", padding: "2px" },
+        onError: () => setFailed(true),
+      }}
+      sx={{
+        width: 20,
+        height: 20,
+        flexShrink: 0,
+        fontSize: 11,
+        fontWeight: 700,
+        bgcolor: "action.hover",
+        color: "text.secondary",
+      }}
+    >
+      {symbol.charAt(0)}
+    </Avatar>
+  );
+}
+
 const COLUMNS: Column<StockListItem>[] = [
   {
     key: "symbol",
     header: "Symbol",
-    width: "8.7%",
+    width: "10%",
     sortKey: "symbol",
     mobileRole: "title",
-    render: (s) => s.symbol,
+    render: (s) => (
+      <Stack direction="row" alignItems="center" spacing={0.75} sx={{ minWidth: 0 }}>
+        <StockLogo symbol={s.symbol} logoUrl={s.logoUrl} />
+        <Typography variant="body2" noWrap title={s.symbol}>
+          {s.symbol}
+        </Typography>
+      </Stack>
+    ),
   },
   {
     key: "company",
