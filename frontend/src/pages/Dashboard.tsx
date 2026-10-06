@@ -83,7 +83,7 @@ function StockLogo({ symbol, logoUrl }: { symbol: string; logoUrl: string | null
   const [failed, setFailed] = useState(false);
   return (
     <Avatar
-      variant="rounded"
+      variant="circular"
       src={logoUrl && !failed ? logoUrl : undefined}
       alt=""
       imgProps={{
