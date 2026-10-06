@@ -51,7 +51,17 @@ describe('parseIndexCompanies', () => {
       change: 0.12,
       changePercent: 0.29,
       marketCap: 123_456,
+      logo: 'logo.svg',
     });
+  });
+
+  it('keeps a real logo URL and nulls an absent one', () => {
+    const withLogo = first(parseIndexCompanies(payload([row()]))).logo;
+    expect(withLogo).toBe('logo.svg');
+    const withoutLogo = first(parseIndexCompanies(payload([row({ logo: null })]))).logo;
+    expect(withoutLogo).toBeNull();
+    const blankLogo = first(parseIndexCompanies(payload([row({ logo: '' })]))).logo;
+    expect(blankLogo).toBeNull();
   });
 
   it('reports no reading for a placeholder row rather than a zero', () => {

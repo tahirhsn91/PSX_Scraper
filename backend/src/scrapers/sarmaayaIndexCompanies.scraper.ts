@@ -36,6 +36,8 @@ export interface IndexConstituentReading {
   change: number | null;
   changePercent: number | null;
   marketCap: number | null;
+  /** The constituent's company logo URL, or null when the board publishes none for it. */
+  logo: string | null;
 }
 
 /** A number the source published, or null — never a coerced 0 for something it did not send. */
@@ -86,6 +88,10 @@ export function parseIndexCompanies(payload: unknown): IndexConstituentReading[]
       change: published ? num(row.change) : null,
       changePercent: published ? num(row.changePercent) : null,
       marketCap: published ? num(row.marketCap) : null,
+      // A logo is not a reading: a placeholder row (all-zero figures) still carries its logo, so
+      // this is read regardless of `published`. Only a non-empty string URL is kept — the board
+      // answers `null` for securities it has no artwork for (ETFs, preference shares).
+      logo: typeof row.logo === 'string' && row.logo.trim() !== '' ? row.logo.trim() : null,
     });
   }
   return rows;

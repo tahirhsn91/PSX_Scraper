@@ -70,6 +70,12 @@ const envSchema = z.object({
    */
   MARKET_CAP_CARRY_CRON: z.string().default('*/5 * * * *'),
   /**
+   * The company-logo refresh. Five requests cover the whole All-Share board, so a daily tick
+   * rather than a session cadence: a logo changes with a rebrand, not with the price. 02:30 UTC
+   * is 07:30 PKT, ahead of the 09:30 open — same window the holiday calendar uses.
+   */
+  LOGO_REFRESH_CRON: z.string().default('30 2 * * *'),
+  /**
    * The exchange's published market holidays - the gate the index session stamp reads. One request
    * to `www.psx.com.pk` a day, so a daily pre-open tick rather than a session cadence: PSX
    * republishes the table rarely, and 02:15 UTC is 07:15 PKT, ahead of the 09:30 open.

@@ -11,6 +11,7 @@ import {
   KSE100_MEMBERSHIP_JOB,
   MARKET_CAP_JOB,
   MARKET_CAP_CARRY_JOB,
+  LOGO_REFRESH_JOB,
   SESSION_CANDLE_JOB,
   UNIVERSE_PASS_JOB,
   universeQueue,
@@ -276,11 +277,37 @@ async function registerMarketCapCarrySchedule(): Promise<void> {
   logger.info('scheduler.market_cap_carry_registered', { cron: env.MARKET_CAP_CARRY_CRON });
 }
 
+/**
+ * Register the company-logo refresh.
+ *
+ * Five requests cover the whole All-Share board, so it runs once a day rather than on a session
+ * cadence: a logo changes with a rebrand, not with the price. Same pattern reconciliation as every
+ * schedule here — BullMQ keys a repeatable by pattern, so a changed cron must not tick on both.
+ */
+async function registerLogoRefreshSchedule(): Promise<void> {
+  for (const job of await quoteQueue.getRepeatableJobs()) {
+    if (job.name !== LOGO_REFRESH_JOB || job.pattern === env.LOGO_REFRESH_CRON) continue;
+    await quoteQueue.removeRepeatableByKey(job.key);
+    logger.info('scheduler.logo_refresh_pattern_replaced', {
+      was: job.pattern,
+      now: env.LOGO_REFRESH_CRON,
+    });
+  }
+
+  await quoteQueue.add(
+    LOGO_REFRESH_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: env.LOGO_REFRESH_CRON }, jobId: 'scheduled-stock-logo-refresh' },
+  );
+  logger.info('scheduler.logo_refresh_registered', { cron: env.LOGO_REFRESH_CRON });
+}
+
 export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
   await registerKse100MembershipSchedule();
   await registerMarketCapSchedule();
   await registerMarketCapCarrySchedule();
+  await registerLogoRefreshSchedule();
   await registerSessionCandleSchedule();
   await registerUniversePassSchedule();
   await registerIndexBoardSchedule();

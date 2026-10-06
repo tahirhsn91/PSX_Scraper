@@ -42,6 +42,7 @@ const row = (over: Partial<StockListItem> = {}): StockListItem => ({
   symbol: 'FFC',
   companyName: 'Fauji Fertilizer Company Limited',
   sector: 'FERTILIZER',
+  logoUrl: null,
   currentPrice: 540.41,
   changePercent: 0.99,
   volume: 582743,

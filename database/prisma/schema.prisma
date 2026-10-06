@@ -21,6 +21,10 @@ model Stock {
   symbol      String       @unique
   companyName String?      @map("company_name")
   sector      String?
+  // Company logo (the SYMBOL column's icon), from Sarmaaya's ALLSHR constituents board. Null for
+  // symbols it publishes no logo for (ETFs, preference shares, rights) — the frontend shows a
+  // letter avatar then, never a broken image.
+  logoUrl     String?      @map("logo_url")
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt @map("updated_at")
 
