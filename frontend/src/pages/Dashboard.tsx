@@ -287,11 +287,13 @@ const COLUMNS: Column<StockListItem>[] = [
  */
 type Universe = "kse100" | "allshr";
 /**
- * How many rows each list is read in. The KSE-100 is one page — the exchange publishes 100 members, 99
- * of them tracked here, and the API's `limit` ceiling is 200 — while the broad market's 486 tracked
- * members are read 50 at a time.
+ * How many rows each list is read in — 100 per page for both. The KSE-100 is one page (the exchange
+ * publishes 100 members, 99 of them tracked here) and the broad market's 486 tracked members are read
+ * 100 at a time; both are well under the API's `limit` ceiling of 200. A phone reads the same page
+ * size as a desktop — the mobile pager has no rows-per-page selector, so the default is what a phone
+ * gets.
  */
-const PAGE_SIZE: Record<Universe, number> = { kse100: 100, allshr: 50 };
+const PAGE_SIZE: Record<Universe, number> = { kse100: 100, allshr: 100 };
 /**
  * The published index whose member list a list shows. `index` is the parameter for this, not `group`:
  * it narrows the rows to one index's tracked members (KSE-100 through the exchange's own member site,
