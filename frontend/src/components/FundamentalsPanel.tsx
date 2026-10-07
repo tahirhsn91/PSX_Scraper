@@ -1,6 +1,22 @@
-import { Grid, Stack, Tooltip, Typography, useTheme } from '@mui/material';
+import { useState } from 'react';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Card,
+  Drawer,
+  Grid,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import type { Theme } from '@mui/material/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 import { SectionCard } from './ui/SectionCard';
 import { StatTile } from './ui/StatTile';
 import { DASH, formatCount, formatNumber } from '../lib/format';
@@ -9,7 +25,7 @@ import type { StockDetail } from '../types';
 type Ratios = NonNullable<StockDetail['ratios']>;
 type Insights = NonNullable<StockDetail['insights']>;
 
-/** Per-metric tooltip: one line of what-it-is, one line of direction. */
+/** Per-metric copy: one line of what-it-is, one line of direction. */
 interface MetricMeta {
   key: keyof Ratios;
   label: string;
@@ -17,26 +33,71 @@ interface MetricMeta {
   direction: 'higher' | 'lower' | 'band' | 'neutral';
   /** How the value is formatted and suffixed. */
   kind: 'rs' | 'pct' | 'x' | 'shares';
+  /** Colour the value by sign — for figures that can be negative (growth). */
+  signed?: boolean;
 }
 
-const METRICS: MetricMeta[] = [
-  { key: 'eps', label: 'EPS', kind: 'rs', what: 'Earnings per share — the profit each share earned.', direction: 'higher' },
-  { key: 'peRatio', label: 'P/E', kind: 'x', what: 'Price-to-earnings — the price for each rupee of earnings.', direction: 'lower' },
-  { key: 'bookValue', label: 'Book Value / Share', kind: 'rs', what: 'Net assets per share (equity ÷ shares outstanding).', direction: 'higher' },
-  { key: 'pbRatio', label: 'P/B', kind: 'x', what: 'Price-to-book — price versus book value per share.', direction: 'lower' },
-  { key: 'dividendYield', label: 'Dividend Yield', kind: 'pct', what: 'Annual dividend as a percentage of the price.', direction: 'higher' },
-  { key: 'dps', label: 'DPS', kind: 'rs', what: 'Dividend per share — the latest announced dividend.', direction: 'higher' },
-  { key: 'payoutRatio', label: 'Payout Ratio', kind: 'pct', what: 'Share of earnings paid out as dividends.', direction: 'band' },
-  { key: 'roe', label: 'ROE', kind: 'pct', what: 'Return on equity — profit as a % of shareholders\u2019 equity.', direction: 'higher' },
-  { key: 'roa', label: 'ROA', kind: 'pct', what: 'Return on assets — profit as a % of total assets.', direction: 'higher' },
-  { key: 'roic', label: 'ROIC', kind: 'pct', what: 'Return on average invested capital.', direction: 'higher' },
-  { key: 'debtToEquity', label: 'D/E', kind: 'x', what: 'Debt-to-equity — debt as a multiple of equity.', direction: 'lower' },
-  { key: 'currentRatio', label: 'Current Ratio', kind: 'x', what: 'Current assets ÷ current liabilities — short-term liquidity.', direction: 'higher' },
-  { key: 'netProfitMargin', label: 'Net Profit Margin', kind: 'pct', what: 'Profit after tax as a percentage of revenue.', direction: 'higher' },
-  { key: 'revenueGrowth', label: 'Revenue Growth', kind: 'pct', what: 'Year-over-year growth in net sales.', direction: 'higher' },
-  { key: 'epsGrowth', label: 'EPS Growth', kind: 'pct', what: 'Year-over-year growth in basic earnings per share.', direction: 'higher' },
-  { key: 'freeFloatShares', label: 'Free Float Share', kind: 'shares', what: 'Shares freely tradeable on the market.', direction: 'neutral' },
-  { key: 'freeFloatPercent', label: 'Free Float Share %', kind: 'pct', what: 'Free float as a percentage of shares outstanding.', direction: 'neutral' },
+/** A logical cluster of metrics, shown as one collapsible group. */
+interface MetricCategory {
+  key: string;
+  label: string;
+  metrics: MetricMeta[];
+}
+
+/**
+ * The metrics grouped into five scannable clusters. Grouping is fixed, not derived: a metric's
+ * category is a display decision, so it lives with the label and the explanation rather than being
+ * inferred from the field name.
+ */
+const CATEGORIES: MetricCategory[] = [
+  {
+    key: 'valuation',
+    label: 'Valuation',
+    metrics: [
+      { key: 'eps', label: 'EPS', kind: 'rs', what: 'Earnings per share — the profit each share earned.', direction: 'higher' },
+      { key: 'peRatio', label: 'P/E', kind: 'x', what: 'Price-to-earnings — the price for each rupee of earnings.', direction: 'lower' },
+      { key: 'bookValue', label: 'Book Value / Share', kind: 'rs', what: 'Net assets per share (equity ÷ shares outstanding).', direction: 'higher' },
+      { key: 'pbRatio', label: 'P/B', kind: 'x', what: 'Price-to-book — price versus book value per share.', direction: 'lower' },
+      { key: 'dividendYield', label: 'Dividend Yield', kind: 'pct', what: 'Annual dividend as a percentage of the price.', direction: 'higher' },
+      { key: 'dps', label: 'DPS', kind: 'rs', what: 'Dividend per share — the latest announced dividend.', direction: 'higher' },
+    ],
+  },
+  {
+    key: 'profitability',
+    label: 'Profitability',
+    metrics: [
+      { key: 'roe', label: 'ROE', kind: 'pct', what: 'Return on equity — profit as a % of shareholders’ equity.', direction: 'higher' },
+      { key: 'roa', label: 'ROA', kind: 'pct', what: 'Return on assets — profit as a % of total assets.', direction: 'higher' },
+      { key: 'roic', label: 'ROIC', kind: 'pct', what: 'Return on average invested capital.', direction: 'higher' },
+      { key: 'netProfitMargin', label: 'Net Profit Margin', kind: 'pct', what: 'Profit after tax as a percentage of revenue.', direction: 'higher' },
+    ],
+  },
+  {
+    key: 'health',
+    label: 'Financial Health',
+    metrics: [
+      { key: 'debtToEquity', label: 'D/E', kind: 'x', what: 'Debt-to-equity — debt as a multiple of equity.', direction: 'lower' },
+      { key: 'currentRatio', label: 'Current Ratio', kind: 'x', what: 'Current assets ÷ current liabilities — short-term liquidity.', direction: 'higher' },
+      { key: 'payoutRatio', label: 'Payout Ratio', kind: 'pct', what: 'Share of earnings paid out as dividends.', direction: 'band' },
+      { key: 'beta', label: 'Beta', kind: 'x', what: 'Volatility versus the market — above 1 moves more, below 1 moves less.', direction: 'neutral' },
+    ],
+  },
+  {
+    key: 'growth',
+    label: 'Growth',
+    metrics: [
+      { key: 'revenueGrowth', label: 'Revenue Growth', kind: 'pct', what: 'Year-over-year growth in net sales.', direction: 'higher', signed: true },
+      { key: 'epsGrowth', label: 'EPS Growth', kind: 'pct', what: 'Year-over-year growth in basic earnings per share.', direction: 'higher', signed: true },
+    ],
+  },
+  {
+    key: 'shareholding',
+    label: 'Shareholding',
+    metrics: [
+      { key: 'freeFloatShares', label: 'Free Float Share', kind: 'shares', what: 'Shares freely tradeable on the market.', direction: 'neutral' },
+      { key: 'freeFloatPercent', label: 'Free Float Share %', kind: 'pct', what: 'Free float as a percentage of shares outstanding.', direction: 'neutral' },
+    ],
+  },
 ];
 
 const DIRECTION_TEXT: Record<MetricMeta['direction'], string> = {
@@ -50,27 +111,15 @@ function formatMetric(value: number | null, kind: MetricMeta['kind']): string {
   if (value === null) return DASH;
   if (kind === 'shares') return formatCount(value);
   if (kind === 'pct') return `${formatNumber(value, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
-  if (kind === 'x') return formatNumber(value, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return formatNumber(value, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-/** The small ⓘ in each tile's top-right corner. */
-function InfoIcon({ what, direction }: Pick<MetricMeta, 'what' | 'direction'>) {
-  return (
-    <Tooltip
-      arrow
-      title={
-        <Stack spacing={0.5} sx={{ py: 0.5 }}>
-          <Typography variant="body2">{what}</Typography>
-          <Typography variant="body2" sx={{ opacity: 0.8 }}>
-            {DIRECTION_TEXT[direction]}
-          </Typography>
-        </Stack>
-      }
-    >
-      <InfoOutlinedIcon fontSize="small" sx={{ color: 'text.secondary', cursor: 'help' }} aria-label="Metric explanation" />
-    </Tooltip>
-  );
+/** Growth figures carry direction colour by sign; everything else stays neutral to avoid fatigue. */
+function valueColor(meta: MetricMeta, value: number | null, theme: Theme): string {
+  if (meta.signed && value != null && value !== 0) {
+    return value > 0 ? theme.palette.up.main : theme.palette.down.main;
+  }
+  return theme.palette.text.primary;
 }
 
 const VERDICT_LABEL: Record<'strong' | 'fair' | 'weak', string> = {
@@ -98,12 +147,16 @@ interface FundamentalsPanelProps {
 }
 
 /**
- * The Fundamentals tab: the 17 per-share/ratio metrics, each with its own ⓘ, plus the two derived
- * blocks. Nothing here invents a number — an unpublished metric renders `—`, and a stock with no
- * published fundamentals at all shows an explicit "not enough data" note rather than a blank.
+ * The Fundamentals tab. The 18 per-share/ratio metrics are grouped into five collapsible clusters,
+ * each a two-column grid, so a phone gets a scannable, grouped board instead of a single-column wall
+ * of tiles. Every metric carries a ⓘ that opens a bottom sheet with its definition — hover tooltips
+ * do not exist on a phone. Nothing here invents a number: an unpublished metric renders `—`, and a
+ * stock with no published fundamentals at all shows an explicit note rather than a blank.
  */
 export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) {
   const theme = useTheme();
+  const [info, setInfo] = useState<MetricMeta | null>(null);
+
   const currentAssessed = insights?.current.assessed ?? 0;
   const futureAssessed = insights?.future.assessed ?? 0;
   const hasAnyMetric = currentAssessed + futureAssessed > 0;
@@ -112,27 +165,112 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
     <Stack spacing={2}>
       <SectionCard
         title="Fundamentals"
-        subtitle="As published on the company page · blank means the field was not on the page we read"
+        subtitle="Grouped by what they measure · blank means the field was not on the page we read"
       >
         {ratios ? (
-          <Grid container spacing={1.5}>
-            {METRICS.map((m) => (
-              <Grid item xs={12} sm={4} md={2} key={m.key}>
-                <StatTile
-                  label={m.label}
-                  value={formatMetric(ratios[m.key], m.kind)}
-                  valueTitle={ratios[m.key] != null ? formatMetric(ratios[m.key], m.kind) : undefined}
-                  icon={<InfoIcon what={m.what} direction={m.direction} />}
-                />
-              </Grid>
+          <Stack spacing={1}>
+            {CATEGORIES.map((cat) => (
+              <Accordion
+                key={cat.key}
+                defaultExpanded
+                disableGutters
+                elevation={0}
+                square={false}
+                sx={{
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                  '&:before': { display: 'none' },
+                  '&.Mui-expanded': { m: 0 },
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`fundamentals-${cat.key}-content`}
+                  id={`fundamentals-${cat.key}-header`}
+                  // 48px ≥ the 44px touch target, chevron included inside that height.
+                  sx={{ minHeight: 48, '& .MuiAccordionSummary-content': { my: 1, alignItems: 'center' } }}
+                >
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                      {cat.label}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {cat.metrics.length}
+                    </Typography>
+                  </Stack>
+                </AccordionSummary>
+                <AccordionDetails sx={{ pt: 0.5, px: 1.5, pb: 1.5 }}>
+                  <Grid container spacing={1.5}>
+                    {cat.metrics.map((m) => (
+                      <Grid item xs={6} md={4} key={m.key}>
+                        <Card variant="outlined" sx={{ height: '100%' }}>
+                          <Box sx={{ p: 1.5 }}>
+                            <Stack direction="row" spacing={0.5} alignItems="flex-start" justifyContent="space-between">
+                              <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.3 }}>
+                                {m.label}
+                              </Typography>
+                              <IconButton
+                                size="small"
+                                onClick={() => setInfo(m)}
+                                aria-label={`What is ${m.label}?`}
+                                sx={{ p: 0.5, mt: -0.5, mr: -0.5, color: 'text.secondary' }}
+                              >
+                                <InfoOutlinedIcon sx={{ fontSize: 16 }} />
+                              </IconButton>
+                            </Stack>
+                            <Typography
+                              variant="subtitle1"
+                              noWrap
+                              title={ratios[m.key] != null ? formatMetric(ratios[m.key], m.kind) : undefined}
+                              sx={{ color: valueColor(m, ratios[m.key], theme), lineHeight: 1.25, mt: 0.25 }}
+                            >
+                              {formatMetric(ratios[m.key], m.kind)}
+                            </Typography>
+                          </Box>
+                        </Card>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             ))}
-          </Grid>
+          </Stack>
         ) : (
           <Typography variant="body2" color="text.secondary">
             Sync the company page to pick up EPS, P/E, ROE and the rest.
           </Typography>
         )}
       </SectionCard>
+
+      {/* The ⓘ definition as a bottom sheet — reachable by tap on every viewport. */}
+      <Drawer
+        anchor="bottom"
+        open={info != null}
+        onClose={() => setInfo(null)}
+        PaperProps={{
+          sx: { borderTopLeftRadius: 16, borderTopRightRadius: 16, p: 2, pb: 3, maxWidth: 640, mx: 'auto' },
+        }}
+      >
+        {info && (
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+              <Typography variant="h6" component="h3">
+                {info.label}
+              </Typography>
+              <IconButton onClick={() => setInfo(null)} aria-label="Close definition" edge="end">
+                <CloseIcon />
+              </IconButton>
+            </Stack>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              {info.what}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              {DIRECTION_TEXT[info.direction]}
+            </Typography>
+          </Box>
+        )}
+      </Drawer>
 
       <SectionCard
         title="Performance Insights"
