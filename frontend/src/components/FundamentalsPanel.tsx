@@ -9,7 +9,6 @@ import {
   Grid,
   IconButton,
   Stack,
-  Tooltip,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -42,6 +41,13 @@ interface MetricCategory {
   key: string;
   label: string;
   metrics: MetricMeta[];
+}
+
+/** Content for the ⓘ bottom sheet — metric definitions and the two section explanations. */
+interface InfoSheet {
+  title: string;
+  what: string;
+  direction?: string;
 }
 
 /**
@@ -149,13 +155,13 @@ interface FundamentalsPanelProps {
 /**
  * The Fundamentals tab. The 18 per-share/ratio metrics are grouped into five collapsible clusters,
  * each a two-column grid, so a phone gets a scannable, grouped board instead of a single-column wall
- * of tiles. Every metric carries a ⓘ that opens a bottom sheet with its definition — hover tooltips
- * do not exist on a phone. Nothing here invents a number: an unpublished metric renders `—`, and a
- * stock with no published fundamentals at all shows an explicit note rather than a blank.
+ * of tiles. Every ⓘ — including the two section-level ones — opens the same bottom sheet, because a
+ * hover tooltip does nothing on a phone. Nothing here invents a number: an unpublished metric
+ * renders `—`, and a stock with no published fundamentals shows an explicit note rather than a blank.
  */
 export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) {
   const theme = useTheme();
-  const [info, setInfo] = useState<MetricMeta | null>(null);
+  const [info, setInfo] = useState<InfoSheet | null>(null);
 
   const currentAssessed = insights?.current.assessed ?? 0;
   const futureAssessed = insights?.future.assessed ?? 0;
@@ -212,7 +218,9 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
                               </Typography>
                               <IconButton
                                 size="small"
-                                onClick={() => setInfo(m)}
+                                onClick={() =>
+                                  setInfo({ title: m.label, what: m.what, direction: DIRECTION_TEXT[m.direction] })
+                                }
                                 aria-label={`What is ${m.label}?`}
                                 sx={{ p: 0.5, mt: -0.5, mr: -0.5, color: 'text.secondary' }}
                               >
@@ -256,7 +264,7 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
               <Typography variant="h6" component="h3">
-                {info.label}
+                {info.title}
               </Typography>
               <IconButton onClick={() => setInfo(null)} aria-label="Close definition" edge="end">
                 <CloseIcon />
@@ -265,9 +273,11 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
             <Typography variant="body2" sx={{ mt: 1 }}>
               {info.what}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-              {DIRECTION_TEXT[info.direction]}
-            </Typography>
+            {info.direction && (
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                {info.direction}
+              </Typography>
+            )}
           </Box>
         )}
       </Drawer>
@@ -282,17 +292,18 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
             : 'No fundamentals published for this stock'
         }
         action={
-          <Tooltip
-            arrow
-            title={
-              <Typography variant="body2" sx={{ py: 0.5 }}>
-                Calculated from the current Fundamentals metrics — not a forecast, not a
-                recommendation.
-              </Typography>
+          <IconButton
+            onClick={() =>
+              setInfo({
+                title: 'Performance Insights',
+                what: 'Calculated from the current Fundamentals metrics — not a forecast, not a recommendation.',
+              })
             }
+            aria-label="What is Performance Insights?"
+            sx={{ color: 'text.secondary', width: 44, height: 44 }}
           >
-            <InfoOutlinedIcon fontSize="small" sx={{ color: 'text.secondary', cursor: 'help' }} aria-label="Performance Insights explanation" />
-          </Tooltip>
+            <InfoOutlinedIcon fontSize="small" />
+          </IconButton>
         }
       >
         {hasAnyMetric && insights ? (
@@ -349,17 +360,18 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
         title="Future Outlook"
         subtitle="Forward-looking view from growth, profitability and leverage"
         action={
-          <Tooltip
-            arrow
-            title={
-              <Typography variant="body2" sx={{ py: 0.5 }}>
-                Derived from the current Fundamentals metrics — an indication of trajectory, not a
-                guarantee of future returns.
-              </Typography>
+          <IconButton
+            onClick={() =>
+              setInfo({
+                title: 'Future Outlook',
+                what: 'Derived from the current Fundamentals metrics — an indication of trajectory, not a guarantee of future returns.',
+              })
             }
+            aria-label="What is Future Outlook?"
+            sx={{ color: 'text.secondary', width: 44, height: 44 }}
           >
-            <InfoOutlinedIcon fontSize="small" sx={{ color: 'text.secondary', cursor: 'help' }} aria-label="Future Outlook explanation" />
-          </Tooltip>
+            <InfoOutlinedIcon fontSize="small" />
+          </IconButton>
         }
       >
         {insights?.outlook ? (
