@@ -159,6 +159,39 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
       }
     }
 
+    if (result.incomeStatement) {
+      // The income statement is stored as one row per (period, line item), upserted so a partial
+      // read — the LTM leg failed but ANN answered, or vice versa — leaves the missing half's rows
+      // untouched instead of blanking them. A line item with no value for a period is not written.
+      let position = 0;
+      for (const line of result.incomeStatement.lines) {
+        const pos = position++;
+        for (const [periodKey, value] of Object.entries(line.values)) {
+          if (value === null || value === undefined) continue;
+          const periodicity = periodKey === 'TTM' ? 'LTM' : 'ANN';
+          await tx.incomeStatement.upsert({
+            where: {
+              stockId_periodKey_metricCode: {
+                stockId: stock.id,
+                periodKey,
+                metricCode: line.metricCode,
+              },
+            },
+            update: { value: dec(value), metricName: line.metricName, position: pos, periodicity },
+            create: {
+              stockId: stock.id,
+              periodKey,
+              periodicity,
+              metricCode: line.metricCode,
+              metricName: line.metricName,
+              value: dec(value),
+              position: pos,
+            },
+          });
+        }
+      }
+    }
+
     return stock.id;
   });
 }
