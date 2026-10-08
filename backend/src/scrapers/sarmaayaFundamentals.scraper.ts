@@ -1,5 +1,5 @@
 import { IStockScraper } from '../types/scraper';
-import { DividendDTO, RatioDTO, ScrapeResult } from '../types/dto';
+import { DividendDTO, IncomeStatementDTO, IncomeStatementLineDTO, RatioDTO, ScrapeResult } from '../types/dto';
 import { childLogger } from '../utils/logger';
 import { sourceBreaker } from '../utils/sourceBreaker';
 import { SCRAPER_USER_AGENT } from '../utils/userAgent';
@@ -54,6 +54,9 @@ export const sarmaayaDividendsUrl = (symbol: string): string =>
 
 export const sarmaayaRatioSeriesUrl = (isin: string, periodicity: 'LTM' | 'ANN'): string =>
   `${SARMAYA_API_BASE}/api/stocks/fundamentals/ratios?isin=${encodeURIComponent(isin)}&periodicity=${periodicity}`;
+
+export const sarmaayaIncomeStatementUrl = (isin: string, periodicity: 'LTM' | 'ANN'): string =>
+  `${SARMAYA_API_BASE}/api/stocks/fundamentals/income-statement?isin=${encodeURIComponent(isin)}&periodicity=${periodicity}`;
 
 /**
  * A number, or null for anything that is not one.
@@ -236,6 +239,102 @@ export function mergeRatioSeries(a: SarmaayaRatioSeries, b: SarmaayaRatioSeries)
   };
 }
 
+/**
+ * Parse one income-statement response (the ANN or the LTM series) into line items keyed by period.
+ *
+ * The endpoint answers `{ response: { "<display name>": { metric, data: [ { value, year, … } ] } } }`
+ * — one entry per statement line, `data` newest-first. A bank's set of lines is not an
+ * industrial's, so the lines are returned in the source's own order and the UI renders whatever
+ * rows exist.
+ *
+ * The two periodicities mean different things:
+ *  - LTM: `data` is a run of quarterly trailing-twelve-month readings (newest first), every one a
+ *    real number. The "TTM" column is `data[0]`.
+ *  - ANN: `data` is the fiscal-year run (newest first). The newest year is a real JSON number; the
+ *    annual series repeats a stale placeholder down its older rows, and it publishes that
+ *    placeholder as a *quoted string* where the real readings are numbers. Only number-typed rows
+ *    are taken, so a placeholder never reaches a column (the user accepted that older years will be
+ *    mostly empty).
+ */
+export function parseSarmaayaIncomeStatement(
+  payload: unknown,
+  periodicity: 'LTM' | 'ANN',
+): IncomeStatementDTO | null {
+  const response = (payload as { response?: unknown } | null)?.response;
+  if (!response || typeof response !== 'object' || Array.isArray(response)) return null;
+  const map = response as Record<string, unknown>;
+
+  const periods: string[] = [];
+  const lines: IncomeStatementLineDTO[] = [];
+
+  for (const [name, raw] of Object.entries(map)) {
+    if (!raw || typeof raw !== 'object') continue;
+    const series = raw as { metric?: unknown; data?: unknown };
+    if (!Array.isArray(series.data) || series.data.length === 0) continue;
+    const metricCode = typeof series.metric === 'string' ? series.metric : '';
+    const values: Record<string, number | null> = {};
+
+    if (periodicity === 'LTM') {
+      const head = series.data[0] as Record<string, unknown>;
+      values['TTM'] = asNumber(head.value);
+      if (!periods.includes('TTM')) periods.push('TTM');
+    } else {
+      for (const row of series.data as Record<string, unknown>[]) {
+        // Real readings are JSON numbers; the stale placeholder is a quoted string. Skip strings.
+        if (typeof row.value !== 'number') continue;
+        const year = typeof row.year === 'number' ? String(row.year) : null;
+        if (year === null) continue;
+        if (!periods.includes(year)) periods.push(year);
+        values[year] = asNumber(row.value);
+      }
+    }
+
+    // Push every line the source publishes, even one with no real value for *this* periodicity —
+    // e.g. "Net Interest Income" has only placeholder strings in ANN but a real TTM in LTM. Dropping
+    // it here would let the merge re-append it out of statement order, so the row must keep its
+    // place and let the merge fill its values from the other leg.
+    lines.push({ metricCode, metricName: name, values });
+  }
+
+  if (lines.length === 0) return null;
+  return { periods, lines };
+}
+
+/**
+ * One income statement out of the LTM and ANN responses: the TTM column first, then the fiscal
+ * years the annual series carried. Line items are unioned by metric code in the source's own
+ * order, so a line the annual series omitted still keeps its TTM value and vice versa.
+ */
+export function mergeIncomeStatements(
+  ltm: IncomeStatementDTO | null,
+  ann: IncomeStatementDTO | null,
+): IncomeStatementDTO | null {
+  if (!ltm && !ann) return null;
+  const periods: string[] = [];
+  for (const src of [ltm, ann]) {
+    if (!src) continue;
+    for (const p of src.periods) if (!periods.includes(p)) periods.push(p);
+  }
+
+  const order: string[] = [];
+  const byKey = new Map<string, IncomeStatementLineDTO>();
+  for (const src of [ann, ltm]) {
+    if (!src) continue;
+    for (const line of src.lines) {
+      const key = line.metricCode || line.metricName;
+      const existing = byKey.get(key);
+      if (!existing) {
+        byKey.set(key, { ...line, values: { ...line.values } });
+        order.push(key);
+      } else {
+        Object.assign(existing.values, line.values);
+      }
+    }
+  }
+
+  return { periods, lines: order.map((k) => byKey.get(k)!) };
+}
+
 /** A dividend row has to look like a date before it can key one; the source prints `0000-00-00`. */
 function validDate(raw: unknown): string | null {
   if (typeof raw !== 'string') return null;
@@ -350,12 +449,14 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
     let detailsLeg: Leg = { ok: true, transport: false };
     let seriesLeg: Leg = { ok: true, transport: false };
     let dividendsLeg: Leg = { ok: true, transport: false };
+    let incomeLeg: Leg = { ok: true, transport: false };
     let series: SarmaayaRatioSeries = {
       bookValue: null, roe: null, roa: null, bookValueAsOf: null, periodicity: null,
       payoutRatio: null, roic: null, debtToEquity: null, currentRatio: null,
       revenueGrowth: null, epsGrowth: null,
     };
     let dividends: DividendDTO[] = [];
+    let incomeStatement: IncomeStatementDTO | null = null;
 
     try {
       // The metric table first: it is one small request and it carries the ISIN the ratio series
@@ -366,7 +467,7 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
     }
 
     const isin = details.isin;
-    const [seriesResult, dividendsResult] = await Promise.allSettled([
+    const [seriesResult, dividendsResult, incomeResult] = await Promise.allSettled([
       isin
         ? (async (): Promise<SarmaayaRatioSeries> => {
             const ttm = parseSarmaayaRatioSeries(await fetchJson(sarmaayaRatioSeriesUrl(isin, 'LTM')), 'LTM');
@@ -378,6 +479,17 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
           })()
         : Promise.reject(new Error('no isin in the metric table')),
       fetchJson(sarmaayaDividendsUrl(sym)).then(parseSarmaayaDividends),
+      // The income statement needs both periodicities — LTM for the TTM column, ANN for the fiscal
+      // years — so this leg costs two requests and is what fills the Financials section.
+      isin
+        ? (async (): Promise<IncomeStatementDTO | null> => {
+            const ltm = parseSarmaayaIncomeStatement(
+              await fetchJson(sarmaayaIncomeStatementUrl(isin, 'LTM')), 'LTM');
+            const ann = parseSarmaayaIncomeStatement(
+              await fetchJson(sarmaayaIncomeStatementUrl(isin, 'ANN')), 'ANN');
+            return mergeIncomeStatements(ltm, ann);
+          })()
+        : Promise.reject(new Error('no isin in the metric table')),
     ]);
 
     if (seriesResult.status === 'fulfilled') series = seriesResult.value;
@@ -386,10 +498,14 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
     if (dividendsResult.status === 'fulfilled') dividends = dividendsResult.value;
     else dividendsLeg = failure(dividendsResult.reason);
 
+    if (incomeResult.status === 'fulfilled') incomeStatement = incomeResult.value;
+    else incomeLeg = failure(incomeResult.reason);
+
     const legs: Array<[string, Leg]> = [
       ['details', detailsLeg],
       ['ratio-series', seriesLeg],
       ['dividends', dividendsLeg],
+      ['income-statement', incomeLeg],
     ];
     const failed = legs.filter(([, l]) => !l.ok);
     for (const [name, leg] of failed) log.warn('sarmaaya-fundamentals.leg_failed', { leg: name, error: leg.error });
@@ -409,7 +525,7 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
       || details.dividendYield !== null || details.eps !== null
       || details.netProfitMargin !== null || details.freeFloatShares !== null
       || series.bookValue !== null || series.roe !== null || series.roic !== null
-      || dividends.length > 0;
+      || dividends.length > 0 || incomeStatement !== null;
     if (transportFailures.length > 0 && !producedSomething) {
       sourceBreaker.recordFailure(this.source, transportFailures[0]?.[1].error ?? 'transport failure');
     } else {
@@ -459,6 +575,7 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
       bookValueAsOf: series.bookValueAsOf,
       dividends: dividends.length,
       newestDividend: dividends[0]?.announcementDate ?? null,
+      incomeStatementLines: incomeStatement?.lines.length ?? 0,
       legsFailed: failed.map(([name]) => name),
     });
 
@@ -472,6 +589,7 @@ export class SarmaayaFundamentalsScraper implements IStockScraper {
       dividends,
       financials: [],
       ratios,
+      incomeStatement,
     };
   }
 }

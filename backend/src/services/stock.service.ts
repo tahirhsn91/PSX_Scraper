@@ -18,6 +18,42 @@ import { logger } from '../utils/logger';
 
 const num = (v: Prisma.Decimal | null): number | null => (v === null ? null : Number(v));
 
+/** A stored income-statement row, structurally (see `IncomeStatement` in schema.prisma). */
+type IncomeRow = {
+  periodKey: string;
+  metricCode: string;
+  metricName: string;
+  value: Prisma.Decimal | null;
+};
+
+/**
+ * Rebuild the income-statement view out of the stored line-item rows. Periods are "TTM" first then
+ * fiscal years newest-first; lines are grouped by metric code in their stored `position` order, so
+ * a bank's statement and an industrial's both render in the source's own line order.
+ */
+function buildIncomeStatement(
+  rows: IncomeRow[],
+): { periods: string[]; lines: Array<{ metricCode: string; metricName: string; values: Record<string, number | null> }> } | null {
+  if (rows.length === 0) return null;
+  const periodKeys = new Set<string>();
+  for (const r of rows) periodKeys.add(r.periodKey);
+  const years = [...periodKeys].filter((k) => k !== 'TTM').sort((a, b) => b.localeCompare(a));
+  const periods = periodKeys.has('TTM') ? ['TTM', ...years] : years;
+
+  const lines: Array<{ metricCode: string; metricName: string; values: Record<string, number | null> }> = [];
+  const byCode = new Map<string, (typeof lines)[number]>();
+  for (const r of rows) {
+    let line = byCode.get(r.metricCode);
+    if (!line) {
+      line = { metricCode: r.metricCode, metricName: r.metricName, values: {} };
+      byCode.set(r.metricCode, line);
+      lines.push(line);
+    }
+    line.values[r.periodKey] = r.value === null ? null : Number(r.value);
+  }
+  return { periods, lines };
+}
+
 export const stockService = {
   /**
    * A page of the tracked universe.
@@ -169,6 +205,9 @@ export const stockService = {
         profitAfterTax: num(f.profitAfterTax), assets: num(f.assets),
         liabilities: num(f.liabilities), equity: num(f.equity),
       })),
+      // The full income statement: ordered columns (TTM + fiscal years) and ordered line items.
+      // Null for a stock the source publishes nothing for (ETFs, funds) — the UI hides the block.
+      incomeStatement: buildIncomeStatement(s.incomeStatements),
       dividends: s.dividends.map((d) => ({
         announcementDate: d.announcementDate, bookClosure: d.bookClosure,
         paymentDate: d.paymentDate, dividend: num(d.dividend),

@@ -133,6 +133,8 @@ export async function scrapeSymbol(symbol: string): Promise<OrchestrationResult>
     // share, and the page's ratio block is the one that has been coming back empty for the board.
     ratios: mergeRatios(fundamentals?.ratios, sarmaaya?.ratios, psx?.ratios),
     financials: [...(sarmaaya?.financials ?? []), ...(psx?.financials ?? [])],
+    // The income statement has a single producer (the JSON fundamentals leg); nothing merges it.
+    incomeStatement: fundamentals?.incomeStatement ?? null,
     dividends: mergeDividends(
       fundamentals?.dividends ?? [],
       sarmaaya?.dividends ?? [],

@@ -3,11 +3,14 @@ import {
   mergeRatioSeries,
   parseSarmaayaDetails,
   parseSarmaayaDividends,
+  parseSarmaayaIncomeStatement,
+  mergeIncomeStatements,
   parseSarmaayaRatioSeries,
   seriesLatest,
   sarmaayaDetailsUrl,
   sarmaayaDividendsUrl,
   sarmaayaRatioSeriesUrl,
+  sarmaayaIncomeStatementUrl,
   SarmaayaFundamentalsScraper,
   SARMAYA_FUNDAMENTALS_SOURCE,
 } from '../src/scrapers/sarmaayaFundamentals.scraper';
@@ -103,6 +106,64 @@ const DIVIDENDS_EFERT = {
       { symbol: 'EFERT', year: '2024', announcementDate: '0000-00-00', payoutType: 'type', faceValue: 0, dividendPerShare: 0, percentage: 0 },
       { symbol: 'EFERT', year: '2023', announcementDate: '0000-00-00', payoutType: 'type', faceValue: 0, dividendPerShare: 0, percentage: 0 },
     ],
+  },
+};
+
+/**
+ * GET /api/stocks/fundamentals/income-statement?isin=PK0099701010&periodicity=ANN — the fiscal-year
+ * statement. Note the two value shapes: the newest year is a JSON number, and the annual series
+ * repeats a stale placeholder down its older rows as a quoted *string*. Only the number rows are
+ * real, which is why the parser drops the strings.
+ */
+const INCOME_ANN_EFERT = {
+  success: true,
+  response: {
+    Revenue: {
+      metric: 'FF_SALES',
+      data: [
+        { value: 237130.786, date: '2025-12-31T00:00:00.000Z', year: 2025, periodicity: 'ANN', fiscalPeriod: 0 },
+        { value: '16.946', date: '2024-12-31T00:00:00.000Z', year: 2024, periodicity: 'ANN', fiscalPeriod: 0 },
+        { value: '16.946', date: '2023-12-31T00:00:00.000Z', year: 2023, periodicity: 'ANN', fiscalPeriod: 0 },
+      ],
+    },
+    'Net Income': {
+      metric: 'FF_NET_INC',
+      data: [
+        { value: 22628.044, date: '2025-12-31T00:00:00.000Z', year: 2025, periodicity: 'ANN', fiscalPeriod: 0 },
+        { value: '16.946', date: '2024-12-31T00:00:00.000Z', year: 2024, periodicity: 'ANN', fiscalPeriod: 0 },
+      ],
+    },
+    'Basic EPS': {
+      metric: 'FF_EPS_BASIC',
+      data: [
+        { value: 16.946, date: '2025-12-31T00:00:00.000Z', year: 2025, periodicity: 'ANN', fiscalPeriod: 0 },
+        { value: 21.164, date: '2024-12-31T00:00:00.000Z', year: 2024, periodicity: 'ANN', fiscalPeriod: 0 },
+        { value: 19.614, date: '2023-12-31T00:00:00.000Z', year: 2023, periodicity: 'ANN', fiscalPeriod: 0 },
+      ],
+    },
+  },
+};
+
+/**
+ * GET .../income-statement?...&periodicity=LTM — a run of quarterly TTM readings, newest first,
+ * every one a real number. The TTM column is `data[0]`.
+ */
+const INCOME_LTM_EFERT = {
+  success: true,
+  response: {
+    Revenue: {
+      metric: 'FF_SALES',
+      data: [
+        { value: 227295.86, date: '2026-06-30T00:00:00.000Z', year: 2026, periodicity: 'LTM', fiscalPeriod: 2 },
+        { value: 244635.023, date: '2026-03-31T00:00:00.000Z', year: 2026, periodicity: 'LTM', fiscalPeriod: 1 },
+      ],
+    },
+    'Net Income': {
+      metric: 'FF_NET_INC',
+      data: [
+        { value: 27615.778, date: '2026-06-30T00:00:00.000Z', year: 2026, periodicity: 'LTM', fiscalPeriod: 2 },
+      ],
+    },
   },
 };
 
@@ -238,6 +299,81 @@ describe('parseSarmaayaDividends', () => {
   });
 });
 
+describe('parseSarmaayaIncomeStatement', () => {
+  it('reads the annual statement, dropping the stale string placeholders down older years', () => {
+    const stmt = parseSarmaayaIncomeStatement(INCOME_ANN_EFERT, 'ANN');
+    expect(stmt).not.toBeNull();
+    // Columns are the real years the source published, newest first — a placeholder year never
+    // becomes a column.
+    expect(stmt!.periods).toEqual(['2025', '2024', '2023']);
+    // Lines stay in the source's own order (Revenue first), not alphabetical.
+    expect(stmt!.lines.map((l) => l.metricName)).toEqual(['Revenue', 'Net Income', 'Basic EPS']);
+    expect(stmt!.lines[0]!.metricCode).toBe('FF_SALES');
+    // Revenue's older rows are the quoted placeholder, so only 2025 survives.
+    expect(stmt!.lines[0]!.values).toEqual({ '2025': 237130.786 });
+    // Basic EPS carries real history, so all three years survive.
+    expect(stmt!.lines[2]!.values).toEqual({ '2025': 16.946, '2024': 21.164, '2023': 19.614 });
+  });
+
+  it('reads the LTM series as a single TTM column from its newest reading', () => {
+    const stmt = parseSarmaayaIncomeStatement(INCOME_LTM_EFERT, 'LTM');
+    expect(stmt!.periods).toEqual(['TTM']);
+    // data[0] is the current TTM; data[1] is the prior quarter and must not win.
+    expect(stmt!.lines[0]!.values).toEqual({ TTM: 227295.86 });
+    expect(stmt!.lines[1]!.values).toEqual({ TTM: 27615.778 });
+  });
+
+  it('answers null for a payload with no statement', () => {
+    expect(parseSarmaayaIncomeStatement(null, 'ANN')).toBeNull();
+    expect(parseSarmaayaIncomeStatement({ response: {} }, 'ANN')).toBeNull();
+    expect(parseSarmaayaIncomeStatement({ response: { Revenue: { data: [] } } }, 'ANN')).toBeNull();
+  });
+});
+
+describe('mergeIncomeStatements', () => {
+  it('puts the TTM column first and unions the lines field by field', () => {
+    const merged = mergeIncomeStatements(
+      parseSarmaayaIncomeStatement(INCOME_LTM_EFERT, 'LTM'),
+      parseSarmaayaIncomeStatement(INCOME_ANN_EFERT, 'ANN'),
+    );
+    expect(merged!.periods).toEqual(['TTM', '2025', '2024', '2023']);
+    expect(merged!.lines.map((l) => l.metricName)).toEqual(['Revenue', 'Net Income', 'Basic EPS']);
+    // Revenue gets its TTM value from the LTM leg and its fiscal-year value from ANN.
+    expect(merged!.lines[0]!.values).toEqual({ TTM: 227295.86, '2025': 237130.786 });
+    // Basic EPS exists only in ANN, so it keeps no TTM key.
+    expect(merged!.lines[2]!.values).toEqual({ '2025': 16.946, '2024': 21.164, '2023': 19.614 });
+  });
+
+  it('answers null when both legs produced nothing', () => {
+    expect(mergeIncomeStatements(null, null)).toBeNull();
+  });
+
+  it('keeps a line whose annual values are all placeholders in its statement position', () => {
+    // "Net Interest Income" publishes no real annual figure (only the stale placeholder string) but
+    // a real TTM — the merge must keep it between Revenue and Diluted EPS, not append it at the end.
+    const annOnlyPlaceholders = {
+      response: {
+        Revenue: { metric: 'FF_SALES', data: [{ value: 100, year: 2025 }] },
+        'Net Interest Income': { metric: 'FF_INT_INC_NET', data: [{ value: '16.946', year: 2024 }, { value: '16.946', year: 2023 }] },
+        'Diluted EPS': { metric: 'FF_EPS_DIL', data: [{ value: 5.5, year: 2025 }] },
+      },
+    };
+    const ltm = {
+      response: {
+        Revenue: { metric: 'FF_SALES', data: [{ value: 110, year: 2026 }] },
+        'Net Interest Income': { metric: 'FF_INT_INC_NET', data: [{ value: 0, year: 2026 }] },
+        'Diluted EPS': { metric: 'FF_EPS_DIL', data: [{ value: 5.6, year: 2026 }] },
+      },
+    };
+    const merged = mergeIncomeStatements(
+      parseSarmaayaIncomeStatement(ltm, 'LTM'),
+      parseSarmaayaIncomeStatement(annOnlyPlaceholders, 'ANN'),
+    )!;
+    expect(merged.lines.map((l) => l.metricName)).toEqual(['Revenue', 'Net Interest Income', 'Diluted EPS']);
+    expect(merged.lines[1]!.values).toEqual({ TTM: 0 });
+  });
+});
+
 describe('mergeRatios', () => {
   const none: RatioDTO = {
     peRatio: null, pbRatio: null, roe: null, roa: null,
@@ -294,7 +430,7 @@ describe('mergeDividends', () => {
 describe('scrapeResultSchema with the new field', () => {
   const base = {
     symbol: 'EFERT', companyName: 'Engro', sector: 'FERTILIZER', price: null,
-    dividends: [] as unknown[], financials: [] as unknown[],
+    dividends: [] as unknown[], financials: [] as unknown[], incomeStatement: null,
   };
 
   it('accepts a merged result that carries book value', () => {
@@ -323,14 +459,16 @@ describe('SarmaayaFundamentalsScraper over a stubbed source', () => {
     global.fetch = realFetch;
   });
 
-  it('asks the documented endpoints and returns the ratios, book value and dividends', async () => {
+  it('asks the documented endpoints and returns the ratios, book value, income statement and dividends', async () => {
     const seen: string[] = [];
     global.fetch = (async (url: string) => {
-      seen.push(String(url));
-      if (String(url).includes('/details/')) return json(DETAILS_EFERT);
-      if (String(url).includes('periodicity=LTM')) return json(RATIOS_LTM_EFERT);
-      if (String(url).includes('/dividends/')) return json(DIVIDENDS_EFERT);
-      throw new Error(`unexpected url ${url}`);
+      const u = String(url);
+      seen.push(u);
+      if (u.includes('/details/')) return json(DETAILS_EFERT);
+      if (u.includes('/income-statement')) return json(u.includes('periodicity=ANN') ? INCOME_ANN_EFERT : INCOME_LTM_EFERT);
+      if (u.includes('periodicity=LTM')) return json(RATIOS_LTM_EFERT);
+      if (u.includes('/dividends/')) return json(DIVIDENDS_EFERT);
+      throw new Error(`unexpected url ${u}`);
     }) as unknown as typeof fetch;
 
     const result = await new SarmaayaFundamentalsScraper().scrape('efert');
@@ -339,11 +477,19 @@ describe('SarmaayaFundamentalsScraper over a stubbed source', () => {
       sarmaayaDetailsUrl('EFERT'),
       sarmaayaRatioSeriesUrl('PK0099701010', 'LTM'),
       sarmaayaDividendsUrl('EFERT'),
+      sarmaayaIncomeStatementUrl('PK0099701010', 'LTM'),
+      sarmaayaIncomeStatementUrl('PK0099701010', 'ANN'),
     ]);
     expect(result.ratios).toMatchObject({ peRatio: 12.48, pbRatio: 5.95, dividendYield: 6.16, bookValue: 32.842, eps: 15.94 });
     // Beta is computed from our own history against the index, never borrowed from this payload.
     expect(result.ratios!.beta).toBeNull();
     expect(result.dividends[0]).toMatchObject({ announcementDate: '2026-08-10T00:00:00.000Z', dividend: 1.75 });
+    // The income statement: TTM column first, then the fiscal years, lines in source order.
+    expect(result.incomeStatement).not.toBeNull();
+    expect(result.incomeStatement!.periods).toEqual(['TTM', '2025', '2024', '2023']);
+    expect(result.incomeStatement!.lines[0]).toMatchObject({
+      metricCode: 'FF_SALES', metricName: 'Revenue', values: { TTM: 227295.86, '2025': 237130.786 },
+    });
     // The page scraper owns the price block and the sector; this leg must not blank them.
     expect(result.price).toBeNull();
     expect(result.sector).toBeNull();
@@ -357,6 +503,7 @@ describe('SarmaayaFundamentalsScraper over a stubbed source', () => {
       const u = String(url);
       seen.push(u);
       if (u.includes('/details/')) return json(DETAILS_EFERT);
+      if (u.includes('/income-statement')) return json({ response: {} });
       if (u.includes('periodicity=LTM')) return json({ response: {} });
       if (u.includes('periodicity=ANN')) return json(RATIOS_ANN_EFERT);
       if (u.includes('/dividends/')) return json(DIVIDENDS_EFERT);
@@ -373,6 +520,7 @@ describe('SarmaayaFundamentalsScraper over a stubbed source', () => {
     global.fetch = (async (url: string) => {
       const u = String(url);
       if (u.includes('/details/')) return json(DETAILS_EFERT);
+      if (u.includes('/income-statement')) throw Object.assign(new Error('http=404'), { httpStatus: 404 });
       if (u.includes('periodicity=LTM')) return json(RATIOS_LTM_EFERT);
       throw Object.assign(new Error('http=404'), { httpStatus: 404 });
     }) as unknown as typeof fetch;

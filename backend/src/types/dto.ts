@@ -33,6 +33,24 @@ export interface FinancialDTO {
   equity: number | null;
 }
 
+/** One income-statement line item with its value per period. */
+export interface IncomeStatementLineDTO {
+  /** The source's own metric code (FF_SALES, FF_NET_INC, …). */
+  metricCode: string;
+  /** Display name as the source prints it ("Revenue", "Tax Rate (%)", "Basic EPS", …). */
+  metricName: string;
+  /** Value per period key ("TTM", "2025", …). A period the source left empty is null. */
+  values: Record<string, number | null>;
+}
+
+/** The full income statement for one stock: ordered columns and ordered line items. */
+export interface IncomeStatementDTO {
+  /** Column keys in display order — "TTM" first, then fiscal years newest-first. */
+  periods: string[];
+  /** Line items in the statement's own order. */
+  lines: IncomeStatementLineDTO[];
+}
+
 export interface RatioDTO {
   peRatio: number | null;
   pbRatio: number | null;
@@ -76,6 +94,8 @@ export interface ScrapeResult {
   dividends: DividendDTO[];
   financials: FinancialDTO[];
   ratios: RatioDTO | null;
+  /** The full income statement, when a provider published one. Only the Sarmaaya JSON leg reads it. */
+  incomeStatement: IncomeStatementDTO | null;
 }
 
 export interface ProviderOutcome {
