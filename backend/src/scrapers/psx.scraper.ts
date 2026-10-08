@@ -211,6 +211,7 @@ export class PSXScraper implements IStockScraper {
       dividends: [],
       financials: [],
       ratios: null,
+      incomeStatement: null,
     };
     logger.debug("psx.scraped", { symbol, hasCompany: !!result.companyName });
     return result;

@@ -1018,6 +1018,32 @@ export const openapiSpec = {
           equity: { type: "number", nullable: true },
         },
       },
+      IncomeStatementLine: {
+        type: "object",
+        properties: {
+          metricCode: { type: "string", example: "FF_SALES" },
+          metricName: { type: "string", example: "Revenue" },
+          values: {
+            type: "object",
+            additionalProperties: { type: "number", nullable: true },
+            example: { TTM: 227295.86, "2025": 237130.786 },
+          },
+        },
+      },
+      IncomeStatement: {
+        type: "object",
+        properties: {
+          periods: {
+            type: "array",
+            items: { type: "string" },
+            example: ["TTM", "2025", "2024"],
+          },
+          lines: {
+            type: "array",
+            items: { $ref: "#/components/schemas/IncomeStatementLine" },
+          },
+        },
+      },
       Dividend: {
         type: "object",
         properties: {
@@ -1053,6 +1079,10 @@ export const openapiSpec = {
           financials: {
             type: "array",
             items: { $ref: "#/components/schemas/Financial" },
+          },
+          incomeStatement: {
+            allOf: [{ $ref: "#/components/schemas/IncomeStatement" }],
+            nullable: true,
           },
           dividends: {
             type: "array",

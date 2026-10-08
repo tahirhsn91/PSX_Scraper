@@ -26,6 +26,18 @@ export const scrapeResultSchema = z.object({
       eps: num, sales: num, profitAfterTax: num, assets: num, liabilities: num, equity: num,
     }),
   ),
+  incomeStatement: z
+    .object({
+      periods: z.array(z.string()),
+      lines: z.array(
+        z.object({
+          metricCode: z.string(),
+          metricName: z.string(),
+          values: z.record(z.string(), num),
+        }),
+      ),
+    })
+    .nullable(),
   ratios: z
     .object({
       peRatio: num, pbRatio: num, roe: num, roa: num, dividendYield: num,

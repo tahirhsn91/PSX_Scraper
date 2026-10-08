@@ -21,6 +21,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { FundamentalsPanel } from '../components/FundamentalsPanel';
+import { IncomeStatementPanel } from '../components/IncomeStatementPanel';
 import { QuickJumpNav, type QuickJumpSection } from '../components/QuickJumpNav';
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
@@ -85,43 +86,7 @@ const rangeLabel = (r: HistoryRange): string =>
     MAX: 'all stored sessions',
   })[r];
 
-type Financial = StockDetail['financials'][number];
 type Dividend = StockDetail['dividends'][number];
-
-const financialColumns: Column<Financial>[] = [
-  { key: 'year', header: 'Year', render: (f) => f.year, mobileRole: 'title' },
-  { key: 'quarter', header: 'Qtr', render: (f) => f.quarter ?? DASH, mobileRole: 'subtitle' },
-  {
-    key: 'eps',
-    header: 'EPS',
-    align: 'right',
-    mobileRole: 'meta',
-    render: (f) => formatNumber(f.eps),
-  },
-  {
-    key: 'sales',
-    header: 'Sales',
-    align: 'right',
-    hideBelow: 'md',
-    mobileRole: 'meta',
-    render: (f) => formatNumber(f.sales),
-  },
-  {
-    key: 'pat',
-    header: 'PAT',
-    align: 'right',
-    mobileRole: 'meta',
-    render: (f) => formatNumber(f.profitAfterTax),
-  },
-  {
-    key: 'equity',
-    header: 'Equity',
-    align: 'right',
-    hideBelow: 'md',
-    mobileRole: 'meta',
-    render: (f) => formatNumber(f.equity),
-  },
-];
 
 const dividendColumns: Column<Dividend>[] = [
   {
@@ -572,20 +537,7 @@ export function StockDetails() {
         </Box>
 
         <Box component="section" id="section-financials" sx={{ scrollMarginTop: scrollOffset }}>
-          <SectionCard
-            title="Financials"
-            subtitle={`${data.financials.length} period${data.financials.length === 1 ? '' : 's'} on record`}
-            flush
-          >
-            <DataTable
-              columns={financialColumns}
-              rows={data.financials}
-              ariaLabel="Financials"
-              rowKey={(f) => `${f.year}-${f.quarter ?? 'FY'}`}
-              emptyTitle="No financials recorded"
-              emptyDescription="The company page has not been scraped yet, or it publishes no quarterly accounts."
-            />
-          </SectionCard>
+          <IncomeStatementPanel statement={data.incomeStatement} />
         </Box>
 
         <Box component="section" id="section-ratios" sx={{ scrollMarginTop: scrollOffset }}>
