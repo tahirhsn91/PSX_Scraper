@@ -203,6 +203,16 @@ export interface StockDetail {
     liabilities: number | null;
     equity: number | null;
   }>;
+  /** The full income statement: ordered columns ("TTM" first, then fiscal years newest-first) and
+   *  ordered line items. Null for a stock the source publishes nothing for (ETFs, funds). */
+  incomeStatement: {
+    periods: string[];
+    lines: Array<{
+      metricCode: string;
+      metricName: string;
+      values: Record<string, number | null>;
+    }>;
+  } | null;
   dividends: Array<{
     announcementDate: string | null;
     bookClosure: string | null;

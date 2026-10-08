@@ -24,6 +24,7 @@ const scrapeResult = (over: Partial<ScrapeResult['price']> = {}): ScrapeResult =
   dividends: [],
   financials: [],
   ratios: null,
+  incomeStatement: null,
 });
 
 const verification = (verdicts: VerificationResult['verdicts']): VerificationResult => ({
