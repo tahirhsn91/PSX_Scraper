@@ -133,6 +133,14 @@ const envSchema = z.object({
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'http', 'debug']).default('info'),
   CORS_ORIGIN: z.string().default('*'),
   SEARCH_CACHE_TTL: z.coerce.number().int().nonnegative().default(45),
+  // How long a sector's median ratios may be served before the next detail view recomputes them.
+  // Sector medians change only when a new ratio row is written (a sync), and the Fundamentals
+  // panel compares a stock against its peers — an hour of staleness there is not user-visible.
+  SECTOR_MEDIANS_CACHE_TTL: z.coerce.number().int().nonnegative().default(3600),
+  // How long a symbol's beta may be served before the next detail view recomputes it. Beta is
+  // measured over ~250 daily sessions, so it moves only when a new daily close lands (~daily);
+  // an hour of staleness is not user-visible, and the sync path bypasses the cache entirely.
+  BETA_CACHE_TTL: z.coerce.number().int().nonnegative().default(3600),
   WORKER_CONCURRENCY: z.coerce.number().int().positive().default(2),
   PUPPETEER_EXECUTABLE_PATH: z.string().optional(),
   // Hard ceiling on puppeteer.launch(). Without this, a Chromium launch that
