@@ -10,6 +10,19 @@
 # mode and debug logging. The name now matches the base-overlay convention used by
 # docker-compose.prod.yml, so nothing loads by accident in either direction.
 services:
+  postgres:
+    # The base file publishes Postgres/Redis on 0.0.0.0. On this shared host that puts
+    # the dev datastores on the open internet (dev credentials, but still reachable).
+    # Loopback-only here, matching the prod overlay: the backend/worker already reach
+    # them over the compose network (DATABASE_URL/REDIS_URL use the `postgres`/`redis`
+    # service names), and an operator on this host can still psql/redis-cli on 127.0.0.1.
+    ports: !override
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+
+  redis:
+    ports: !override
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+
   backend:
     build:
       dockerfile: backend/Dockerfile.api
@@ -43,6 +56,13 @@ services:
     # !reset removes the base `build:` so this service NEVER rebuilds/retags node:20-alpine.
     build: !reset null
     image: node:20-alpine
+    # The base file drops all caps for the prod nginx image. This dev service is a Vite
+    # dev server that bind-mounts source and runs `npm install` at startup — writing to
+    # the deploy-owned bind mount needs CAP_DAC_OVERRIDE, so `cap_drop: [ALL]` makes it
+    # crash-loop with EACCES on /app/package-lock.json. Restore the default cap set for
+    # dev only (the prod nginx image keeps the hardened caps from the base file).
+    cap_drop: !reset []
+    cap_add: !reset []
     # The base file caps the frontend at 192m for the static nginx image. This dev service
     # is a Vite dev server instead — esbuild workers + HMR need real headroom, and without
     # this the container gets OOM-killed under load (SIGKILL / esbuild EPIPE crash-loop).
