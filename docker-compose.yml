@@ -181,13 +181,10 @@ services:
     cpus: "0.5"
     # nginx master runs as root (Config.User is empty in the image) and drops to the
     # `nginx` user for workers; keep SETUID/SETGID so that drop still works with all
-    # other capabilities removed. CHOWN is required as well: the master chowns
-    # /var/cache/nginx/* before dropping, and without it nginx exits on every start with
-    # "chown(\"/var/cache/nginx/client_temp\", 101) failed (1: Operation not permitted)".
+    # other capabilities removed.
     cap_drop:
       - ALL
     cap_add:
-      - CHOWN
       - SETUID
       - SETGID
     logging:
