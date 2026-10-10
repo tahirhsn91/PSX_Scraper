@@ -250,6 +250,7 @@ export class SarmaayaScraper implements IStockScraper {
         revenueGrowth: null,
         epsGrowth: null,
       },
+      incomeStatement: null,
     };
     logger.debug('sarmaaya.scraped', { symbol, hasRatios: !!result.ratios });
     return result;

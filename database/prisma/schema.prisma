@@ -32,6 +32,7 @@ model Stock {
   dividends   Dividend[]
   financials  Financial[]
   ratios      Ratio[]
+  incomeStatements IncomeStatement[]
   syncLogs    SyncLog[]
   // Membership of a published index (KSE-100 today). A join rather than a column: the exchange
   // publishes each index's own member list, and the dashboard's first page is driven by it.
@@ -101,6 +102,32 @@ model Financial {
 
   @@unique([stockId, year, quarter])
   @@map("financials")
+}
+
+/// One income-statement line item per period per stock. The source's own statement — a bank's rows
+/// are different from an industrial's — so it is stored as ordered rows rather than a fixed set of
+/// columns: `position` preserves the statement's line order and the UI renders whatever rows exist.
+model IncomeStatement {
+  id          String   @id @default(uuid())
+  stockId     String   @map("stock_id")
+  /// Column key: "TTM" for the trailing-twelve-month reading, or a fiscal year like "2025".
+  periodKey   String   @map("period_key")
+  /// "ANN" (fiscal year) or "LTM" (trailing twelve months).
+  periodicity String
+  /// The source's own metric code (FF_SALES, FF_NET_INC, …).
+  metricCode  String   @map("metric_code")
+  /// Display name as the source prints it ("Revenue", "Tax Rate (%)", "Basic EPS", …).
+  metricName  String   @map("metric_name")
+  value       Decimal? @db.Decimal(24, 4)
+  /// Line order within the statement, so the UI renders the source's own order.
+  position    Int
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  stock       Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([stockId, periodKey, metricCode])
+  @@index([stockId, periodKey])
+  @@map("income_statements")
 }
 
 model Ratio {

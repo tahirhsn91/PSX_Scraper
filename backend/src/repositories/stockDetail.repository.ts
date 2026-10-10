@@ -13,6 +13,7 @@ export async function getStockDetail(symbol: string) {
       },
       ratios: { orderBy: { createdAt: 'desc' }, take: 1 },
       financials: { orderBy: [{ year: 'desc' }, { quarter: 'desc' }] },
+      incomeStatements: { orderBy: { position: 'asc' } },
       dividends: { orderBy: { announcementDate: 'desc' } },
       syncLogs: { orderBy: { startedAt: 'desc' }, take: 1 },
     },
