@@ -5,12 +5,11 @@ import {
 import { deletedSymbolRepository } from '../repositories/deletedSymbol.repository';
 import { indexRepository } from '../repositories/index.repository';
 import { kse100GroupCounts } from './kse100Membership.service';
-import { betaService } from './beta.service';
 import {
   getStockDetail, getPriceHistory, getCandles, type Candle,
 } from '../repositories/stockDetail.repository';
-import { getSectorRatioRows } from '../repositories/fundamentals.repository';
-import { scoreFundamentals, mediansOf } from './fundamentals.service';
+import { scoreFundamentals } from './fundamentals.service';
+import { getCachedSectorMedians, getCachedBeta } from './detailCache';
 import { enqueueSync, cancelSyncJob } from '../jobs/queues';
 import { ConflictError, NotFoundError, ValidationError } from '../types/errors';
 import { rangeToFrom, HistoryRange } from '../utils/range';
@@ -70,7 +69,7 @@ export const stockService = {
     // the window the value came from — the same function's output is what the sync stores in
     // `ratios.beta`. Below the minimum aligned sessions it is null with the reason attached: a dash,
     // never a figure derived from a handful of days.
-    const beta = await betaService.forSymbol(s.symbol);
+    const beta = await getCachedBeta(s.symbol);
     const price = s.prices[0];
     const ratio = s.ratios[0];
     // `dividends` arrives newest announcement first, so the first row is the newest one the source
@@ -98,7 +97,7 @@ export const stockService = {
       : null;
     const insights =
       ratioMap && s.sector && s.sector !== 'undefined'
-        ? scoreFundamentals(ratioMap, mediansOf(await getSectorRatioRows(s.sector)))
+        ? scoreFundamentals(ratioMap, await getCachedSectorMedians(s.sector))
         : null;
     return {
       id: s.id,
