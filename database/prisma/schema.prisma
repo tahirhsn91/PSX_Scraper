@@ -277,6 +277,8 @@ model SyncLog {
 
   @@index([stockId, startedAt(sort: Desc)])
   @@index([status, startedAt(sort: Desc)])
+  @@index([symbol, startedAt(sort: Desc)])
+  @@index([startedAt(sort: Desc)])
   @@map("sync_logs")
 }
 
