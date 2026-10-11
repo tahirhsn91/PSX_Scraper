@@ -179,6 +179,8 @@ export interface StockFilters {
   minDividendYield?: number;
   minRoe?: number;
   maxDebtToEquity?: number;
+  /** A specific set of symbols (a watchlist). Bound as a parameter, never assembled into the text. */
+  symbols?: string[];
 }
 
 /** True when any criterion reads the ratios table, so the list query joins it only then. */
@@ -213,6 +215,10 @@ function buildScreenerClauses(filters?: StockFilters): Prisma.Sql[] {
   if (filters.minDividendYield != null) c.push(Prisma.sql`r.dividend_yield >= ${filters.minDividendYield}`);
   if (filters.minRoe != null) c.push(Prisma.sql`r.roe >= ${filters.minRoe}`);
   if (filters.maxDebtToEquity != null) c.push(Prisma.sql`r.debt_to_equity <= ${filters.maxDebtToEquity}`);
+  // A watchlist: bound as an array through `unnest`, exactly like the market-cap gap-fill does.
+  if (filters.symbols && filters.symbols.length > 0) {
+    c.push(Prisma.sql`s.symbol IN (SELECT unnest(${filters.symbols}::text[]))`);
+  }
   return c;
 }
 

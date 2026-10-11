@@ -29,6 +29,7 @@ function toStockFilters(q: StocksQuery): StockFilters | undefined {
   if (q.minDividendYield != null) f.minDividendYield = q.minDividendYield;
   if (q.minRoe != null) f.minRoe = q.minRoe;
   if (q.maxDebtToEquity != null) f.maxDebtToEquity = q.maxDebtToEquity;
+  if (q.symbols?.length) f.symbols = q.symbols;
   return Object.keys(f).length > 0 ? f : undefined;
 }
 
