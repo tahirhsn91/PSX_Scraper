@@ -62,6 +62,14 @@ export const stocksQuery = paginationQuery.extend({
   minDividendYield: z.coerce.number().optional(),
   minRoe: z.coerce.number().optional(),
   maxDebtToEquity: z.coerce.number().optional(),
+  /** Comma-separated symbols, for a watchlist — "give me these specific tracked symbols". */
+  symbols: z
+    .string()
+    .trim()
+    .optional()
+    .transform((s) =>
+      s ? s.split(',').map((x) => x.trim().toUpperCase()).filter(Boolean).slice(0, 50) : undefined,
+    ),
 });
 
 /**
