@@ -5,10 +5,11 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
 import { ThemeMenu } from './ThemeMenu';
 import { layout } from '../../theme/tokens';
+import { isDev } from '../../lib/env';
 
 const NAV = [
   { label: 'Dashboard', to: '/' },
-  { label: 'Sync Logs', to: '/logs' },
+  ...(isDev ? [{ label: 'Sync Logs', to: '/logs' }] : []),
 ];
 
 /**

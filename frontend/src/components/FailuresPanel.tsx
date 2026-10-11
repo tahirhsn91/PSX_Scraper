@@ -5,6 +5,7 @@ import { SectionCard } from './ui/SectionCard';
 import { ConfirmDialog } from './ui/ConfirmDialog';
 import { useToast } from './ui/ToastProvider';
 import { formatRelative } from '../lib/format';
+import { isDev } from '../lib/env';
 import type { QueueFailure, SyncStatus } from '../types';
 
 /**
@@ -105,6 +106,7 @@ export function FailuresPanel({ status }: { status?: SyncStatus }) {
     [status],
   );
 
+  if (!isDev) return null;
   if (rows.length === 0) return null;
 
   const totalFailed = rows.reduce((n, r) => n + r.failed, 0);
