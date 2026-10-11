@@ -518,9 +518,11 @@ export function Dashboard() {
                 {syncingAll ? "Syncing…" : "Sync all"}
               </Button>
             )}
-            <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)}>
-              Add stock
-            </Button>
+            {isDev && (
+              <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)}>
+                Add stock
+              </Button>
+            )}
           </>
         }
       />
@@ -676,40 +678,42 @@ export function Dashboard() {
         />
       </SectionCard>
 
-      <Dialog open={addOpen} onClose={() => setAddOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Add a stock</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            fullWidth
-            margin="dense"
-            label="PSX symbol"
-            placeholder="FFC"
-            value={symbol}
-            onChange={(e) => setSymbol(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && submit()}
-            helperText="The exchange symbol, 1–12 letters or digits."
-            inputProps={{ style: { textTransform: "uppercase" } }}
-          />
-          {addStock.isError && (
-            <Alert severity="error" sx={{ mt: 1 }}>
-              {(addStock.error as unknown as ApiError)?.message}
-            </Alert>
-          )}
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setAddOpen(false)} color="inherit">
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={submit}
-            disabled={addStock.isPending || !/^[A-Z0-9]{1,12}$/.test(symbol.trim().toUpperCase())}
-          >
-            {addStock.isPending ? "Adding…" : "Add & scrape"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {isDev && (
+        <Dialog open={addOpen} onClose={() => setAddOpen(false)} fullWidth maxWidth="xs">
+          <DialogTitle>Add a stock</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              fullWidth
+              margin="dense"
+              label="PSX symbol"
+              placeholder="FFC"
+              value={symbol}
+              onChange={(e) => setSymbol(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && submit()}
+              helperText="The exchange symbol, 1–12 letters or digits."
+              inputProps={{ style: { textTransform: "uppercase" } }}
+            />
+            {addStock.isError && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {(addStock.error as unknown as ApiError)?.message}
+              </Alert>
+            )}
+          </DialogContent>
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button onClick={() => setAddOpen(false)} color="inherit">
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={submit}
+              disabled={addStock.isPending || !/^[A-Z0-9]{1,12}$/.test(symbol.trim().toUpperCase())}
+            >
+              {addStock.isPending ? "Adding…" : "Add & scrape"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
 
       {isDev && (
         <ConfirmDialog
