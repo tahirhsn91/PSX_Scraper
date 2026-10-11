@@ -17,7 +17,7 @@ export interface SectionCardProps {
 export function SectionCard({ title, subtitle, action, children, flush = false, sx }: SectionCardProps) {
   const hasHeader = Boolean(title || subtitle || action);
   return (
-    <Card variant="outlined" sx={sx}>
+    <Card variant="outlined" sx={{ display: 'flex', flexDirection: 'column', ...sx }}>
       {hasHeader && (
         <>
           <Stack
@@ -45,7 +45,7 @@ export function SectionCard({ title, subtitle, action, children, flush = false, 
           <Divider />
         </>
       )}
-      <Box sx={{ p: flush ? 0 : 1.5 }}>{children}</Box>
+      <Box sx={{ p: flush ? 0 : 1.5, flexGrow: 1, minHeight: 0 }}>{children}</Box>
     </Card>
   );
 }
