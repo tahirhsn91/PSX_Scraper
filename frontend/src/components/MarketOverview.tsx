@@ -15,6 +15,15 @@ const PREVIEW = 3;
 /** Upper bound when expanded (the endpoint itself returns 5). */
 const FULL = 8;
 
+/** A small muted caption explaining what a breadth tile counts. */
+function hint(text: string) {
+  return (
+    <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+      {text}
+    </Typography>
+  );
+}
+
 function MoverList({ title, movers, limit }: { title: string; movers: Mover[]; limit: number }) {
   if (movers.length === 0) return null;
   return (
@@ -25,7 +34,7 @@ function MoverList({ title, movers, limit }: { title: string; movers: Mover[]; l
       <Stack spacing={0.5} sx={{ mt: 1 }}>
         {movers.slice(0, limit).map((m) => (
           <Stack key={m.symbol} direction="row" spacing={1} alignItems="center" justifyContent="space-between">
-            <Box sx={{ minWidth: 0 }}>
+            <Stack spacing={0.25} sx={{ minWidth: 0 }}>
               <Typography
                 component={RouterLink}
                 to={`/stocks/${m.symbol}`}
@@ -43,7 +52,7 @@ function MoverList({ title, movers, limit }: { title: string; movers: Mover[]; l
               <Typography variant="caption" color="text.secondary" noWrap>
                 {m.companyName ?? DASH}
               </Typography>
-            </Box>
+            </Stack>
             <Stack direction="row" spacing={1} alignItems="center" sx={{ flexShrink: 0 }}>
               <Typography variant="body2" sx={{ fontVariantNumeric: 'tabular-nums' }}>
                 {formatNumber(m.currentPrice)}
@@ -86,7 +95,7 @@ export function MarketOverview() {
             sx={{ height: '100%' }}
           >
             {isLoading || !breadth ? (
-              <Grid container spacing={2} sx={{ height: '100%', alignContent: 'center' }}>
+              <Grid container spacing={2} sx={{ height: '100%', alignContent: 'stretch' }}>
                 {Array.from({ length: 6 }).map((_, i) => (
                   <Grid item xs={6} md={4} key={i}>
                     <Skeleton variant="rounded" height={72} />
@@ -94,24 +103,24 @@ export function MarketOverview() {
                 ))}
               </Grid>
             ) : (
-              <Grid container spacing={2} sx={{ height: '100%', alignContent: 'center' }}>
+              <Grid container spacing={2} sx={{ height: '100%', alignContent: 'stretch' }}>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="Advancers" value={formatCount(breadth.advancers)} tone="up" />
+                  <StatTile label="Advancers" value={formatCount(breadth.advancers)} tone="up" fill footer={hint('Stocks that rose this session')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="Decliners" value={formatCount(breadth.decliners)} tone="down" />
+                  <StatTile label="Decliners" value={formatCount(breadth.decliners)} tone="down" fill footer={hint('Stocks that fell this session')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="Unchanged" value={formatCount(breadth.unchanged)} tone="muted" />
+                  <StatTile label="Unchanged" value={formatCount(breadth.unchanged)} tone="muted" fill footer={hint('Stocks that were flat this session')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="Volume" value={formatVolume(breadth.totalVolume) ?? DASH} />
+                  <StatTile label="Volume" value={formatVolume(breadth.totalVolume) ?? DASH} fill footer={hint('Total shares traded this session')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="New highs" value={formatCount(breadth.newHighs)} />
+                  <StatTile label="New highs" value={formatCount(breadth.newHighs)} fill footer={hint('At or above a 52-week high')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="New lows" value={formatCount(breadth.newLows)} />
+                  <StatTile label="New lows" value={formatCount(breadth.newLows)} fill footer={hint('At or below a 52-week low')} />
                 </Grid>
               </Grid>
             )}
