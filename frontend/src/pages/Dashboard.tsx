@@ -518,9 +518,11 @@ export function Dashboard() {
                 {syncingAll ? "Syncing…" : "Sync all"}
               </Button>
             )}
-            <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)}>
-              Add stock
-            </Button>
+            {isDev && (
+              <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)}>
+                Add stock
+              </Button>
+            )}
           </>
         }
       />
