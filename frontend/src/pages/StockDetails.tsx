@@ -39,6 +39,7 @@ import {
   formatVolume,
 } from '../lib/format';
 import { stockMetaDescription, stockMetaTitle } from '../lib/seo';
+import { isDev } from '../lib/env';
 import { usePageMeta } from '../lib/usePageMeta';
 import {
   keys,
@@ -247,7 +248,7 @@ export function StockDetails() {
         crumbs={[{ label: 'Market board', to: '/' }, { label: data.symbol }]}
         meta={
           <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center">
-            {data.lastSync && (
+            {isDev && data.lastSync && (
               <Chip
                 size="small"
                 label={`Last sync ${data.lastSync.status.toLowerCase()}`}
@@ -269,18 +270,20 @@ export function StockDetails() {
           </Stack>
         }
         actions={
-          <Button
-            variant="contained"
-            startIcon={<SyncIcon />}
-            disabled={syncing}
-            onClick={() => syncStock.mutate(symbol)}
-          >
-            {syncing ? 'Syncing…' : 'Sync latest data'}
-          </Button>
+          isDev ? (
+            <Button
+              variant="contained"
+              startIcon={<SyncIcon />}
+              disabled={syncing}
+              onClick={() => syncStock.mutate(symbol)}
+            >
+              {syncing ? 'Syncing…' : 'Sync latest data'}
+            </Button>
+          ) : undefined
         }
       />
 
-      {syncing && <LinearProgress sx={{ mb: 2 }} />}
+      {isDev && syncing && <LinearProgress sx={{ mb: 2 }} />}
 
       <Grid container spacing={1.5} sx={{ mb: 3 }}>
         <Grid item xs={6} sm={4} md={3}>
@@ -376,14 +379,16 @@ export function StockDetails() {
                   : `Our stored sessions, ${rangeLabel(range)}`
             }
             action={
-              <Button
-                variant="outlined"
-                startIcon={<DownloadIcon />}
-                disabled={fetching}
-                onClick={startFetch}
-              >
-                {fetching ? 'Fetching…' : 'Fetch historical data'}
-              </Button>
+              isDev ? (
+                <Button
+                  variant="outlined"
+                  startIcon={<DownloadIcon />}
+                  disabled={fetching}
+                  onClick={startFetch}
+                >
+                  {fetching ? 'Fetching…' : 'Fetch historical data'}
+                </Button>
+              ) : undefined
             }
           >
             <Stack
@@ -521,11 +526,17 @@ export function StockDetails() {
                 kind="empty"
                 compact
                 title="No stored history for this range"
-                description="Fetch it from PSX to fill the chart and the range controls."
+                description={
+                  isDev
+                    ? 'Fetch it from PSX to fill the chart and the range controls.'
+                    : 'No historical prices are stored for this range yet.'
+                }
                 action={
-                  <Button size="small" variant="contained" disabled={fetching} onClick={startFetch}>
-                    Fetch historical data
-                  </Button>
+                  isDev ? (
+                    <Button size="small" variant="contained" disabled={fetching} onClick={startFetch}>
+                      Fetch historical data
+                    </Button>
+                  ) : undefined
                 }
               />
             )}

@@ -31,6 +31,7 @@ import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { DataTable, type Column } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
 import { DASH, formatCount, formatMarketCap, formatNumber, formatRelative, formatRupees, formatSigned } from "../lib/format";
+import { isDev } from "../lib/env";
 import { isPsxSessionOpen } from "../lib/session";
 import type { StockListItem, StockSortField, SortOrder } from "../types";
 import type { ApiError } from "../api/client";
@@ -495,14 +496,16 @@ export function Dashboard() {
         }`}
         actions={
           <>
-            <Button
-              variant="outlined"
-              startIcon={<SyncIcon />}
-              disabled={syncingAll || syncAll.isPending}
-              onClick={() => setConfirmSyncAll(true)}
-            >
-              {syncingAll ? "Syncing…" : "Sync all"}
-            </Button>
+            {isDev && (
+              <Button
+                variant="outlined"
+                startIcon={<SyncIcon />}
+                disabled={syncingAll || syncAll.isPending}
+                onClick={() => setConfirmSyncAll(true)}
+              >
+                {syncingAll ? "Syncing…" : "Sync all"}
+              </Button>
+            )}
             <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)}>
               Add stock
             </Button>
@@ -527,37 +530,43 @@ export function Dashboard() {
             </Typography>
           }
         />
-        <StatTile
-          label="Active syncs"
-          value={formatCount(inFlightCount)}
-          footer={
-            <Typography variant="caption" color="text.secondary">
-              {syncingAll ? "syncing now" : "idle"}
-            </Typography>
-          }
-        />
-        <StatTile
-          label="Waiting"
-          value={formatCount(queuedCount)}
-          footer={
-            <Typography variant="caption" color="text.secondary">
-              queued plus delayed
-            </Typography>
-          }
-        />
-        <StatTile
-          label="Failed"
-          value={formatCount(failedCount)}
-          tone={failedCount > 0 ? "down" : "muted"}
-          footer={
-            <Typography variant="caption" color="text.secondary">
-              {failedCount > 0 ? "see Failed jobs below" : "none"}
-            </Typography>
-          }
-        />
+        {isDev && (
+          <StatTile
+            label="Active syncs"
+            value={formatCount(inFlightCount)}
+            footer={
+              <Typography variant="caption" color="text.secondary">
+                {syncingAll ? "syncing now" : "idle"}
+              </Typography>
+            }
+          />
+        )}
+        {isDev && (
+          <StatTile
+            label="Waiting"
+            value={formatCount(queuedCount)}
+            footer={
+              <Typography variant="caption" color="text.secondary">
+                queued plus delayed
+              </Typography>
+            }
+          />
+        )}
+        {isDev && (
+          <StatTile
+            label="Failed"
+            value={formatCount(failedCount)}
+            tone={failedCount > 0 ? "down" : "muted"}
+            footer={
+              <Typography variant="caption" color="text.secondary">
+                {failedCount > 0 ? "see Failed jobs below" : "none"}
+              </Typography>
+            }
+          />
+        )}
       </Box>
 
-      {syncingAll && (
+      {isDev && syncingAll && (
         <Box sx={{ mb: 2.5 }}>
           <LinearProgress />
           <Typography variant="caption" color="text.secondary">
@@ -688,16 +697,18 @@ export function Dashboard() {
         </DialogActions>
       </Dialog>
 
-      <ConfirmDialog
-        open={confirmSyncAll}
-        title="Sync all tracked stocks?"
-        message={`This fetches the latest data for all ${formatCount(universeCount)} tracked stocks from PSX and Sarmaaya. It runs in the background — you can keep using the dashboard while it completes.`}
-        confirmLabel="Sync all"
-        pending={syncAll.isPending}
-        pendingLabel="Starting…"
-        onConfirm={runSyncAll}
-        onClose={() => setConfirmSyncAll(false)}
-      />
+      {isDev && (
+        <ConfirmDialog
+          open={confirmSyncAll}
+          title="Sync all tracked stocks?"
+          message={`This fetches the latest data for all ${formatCount(universeCount)} tracked stocks from PSX and Sarmaaya. It runs in the background — you can keep using the dashboard while it completes.`}
+          confirmLabel="Sync all"
+          pending={syncAll.isPending}
+          pendingLabel="Starting…"
+          onConfirm={runSyncAll}
+          onClose={() => setConfirmSyncAll(false)}
+        />
+      )}
     </Box>
   );
 }

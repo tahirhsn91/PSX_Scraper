@@ -142,3 +142,33 @@ silently against a changed upstream page. After touching `backend/src/scrapers/`
 exercise a real scrape (add a stock through the API, or POST
 `/api/v1/stocks/{symbol}/sync`) and confirm rows land in Postgres — and say in your
 report that you did, or that you could not.
+
+---
+
+## 5. Query the Graphify knowledge graph first
+
+This repo maps its codebase into a local **Graphify** knowledge graph (tree-sitter AST, no
+LLM, nothing leaves the machine) under `graphify-out/`. Before touching code, query the
+graph to find the impacted area instead of grepping or reading whole files — that is the
+token-saving path:
+
+```bash
+graphify affected "<symbol>"   # reverse traversal: what X impacts (or is impacted by)
+graphify explain "<symbol>"     # a node and its neighbours, with source locations
+graphify query "<question>"     # scoped subgraph for a plain-language question
+graphify path "<A>" "<B>"       # how two things connect
+```
+
+Then read only the files those queries name. `graphify-out/GRAPH_REPORT.md` is the broad
+architecture orientation (god nodes, communities, surprising connections).
+
+`graphify-out/` is gitignored and regenerable from source. Build it once per checkout and
+refresh after edits (AST-only, no API cost):
+
+```bash
+graphify extract . --code-only && graphify cluster-only . --no-label   # first build
+graphify update .                                                      # after edits
+```
+
+The CLI is `graphify` (PyPI package `graphifyy`); install `graphifyy[sql]` to also map the
+SQL migrations under `database/prisma/migrations/`.
