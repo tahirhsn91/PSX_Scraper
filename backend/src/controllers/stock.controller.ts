@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { z } from 'zod';
 import { stockService } from '../services/stock.service';
+import type { StockFilters } from '../repositories/stock.repository';
 import { betaService } from '../services/beta.service';
 import { syncService } from '../services/sync.service';
 import { marketCapService } from '../services/marketCap.service';
@@ -11,9 +12,29 @@ import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, 
 type StocksQuery = z.infer<typeof stocksQuery>;
 type Sym = z.infer<typeof symbolParam>;
 
+/** The screener fields off a validated query, or undefined when none were sent. */
+function toStockFilters(q: StocksQuery): StockFilters | undefined {
+  const f: StockFilters = {};
+  if (q.sector) f.sector = q.sector;
+  if (q.minPrice != null) f.minPrice = q.minPrice;
+  if (q.maxPrice != null) f.maxPrice = q.maxPrice;
+  if (q.minMarketCap != null) f.minMarketCap = q.minMarketCap;
+  if (q.maxMarketCap != null) f.maxMarketCap = q.maxMarketCap;
+  if (q.minChangePercent != null) f.minChangePercent = q.minChangePercent;
+  if (q.maxChangePercent != null) f.maxChangePercent = q.maxChangePercent;
+  if (q.minPe != null) f.minPe = q.minPe;
+  if (q.maxPe != null) f.maxPe = q.maxPe;
+  if (q.minPb != null) f.minPb = q.minPb;
+  if (q.maxPb != null) f.maxPb = q.maxPb;
+  if (q.minDividendYield != null) f.minDividendYield = q.minDividendYield;
+  if (q.minRoe != null) f.minRoe = q.minRoe;
+  if (q.maxDebtToEquity != null) f.maxDebtToEquity = q.maxDebtToEquity;
+  return Object.keys(f).length > 0 ? f : undefined;
+}
+
 export const listStocks: RequestHandler = async (req, res) => {
-  const { page, limit, sort, order, group, index } = valid<StocksQuery>(req, 'query');
-  res.json(await stockService.list(page, limit, sort, order, group, index));
+  const q = valid<StocksQuery>(req, 'query');
+  res.json(await stockService.list(q.page, q.limit, q.sort, q.order, q.group, q.index, toStockFilters(q)));
 };
 
 export const getStock: RequestHandler = async (req, res) => {
