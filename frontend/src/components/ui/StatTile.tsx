@@ -18,6 +18,8 @@ export interface StatTileProps {
   href?: string;
   /** Title attribute for the value, e.g. the unabbreviated figure. */
   valueTitle?: string;
+  /** Stretch the tile's content so the label+value sit at the top and the footer at the bottom. */
+  fill?: boolean;
 }
 
 /**
@@ -32,6 +34,7 @@ export function StatTile({
   icon,
   href,
   valueTitle,
+  fill = false,
 }: StatTileProps) {
   const theme = useTheme();
   const toneColor: string =
@@ -46,7 +49,10 @@ export function StatTile({
             : theme.palette.text.primary;
 
   const body = (
-    <Stack spacing={0.5} sx={{ width: '100%' }}>
+    <Stack
+      spacing={0.5}
+      sx={{ width: '100%', ...(fill ? { height: '100%', justifyContent: 'space-between' } : {}) }}
+    >
       <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
         <Typography variant="overline" sx={{ color: 'text.secondary', lineHeight: 1.2 }}>
           {label}
