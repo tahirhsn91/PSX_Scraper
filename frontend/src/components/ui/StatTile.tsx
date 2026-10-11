@@ -20,6 +20,8 @@ export interface StatTileProps {
   valueTitle?: string;
   /** Stretch the tile's content so the label+value sit at the top and the footer at the bottom. */
   fill?: boolean;
+  /** Center the label, value and footer and render the value at the hero size. */
+  centered?: boolean;
 }
 
 /**
@@ -35,6 +37,7 @@ export function StatTile({
   href,
   valueTitle,
   fill = false,
+  centered = false,
 }: StatTileProps) {
   const theme = useTheme();
   const toneColor: string =
@@ -53,7 +56,7 @@ export function StatTile({
       spacing={0.5}
       sx={{ width: '100%', ...(fill ? { height: '100%', justifyContent: 'space-between' } : {}) }}
     >
-      <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+      <Stack direction="row" spacing={1} alignItems="center" justifyContent={centered ? 'center' : 'space-between'}>
         <Typography variant="overline" sx={{ color: 'text.secondary', lineHeight: 1.2 }}>
           {label}
         </Typography>
@@ -63,10 +66,14 @@ export function StatTile({
           </Box>
         )}
       </Stack>
-      <Typography variant="h5" sx={{ color: toneColor, lineHeight: 1.2 }} title={valueTitle}>
+      <Typography
+        variant={centered ? 'h1' : 'h5'}
+        sx={{ color: toneColor, lineHeight: 1.2, ...(centered ? { textAlign: 'center' } : {}) }}
+        title={valueTitle}
+      >
         {value}
       </Typography>
-      {footer && <Box>{footer}</Box>}
+      {footer && <Box sx={{ ...(centered ? { textAlign: 'center' } : {}) }}>{footer}</Box>}
     </Stack>
   );
 

@@ -105,22 +105,22 @@ export function MarketOverview() {
             ) : (
               <Grid container spacing={2} sx={{ height: '100%', alignContent: 'stretch' }}>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="Advancers" value={formatCount(breadth.advancers)} tone="up" fill footer={hint('Stocks that rose this session')} />
+                  <StatTile label="Advancers" value={formatCount(breadth.advancers)} tone="up" fill centered footer={hint('Stocks that rose this session')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="Decliners" value={formatCount(breadth.decliners)} tone="down" fill footer={hint('Stocks that fell this session')} />
+                  <StatTile label="Decliners" value={formatCount(breadth.decliners)} tone="down" fill centered footer={hint('Stocks that fell this session')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="Unchanged" value={formatCount(breadth.unchanged)} tone="muted" fill footer={hint('Stocks that were flat this session')} />
+                  <StatTile label="Unchanged" value={formatCount(breadth.unchanged)} tone="muted" fill centered footer={hint('Stocks that were flat this session')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="Volume" value={formatVolume(breadth.totalVolume) ?? DASH} fill footer={hint('Total shares traded this session')} />
+                  <StatTile label="Volume" value={formatVolume(breadth.totalVolume) ?? DASH} fill centered footer={hint('Total shares traded this session')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="New highs" value={formatCount(breadth.newHighs)} fill footer={hint('At or above a 52-week high')} />
+                  <StatTile label="New highs" value={formatCount(breadth.newHighs)} fill centered footer={hint('At or above a 52-week high')} />
                 </Grid>
                 <Grid item xs={6} md={4}>
-                  <StatTile label="New lows" value={formatCount(breadth.newLows)} fill footer={hint('At or below a 52-week low')} />
+                  <StatTile label="New lows" value={formatCount(breadth.newLows)} fill centered footer={hint('At or below a 52-week low')} />
                 </Grid>
               </Grid>
             )}
