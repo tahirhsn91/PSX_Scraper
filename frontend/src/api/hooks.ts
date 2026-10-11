@@ -3,8 +3,12 @@ import { api } from './client';
 import type {
   Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
-  IndexSummary,
+  IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
 } from '../types';
+
+/** Stable string for a filters object, so the query key changes only when the criteria change. */
+const filtersKey = (f?: StockFilters): string =>
+  f ? JSON.stringify(f, Object.keys(f).sort()) : 'none';
 
 export const keys = {
   // The group and the index belong in the key: page one (the KSE-100) and page two (everything
@@ -18,7 +22,8 @@ export const keys = {
     order: SortOrder = 'asc',
     group?: StockListGroup,
     index?: string,
-  ) => ['stocks', page, limit, sort ?? 'symbol', order, group ?? 'all', index ?? 'none'] as const,
+    filters?: StockFilters,
+  ) => ['stocks', page, limit, sort ?? 'symbol', order, group ?? 'all', index ?? 'none', filtersKey(filters)] as const,
   stock: (symbol: string) => ['stock', symbol] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
@@ -32,6 +37,9 @@ export const keys = {
   // The window size belongs in the key: a 40-session card chart and a 252-session detail chart are
   // different series at the same symbol, and without it one would be served the other's cache.
   indexHistory: (symbol: string, limit: number) => ['index-history', symbol, limit] as const,
+  marketOverview: ['market', 'overview'] as const,
+  sectors: ['market', 'sectors'] as const,
+  dividends: ['market', 'dividends'] as const,
 };
 
 /**
@@ -52,19 +60,24 @@ export const useStocks = (
   order: SortOrder = 'asc',
   group?: StockListGroup,
   index?: string,
+  filters?: StockFilters,
 ) =>
   useQuery({
     // The sort belongs in the key: a different order is a different page of data, not a
     // re-render of this one.
-    queryKey: keys.stocks(page, limit, sort, order, group, index),
-    queryFn: async () =>
-      (
-        await api.get<StocksPage>('/stocks', {
-          // Undefined params are dropped from the query string by axios, so "no scope" really is
-          // no `group` / `index` on the wire rather than an empty one.
-          params: { page, limit, sort, order, group, index },
-        })
-      ).data,
+    queryKey: keys.stocks(page, limit, sort, order, group, index, filters),
+    queryFn: async () => {
+      // Undefined params are dropped from the query string by axios, so "no scope" really is
+      // no `group` / `index` on the wire rather than an empty one. Screener/watchlist filters are
+      // spread in, with `symbols` joined back to a comma string.
+      const params: Record<string, unknown> = { page, limit, sort, order, group, index };
+      if (filters) {
+        for (const [k, v] of Object.entries(filters)) {
+          if (v != null) params[k] = k === 'symbols' ? (v as string[]).join(',') : v;
+        }
+      }
+      return (await api.get<StocksPage>('/stocks', { params })).data;
+    },
     // Poll while a sync-all fan-out is in flight so prices / "last synced" update live, or at the
     // slower live cadence the caller asks for (a number) while there is something to keep up with.
     refetchInterval: typeof poll === 'number' ? poll : poll ? 4000 : false,
@@ -245,3 +258,24 @@ export const useClearFailed = () => {
     onSuccess: () => qc.invalidateQueries({ queryKey: keys.syncStatus }),
   });
 };
+
+/** Market breadth plus the top gainers / losers / most active — the dashboard's summary strip. */
+export const useMarketOverview = () =>
+  useQuery({
+    queryKey: keys.marketOverview,
+    queryFn: async () => (await api.get<MarketOverview>('/market/overview')).data,
+  });
+
+/** One aggregate row per sector, for the sector browser. */
+export const useSectors = () =>
+  useQuery({
+    queryKey: keys.sectors,
+    queryFn: async () => (await api.get<{ items: SectorSummary[] }>('/market/sectors')).data,
+  });
+
+/** Upcoming dividend events plus the highest current yields. */
+export const useDividends = () =>
+  useQuery({
+    queryKey: keys.dividends,
+    queryFn: async () => (await api.get<DividendData>('/market/dividends')).data,
+  });

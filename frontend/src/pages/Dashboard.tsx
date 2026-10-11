@@ -23,6 +23,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAddStock, useIndices, useStocks, useSyncAll, useSyncStatus } from "../api/hooks";
 import { FailuresPanel } from "../components/FailuresPanel";
 import { IndicesPanel } from "../components/IndicesPanel";
+import { MarketOverview } from "../components/MarketOverview";
+import { WatchButton } from "../components/WatchButton";
 import { PageHeader } from "../components/ui/PageHeader";
 import { SectionCard } from "../components/ui/SectionCard";
 import { StatTile } from "../components/ui/StatTile";
@@ -65,7 +67,8 @@ const SESSION_POLL_MS = 30_000;
  * The nine sortable columns share the width the container gives them, and each is sized for its own
  * `nowrap` header label: the label renders uppercase with letter-spacing and carries a sort arrow, so
  * a six-letter word like "Weight" needs ~74px, not the ~48px its bare letters take. The widths below
- * add up to 79.6% for that reason (the Symbol column carries a little extra for its 20px logo chip)
+ * add up to 83.1% for that reason (the Symbol column carries a little extra for its 20px logo chip,
+ * and the watch star takes 3.5%)
  * — the table is laid out `fixed` (see `DataTable`) and the Company
  * column, the only one without a width, takes what is left. A column narrower than its label clips the
  * label behind the next sticky header (which is how "WEIGHT" read as "WEIGH"), so the floor below is
@@ -279,6 +282,15 @@ const COLUMNS: Column<StockListItem>[] = [
     sortKey: "week52High",
     mobileRole: "meta",
     render: (s) => formatNumber(s.week52High),
+  },
+  {
+    key: "watch",
+    // Empty header: the star itself carries the label via its aria-label. Not sortable — the
+    // watchlist is local state, not a server order.
+    header: "",
+    align: "right",
+    width: "3.5%",
+    render: (s) => <WatchButton symbol={s.symbol} />,
   },
 ];
 /**
@@ -577,6 +589,8 @@ export function Dashboard() {
       )}
 
       <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
+
+      <MarketOverview />
 
       <FailuresPanel status={status} />
 

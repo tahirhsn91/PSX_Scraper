@@ -10,3 +10,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </AppProviders>
   </React.StrictMode>,
 );
+
+// PWA: register the service worker only in production builds. The dev server has no stable URL and
+// a stale dev worker would fight hot-module reload, so it is deliberately left unregistered there.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {
+      // Best-effort: the app is fully usable without the worker.
+    });
+  });
+}

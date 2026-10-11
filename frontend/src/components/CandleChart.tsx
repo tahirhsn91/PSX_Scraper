@@ -52,6 +52,10 @@ export function CandleChart({
   const volumeRef = useRef<ISeriesApi<'Histogram'> | null>(null);
   /** One line series per run of close-only sessions — see the note in draw(). */
   const lineRefs = useRef<ISeriesApi<'Line'>[]>([]);
+  /** The three moving-average overlays (SMA 20 / 50 / 200). */
+  const sma20Ref = useRef<ISeriesApi<'Line'> | null>(null);
+  const sma50Ref = useRef<ISeriesApi<'Line'> | null>(null);
+  const sma200Ref = useRef<ISeriesApi<'Line'> | null>(null);
   const dataRef = useRef<CandleSeries | undefined>(data);
   /** Which preset the current view is showing, so a redraw does not yank a panned view back. */
   const appliedRef = useRef<HistoryRange | null>(null);
@@ -72,11 +76,26 @@ export function CandleChart({
     text: chartText,
     volumeUp,
     volumeDown,
+    sma20,
+    sma50,
+    sma200,
   } = useTheme().palette.chart;
 
   /** Days of history a preset should show. MAX means the whole series. */
   const daysFor = (preset: HistoryRange): number | null =>
     ({ '1W': 7, '1M': 30, '6M': 182, '1Y': 365, '3Y': 1095, '5Y': 1825, MAX: null } as Record<HistoryRange, number | null>)[preset];
+
+  /** Simple moving average over the series' closes — one point per completed window of `period`. */
+  const sma = (items: Candle[], period: number) => {
+    const out: { time: UTCTimestamp; value: number }[] = [];
+    let sum = 0;
+    for (let i = 0; i < items.length; i++) {
+      sum += items[i].close;
+      if (i >= period) sum -= items[i - period].close;
+      if (i >= period - 1) out.push({ time: items[i].time as unknown as UTCTimestamp, value: sum / period });
+    }
+    return out;
+  };
 
   const draw = (series: CandleSeries | undefined, preset: HistoryRange, force: boolean) => {
     if (!candleRef.current || !volumeRef.current || !chartRef.current) return;
@@ -139,6 +158,11 @@ export function CandleChart({
       value: c.volume ?? 0,
       color: c.close >= (c.open ?? c.close) ? volumeUp : volumeDown,
     })));
+    // Moving-average overlays. `close` is always present (only open/high/low can be null), so the
+    // averages run across the full series even where a source reported close-only sessions.
+    if (sma20Ref.current) sma20Ref.current.setData(sma(items, 20));
+    if (sma50Ref.current) sma50Ref.current.setData(sma(items, 50));
+    if (sma200Ref.current) sma200Ref.current.setData(sma(items, 200));
     if (items.length === 0) return;
 
     // Move the viewport only when the preset changed (or on first draw) — not on every data
@@ -202,6 +226,9 @@ export function CandleChart({
       priceScaleId: 'volume',
     });
     chart.priceScale('volume').applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
+    sma20Ref.current = chart.addLineSeries({ color: sma20, lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
+    sma50Ref.current = chart.addLineSeries({ color: sma50, lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
+    sma200Ref.current = chart.addLineSeries({ color: sma200, lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
     chartRef.current = chart;
     // Whatever data we already hold goes in immediately: the data effect below will not fire
     // again just because the chart was rebuilt.
@@ -214,9 +241,12 @@ export function CandleChart({
       candleRef.current = null;
       volumeRef.current = null;
       lineRefs.current = [];
+      sma20Ref.current = null;
+      sma50Ref.current = null;
+      sma200Ref.current = null;
       appliedRef.current = null;
     };
-  }, [height, chartUp, chartDown, chartGold, chartGrid, chartText, volumeUp, volumeDown]);
+  }, [height, chartUp, chartDown, chartGold, chartGrid, chartText, volumeUp, volumeDown, sma20, sma50, sma200]);
 
   // Data arriving (or a refresh) redraws the series but leaves the viewport where it is.
   useEffect(() => {
@@ -241,7 +271,7 @@ export function CandleChart({
   // The chart is drawn into a canvas: give assistive tech the shape of the series, since the
   // picture itself carries no text. The page's caption underneath stays the full description.
   const label = data
-    ? `${data.symbol} price chart — ${data.items.length} sessions, ${
+    ? `${data.symbol} price chart with 20-, 50- and 200-day moving averages — ${data.items.length} sessions, ${
         data.from ?? 'unknown start'
       } to ${data.to ?? 'unknown end'}, ${
         range === 'MAX' ? 'all stored sessions' : `showing ${range}`
