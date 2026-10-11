@@ -58,6 +58,10 @@ export interface ChartColors {
   text: string;
   volumeUp: string;
   volumeDown: string;
+  /** Moving-average overlays (SMA 20 / 50 / 200). */
+  sma20: string;
+  sma50: string;
+  sma200: string;
 }
 
 /** The top bar. A dark navigation strip is part of the PSX identity in both colour modes. */
@@ -159,6 +163,9 @@ export const lightTokens: ModeTokens = {
     text: '#6B6B6B',
     volumeUp: 'rgba(0, 153, 82, 0.45)',
     volumeDown: 'rgba(214, 47, 53, 0.45)',
+    sma20: '#1976D2', // 4.60:1 on white
+    sma50: '#E65100', // 3.79:1 on white
+    sma200: '#6A1B9A', // 9.39:1 on white
   },
   focusRing: '#007A42', // 4.81:1 against the page
   hoverWash: 'rgba(51, 51, 51, 0.04)',
@@ -218,6 +225,9 @@ export const darkTokens: ModeTokens = {
     text: '#A8ADAB',
     volumeUp: 'rgba(50, 206, 138, 0.45)',
     volumeDown: 'rgba(244, 116, 122, 0.45)',
+    sma20: '#64B5F6', // 8.46:1 on #121212
+    sma50: '#FFB74D', // 10.82:1 on #121212
+    sma200: '#CE93D8', // 7.84:1 on #121212
   },
   focusRing: '#45D89A',
   hoverWash: 'rgba(241, 241, 241, 0.06)',

@@ -3,7 +3,7 @@
  * enum: the server sorts (the table is paginated, so sorting in the browser would only reorder
  * the fifty rows on screen).
  */
-export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume' | 'marketCap' | 'points' | 'weight';
+export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume' | 'marketCap' | 'points' | 'weight' | 'dividendYield' | 'peRatio' | 'pbRatio' | 'roe' | 'beta';
 
 /**
  * One daily candle. `open`/`high`/`low` are null when the source did not report them — the
@@ -106,6 +106,15 @@ export interface StockListItem {
   weight?: number | null;
   lastTradeDate: string | null;
   lastSyncedAt: string | null;
+  /** Ratio fields, present when the list query joins the newest ratio row (the screener shows
+   *  them; the plain board ignores them). Null when the source published none — never a zero. */
+  peRatio?: number | null;
+  pbRatio?: number | null;
+  dividendYield?: number | null;
+  roe?: number | null;
+  beta?: number | null;
+  debtToEquity?: number | null;
+  eps?: number | null;
 }
 
 export interface Paginated<T> {
@@ -288,4 +297,78 @@ export interface HistoryJobStatus {
   progress: { percent?: number; note?: string } | number | null;
   returnValue: { fetched?: number; persisted?: number } | null;
   failedReason: string | null;
+}
+
+/** Screener criteria, mirroring the API's optional filter fields. Absent means "no criterion". */
+export interface StockFilters {
+  sector?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minMarketCap?: number;
+  maxMarketCap?: number;
+  minChangePercent?: number;
+  maxChangePercent?: number;
+  minPe?: number;
+  maxPe?: number;
+  minPb?: number;
+  maxPb?: number;
+  minDividendYield?: number;
+  minRoe?: number;
+  maxDebtToEquity?: number;
+  /** A watchlist: "give me these specific symbols". Sent as a comma-joined string. */
+  symbols?: string[];
+}
+
+export interface MarketBreadth {
+  advancers: number;
+  decliners: number;
+  unchanged: number;
+  totalVolume: number | null;
+  newHighs: number;
+  newLows: number;
+}
+
+export interface Mover {
+  symbol: string;
+  companyName: string | null;
+  currentPrice: number | null;
+  change: number | null;
+  changePercent: number | null;
+  volume: number | null;
+}
+
+export interface MarketOverview {
+  breadth: MarketBreadth;
+  movers: { gainers: Mover[]; losers: Mover[]; mostActive: Mover[] };
+}
+
+export interface SectorSummary {
+  sector: string;
+  count: number;
+  avgChangePercent: number | null;
+  totalMarketCap: number | null;
+  advancers: number;
+  decliners: number;
+}
+
+export interface DividendEvent {
+  symbol: string;
+  companyName: string | null;
+  announcementDate: string | null;
+  bookClosure: string | null;
+  paymentDate: string | null;
+  dividend: number | null;
+}
+
+export interface YieldRow {
+  symbol: string;
+  companyName: string | null;
+  sector: string | null;
+  dividendYield: number | null;
+  currentPrice: number | null;
+}
+
+export interface DividendData {
+  upcoming: DividendEvent[];
+  topYield: YieldRow[];
 }
