@@ -24,7 +24,7 @@ export const paginationQuery = z.object({
  */
 export const stocksQuery = paginationQuery.extend({
   sort: z
-    .enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points', 'weight'])
+    .enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points', 'weight', 'dividendYield', 'peRatio', 'pbRatio', 'roe', 'beta'])
     .optional(),
   order: z.enum(['asc', 'desc']).default('asc'),
   /**
@@ -45,6 +45,23 @@ export const stocksQuery = paginationQuery.extend({
    * `index` wins over `group` when both are sent (see buildListFilter).
    */
   index: symbolSchema.optional(),
+  // Screener filters — every one optional; a present field is a criterion. Numeric fields coerce
+  // from the query string; the repository binds them as parameters, so nothing here reaches SQL as
+  // text. Ratio criteria read the symbol's newest ratio row, price criteria its newest priced row.
+  sector: z.string().trim().max(100).optional(),
+  minPrice: z.coerce.number().optional(),
+  maxPrice: z.coerce.number().optional(),
+  minMarketCap: z.coerce.number().optional(),
+  maxMarketCap: z.coerce.number().optional(),
+  minChangePercent: z.coerce.number().optional(),
+  maxChangePercent: z.coerce.number().optional(),
+  minPe: z.coerce.number().optional(),
+  maxPe: z.coerce.number().optional(),
+  minPb: z.coerce.number().optional(),
+  maxPb: z.coerce.number().optional(),
+  minDividendYield: z.coerce.number().optional(),
+  minRoe: z.coerce.number().optional(),
+  maxDebtToEquity: z.coerce.number().optional(),
 });
 
 /**
@@ -103,3 +120,8 @@ export const logsQuery = z.object({
  * so an unknown queue is a 400 naming it rather than an action that silently does nothing.
  */
 export const clearFailedBody = z.object({ queue: z.enum(MONITORED_QUEUES) });
+
+/** How many upcoming dividend events to read for the calendar view. */
+export const calendarQuery = z.object({
+  limit: z.coerce.number().int().positive().max(200).default(50),
+});

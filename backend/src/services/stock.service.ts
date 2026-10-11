@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import {
-  stockRepository, StockSortField, SortOrder, StockListGroup,
+  stockRepository, StockSortField, SortOrder, StockListGroup, StockFilters,
 } from '../repositories/stock.repository';
 import { deletedSymbolRepository } from '../repositories/deletedSymbol.repository';
 import { indexRepository } from '../repositories/index.repository';
@@ -78,13 +78,14 @@ export const stockService = {
     order: SortOrder = 'asc',
     group?: StockListGroup,
     index?: string,
+    filters?: StockFilters,
   ) {
     const offset = (page - 1) * limit;
     if (index && !(await indexRepository.findBySymbol(index))) {
       throw new ValidationError(`Unknown index: ${index}`);
     }
     const [{ items, total }, groups] = await Promise.all([
-      stockRepository.list(limit, offset, sort, order, group, index),
+      stockRepository.list(limit, offset, sort, order, group, index, filters),
       index || group ? kse100GroupCounts() : Promise.resolve(undefined),
     ]);
     return {

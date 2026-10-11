@@ -47,8 +47,8 @@ describe('stockService.list with an index filter', () => {
   it('narrows the list to the index and reports the filtered total', async () => {
     const res = await stockService.list(1, 10, undefined, 'asc', undefined, 'KMI30');
 
-    // limit, offset, sort, order, group, index — the index travels to the query, not the group.
-    expect(list).toHaveBeenCalledWith(10, 0, undefined, 'asc', undefined, 'KMI30');
+    // limit, offset, sort, order, group, index, filters — the index travels to the query, not the group.
+    expect(list).toHaveBeenCalledWith(10, 0, undefined, 'asc', undefined, 'KMI30', undefined);
     expect(res.total).toBe(30);
     expect(res.totalPages).toBe(3);
     expect(res.items).toEqual([ITEM]);
@@ -63,7 +63,7 @@ describe('stockService.list with an index filter', () => {
   it('passes the index through even when a group is also given (the index wins)', async () => {
     const res = await stockService.list(1, 50, undefined, 'asc', 'rest', 'KMI30');
 
-    expect(list).toHaveBeenCalledWith(50, 0, undefined, 'asc', 'rest', 'KMI30');
+    expect(list).toHaveBeenCalledWith(50, 0, undefined, 'asc', 'rest', 'KMI30', undefined);
     expect(res.groups).toEqual({ kse100: 99, rest: 409 });
   });
 
@@ -81,7 +81,7 @@ describe('stockService.list with an index filter', () => {
   it('keeps the group path working on its own', async () => {
     const res = await stockService.list(1, 50, undefined, 'asc', 'kse100');
 
-    expect(list).toHaveBeenCalledWith(50, 0, undefined, 'asc', 'kse100', undefined);
+    expect(list).toHaveBeenCalledWith(50, 0, undefined, 'asc', 'kse100', undefined, undefined);
     expect(findBySymbol).not.toHaveBeenCalled();
     expect(res.groups).toEqual({ kse100: 99, rest: 409 });
   });
@@ -91,7 +91,7 @@ describe('stockService.list with an index filter', () => {
 
     const res = await stockService.list(1, 50);
 
-    expect(list).toHaveBeenCalledWith(50, 0, undefined, 'asc', undefined, undefined);
+    expect(list).toHaveBeenCalledWith(50, 0, undefined, 'asc', undefined, undefined, undefined);
     expect(res.total).toBe(508);
     expect(res).not.toHaveProperty('groups');
     expect(groupCounts).not.toHaveBeenCalled();

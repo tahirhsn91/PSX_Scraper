@@ -56,6 +56,15 @@ export interface StockListItem {
    * beside the index it moved.
    */
   pointsIndex?: string;
+  /** Ratio fields for the screener. Present on every list row (one indexed lookup); null when the
+   *  source published none. The plain board ignores them — the mapper keeps them optional. */
+  peRatio?: number | null;
+  pbRatio?: number | null;
+  dividendYield?: number | null;
+  roe?: number | null;
+  beta?: number | null;
+  debtToEquity?: number | null;
+  eps?: number | null;
 }
 
 /**
@@ -91,6 +100,13 @@ export const SORTABLE_COLUMNS = {
    * neither index at the bottom (`NULLS LAST`).
    */
   weight: 'pt.weight',
+  // Ratio sort fields (the screener): read off the newest ratio row, joined as `r` in the list
+  // query. Same NULLS LAST rule — a symbol the source published no ratio for belongs at the bottom.
+  dividendYield: 'r.dividend_yield',
+  peRatio: 'r.pe_ratio',
+  pbRatio: 'r.pb_ratio',
+  roe: 'r.roe',
+  beta: 'r.beta',
 } as const;
 
 export type StockSortField = keyof typeof SORTABLE_COLUMNS;
@@ -144,6 +160,79 @@ export function buildListFilter(group?: StockListGroup, index?: string): Prisma.
   return group === 'kse100' ? Prisma.sql`WHERE ${member}` : Prisma.sql`WHERE NOT ${member}`;
 }
 
+/**
+ * Screener filters. Every field optional; an absent field is not a criterion. Ratio criteria read
+ * the symbol's newest ratio row, price criteria read its newest priced row.
+ */
+export interface StockFilters {
+  sector?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minMarketCap?: number;
+  maxMarketCap?: number;
+  minChangePercent?: number;
+  maxChangePercent?: number;
+  minPe?: number;
+  maxPe?: number;
+  minPb?: number;
+  maxPb?: number;
+  minDividendYield?: number;
+  minRoe?: number;
+  maxDebtToEquity?: number;
+}
+
+/** True when any criterion reads the ratios table, so the list query joins it only then. */
+export function hasRatioFilters(filters?: StockFilters): boolean {
+  if (!filters) return false;
+  return (
+    filters.minPe != null ||
+    filters.maxPe != null ||
+    filters.minPb != null ||
+    filters.maxPb != null ||
+    filters.minDividendYield != null ||
+    filters.minRoe != null ||
+    filters.maxDebtToEquity != null
+  );
+}
+
+/** A `Prisma.sql` fragment per present criterion, each a safe bound-parameter comparison. */
+function buildScreenerClauses(filters?: StockFilters): Prisma.Sql[] {
+  if (!filters) return [];
+  const c: Prisma.Sql[] = [];
+  if (filters.sector) c.push(Prisma.sql`s.sector = ${filters.sector}`);
+  if (filters.minPrice != null) c.push(Prisma.sql`p.current_price >= ${filters.minPrice}`);
+  if (filters.maxPrice != null) c.push(Prisma.sql`p.current_price <= ${filters.maxPrice}`);
+  if (filters.minMarketCap != null) c.push(Prisma.sql`p.market_cap >= ${filters.minMarketCap}`);
+  if (filters.maxMarketCap != null) c.push(Prisma.sql`p.market_cap <= ${filters.maxMarketCap}`);
+  if (filters.minChangePercent != null) c.push(Prisma.sql`p.change_percent >= ${filters.minChangePercent}`);
+  if (filters.maxChangePercent != null) c.push(Prisma.sql`p.change_percent <= ${filters.maxChangePercent}`);
+  if (filters.minPe != null) c.push(Prisma.sql`r.pe_ratio >= ${filters.minPe}`);
+  if (filters.maxPe != null) c.push(Prisma.sql`r.pe_ratio <= ${filters.maxPe}`);
+  if (filters.minPb != null) c.push(Prisma.sql`r.pb_ratio >= ${filters.minPb}`);
+  if (filters.maxPb != null) c.push(Prisma.sql`r.pb_ratio <= ${filters.maxPb}`);
+  if (filters.minDividendYield != null) c.push(Prisma.sql`r.dividend_yield >= ${filters.minDividendYield}`);
+  if (filters.minRoe != null) c.push(Prisma.sql`r.roe >= ${filters.minRoe}`);
+  if (filters.maxDebtToEquity != null) c.push(Prisma.sql`r.debt_to_equity <= ${filters.maxDebtToEquity}`);
+  return c;
+}
+
+/**
+ * Full WHERE clause for the list query: membership (group/index) composed with the screener
+ * criteria. Returns an empty fragment when there is nothing to filter on, so the query reads
+ * "all stocks" exactly as before.
+ */
+export function buildWhereClause(group?: StockListGroup, index?: string, filters?: StockFilters): Prisma.Sql {
+  const parts: Prisma.Sql[] = [];
+  if (index) parts.push(membershipFilter(index));
+  else if (group) {
+    const member = membershipFilter(DASHBOARD_GROUP_INDEX);
+    parts.push(group === 'kse100' ? member : Prisma.sql`NOT ${member}`);
+  }
+  parts.push(...buildScreenerClauses(filters));
+  if (parts.length === 0) return Prisma.sql``;
+  return Prisma.sql`WHERE ${Prisma.join(parts, ' AND ')}`;
+}
+
 
 export const STOCK_SORT_FIELDS = Object.keys(SORTABLE_COLUMNS) as [StockSortField, ...StockSortField[]];
 
@@ -183,6 +272,13 @@ type RawStockListRow = {
   /** Read from the same row as `points`, so it is null for exactly the same symbols. */
   weight?: Prisma.Decimal | null;
   points_index_symbol?: string | null;
+  pe_ratio?: Prisma.Decimal | null;
+  pb_ratio?: Prisma.Decimal | null;
+  dividend_yield?: Prisma.Decimal | null;
+  roe?: Prisma.Decimal | null;
+  beta?: Prisma.Decimal | null;
+  debt_to_equity?: Prisma.Decimal | null;
+  eps?: Prisma.Decimal | null;
 };
 
 /** One mapping for both list and search — they read the same columns and must agree. */
@@ -217,6 +313,15 @@ function toListItem(r: RawStockListRow): StockListItem {
   // The weight comes off that same row, so it needs no second decision: same index, same presence,
   // same `!= null` rule that lets a published `0.00` through where a missing reading stays absent.
   if (r.weight != null) item.weight = Number(r.weight);
+  // Ratio fields (the screener's columns). Additive and optional: `!= null` on each so a published
+  // `0` survives where a missing reading stays absent, and the plain board's rows are unchanged.
+  if (r.pe_ratio != null) item.peRatio = Number(r.pe_ratio);
+  if (r.pb_ratio != null) item.pbRatio = Number(r.pb_ratio);
+  if (r.dividend_yield != null) item.dividendYield = Number(r.dividend_yield);
+  if (r.roe != null) item.roe = Number(r.roe);
+  if (r.beta != null) item.beta = Number(r.beta);
+  if (r.debt_to_equity != null) item.debtToEquity = Number(r.debt_to_equity);
+  if (r.eps != null) item.eps = Number(r.eps);
   return item;
 }
 
@@ -416,8 +521,21 @@ export class StockRepository {
     order: SortOrder = 'asc',
     group?: StockListGroup,
     index?: string,
+    filters?: StockFilters,
   ): Promise<{ items: StockListItem[]; total: number }> {
-    const filter = buildListFilter(group, index);
+    const where = buildWhereClause(group, index, filters);
+    // The COUNT query only needs a join when the WHERE clause references its columns. The main
+    // query joins both laterally anyway (LIMIT 1 each), so the price join is free there.
+    const needsPriceJoin = Boolean(
+      filters &&
+        (filters.minPrice != null ||
+          filters.maxPrice != null ||
+          filters.minMarketCap != null ||
+          filters.maxMarketCap != null ||
+          filters.minChangePercent != null ||
+          filters.maxChangePercent != null),
+    );
+    const needsRatioJoin = hasRatioFilters(filters);
     const [rows, totals] = await Promise.all([
       prisma.$queryRaw<RawStockListRow[]>(Prisma.sql`
         SELECT s.id, s.symbol, s.company_name, s.sector, s.logo_url,
@@ -425,7 +543,9 @@ export class StockRepository {
                p.week52_high, p.week52_low,
                p.last_trade_date,
                sl.completed_at AS last_synced_at,
-               pt.points, pt.weight, pt.index_symbol AS points_index_symbol
+               pt.points, pt.weight, pt.index_symbol AS points_index_symbol,
+               r.pe_ratio, r.pb_ratio, r.dividend_yield, r.roe, r.beta,
+               r.debt_to_equity, r.eps
         FROM stocks s
         LEFT JOIN LATERAL (
           SELECT current_price, change, change_percent, volume, market_cap, week52_high,
@@ -438,10 +558,7 @@ export class StockRepository {
           WHERE stock_id = s.id
           ORDER BY started_at DESC LIMIT 1
         ) sl ON true
-        -- The stock's index contribution, KSE-100 preferred: that is the index the board is read
-        -- against, and the broad market (ALLSHR) figure is the fallback for the ~350 symbols the
-        -- KSE-100 does not carry. A reading is overwritten rather than appended, so this is one row
-        -- either way — no row multiplication, and the ORDER BY above is untouched by it.
+        -- The stock's index contribution, KSE-100 preferred (see the column's comment above).
         LEFT JOIN LATERAL (
           SELECT ic.points, ic.weight, mi.symbol AS index_symbol
           FROM index_contributions ic
@@ -450,16 +567,43 @@ export class StockRepository {
           ORDER BY (mi.symbol = 'KSE100') DESC, ic.captured_at DESC
           LIMIT 1
         ) pt ON true
-        ${filter}
+        -- Newest ratio row, for the screener's columns and criteria. One indexed lookup per row.
+        LEFT JOIN LATERAL (
+          SELECT pe_ratio, pb_ratio, dividend_yield, roe, beta, debt_to_equity, eps
+          FROM ratios WHERE stock_id = s.id
+          ORDER BY created_at DESC LIMIT 1
+        ) r ON true
+        ${where}
         -- Prisma.raw, not a bound parameter: ORDER BY cannot take one. The string is safe by
-        -- construction — it is assembled from the SORTABLE_COLUMNS literals above and an enum
-        -- the validator already checked; no request text reaches it (see buildOrderBy's test).
+        -- construction — it is assembled from the SORTABLE_COLUMNS literals and an enum the
+        -- validator already checked; no request text reaches it (see buildOrderBy's test).
         ORDER BY ${Prisma.raw(buildOrderBy(sort, order))}
         LIMIT ${limit} OFFSET ${offset}
       `),
-      prisma.$queryRaw<Array<{ total: number }>>(
-        Prisma.sql`SELECT COUNT(*)::int AS total FROM stocks s ${filter}`,
-      ),
+      prisma.$queryRaw<Array<{ total: number }>>(Prisma.sql`
+        SELECT COUNT(*)::int AS total
+        FROM stocks s
+        ${
+          needsPriceJoin
+            ? Prisma.sql`
+          LEFT JOIN LATERAL (
+            SELECT current_price, change_percent, market_cap
+            FROM stock_prices WHERE stock_id = s.id AND current_price IS NOT NULL
+            ORDER BY last_trade_date DESC NULLS LAST LIMIT 1
+          ) p ON true`
+            : Prisma.sql``
+        }
+        ${
+          needsRatioJoin
+            ? Prisma.sql`
+          LEFT JOIN LATERAL (
+            SELECT pe_ratio, pb_ratio, dividend_yield, roe, debt_to_equity
+            FROM ratios WHERE stock_id = s.id ORDER BY created_at DESC LIMIT 1
+          ) r ON true`
+            : Prisma.sql``
+        }
+        ${where}
+      `),
     ]);
     return { items: rows.map(toListItem), total: totals[0]?.total ?? 0 };
   }
