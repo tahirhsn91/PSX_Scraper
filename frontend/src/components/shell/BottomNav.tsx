@@ -2,12 +2,16 @@ import { Box, ButtonBase, Typography } from '@mui/material';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SyncRoundedIcon from '@mui/icons-material/SyncRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
+import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { layout } from '../../theme/tokens';
 import { isDev } from '../../lib/env';
 
 const ITEMS = [
   { label: 'Dashboard', to: '/', icon: <HomeRoundedIcon /> },
+  { label: 'Screener', to: '/screener', icon: <TuneRoundedIcon /> },
+  { label: 'Watchlist', to: '/watchlist', icon: <StarBorderRoundedIcon /> },
   ...(isDev ? [{ label: 'Sync Logs', to: '/logs', icon: <SyncRoundedIcon /> }] : []),
 ];
 

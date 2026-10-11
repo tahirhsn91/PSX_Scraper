@@ -9,6 +9,11 @@ import { isDev } from '../../lib/env';
 
 const NAV = [
   { label: 'Dashboard', to: '/' },
+  { label: 'Screener', to: '/screener' },
+  { label: 'Sectors', to: '/sectors' },
+  { label: 'Dividends', to: '/dividends' },
+  { label: 'Watchlist', to: '/watchlist' },
+  { label: 'Compare', to: '/compare' },
   ...(isDev ? [{ label: 'Sync Logs', to: '/logs' }] : []),
 ];
 

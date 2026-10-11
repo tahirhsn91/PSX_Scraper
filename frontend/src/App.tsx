@@ -20,6 +20,11 @@ const IndexDetail = lazy(() =>
   import('./pages/IndexDetail').then((m) => ({ default: m.IndexDetail })),
 );
 const SyncLogs = lazy(() => import('./pages/SyncLogs').then((m) => ({ default: m.SyncLogs })));
+const Screener = lazy(() => import('./pages/Screener').then((m) => ({ default: m.Screener })));
+const Sectors = lazy(() => import('./pages/Sectors').then((m) => ({ default: m.Sectors })));
+const Dividends = lazy(() => import('./pages/Dividends').then((m) => ({ default: m.Dividends })));
+const Watchlist = lazy(() => import('./pages/Watchlist').then((m) => ({ default: m.Watchlist })));
+const Compare = lazy(() => import('./pages/Compare').then((m) => ({ default: m.Compare })));
 const NotFound = lazy(() => import('./pages/NotFound').then((m) => ({ default: m.NotFound })));
 
 /** Mirrors the page shape so the swap does not jump: a title, a KPI row, a chart card. */
@@ -49,6 +54,11 @@ export default function App() {
           <Route path="/search" element={<SearchResults />} />
           <Route path="/stocks/:symbol" element={<StockDetails />} />
           <Route path="/indices/:symbol" element={<IndexDetail />} />
+          <Route path="/screener" element={<Screener />} />
+          <Route path="/sectors" element={<Sectors />} />
+          <Route path="/dividends" element={<Dividends />} />
+          <Route path="/watchlist" element={<Watchlist />} />
+          <Route path="/compare" element={<Compare />} />
           {isDev && <Route path="/logs" element={<SyncLogs />} />}
           <Route path="*" element={<NotFound />} />
         </Routes>
