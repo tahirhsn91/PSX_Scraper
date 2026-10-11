@@ -4,10 +4,11 @@ import SyncRoundedIcon from '@mui/icons-material/SyncRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { layout } from '../../theme/tokens';
+import { isDev } from '../../lib/env';
 
 const ITEMS = [
   { label: 'Dashboard', to: '/', icon: <HomeRoundedIcon /> },
-  { label: 'Sync Logs', to: '/logs', icon: <SyncRoundedIcon /> },
+  ...(isDev ? [{ label: 'Sync Logs', to: '/logs', icon: <SyncRoundedIcon /> }] : []),
 ];
 
 /**

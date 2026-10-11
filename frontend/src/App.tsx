@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Box, Grid, Skeleton } from '@mui/material';
 import { Layout } from './components/Layout';
+import { isDev } from './lib/env';
 
 // One bundle used to carry every page, its charts and the TradingView widget loader before the
 // market board could paint. Each page is now its own chunk, fetched when its route is opened;
@@ -48,7 +49,7 @@ export default function App() {
           <Route path="/search" element={<SearchResults />} />
           <Route path="/stocks/:symbol" element={<StockDetails />} />
           <Route path="/indices/:symbol" element={<IndexDetail />} />
-          <Route path="/logs" element={<SyncLogs />} />
+          {isDev && <Route path="/logs" element={<SyncLogs />} />}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
