@@ -259,11 +259,23 @@ export const useClearFailed = () => {
   });
 };
 
-/** Market breadth plus the top gainers / losers / most active — the dashboard's summary strip. */
-export const useMarketOverview = () =>
+/**
+ * Market breadth plus the top gainers / losers / most active — the dashboard's summary strip.
+ *
+ * `poll` follows `useIndices`: a number re-reads on that cadence, `true` uses the index board's 30s,
+ * `false` reads once. The header ticker is the caller that wants a cadence; the dashboard settles for
+ * once, because its own sync fan-out already re-reads what it shows.
+ *
+ * A live cadence needs `staleTime: 0` for the same reason `useStocks` sets it: React Query skips a
+ * scheduled refetch while the cached data is still fresh, so the app-wide stale time would silently
+ * stretch the interval instead of honouring it.
+ */
+export const useMarketOverview = (poll: boolean | number = false) =>
   useQuery({
     queryKey: keys.marketOverview,
     queryFn: async () => (await api.get<MarketOverview>('/market/overview')).data,
+    refetchInterval: typeof poll === 'number' ? poll : poll ? 30000 : false,
+    ...(poll ? { staleTime: 0 } : {}),
   });
 
 /** One aggregate row per sector, for the sector browser. */
