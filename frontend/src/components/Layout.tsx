@@ -1,6 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Box } from '@mui/material';
 import { AppHeader } from './shell/AppHeader';
+import { MarketTicker } from './shell/MarketTicker';
 import { BottomNav } from './shell/BottomNav';
 import { SearchSheet } from './shell/SearchSheet';
 import { EnvBanner } from './EnvBanner';
@@ -44,6 +45,9 @@ export function Layout({ children }: { children: ReactNode }) {
       <Box id="app-header" sx={{ position: 'sticky', top: 0, zIndex: (theme) => theme.zIndex.appBar }}>
         <EnvBanner />
         <AppHeader onOpenSearch={openSearch} />
+        {/* Inside the sticky wrapper, so the tape stays on screen and the pages that measure
+            `#app-header` (the stock page's quick-jump) pick its height up automatically. */}
+        <MarketTicker />
       </Box>
 
       <Box
