@@ -24,6 +24,7 @@ const Screener = lazy(() => import('./pages/Screener').then((m) => ({ default: m
 const Sectors = lazy(() => import('./pages/Sectors').then((m) => ({ default: m.Sectors })));
 const Dividends = lazy(() => import('./pages/Dividends').then((m) => ({ default: m.Dividends })));
 const Watchlist = lazy(() => import('./pages/Watchlist').then((m) => ({ default: m.Watchlist })));
+const Portfolio = lazy(() => import('./pages/Portfolio').then((m) => ({ default: m.Portfolio })));
 const Compare = lazy(() => import('./pages/Compare').then((m) => ({ default: m.Compare })));
 const NotFound = lazy(() => import('./pages/NotFound').then((m) => ({ default: m.NotFound })));
 
@@ -58,6 +59,7 @@ export default function App() {
           <Route path="/sectors" element={<Sectors />} />
           <Route path="/dividends" element={<Dividends />} />
           <Route path="/watchlist" element={<Watchlist />} />
+          <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/compare" element={<Compare />} />
           {isDev && <Route path="/logs" element={<SyncLogs />} />}
           <Route path="*" element={<NotFound />} />
