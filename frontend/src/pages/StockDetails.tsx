@@ -32,13 +32,16 @@ import { StatTile } from '../components/ui/StatTile';
 import { StatePanel } from '../components/ui/StatePanel';
 import {
   DASH,
+  GLYPH,
   formatCount,
   formatDate,
   formatDateTime,
   formatMarketCap,
   formatNumber,
+  formatPercent,
   formatVolume,
 } from '../lib/format';
+import { seriesTrend } from '../lib/seriesTrend';
 import { stockMetaDescription, stockMetaTitle } from '../lib/seo';
 import { isDev } from '../lib/env';
 import { usePageMeta } from '../lib/usePageMeta';
@@ -234,6 +237,26 @@ export function StockDetails() {
     .filter((p) => p.close != null && p.lastTradeDate)
     .slice()
     .reverse();
+
+  // The window's own direction — first reading to last — which is what tones the line and the wash
+  // beneath it. Read off the same series the chart draws, so the colour can never describe a
+  // different window than the line does. Deliberately not `trendOf`: see `seriesTrend`.
+  const lineTrend = seriesTrend(chart.map((p) => p.close));
+  // Two token families, because they answer to two different thresholds: `chart.*` is contrast-checked
+  // for graphical marks (3:1), while the caption's figure is text and takes the `up`/`down` pair,
+  // which clears 4.5:1.
+  const lineColor =
+    lineTrend?.trend === 'up'
+      ? theme.palette.chart.up
+      : lineTrend?.trend === 'down'
+        ? theme.palette.chart.down
+        : theme.palette.text.secondary;
+  const lineTextColor =
+    lineTrend?.trend === 'up'
+      ? theme.palette.up.main
+      : lineTrend?.trend === 'down'
+        ? theme.palette.down.main
+        : theme.palette.text.secondary;
 
   // Where today's price sits inside the 52-week range — a bar says it faster than two numbers.
   const rangePct = (() => {
@@ -485,24 +508,59 @@ export function StockDetails() {
               historyLoading ? (
                 <Skeleton variant="rounded" height={320} />
               ) : chart.length > 1 ? (
-                <LineChart
-                  height={isMobile ? 240 : 340}
-                  xAxis={[
-                    {
-                      scaleType: 'point',
-                      data: chart.map((p) => formatDate(p.lastTradeDate)),
-                      tickLabelStyle: { fontSize: 10 },
-                    },
-                  ]}
-                  series={[
-                    {
-                      data: chart.map((p) => p.close as number),
-                      label: 'Close',
-                      color: theme.palette.primary.main,
-                      showMark: false,
-                    },
-                  ]}
-                />
+                <>
+                  <LineChart
+                    height={isMobile ? 240 : 340}
+                    xAxis={[
+                      {
+                        scaleType: 'point',
+                        data: chart.map((p) => formatDate(p.lastTradeDate)),
+                        tickLabelStyle: { fontSize: 10 },
+                      },
+                    ]}
+                    // Left alone, MUI X paints the area as the series colour brightened by 0.5 at
+                    // full opacity — a solid block that swallows the line and the gridlines. The
+                    // fill is set here instead, to the same token the stroke uses, as a low wash.
+                    sx={{
+                      '& .MuiAreaElement-root': { fill: lineColor, fillOpacity: 0.12 },
+                    }}
+                    series={[
+                      {
+                        data: chart.map((p) => p.close as number),
+                        label: 'Close',
+                        color: lineColor,
+                        // The wash under the line is what makes the window's shape readable at a
+                        // glance. `'min'` fills down to the axis rather than to zero: a price series
+                        // never reaches zero, and anchoring the fill there would squash the whole
+                        // shape into the top of the box.
+                        area: true,
+                        baseline: 'min',
+                        showMark: false,
+                      },
+                    ]}
+                  />
+                  {lineTrend && (
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      component="p"
+                      sx={{ mt: 1 }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{
+                          color: lineTextColor,
+                          fontWeight: 600,
+                          fontVariantNumeric: 'tabular-nums',
+                        }}
+                      >
+                        {GLYPH[lineTrend.trend]} {formatPercent(lineTrend.changePercent)}
+                      </Box>{' '}
+                      over {range === 'MAX' ? 'all stored sessions' : rangeLabel(range)} ·{' '}
+                      {formatNumber(lineTrend.first)} → {formatNumber(lineTrend.last)}
+                    </Typography>
+                  )}
+                </>
               ) : (
                 <StatePanel
                   kind="empty"
