@@ -64,7 +64,11 @@ const RANGES: { value: HistoryRange; label: string }[] = [
   { value: 'MAX', label: 'Max' },
 ];
 
-/** Candles are ours; the TradingView tab is their widget; the line view is the older chart. */
+/**
+ * Both our views draw the sessions we have stored — the line is the plainest read of the closes
+ * and is what the page opens on; the candle view adds the OHLC body and volume. TradingView is
+ * their widget, rendered live.
+ */
 type ChartMode = 'candles' | 'line' | 'tradingview';
 
 /** The page's sections, in reading order. `id` is the anchor the sticky quick-jump scrolls to. */
@@ -138,7 +142,7 @@ export function StockDetails() {
   const { data: history, isFetching: historyLoading } = useHistory(symbol, range);
   // One range control drives both views: the API resolves the preset (1W … MAX) to a lower
   // bound, so the candle chart really does show one week when 1W is picked.
-  const [chartMode, setChartMode] = useState<ChartMode>('candles');
+  const [chartMode, setChartMode] = useState<ChartMode>('line');
   const { data: candles, isLoading: candlesLoading } = useCandles(symbol);
   const syncStock = useSyncStock();
   const { data: status } = useSyncStatus(syncStock.isPending);
@@ -378,9 +382,9 @@ export function StockDetails() {
             subtitle={
               chartMode === 'tradingview'
                 ? 'TradingView data, rendered by their widget — nothing scraped, nothing stored.'
-                : chartMode === 'candles'
-                  ? `Daily candles · showing ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
-                  : `Our stored sessions, ${rangeLabel(range)}`
+                : chartMode === 'line'
+                  ? `Our stored sessions, ${rangeLabel(range)}`
+                  : `Daily candles · showing ${range === 'MAX' ? 'all stored sessions' : rangeLabel(range)}`
             }
             action={
               isDev ? (
@@ -423,8 +427,8 @@ export function StockDetails() {
                 onChange={(_e, v: ChartMode | null) => v && setChartMode(v)}
                 aria-label="Chart type"
               >
-                <ToggleButton value="candles">Candles</ToggleButton>
                 <ToggleButton value="line">Line</ToggleButton>
+                <ToggleButton value="candles">Candles</ToggleButton>
                 <ToggleButton value="tradingview">TradingView</ToggleButton>
               </ToggleButtonGroup>
             </Stack>
@@ -477,7 +481,53 @@ export function StockDetails() {
               </Typography>
             )}
 
-            {chartMode === 'candles' ? (
+            {chartMode === 'line' ? (
+              historyLoading ? (
+                <Skeleton variant="rounded" height={320} />
+              ) : chart.length > 1 ? (
+                <LineChart
+                  height={isMobile ? 240 : 340}
+                  xAxis={[
+                    {
+                      scaleType: 'point',
+                      data: chart.map((p) => formatDate(p.lastTradeDate)),
+                      tickLabelStyle: { fontSize: 10 },
+                    },
+                  ]}
+                  series={[
+                    {
+                      data: chart.map((p) => p.close as number),
+                      label: 'Close',
+                      color: theme.palette.primary.main,
+                      showMark: false,
+                    },
+                  ]}
+                />
+              ) : (
+                <StatePanel
+                  kind="empty"
+                  compact
+                  title="No stored history for this range"
+                  description={
+                    isDev
+                      ? 'Fetch it from PSX to fill the chart and the range controls.'
+                      : 'No historical prices are stored for this range yet.'
+                  }
+                  action={
+                    isDev ? (
+                      <Button
+                        size="small"
+                        variant="contained"
+                        disabled={fetching}
+                        onClick={startFetch}
+                      >
+                        Fetch historical data
+                      </Button>
+                    ) : undefined
+                  }
+                />
+              )
+            ) : chartMode === 'candles' ? (
               candlesLoading ? (
                 <Skeleton variant="rounded" height={340} />
               ) : (
@@ -502,47 +552,8 @@ export function StockDetails() {
                   )}
                 </>
               )
-            ) : chartMode === 'tradingview' ? (
-              <TradingViewChart symbol={symbol} height={isMobile ? 360 : 460} />
-            ) : historyLoading ? (
-              <Skeleton variant="rounded" height={320} />
-            ) : chart.length > 1 ? (
-              <LineChart
-                height={isMobile ? 240 : 340}
-                xAxis={[
-                  {
-                    scaleType: 'point',
-                    data: chart.map((p) => formatDate(p.lastTradeDate)),
-                    tickLabelStyle: { fontSize: 10 },
-                  },
-                ]}
-                series={[
-                  {
-                    data: chart.map((p) => p.close as number),
-                    label: 'Close',
-                    color: theme.palette.primary.main,
-                    showMark: false,
-                  },
-                ]}
-              />
             ) : (
-              <StatePanel
-                kind="empty"
-                compact
-                title="No stored history for this range"
-                description={
-                  isDev
-                    ? 'Fetch it from PSX to fill the chart and the range controls.'
-                    : 'No historical prices are stored for this range yet.'
-                }
-                action={
-                  isDev ? (
-                    <Button size="small" variant="contained" disabled={fetching} onClick={startFetch}>
-                      Fetch historical data
-                    </Button>
-                  ) : undefined
-                }
-              />
+              <TradingViewChart symbol={symbol} height={isMobile ? 360 : 460} />
             )}
           </SectionCard>
         </Box>
