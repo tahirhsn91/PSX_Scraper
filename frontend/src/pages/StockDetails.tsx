@@ -242,21 +242,15 @@ export function StockDetails() {
   // beneath it. Read off the same series the chart draws, so the colour can never describe a
   // different window than the line does. Deliberately not `trendOf`: see `seriesTrend`.
   const lineTrend = seriesTrend(chart.map((p) => p.close));
-  // Two token families, because they answer to two different thresholds: `chart.*` is contrast-checked
-  // for graphical marks (3:1), while the caption's figure is text and takes the `up`/`down` pair,
-  // which clears 4.5:1.
-  const lineColor =
-    lineTrend?.trend === 'up'
-      ? theme.palette.chart.up
-      : lineTrend?.trend === 'down'
-        ? theme.palette.chart.down
-        : theme.palette.text.secondary;
-  const lineTextColor =
-    lineTrend?.trend === 'up'
-      ? theme.palette.up.main
-      : lineTrend?.trend === 'down'
-        ? theme.palette.down.main
-        : theme.palette.text.secondary;
+  // The line and the wash under it stay on the brand green. A colour that flips with the window
+  // reads as a verdict rather than as identity, and in a marketing surface it means the same page
+  // changes colour from one day to the next. The window's direction is not lost — the caption below
+  // still names it, with its ▲/▼ glyph, so the tone never has to carry that claim on its own.
+  //
+  // `primary.main` is used for the caption too: it is a dark green that clears 4.5:1 on the card
+  // surface, so it is safe as text, not only as a graphical mark.
+  const lineColor = theme.palette.primary.main;
+  const lineTextColor = theme.palette.primary.main;
 
   // Where today's price sits inside the 52-week range — a bar says it faster than two numbers.
   const rangePct = (() => {
