@@ -218,6 +218,14 @@ export function buildIndexSummary(input: IndexSummaryInput) {
     return1y,
     returnYtd,
     lastTradeDate,
+    /**
+     * When the newest reading behind this index was stored — in practice, when the board last read
+     * it. Distinct from `lastTradeDate`, which is the session the value belongs to: `lastTradeDate`
+     * alone cannot tell a live board from a stopped one, because a board that has stopped reading
+     * keeps serving its last session. That is exactly how a level five days old read as "as of 4:30
+     * PM" with nothing on the payload to contradict it. Null when we hold no reading for it.
+     */
+    liveAt: live?.at ?? null,
   };
 }
 

@@ -8,7 +8,8 @@ import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import type { IndexSummary } from '../types';
 import { MiniIndexChart } from './MiniIndexChart';
-import { formatVolume } from '../lib/format';
+import { formatRelative, formatVolume } from '../lib/format';
+import { isStaleReading } from '../lib/freshness';
 
 /**
  * The PSX index board on the dashboard: breadth first, then one tile per index.
@@ -293,6 +294,23 @@ export function IndicesPanel({
     return newest ? new Date(newest).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : null;
   }, [indices]);
 
+  /**
+   * When the board was last *read* — the newest `liveAt` across the indices.
+   *
+   * Not the same question as `asOf` above, and this is the one a reader needs: `lastTradeDate` is the
+   * session a value belongs to, so a board that has stopped reading keeps answering with its last
+   * session and looks exactly like a live one. That is what made a five-day-old level render as
+   * "as of 4:30 PM" with nothing on screen to contradict it. The age is shown as words, and a reading
+   * past a session is flagged, so a stopped board is visible instead of merely stale.
+   */
+  const updated = useMemo(() => {
+    const newest = (indices ?? []).reduce<string | null>(
+      (latest, i) => (i.liveAt && (!latest || i.liveAt > latest) ? i.liveAt : latest),
+      null,
+    );
+    return newest ? { at: newest, relative: formatRelative(newest), stale: isStaleReading(newest) } : null;
+  }, [indices]);
+
   // Loading, failure and "nothing published" are three different pages, and each says which one
   // it is. The panel is a content block, so an absent board is worth stating rather than hiding:
   // a silent gap is indistinguishable from a board that has not loaded yet.
@@ -330,10 +348,20 @@ export function IndicesPanel({
           <Typography variant="subtitle2" color="text.secondary">
             PSX indices {indices?.length ? `(${indices.length})` : ''}
           </Typography>
-          {asOf && (
-            <Typography variant="caption" color="text.secondary">
-              as of {asOf}
+          {updated ? (
+            <Typography
+              variant="caption"
+              color={updated.stale ? 'warning.main' : 'text.secondary'}
+              title={new Date(updated.at).toLocaleString()}
+            >
+              updated {updated.relative}
             </Typography>
+          ) : (
+            asOf && (
+              <Typography variant="caption" color="text.secondary">
+                as of {asOf}
+              </Typography>
+            )
           )}
         </Stack>
 

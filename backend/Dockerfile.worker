@@ -21,7 +21,14 @@ RUN npm install
 WORKDIR /app
 COPY backend ./backend
 WORKDIR /app/backend
-RUN npx prisma generate --schema=../database/prisma/schema.prisma
+# Generate the client into the package the app actually loads it from. See Dockerfile.api for the
+# full note: pointing Prisma at ../database/prisma/schema.prisma puts the client under
+# /app/node_modules while the worker reads /app/backend/node_modules, so a schema change can ship
+# without the running code ever seeing it — which is what froze the index board on `week52High`.
+RUN mkdir -p ./prisma-schema \
+ && cp ../database/prisma/schema.prisma ./prisma-schema/schema.prisma \
+ && npx prisma generate --schema=./prisma-schema/schema.prisma \
+ && rm -rf ./prisma-schema
 RUN npm run build
 
 # ---- Runtime (worker) ----
