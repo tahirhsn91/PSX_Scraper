@@ -16,6 +16,14 @@ export async function getStockDetail(symbol: string) {
       incomeStatements: { orderBy: { position: 'asc' } },
       dividends: { orderBy: { announcementDate: 'desc' } },
       syncLogs: { orderBy: { startedAt: 'desc' }, take: 1 },
+      // Which of the indices we track list this stock (#174), so the stock page can link to each
+      // index page. Read live from `index_constituents` rather than a column on `stocks`, so an
+      // index rebalance is reflected on the next request. Ordered by index symbol to keep the list
+      // — and therefore the page — stable between reads.
+      constituents: {
+        orderBy: { index: { symbol: 'asc' } },
+        select: { index: { select: { symbol: true } } },
+      },
     },
   });
   return stock;

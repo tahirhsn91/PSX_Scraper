@@ -52,6 +52,7 @@ import {
   useHistory,
   useHistoryStatus,
   useStock,
+  useStocks,
   useSyncStatus,
   useSyncStock,
 } from '../api/hooks';
@@ -81,7 +82,22 @@ const SECTIONS: QuickJumpSection[] = [
   { id: 'section-financials', label: 'Financials' },
   { id: 'section-ratios', label: 'Ratios' },
   { id: 'section-dividends', label: 'Dividends' },
+  { id: 'section-related', label: 'Related' },
 ];
+
+/** How many sector peers the Related block links to. It is a set of onward links, not a screener. */
+const PEER_LIMIT = 8;
+
+/**
+ * A sector worth linking to.
+ *
+ * `null` means no company record has been scraped, and the literal string `"undefined"` is a known
+ * data defect that reaches us as text. Neither names a sector, so both stay plain text rather than
+ * becoming a link into a screener view for a sector that does not exist.
+ */
+function usableSector(sector: string | null | undefined): sector is string {
+  return Boolean(sector) && sector !== 'undefined';
+}
 
 /** Spelled-out form of a range preset, for the caption above the chart. */
 const rangeLabel = (r: HistoryRange): string =>
@@ -156,6 +172,33 @@ export function StockDetails() {
   const fetchHistory = useFetchHistory(symbol);
   const [fetching, setFetching] = useState(false);
   const { data: histJob } = useHistoryStatus(symbol, fetching);
+
+  // Sector peers (#174). Called unconditionally — before the loading and error returns — so the
+  // hook order is stable; while the detail is still in flight the sector is undefined and the query
+  // simply does not fire. Sorted by market cap descending, matching "largest first".
+  const sectorName = usableSector(data?.sector) ? data.sector : undefined;
+  const { data: sectorPage } = useStocks(
+    1,
+    PEER_LIMIT + 1,
+    false,
+    'marketCap',
+    'desc',
+    undefined,
+    undefined,
+    sectorName ? { sector: sectorName } : undefined,
+  );
+  // This stock is usually its own sector's largest name, so drop it before capping: the block is a
+  // set of links onward, not the list the reader is already on.
+  //
+  // Gated on `sectorName`, not on the response. An absent filter is not an absent query: with no
+  // sector, `useStocks` returns the market's largest names, which would render as "Other stocks in "
+  // followed by eight links to unrelated companies. No usable sector means no peers at all.
+  const peers = sectorName
+    ? (sectorPage?.items ?? [])
+        .filter((p) => p.symbol !== data?.symbol)
+        .slice(0, PEER_LIMIT)
+    : [];
+  const memberIndices = (data?.indices ?? []).filter(Boolean);
 
   // Per-stock document head: tab title + meta description for on-page SEO (all 508 stocks).
   usePageMeta(
@@ -265,7 +308,27 @@ export function StockDetails() {
       <PageHeader
         title={data.symbol}
         subtitle={
-          [data.companyName, data.sector].filter(Boolean).join(' · ') || 'No company record scraped yet'
+          usableSector(data.sector) ? (
+            <>
+              {data.companyName ? `${data.companyName} · ` : ''}
+              {/* The sector opens the screener filtered to it — the same destination the sectors
+                  page links each row to, so one sector has one address. */}
+              <Box
+                component={RouterLink}
+                to={`/screener?sector=${encodeURIComponent(data.sector)}`}
+                sx={{
+                  color: 'primary.main',
+                  textDecoration: 'none',
+                  '&:hover': { textDecoration: 'underline' },
+                }}
+              >
+                {data.sector}
+              </Box>
+            </>
+          ) : (
+            [data.companyName, data.sector].filter(Boolean).join(' · ') ||
+            'No company record scraped yet'
+          )
         }
         crumbs={[{ label: 'Market board', to: '/' }, { label: data.symbol }]}
         meta={
@@ -667,6 +730,84 @@ export function StockDetails() {
               emptyDescription="Nothing announced for this symbol in the periods we have scraped."
             />
           </SectionCard>
+
+          {/* Onward links between related content (#174): the indices this stock belongs to, and
+              the other names in its sector. Both are internal links an SEO pass would want, and
+              both are ordinary navigation for a reader who is looking sideways from this page. */}
+          <Box component="section" id="section-related" sx={{ scrollMarginTop: scrollOffset }}>
+            <SectionCard
+              title="Related"
+              subtitle="Where this stock sits in the market — every link opens that page"
+            >
+              <Stack spacing={2.5}>
+                {memberIndices.length > 0 && (
+                  <Box>
+                    <Typography variant="overline" color="text.secondary">
+                      Index membership
+                    </Typography>
+                    <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1 }}>
+                      {memberIndices.map((indexSymbol) => (
+                        <Chip
+                          key={indexSymbol}
+                          component={RouterLink}
+                          to={`/indices/${encodeURIComponent(indexSymbol)}`}
+                          label={indexSymbol}
+                          size="small"
+                          variant="outlined"
+                          clickable
+                        />
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+
+                {peers.length > 0 && (
+                  <Box>
+                    <Typography variant="overline" color="text.secondary">
+                      Other stocks in {sectorName}
+                    </Typography>
+                    <Stack spacing={0.5} sx={{ mt: 1 }}>
+                      {peers.map((peer) => (
+                        <Box
+                          key={peer.symbol}
+                          component={RouterLink}
+                          to={`/stocks/${encodeURIComponent(peer.symbol)}`}
+                          sx={{
+                            display: 'flex',
+                            gap: 1,
+                            alignItems: 'baseline',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                            '&:hover .peer-symbol': { textDecoration: 'underline' },
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            className="peer-symbol"
+                            sx={{ fontWeight: 600, color: 'primary.main', minWidth: 78 }}
+                          >
+                            {peer.symbol}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary" noWrap sx={{ minWidth: 0 }}>
+                            {peer.companyName ?? ''}
+                          </Typography>
+                        </Box>
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+
+                {/* A stock in none of the tracked indices, with no tracked peers, gets a sentence
+                    rather than an empty card — and never a made-up link. */}
+                {memberIndices.length === 0 && peers.length === 0 && (
+                  <Typography variant="body2" color="text.secondary">
+                    No related pages yet: this symbol is not a member of any index we track, and its
+                    sector has no other tracked stock.
+                  </Typography>
+                )}
+              </Stack>
+            </SectionCard>
+          </Box>
         </Box>
       </Stack>
     </Box>

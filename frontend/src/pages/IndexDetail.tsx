@@ -11,17 +11,56 @@ import {
   Typography,
 } from '@mui/material';
 import { ChangePill } from '../components/ui/ChangePill';
+import { DataTable, type Column } from '../components/ui/DataTable';
 import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { StatTile } from '../components/ui/StatTile';
 import { StatePanel } from '../components/ui/StatePanel';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
-import { useIndex, useIndexCandles } from '../api/hooks';
+import { useIndex, useIndexCandles, useStocks } from '../api/hooks';
 import { DASH, formatCount, formatDateTime, formatNumber } from '../lib/format';
 import { indexMetaDescription, indexMetaTitle } from '../lib/seo';
 import { usePageMeta } from '../lib/usePageMeta';
-import type { HistoryRange } from '../types';
+import type { HistoryRange, StockListItem } from '../types';
+
+/**
+ * The constituent table (#174). Heaviest first, because that is how a reader reads an index — the
+ * names that move it, then the tail. Every row links to that stock's page through the table's own
+ * `rowHref`, so a row is a link without a per-cell anchor.
+ */
+const CONSTITUENT_COLUMNS: Column<StockListItem>[] = [
+  { key: 'symbol', header: 'Symbol', render: (s) => s.symbol, mobileRole: 'title' },
+  {
+    key: 'company',
+    header: 'Company',
+    render: (s) => s.companyName ?? DASH,
+    noWrap: true,
+    mobileRole: 'meta',
+  },
+  {
+    key: 'price',
+    header: 'Price',
+    align: 'right',
+    render: (s) => (s.currentPrice == null ? DASH : formatNumber(s.currentPrice)),
+    mobileRole: 'meta',
+  },
+  {
+    key: 'change',
+    header: 'Change',
+    align: 'right',
+    render: (s) => <ChangePill value={s.changePercent} variant="soft" />,
+    mobileRole: 'meta',
+  },
+  {
+    key: 'weight',
+    header: 'Weight',
+    align: 'right',
+    hideBelow: 'md',
+    render: (s) => (s.weight == null ? DASH : `${formatNumber(s.weight)}%`),
+    mobileRole: 'meta',
+  },
+];
 
 const RANGES: { value: HistoryRange; label: string }[] = [
   { value: '1W', label: '1W' },
@@ -58,6 +97,19 @@ export function IndexDetail() {
   const [mode, setMode] = useState<'candles' | 'tradingview'>('candles');
   const { data, isLoading, isError } = useIndex(symbol);
   const { data: candles, isLoading: candlesLoading } = useIndexCandles(symbol);
+  // Constituents (#174): the tracked members of this index, heaviest first. This is the read the
+  // dashboard's KSE-100 scope already uses, so no new endpoint — and it is called before the
+  // loading/error returns below so the hook order never changes.
+  const { data: constituentPage, isError: constituentsFailed } = useStocks(
+    1,
+    100,
+    false,
+    'weight',
+    'desc',
+    undefined,
+    symbol,
+  );
+  const constituents = constituentPage?.items ?? [];
 
   // Per-index document head: tab title + meta description for on-page SEO.
   usePageMeta(
@@ -231,6 +283,40 @@ export function IndexDetail() {
           </>
         )}
       </SectionCard>
+
+      {/* Constituents (#174): the index's members, each row linking through to its stock page.
+          A read that failed says so, so it cannot be mistaken for an index with no members. */}
+      <Box sx={{ mt: 3 }}>
+        <SectionCard
+          title="Constituents"
+          subtitle={
+            constituentsFailed
+              ? 'Membership could not be read'
+              : `${constituents.length} tracked member${constituents.length === 1 ? '' : 's'} · heaviest first`
+          }
+          flush
+        >
+          {constituentsFailed ? (
+            <Box sx={{ p: 3 }}>
+              <StatePanel
+                kind="error"
+                title="Could not read this index's membership"
+                description="The membership request failed — that is not the same as this index having no members. Try again in a moment."
+              />
+            </Box>
+          ) : (
+            <DataTable
+              columns={CONSTITUENT_COLUMNS}
+              rows={constituents}
+              ariaLabel={`${data.symbol} constituents`}
+              rowKey={(s) => s.symbol}
+              rowHref={(s) => `/stocks/${encodeURIComponent(s.symbol)}`}
+              emptyTitle="No tracked constituents"
+              emptyDescription="We hold no membership rows for this index yet, so there are no stock pages to link to. Indices whose membership we have not read show this rather than an empty table."
+            />
+          )}
+        </SectionCard>
+      </Box>
     </Box>
   );
 }
