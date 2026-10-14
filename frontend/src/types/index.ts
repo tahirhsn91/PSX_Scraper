@@ -160,6 +160,12 @@ export interface StockDetail {
   symbol: string;
   companyName: string | null;
   sector: string | null;
+  /**
+   * Symbols of the tracked indices this stock is a constituent of (#174), read live from the
+   * membership table so an index rebalance is reflected immediately. Empty when it belongs to none
+   * of them — the page then shows no index links rather than guessing one.
+   */
+  indices: string[];
   price: {
     currentPrice: number | null;
     change: number | null;

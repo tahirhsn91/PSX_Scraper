@@ -141,6 +141,11 @@ export const stockService = {
       symbol: s.symbol,
       companyName: s.companyName,
       sector: s.sector,
+      // Index membership (#174): the symbols of the tracked indices this stock is a member of, so
+      // the detail page can link through to each index. Derived from `index_constituents`, which is
+      // read live, so a rebalance shows up without a schema change. Empty when the stock is in none
+      // of the indices we track — the page then renders no index links rather than guessing one.
+      indices: s.constituents.map((c) => c.index.symbol),
       price: price
         ? {
             currentPrice: num(price.currentPrice),
