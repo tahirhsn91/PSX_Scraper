@@ -91,6 +91,12 @@ function StockLogo({ symbol, logoUrl }: { symbol: string; logoUrl: string | null
       src={logoUrl && !failed ? logoUrl : undefined}
       alt=""
       imgProps={{
+        // The table renders ~100 of these, and they are the page's only third-party requests.
+        // Measured on prod, 96 of them fire in one burst at ~5.87s — mid-LCP — off a CloudFront
+        // origin, competing for bandwidth with the bundle that is still blocking first paint.
+        // Deferring the ones below the fold costs nothing and removes that competition.
+        loading: "lazy",
+        decoding: "async",
         sx: { objectFit: "contain", padding: "2px" },
         onError: () => setFailed(true),
       }}
