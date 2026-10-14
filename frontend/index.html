@@ -4,6 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Pakistan Stock Exchange prices, indices and sync status." />
+
+    <!-- Social share (Open Graph + Twitter card).
+         These MUST be static and MUST use absolute URLs. The crawlers that build a link preview —
+         WhatsApp, Facebook, X, LinkedIn, Slack, Discord — fetch the HTML and do NOT execute
+         JavaScript, so anything a React effect writes after mount is invisible to them. A relative
+         `og:image` is silently ignored and the card renders with no thumbnail at all.
+         `usePageMeta` mirrors the per-route title over these for crawlers that do run JS. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="My Portfolio 365" />
+    <meta property="og:locale" content="en_PK" />
+    <meta property="og:url" content="https://psx.myportfolio365.com/" />
+    <meta property="og:title" content="My Portfolio 365 Market — live PSX prices and indices" />
+    <meta
+      property="og:description"
+      content="Live Pakistan Stock Exchange prices, KSE-100 and sector indices, dividend history and portfolio tracking. Updated as the market moves."
+    />
+    <meta property="og:image" content="https://psx.myportfolio365.com/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="The My Portfolio 365 stock page for ENGROH, showing a one-year price line chart."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="My Portfolio 365 Market — live PSX prices and indices" />
+    <meta
+      name="twitter:description"
+      content="Live Pakistan Stock Exchange prices, KSE-100 and sector indices, dividend history and portfolio tracking. Updated as the market moves."
+    />
+    <meta name="twitter:image" content="https://psx.myportfolio365.com/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="The My Portfolio 365 stock page for ENGROH, showing a one-year price line chart."
+    />
     <meta name="theme-color" content="#3F4140" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#3A3F3D" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#3F4140" />
