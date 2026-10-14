@@ -1064,6 +1064,13 @@ export const openapiSpec = {
           symbol: { type: "string", example: "FFC" },
           companyName: { type: "string", nullable: true },
           sector: { type: "string", nullable: true },
+          indices: {
+            type: "array",
+            items: { type: "string" },
+            example: ["KMI30", "KSE100"],
+            description:
+              "Symbols of the indices we track that include this stock, read live from index_constituents. Empty when it is in none of them, so a client renders no index links rather than guessing one.",
+          },
           price: {
             allOf: [{ $ref: "#/components/schemas/Price" }],
             nullable: true,
