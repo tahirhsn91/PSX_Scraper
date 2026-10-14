@@ -19,7 +19,8 @@ import { StatePanel } from '../components/ui/StatePanel';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { useIndex, useIndexCandles, useStocks } from '../api/hooks';
-import { DASH, formatCount, formatDateTime, formatNumber } from '../lib/format';
+import { DASH, formatCount, formatDateTime, formatNumber, formatRelative } from '../lib/format';
+import { isStaleReading } from '../lib/freshness';
 import { indexMetaDescription, indexMetaTitle } from '../lib/seo';
 import { usePageMeta } from '../lib/usePageMeta';
 import type { HistoryRange, StockListItem } from '../types';
@@ -171,11 +172,28 @@ export function IndexDetail() {
         subtitle={data.name}
         crumbs={[{ label: 'Market board', to: '/' }, { label: data.symbol }]}
         meta={
-          <Typography variant="caption" color="text.secondary">
-            {data.lastTradeDate
-              ? `Exchange figures as of ${formatDateTime(data.lastTradeDate)}`
-              : 'No board row stored yet'}
-          </Typography>
+          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" alignItems="baseline">
+            <Typography variant="caption" color="text.secondary">
+              {data.lastTradeDate
+                ? `Exchange figures as of ${formatDateTime(data.lastTradeDate)}`
+                : 'No board row stored yet'}
+            </Typography>
+            {/*
+              When we last read this index — not the same question as the session above. A board that
+              has stopped reading keeps serving its last session, so without this the page cannot be
+              told apart from a live one; it is also the value a reader checks to know the data is
+              current.
+            */}
+            {data.liveAt && (
+              <Typography
+                variant="caption"
+                color={isStaleReading(data.liveAt) ? 'warning.main' : 'text.secondary'}
+                title={formatDateTime(data.liveAt)}
+              >
+                · last updated {formatRelative(data.liveAt)}
+              </Typography>
+            )}
+          </Stack>
         }
       />
 

@@ -50,6 +50,13 @@ export interface IndexSummary {
   return1y?: number | null;
   returnYtd?: number | null;
   lastTradeDate: string | null;
+  /**
+   * When the newest reading behind this index was stored — effectively when the board last read it.
+   * Distinct from `lastTradeDate`, which is the session the value belongs to: a board that has
+   * stopped reading keeps serving its last session, so the two are only alike while the board is
+   * alive. Null when we hold no reading for the index.
+   */
+  liveAt?: string | null;
 }
 
 export interface CandleSeries {
