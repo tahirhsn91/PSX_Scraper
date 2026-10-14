@@ -44,6 +44,11 @@ export interface IndexScrapeResult {
   /** Indices registered this pass that no board carries, filled from the source that publishes them
    *  (`supplementaryIndices.service.ts`). Present only on a pass that added one. */
   registered?: string[];
+  /**
+   * Symbols whose 52-week/market-cap write was refused. Present only when one was. Those columns are
+   * a best-effort extra from a second source; a refusal there must leave the index's level alone.
+   */
+  statsRefused?: string[];
 }
 
 /**
@@ -211,6 +216,7 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
   let valuesWritten = 0;
   let repaired = 0;
   const refused: string[] = [];
+  const statsRefused: string[] = [];
 
   // Read once: both the repair gate and the freshness check below need it, and a pass that crosses
   // 09:30 PKT mid-loop must not judge its own readings by two different clocks.
@@ -234,6 +240,14 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     // 52-week pair and market cap, published only by `/api/indices`. Set only when the source
     // published a real figure: a null must not blank what an earlier pass stored, and an index the
     // stats endpoint does not carry keeps its previous values.
+    //
+    // Written in its own statement *below*, never inside the upsert. These three columns are the one
+    // part of this pass that is explicitly allowed to fail (see the note above `boardStats`), and
+    // carrying them in the same call as the level made that promise untrue: a Prisma client that does
+    // not know one of them rejects the whole invocation (`Unknown argument week52High` on
+    // `marketIndex.upsert`), so a metadata gap froze every index's level, its session row and its
+    // repair — the board sat at 2026-10-09 16:30 PKT for five days while nothing but a failed job
+    // said so. The level is the board; the stats ride behind it.
     const stats = boardStats.get(index.symbol);
     const seoFields = {
       ...(stats?.high52 != null ? { week52High: new Prisma.Decimal(stats.high52) } : {}),
@@ -251,7 +265,6 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
         liveChange: index.change === null ? null : new Prisma.Decimal(index.change),
         liveChangePercent: index.changePercent === null ? null : new Prisma.Decimal(index.changePercent),
         lastSyncedAt: now,
-        ...seoFields,
       },
       create: {
         symbol: index.symbol,
@@ -261,11 +274,24 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
         liveChange: index.change === null ? null : new Prisma.Decimal(index.change),
         liveChangePercent: index.changePercent === null ? null : new Prisma.Decimal(index.changePercent),
         lastSyncedAt: now,
-        ...seoFields,
       },
     });
     if (existing) updated += 1;
     else created += 1;
+
+    // Best-effort, and deliberately after the level is stored: a refusal here leaves these columns as
+    // they stand and is reported rather than swallowed.
+    if (Object.keys(seoFields).length > 0) {
+      try {
+        await prisma.marketIndex.update({ where: { id: row.id }, data: seoFields });
+      } catch (error) {
+        statsRefused.push(index.symbol);
+        log.warn('index-scrape.stats_refused', {
+          symbol: index.symbol,
+          error: (error as Error).message.split('\n')[0]?.slice(0, 160),
+        });
+      }
+    }
 
     // The page carries no open, so the day's row is read first: its `open` is what decides whether
     // this reading may become the session's opening level.
@@ -360,6 +386,7 @@ export async function scrapeIndices(now = new Date()): Promise<IndexScrapeResult
     sessionDay,
     sessionRowWritten: writeSessionRow,
     ...(registered.length > 0 ? { registered } : {}),
+    ...(statsRefused.length > 0 ? { statsRefused } : {}),
   };
   log.info('index-scrape.done', { ...result, stamp: stamp.toISOString() });
   return result;

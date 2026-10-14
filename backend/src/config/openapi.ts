@@ -916,6 +916,16 @@ export const openapiSpec = {
             format: "date-time",
             nullable: true,
           },
+          liveAt: {
+            type: "string",
+            format: "date-time",
+            nullable: true,
+            description:
+              "When the newest reading behind this index was stored — in practice when the board last read " +
+              "it. Distinct from `lastTradeDate` (the session the value belongs to): a board that has stopped " +
+              "reading keeps serving its last session, so a client that wants to show whether the data is " +
+              "current uses this field, not `lastTradeDate`.",
+          },
         },
       },
       Price: {

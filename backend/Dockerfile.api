@@ -26,7 +26,20 @@ RUN npm install
 WORKDIR /app
 COPY backend ./backend
 WORKDIR /app/backend
-RUN npx prisma generate --schema=../database/prisma/schema.prisma
+# Generate the client into the package the app actually loads it from.
+#
+# Prisma writes the generated client to the `node_modules` nearest the *schema* file, so pointing at
+# ../database/prisma/schema.prisma lands it in /app/node_modules/.prisma/client — while both the API
+# and the worker resolve `@prisma/client` from /app/backend/node_modules and keep whatever
+# `npm install` left there. A schema change then reaches the image, passes every gate, and dies at
+# runtime on the new column, because the running code is still holding the old client: that is
+# exactly what froze the dev board's indices at their 2026-10-09 levels — `Unknown argument
+# week52High` on a `marketIndex.upsert`, on every 5-minute pass, for five days, with nothing on the
+# API to say so. Copying the schema inside this package puts the generated client where it is read.
+RUN mkdir -p ./prisma-schema \
+ && cp ../database/prisma/schema.prisma ./prisma-schema/schema.prisma \
+ && npx prisma generate --schema=./prisma-schema/schema.prisma \
+ && rm -rf ./prisma-schema
 RUN npm run build
 
 # ---- Runtime (API) ----
