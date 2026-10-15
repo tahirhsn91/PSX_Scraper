@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Avatar,
@@ -30,7 +30,7 @@ import { SectionCard } from "../components/ui/SectionCard";
 import { StatTile } from "../components/ui/StatTile";
 import { ChangePill } from "../components/ui/ChangePill";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
-import { DataTable, type Column } from "../components/ui/DataTable";
+import { DataTable, type Column, type SortState } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
 import { DASH, formatCount, formatMarketCap, formatNumber, formatRelative, formatRupees, formatSigned } from "../lib/format";
 import { isDev } from "../lib/env";
@@ -443,7 +443,7 @@ export function Dashboard() {
     });
   };
 
-  const chooseUniverse = (next: Universe | null) => {
+  const chooseUniverse = useCallback((next: Universe | null) => {
     if (!next || next === universe) return;
     setUniverse(next);
     // Each list is read at its own page size, and both go back to page one: page 4 of the whole
@@ -451,7 +451,7 @@ export function Dashboard() {
     // to the list you just left.
     setRowsPerPage(PAGE_SIZE[next]);
     setPage(0);
-  };
+  }, [universe]);
 
   const runSyncAll = () => {
     setConfirmSyncAll(false);
@@ -464,7 +464,55 @@ export function Dashboard() {
     });
   };
 
-  const pager = (
+  // ── Referentially stable props for the table below ────────────────────────────────────────────
+  //
+  // This component re-renders every 3 seconds while the sync-status poll is live, and the table it
+  // renders is ~100 rows × 9 columns ≈ 900 cells. `DataTable` is memoised and `memo` compares by
+  // reference, so inline arrows and freshly-built object/JSX literals defeat it on their own — the
+  // grid would be rebuilt just to update a queue counter elsewhere on the page. Each value below
+  // changes only when the thing it renders actually changes.
+  const tableRows = useMemo(() => data?.items ?? [], [data]);
+  const rowKey = useCallback((s: StockListItem) => s.id, []);
+  const rowHref = useCallback((s: StockListItem) => `/stocks/${s.symbol}`, []);
+  const handleRowClick = useCallback((s: StockListItem) => navigate(`/stocks/${s.symbol}`), [navigate]);
+  const handleRetry = useCallback(() => void refetch(), [refetch]);
+  const tableSort = useMemo(
+    () => ({ key: sort.key, direction: sort.direction }),
+    [sort.key, sort.direction]
+  );
+  const handleSortChange = useCallback((next: SortState) => {
+    setSort({ key: next.key as StockSortField, direction: next.direction });
+    setPage(0);
+  }, []);
+
+  const tableToolbar = useMemo(
+    () => (
+      <Stack direction="row" spacing={1} alignItems="center" useFlexGap sx={{ flexWrap: "wrap" }}>
+        <Typography variant="caption" color="text.secondary">
+          Sorted by {sort.key} ({sort.direction === "asc" ? "ascending" : "descending"})
+        </Typography>
+        {slowSort && (
+          <Typography variant="caption" color="warning.main">
+            · still sorting — heavy sorts take up to ~20 seconds (issue #96)
+          </Typography>
+        )}
+      </Stack>
+    ),
+    [sort.key, sort.direction, slowSort]
+  );
+
+  const tableEmptyAction = useMemo(
+    () => (
+      // Either way the useful move is the other list; "Add stock" is in the header above.
+      <Button variant="outlined" onClick={() => chooseUniverse(universe === "kse100" ? "allshr" : "kse100")}>
+        {universe === "kse100" ? "Show the broad market" : "Show the KSE-100"}
+      </Button>
+    ),
+    [chooseUniverse, universe]
+  );
+
+  const pager = useMemo(
+    () => (
     <Box>
       <Box sx={{ display: { xs: "none", md: "block" } }}>
         {/* 250 was offered here and could never work: the API caps `limit` at 200 and answers 400. */}
@@ -503,6 +551,8 @@ export function Dashboard() {
         </Button>
       </Stack>
     </Box>
+    ),
+    [page, rowsPerPage, data?.total, data?.totalPages]
   );
 
   return (
@@ -631,7 +681,7 @@ export function Dashboard() {
       >
         <DataTable
           columns={COLUMNS}
-          rows={data?.items ?? []}
+          rows={tableRows}
           ariaLabel="Tracked securities"
           /* Row-wise at every width, as asked: a phone gets the same rows as a desktop rather than
            * the card list, so the table carries a floor and its container takes the scroll. */
@@ -640,17 +690,14 @@ export function Dashboard() {
           /* Rationed widths: nine columns carry a share and Company takes the rest, so one long
            * name clips instead of wrapping and setting the height of every row. */
           fixed
-          rowKey={(s) => s.id}
-          rowHref={(s) => `/stocks/${s.symbol}`}
-          onRowClick={(s) => navigate(`/stocks/${s.symbol}`)}
+          rowKey={rowKey}
+          rowHref={rowHref}
+          onRowClick={handleRowClick}
           loading={isLoading}
           error={isError ? "Failed to load the stock list." : undefined}
-          onRetry={() => void refetch()}
-          sort={{ key: sort.key, direction: sort.direction }}
-          onSortChange={(next) => {
-            setSort({ key: next.key as StockSortField, direction: next.direction });
-            setPage(0);
-          }}
+          onRetry={handleRetry}
+          sort={tableSort}
+          onSortChange={handleSortChange}
           emptyTitle={
             universe === "kse100"
               ? "No KSE-100 members tracked"
@@ -661,26 +708,10 @@ export function Dashboard() {
               ? "The index's published member list is refreshed daily, and nothing in it is tracked here yet. The broad market is the other list."
               : "ALLSHR's published member list is refreshed daily, and nothing in it is tracked here yet. The KSE-100 is the other list."
           }
-          emptyAction={
-            // Either way the useful move is the other list; "Add stock" is in the header above.
-            <Button variant="outlined" onClick={() => chooseUniverse(universe === "kse100" ? "allshr" : "kse100")}>
-              {universe === "kse100" ? "Show the broad market" : "Show the KSE-100"}
-            </Button>
-          }
+          emptyAction={tableEmptyAction}
           pagination={pager}
           skeletonRows={8}
-          toolbar={
-            <Stack direction="row" spacing={1} alignItems="center" useFlexGap sx={{ flexWrap: "wrap" }}>
-              <Typography variant="caption" color="text.secondary">
-                Sorted by {sort.key} ({sort.direction === "asc" ? "ascending" : "descending"})
-              </Typography>
-              {slowSort && (
-                <Typography variant="caption" color="warning.main">
-                  · still sorting — heavy sorts take up to ~20 seconds (issue #96)
-                </Typography>
-              )}
-            </Stack>
-          }
+          toolbar={tableToolbar}
         />
       </SectionCard>
 
