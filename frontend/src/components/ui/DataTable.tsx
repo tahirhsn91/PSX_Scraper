@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 import {
   Box,
   Card,
@@ -129,7 +129,7 @@ export interface DataTableProps<T> {
  * the dashboard's table at 806px inside a 390px viewport, which scrolled the whole page sideways).
  * Horizontal scrolling is confined to the table container — never the page.
  */
-export function DataTable<T>({
+function DataTableInner<T>({
   columns,
   rows,
   rowKey,
@@ -327,6 +327,22 @@ export function DataTable<T>({
     </Box>
   );
 }
+
+/**
+ * Memoised, so a parent's unrelated re-render does not redraw every cell.
+ *
+ * The dashboard re-renders on its 3-second sync-status poll, and the table under it is ~100 rows ×
+ * 9 columns ≈ 900 cells: a queue counter ticking over rebuilt the whole grid. With `memo`, this
+ * component's own props become the only reason it redraws — which holds only as long as the caller
+ * keeps them referentially stable. `Dashboard.tsx` does: its handlers are `useCallback`ed and the
+ * JSX it passes as `toolbar` / `pagination` / `emptyAction` is `useMemo`ed for exactly this reason.
+ * A caller that passes fresh inline arrows simply opts out of the optimisation, and behaves as it
+ * did before.
+ *
+ * The cast restores the generic signature: `memo()` erases the type parameter, and callers render it
+ * as `DataTable<Row>`.
+ */
+export const DataTable = memo(DataTableInner) as typeof DataTableInner;
 
 function MobileCards<T>({
   columns,
