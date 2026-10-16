@@ -162,6 +162,47 @@ export interface SearchResult {
   lastTradeDate: string | null;
 }
 
+/**
+ * A product a company makes, with its image and that image's provenance (#180).
+ *
+ * `imagePath` is a root-relative path this app serves, never a remote URL, and the API withholds it
+ * unless `imageSource` and `imageLicence` are both recorded — an image whose provenance cannot be
+ * stated is not published.
+ */
+export interface CompanyProduct {
+  name: string;
+  summary: string | null;
+  imagePath: string | null;
+  imageSource: string | null;
+  imageLicence: string | null;
+}
+
+/**
+ * The stock page's Company Description section (#180).
+ *
+ * Editorial content, written by hand — no source this project integrates publishes a description,
+ * CEO, website, phone or product list. Null for almost every symbol while the content is written
+ * up in batches, which is why every field is nullable and the section renders nothing at all when
+ * there is no profile.
+ */
+export interface CompanyProfile {
+  description: string | null;
+  headOffice: string | null;
+  phone: string | null;
+  website: string | null;
+  ceo: string | null;
+  /** Where the content came from, shown to the reader so they can weigh it. */
+  sourceNote: string | null;
+  updatedAt: string;
+  products: CompanyProduct[];
+}
+
+/** `profile: null` means the stock is tracked but nobody has written it up — not an error. */
+export interface StockProfileResponse {
+  symbol: string;
+  profile: CompanyProfile | null;
+}
+
 export interface StockDetail {
   id: string;
   symbol: string;
