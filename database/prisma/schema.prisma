@@ -39,6 +39,9 @@ model Stock {
   constituents IndexConstituent[]
   // The same members' *live* contribution to their index, refreshed through the session.
   contributions IndexContribution[]
+  // Editorial company profile (the stock page's "Company Description" section). Null for almost
+  // every symbol: this is written by hand, not scraped — see the 0020 migration's header.
+  profile     CompanyProfile?
 
   @@index([companyName])
   @@map("stocks")
@@ -333,4 +336,58 @@ model MarketHoliday {
 
   @@index([date])
   @@map("market_holidays")
+}
+
+/// Editorial company profile — the "Company Description" section on a stock page.
+///
+/// Nothing here is scraped. No source this project integrates publishes a description, CEO,
+/// website, phone or product list (probed 2026-10-16, issue #180), so every content column is
+/// human-supplied and nullable, and a row exists only once someone has written something. A
+/// stock with no row renders no section at all — absence is the default state, not an edge case,
+/// so the read path must treat "no profile" as ordinary rather than as missing data.
+model CompanyProfile {
+id          String   @id @default(uuid())
+stockId     String   @unique @map("stock_id")
+/// Short prose description of the business — the one field worth having on its own.
+description String?
+/// Registered / head-office address, as the company itself states it.
+headOffice  String?  @map("head_office")
+phone       String?
+/// The company's own site. Stored as written; the UI is responsible for making it a safe link.
+website     String?
+ceo         String?
+/// Where this content came from, so a reader can weigh it. Free text (an annual report, a
+/// company site, the submitter) rather than a URL contract.
+sourceNote  String?  @map("source_note")
+createdAt   DateTime @default(now()) @map("created_at")
+updatedAt   DateTime @updatedAt @map("updated_at")
+
+stock       Stock            @relation(fields: [stockId], references: [id], onDelete: Cascade)
+products    CompanyProduct[]
+
+@@map("company_profiles")
+}
+
+/// One product a company makes, with its own image and that image's provenance.
+model CompanyProduct {
+id           String   @id @default(uuid())
+profileId    String   @map("profile_id")
+name         String
+summary      String?
+/// Path served by this app (e.g. `/products/luck-cement-plant.jpg`), not a remote URL. A
+/// product image that silently 404s, or vanishes with someone else's CDN, is worse than no
+/// image at all — these are the only images on the page we cannot re-derive from a source.
+imagePath    String?  @map("image_path")
+/// Required whenever `imagePath` is set: where the image came from and under what licence.
+/// Enforced by the content script and its test, which Prisma's schema cannot express.
+imageSource  String?  @map("image_source")
+imageLicence String?  @map("image_licence")
+/// Order within the section, so the writer controls the reading order.
+position     Int
+createdAt    DateTime @default(now()) @map("created_at")
+
+profile      CompanyProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+@@index([profileId, position])
+@@map("company_products")
 }

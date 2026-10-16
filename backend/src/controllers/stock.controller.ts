@@ -6,6 +6,7 @@ import { betaService } from '../services/beta.service';
 import { syncService } from '../services/sync.service';
 import { marketCapService } from '../services/marketCap.service';
 import { stockLogoService } from '../services/stockLogo.service';
+import { companyProfileService } from '../services/companyProfile.service';
 import { valid } from '../middleware/validate';
 import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, candlesQuery } from '../validators/schemas';
 
@@ -41,6 +42,19 @@ export const listStocks: RequestHandler = async (req, res) => {
 export const getStock: RequestHandler = async (req, res) => {
   const { symbol } = valid<Sym>(req, 'params');
   res.json(await stockService.getDetail(symbol));
+};
+
+/**
+ * The stock page's "Company Description" section.
+ *
+ * Separate from `getStock` on purpose. The detail payload is what the page waits on before it can
+ * paint anything, and this content is editorial, below the fold, and absent for most symbols — so
+ * it gets its own read the page can make lazily, rather than a few hundred more bytes of usually-null
+ * fields on the hot path.
+ */
+export const stockProfile: RequestHandler = async (req, res) => {
+  const { symbol } = valid<Sym>(req, 'params');
+  res.json(await companyProfileService.get(symbol));
 };
 
 export const addStock: RequestHandler = async (req, res) => {

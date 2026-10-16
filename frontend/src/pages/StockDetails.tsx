@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
@@ -21,6 +21,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { FundamentalsPanel } from '../components/FundamentalsPanel';
+import { CompanyDescriptionPanel } from '../components/CompanyDescriptionPanel';
 import { IncomeStatementPanel } from '../components/IncomeStatementPanel';
 import { HoldingButton } from '../components/HoldingDialog';
 import { QuickJumpNav, type QuickJumpSection } from '../components/QuickJumpNav';
@@ -52,6 +53,7 @@ import {
   useHistory,
   useHistoryStatus,
   useStock,
+  useStockProfile,
   useStocks,
   useSyncStatus,
   useSyncStock,
@@ -78,6 +80,10 @@ type ChartMode = 'candles' | 'line' | 'tradingview';
 /** The page's sections, in reading order. `id` is the anchor the sticky quick-jump scrolls to. */
 const SECTIONS: QuickJumpSection[] = [
   { id: 'section-history', label: 'History' },
+  // The company write-up sits straight after the chart: it is context for the numbers above it,
+  // and putting it first would push the price history — what the page is actually for — below
+  // the fold along with its chart.
+  { id: 'section-company', label: 'Company Description' },
   { id: 'section-fundamentals', label: 'Fundamentals' },
   { id: 'section-financials', label: 'Financials' },
   { id: 'section-ratios', label: 'Ratios' },
@@ -157,6 +163,22 @@ export function StockDetails() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const qc = useQueryClient();
   const { data, isLoading, isError } = useStock(symbol);
+  // Editorial, below the fold, and absent for most symbols — so it is fetched on its own and the
+  // page never waits on it. Must stay above the early returns below: the hook order has to be
+  // stable across the loading, error and loaded renders.
+  const profileQ = useStockProfile(symbol);
+  /**
+   * The quick-jump nav must offer only sections that exist on this page.
+   *
+   * SECTIONS is the full list, but the company write-up is absent for most symbols — and a nav
+   * entry pointing at `#section-company` when no such element rendered is a link that does
+   * nothing. Verified on OGDC (no profile): the section was correctly absent while the nav still
+   * offered it, which is what this removes.
+   */
+  const navSections = useMemo(
+    () => (profileQ.data?.profile ? SECTIONS : SECTIONS.filter((s) => s.id !== 'section-company')),
+    [profileQ.data],
+  );
   const [range, setRange] = useState<HistoryRange>('1Y');
   const { data: history, isFetching: historyLoading } = useHistory(symbol, range);
   // One range control drives both views: the API resolves the preset (1W … MAX) to a lower
@@ -453,7 +475,7 @@ export function StockDetails() {
         </Grid>
       </Grid>
 
-      <QuickJumpNav sections={SECTIONS} onOffsetChange={setScrollOffset} />
+      <QuickJumpNav sections={navSections} onOffsetChange={setScrollOffset} />
 
       <Stack spacing={3} sx={{ mt: 2 }}>
         <Box component="section" id="section-history" sx={{ scrollMarginTop: scrollOffset }}>
@@ -672,6 +694,14 @@ export function StockDetails() {
             )}
           </SectionCard>
         </Box>
+
+        {/* No profile means no section at all — not an empty card. Most of the board is in that
+          * state while the content is written up in batches. */}
+        {profileQ.data?.profile && (
+          <Box component="section" id="section-company" sx={{ scrollMarginTop: scrollOffset }}>
+            <CompanyDescriptionPanel profile={profileQ.data.profile} sector={data.sector} />
+          </Box>
+        )}
 
         <Box component="section" id="section-fundamentals" sx={{ scrollMarginTop: scrollOffset }}>
           <FundamentalsPanel ratios={data.ratios} insights={data.insights} />
