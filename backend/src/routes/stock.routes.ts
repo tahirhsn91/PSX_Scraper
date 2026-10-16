@@ -18,6 +18,14 @@ router.get(
   asyncHandler(ctrl.stockCandles),
 );
 router.post('/', mutationLimiter, validate(addStockBody, 'body'), asyncHandler(ctrl.addStock));
+// Two segments, so the one-segment `/:symbol` routes below cannot shadow it. The company profile
+// is its own read for the same reason it is its own controller: it is editorial content the page
+// fetches after the numbers, and it is absent for most symbols.
+router.get(
+  '/:symbol/profile',
+  validate(symbolParam, 'params'),
+  asyncHandler(ctrl.stockProfile),
+);
 // Two segments, so the one-segment `/:symbol` routes below cannot shadow it.
 router.post('/market-cap/refresh', mutationLimiter, asyncHandler(ctrl.refreshMarketCaps));
 router.post('/beta/refresh', mutationLimiter, asyncHandler(ctrl.refreshBeta));

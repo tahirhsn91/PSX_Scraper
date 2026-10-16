@@ -1,0 +1,75 @@
+{
+  "_comment": "Editorial content for HUBC. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of HUBCO's own plant exists on the open licence sources, and a generic power-plant photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "HUBC",
+  "description": "The Hub Power Company Limited (HUBCO) is Pakistan's first and one of its largest independent power producers, with a combined installed generation capacity of 2,289 MW. Its original plant at Mouza Kund in Hub, Balochistan is one of the most efficient furnace-oil-fired thermal stations in the country. The group has since diversified into imported-coal and Thar lignite generation, oil and gas exploration, coal mining, and operations and maintenance services. Through its subsidiary Hub Power Holdings, it also holds an electric-vehicle venture with BYD Auto Industry Company Limited in Pakistan.",
+  "headOffice": "9th Floor, Ocean Tower, G-3, Block 9, Main Clifton Road, Karachi 75600, Pakistan",
+  "phone": "+92 21 3587 4677",
+  "website": "https://hubpower.com",
+  "ceo": "Kamran Kamal",
+  "sourceNote": "Company website (hubpower.com: about-us, business) and the PSX-listed company's own disclosures, read 2026-10-16.",
+  "products": [
+    {
+      "name": "Hub Plant — thermal generation",
+      "summary": "1,292 MW furnace-oil-fired station at Mouza Kund, Hub, Balochistan. The company's original plant, and one of the most efficient RFO-fired thermal plants in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Narowal Energy Limited",
+      "summary": "An RFO-fired, engine-based combined-cycle power station.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Laraib Energy Limited",
+      "summary": "An 84 MW run-of-the-river hydel station — Pakistan's first hydel independent power producer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "China Power Hub Generation Company Limited",
+      "summary": "A 1,320 MW imported coal-based power plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Thar Energy Limited",
+      "summary": "A 330 MW lignite-fired power plant using indigenous Thar coal.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Thalnova Power Thar Limited",
+      "summary": "A 330 MW lignite-fired power plant using indigenous Thar coal.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sindh Engro Coal Mining Company",
+      "summary": "A 7.6 MTPA lignite coal producer, mining the Thar coalfield.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Prime International Oil & Gas Company",
+      "summary": "Oil and gas exploration and development of indigenous fuel sources.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mega Motor Company — BYD vehicles",
+      "summary": "An electric-vehicle business with BYD Auto Industry Company Limited in Pakistan, held through the wholly owned subsidiary Hub Power Holdings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
