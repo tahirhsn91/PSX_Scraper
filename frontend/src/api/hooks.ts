@@ -4,6 +4,7 @@ import type {
   Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
+  StockProfileResponse,
 } from '../types';
 
 /** Stable string for a filters object, so the query key changes only when the criteria change. */
@@ -25,6 +26,7 @@ export const keys = {
     filters?: StockFilters,
   ) => ['stocks', page, limit, sort ?? 'symbol', order, group ?? 'all', index ?? 'none', filtersKey(filters)] as const,
   stock: (symbol: string) => ['stock', symbol] as const,
+  stockProfile: (symbol: string) => ['stock', symbol, 'profile'] as const,
   search: (q: string) => ['search', q] as const,
   history: (symbol: string, range: HistoryRange) => ['history', symbol, range] as const,
   candles: (symbol: string) => ['candles', symbol] as const,
@@ -150,6 +152,27 @@ export const useStock = (symbol: string) =>
     queryKey: keys.stock(symbol),
     queryFn: async () => (await api.get<StockDetail>(`/stocks/${symbol}`)).data,
     enabled: !!symbol,
+  });
+
+/**
+ * The stock page's Company Description section (#180).
+ *
+ * Its own query rather than part of `useStock`: the content is editorial and below the fold, and it
+ * is absent for most symbols — so the page paints the price and the chart without waiting on it,
+ * and a stock nobody has written up resolves to `profile: null` rather than to an error. The
+ * section renders nothing in that case.
+ *
+ * `retry: false` because the only failure worth retrying is a network blip: a 404 here is a
+ * definitive "not a tracked symbol" and asking again changes nothing.
+ */
+export const useStockProfile = (symbol: string) =>
+  useQuery({
+    queryKey: keys.stockProfile(symbol),
+    queryFn: async () => (await api.get<StockProfileResponse>(`/stocks/${symbol}/profile`)).data,
+    enabled: Boolean(symbol),
+    retry: false,
+    // Editorial content changes when someone edits a file and re-runs the loader, not on a timer.
+    staleTime: 5 * 60 * 1000,
   });
 
 export const useSearch = (q: string) =>

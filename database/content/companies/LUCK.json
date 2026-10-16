@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for LUCK. Every fact here is attributable — see sourceNote. No image is attached: the CC-licensed cement-plant photographs on Wikimedia Commons are of plants in India and Canada, and using one here would state — without saying it — that the picture is of Lucky's facility.",
+  "symbol": "LUCK",
+  "description": "Lucky Cement Limited is Pakistan's largest cement producer, with an installed capacity of 15.3 million tonnes per annum across its plants at Karachi and Pezu in Khyber Pakhtunkhwa. It is part of the Yunus Brothers Group and operates the only dedicated cement export terminal at Karachi Port, exporting to markets in Africa, Bangladesh, Sri Lanka, the United States and Brazil. Its subsidiary Lucky Motor Corporation assembles and distributes Kia and Peugeot vehicles in Pakistan and, under an exclusive agreement announced in April 2026, GAC vehicles as well. The group also runs cement operations in Iraq and the Democratic Republic of Congo, and owns the 660 MW Lucky Electric Power Company plant.",
+  "headOffice": "6-A, Muhammad Ali Housing Society, A. Aziz Hashim Tabba Street, Karachi 75350, Pakistan",
+  "phone": "+92 21 111 786 555",
+  "website": "https://lucky-cement.com",
+  "ceo": "Muhammad Ali Tabba",
+  "sourceNote": "Company website (lucky-cement.com: our-locations, our-leadership, home) and the GAC partnership as disclosed by Lucky Cement to the Pakistan Stock Exchange, April 2026. Read 2026-10-16.",
+  "products": [
+    {
+      "name": "Cement",
+      "summary": "Ordinary Portland and sulphate-resisting cement from the Karachi and Pezu plants, with 15.3 MTPA of installed capacity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Clinker",
+      "summary": "Cement clinker, exported through the company's own terminal at Karachi Port — exports exceeded 3 million tonnes in FY2025.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Kia vehicles",
+      "summary": "Assembled, marketed and distributed in Pakistan by Lucky Motor Corporation Limited, a subsidiary. The lineup includes the Sportage, Sorento, Stonic and Carnival.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Peugeot vehicles",
+      "summary": "Assembled and distributed by Lucky Motor Corporation — the first locally assembled European brand in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "GAC vehicles — Aion and Hyptec",
+      "summary": "Added through an exclusive partnership with China's GAC Group, announced to the Pakistan Stock Exchange in April 2026, bringing GAC's new-energy vehicle brands to Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lucky Electric Power",
+      "summary": "A 660 MW supercritical coal-fired power plant, through Lucky Electric Power Company Limited.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
