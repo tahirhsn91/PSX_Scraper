@@ -205,7 +205,7 @@ export function IndexDetail() {
             footer={
               <Stack direction="row" spacing={1} alignItems="center">
                 <ChangePill value={data.changePercent} variant="soft" />
-                {/* The point move, in the same green/red as the pill (#181). */}
+                {/* The point move, in the same green/red as the pill (#190). */}
                 <Typography
                   variant="caption"
                   fontWeight={600}

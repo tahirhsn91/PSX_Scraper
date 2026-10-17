@@ -200,7 +200,7 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
             sx={{ color: tone.ink, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}
           >
             {/* Points first, percentage in brackets: an index is quoted in points, and the
-                percentage on its own does not say how far the index actually moved (#181). Both
+                percentage on its own does not say how far the index actually moved (#190). Both
                 inherit the tile's up/down ink, so the pair reads as one figure. */}
             <LiveNumber
               value={index.change}
