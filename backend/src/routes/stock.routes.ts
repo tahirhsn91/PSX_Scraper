@@ -8,9 +8,15 @@ import { mutationLimiter } from '../middleware/rateLimit';
 const router = Router();
 
 router.get('/', validate(stocksQuery, 'query'), asyncHandler(ctrl.listStocks));
-// Candles sit before the by-symbol routes: /:symbol matches one segment, so this is
-// unambiguous, but keeping the chart's endpoint next to the list makes the read paths read
-// together.
+// Indicators sit before the by-symbol read: /:symbol matches one segment, so this is unambiguous,
+// and both read paths stay together.
+router.get(
+  '/:symbol/indicators',
+  validate(symbolParam, 'params'),
+  asyncHandler(ctrl.indicators),
+);
+
+// Candles next to the indicators: the chart and the analysis are two views of the same sessions.
 router.get(
   '/:symbol/candles',
   validate(symbolParam, 'params'),

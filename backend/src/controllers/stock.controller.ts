@@ -8,6 +8,9 @@ import { marketCapService } from '../services/marketCap.service';
 import { stockLogoService } from '../services/stockLogo.service';
 import { companyProfileService } from '../services/companyProfile.service';
 import { SCREENER_PRESETS, presetSummaries } from '../services/screenerPresets';
+import { computeIndicators, type IndicatorKey } from '../services/indicators.service';
+import { cacheGet, cacheSet } from '../services/cache';
+import { HISTORY_RANGES, rangeToFrom, type HistoryRange } from '../utils/range';
 import { valid } from '../middleware/validate';
 import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, candlesQuery } from '../validators/schemas';
 
@@ -168,4 +171,92 @@ export const syncHistory: RequestHandler = async (req, res) => {
 export const historyStatus: RequestHandler = async (req, res) => {
   const { symbol } = valid<Sym>(req, 'params');
   res.json(await syncService.historyJobStatus(symbol));
+};
+
+const INDICATOR_SETS: IndicatorKey[] = ['sma', 'ema', 'rsi', 'macd', 'bb', 'atr', 'relvol'];
+const DEFAULT_SETS: IndicatorKey[] = ['sma', 'ema', 'rsi', 'macd', 'bb', 'atr', 'relvol'];
+
+/** `?sets=sma,rsi` → a de-duplicated list; unknown names are ignored rather than silently mapped. */
+function parseSets(raw: unknown): IndicatorKey[] {
+  const asked = String(raw ?? '')
+    .split(',')
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+  if (asked.length === 0) return DEFAULT_SETS;
+  const valid = asked.filter((s): s is IndicatorKey => (INDICATOR_SETS as string[]).includes(s));
+  return valid.length > 0 ? [...new Set(valid)] : DEFAULT_SETS;
+}
+
+/**
+ * Technical indicators for one symbol.
+ *
+ * Cached for five minutes per symbol/range/sets: the inputs only change when a sync writes a new
+ * session, and a chart re-reads this on every period switch. The cache holds the computed payload,
+ * so a warm request is a Redis read and no database work at all.
+ */
+export const indicators: RequestHandler = async (req, res) => {
+  const symbol = String(req.params.symbol).toUpperCase();
+  // Ranges are upper-case in this app ('1Y'); anything unrecognised is refused rather than
+  // silently treated as "all history", which would quietly return a decade of candles.
+  const rangeRaw = String(req.query.range ?? '1Y').toUpperCase();
+  if (!(HISTORY_RANGES as readonly string[]).includes(rangeRaw)) {
+    res.status(422).json({
+      error: { code: 'INVALID_RANGE', message: `range must be one of ${HISTORY_RANGES.join(', ')}` },
+    });
+    return;
+  }
+  const range = rangeRaw as HistoryRange;
+  const sets = parseSets(req.query.sets);
+
+  // Versioned: the cached payload embeds the maths, so a change to the engine must not keep
+  // serving the previous answers for five minutes.
+  const key = `indicators:v1:${symbol}:${range}:${[...sets].sort().join(',')}`;
+  const cached = await cacheGet<Record<string, unknown>>(key);
+  if (cached) {
+    res.setHeader('X-Cache', 'HIT');
+    res.json(cached);
+    return;
+  }
+
+  // Look back further than the requested window: a 1Y chart of SMA(200) still needs 200 sessions
+  // *before* its first point, or the line would only appear in its last quarter. The output is
+  // trimmed back to the requested window after the maths.
+  const cutoff = rangeToFrom(range);
+  const lookback = cutoff ? new Date(cutoff.getTime() - 500 * 86_400_000) : undefined;
+  const candles = await stockService.candles(symbol, { from: lookback });
+  const cutoffIso = cutoff ? cutoff.toISOString().slice(0, 10) : null;
+  const series = computeIndicators(candles.items, sets).map((s) => {
+    if (!cutoffIso) return s;
+    const points = s.points.filter((p) => p.date >= cutoffIso);
+    const valid = points.filter((p) => p.value !== null);
+    return {
+      ...s,
+      points,
+      windowStart: valid[0]?.date ?? null,
+      windowEnd: valid[valid.length - 1]?.date ?? null,
+      insufficientData: valid.length === 0,
+      availableSessions: points.length,
+    };
+  });
+
+  // Report the requested window, not the lookback the maths needed: `sessions` is what the caller
+  // asked for, and a 1M request that reports 375 sessions would be describing the query, not the answer.
+  const windowCandles = cutoffIso ? candles.items.filter((c) => c.time >= cutoffIso) : candles.items;
+
+  const payload = {
+    symbol,
+    range,
+    sessions: windowCandles.length,
+    from: windowCandles[0]?.time ?? null,
+    to: windowCandles[windowCandles.length - 1]?.time ?? null,
+    // The same caveats the candles endpoint reports: readings dropped as implausible, and readings
+    // kept with fields nulled. An indicator built on a sanitised close should say so.
+    skipped: candles.skipped,
+    sanitised: candles.sanitised,
+    series,
+  };
+
+  await cacheSet(key, payload, 300);
+  res.setHeader('X-Cache', 'MISS');
+  res.json(payload);
 };
