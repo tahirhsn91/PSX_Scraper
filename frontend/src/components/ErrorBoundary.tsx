@@ -66,7 +66,7 @@ export class ErrorBoundary extends Component<Props, State> {
         description={
           stale
             ? 'This tab was open when the app was updated, so part of it is out of date. Reloading loads the current version.'
-            : 'Something went wrong while drawing this page. Reloading usually clears it — your watchlist and portfolio are stored separately, so they are not affected.'
+            : 'Something went wrong while drawing this page. Reloading usually clears it — your watchlist is stored on this device, so it is not affected.'
         }
         actions={
           <Stack
