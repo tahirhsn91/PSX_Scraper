@@ -75,7 +75,7 @@ export function Sectors() {
           <SectorHeatmap sectors={rows} />
         </SectionCard>
       )}
-      <SectionCard flush>
+      <SectionCard flush reveal>
         <DataTable
           columns={columns}
           rows={rows}

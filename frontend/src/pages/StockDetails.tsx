@@ -30,6 +30,7 @@ import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
+import { Reveal } from '../components/ui/Reveal';
 import { StatTile } from '../components/ui/StatTile';
 import { StatePanel } from '../components/ui/StatePanel';
 import {
@@ -759,20 +760,27 @@ export function StockDetails() {
           * state while the content is written up in batches. */}
         {profileQ.data?.profile && (
           <Box component="section" id="section-company" sx={{ scrollMarginTop: scrollOffset }}>
-            <CompanyDescriptionPanel profile={profileQ.data.profile} sector={data.sector} />
+            <Reveal>
+              <CompanyDescriptionPanel profile={profileQ.data.profile} sector={data.sector} />
+            </Reveal>
           </Box>
         )}
 
         <Box component="section" id="section-fundamentals" sx={{ scrollMarginTop: scrollOffset }}>
-          <FundamentalsPanel ratios={data.ratios} insights={data.insights} />
+          <Reveal>
+            <FundamentalsPanel ratios={data.ratios} insights={data.insights} />
+          </Reveal>
         </Box>
 
         <Box component="section" id="section-financials" sx={{ scrollMarginTop: scrollOffset }}>
-          <IncomeStatementPanel statement={data.incomeStatement} />
+          <Reveal>
+            <IncomeStatementPanel statement={data.incomeStatement} />
+          </Reveal>
         </Box>
 
         <Box component="section" id="section-ratios" sx={{ scrollMarginTop: scrollOffset }}>
           <SectionCard
+            reveal
             title="Ratios"
             subtitle="As published on the company page · blank means the field was not on the page we read"
           >
@@ -807,6 +815,7 @@ export function StockDetails() {
 
         <Box component="section" id="section-dividends" sx={{ scrollMarginTop: scrollOffset }}>
           <SectionCard
+            reveal
             title="Dividends"
             subtitle={`${data.dividends.length} announcement${data.dividends.length === 1 ? '' : 's'} on record`}
             action={
@@ -840,6 +849,7 @@ export function StockDetails() {
             collapsed the 24px page rhythm to 0px at that seam. */}
         <Box component="section" id="section-related" sx={{ scrollMarginTop: scrollOffset }}>
             <SectionCard
+              reveal
               title="Related"
               subtitle="Where this stock sits in the market — every link opens that page"
             >
