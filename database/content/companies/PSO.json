@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for PSO. Every fact is attributable — see sourceNote. No image is attached: PSO's retail and terminal photography is the company's asset, not licence-cleared.",
+  "symbol": "PSO",
+  "description": "Pakistan State Oil Company Limited is Pakistan's largest energy marketing company, operating a country-wide network of 3,528 retail outlets, nine installations, 19 depots, refuelling facilities at 14 airports and operations at two seaports, with storage capacity of 1.14 million tons. It supplies motor gasoline, high-speed diesel, jet fuel, furnace oil, LPG and LNG, and manufactures and markets lubricants under brands including Carient, Blaze and DEO. The PSO Group comprises Pakistan State Oil as the holding company and Pakistan Refinery Limited as its subsidiary.",
+  "headOffice": "PSO House, Khayaban-e-Iqbal, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 111 111 776",
+  "website": "https://psopk.com",
+  "ceo": "Jawwad Ahmed Cheema",
+  "sourceNote": "Written from: psopk.com/en/our-group/who-we-are, /en/our-group, /en/our-group/our-business-lines, and the press release psopk.com/en/media/press-releases/pso-announces-appointment-of-mr-jawwad-ahmed-cheema-as-ceo (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Octane+ Euro 5",
+      "summary": "Retail high-octane fuel grade sold under the Octane+ Euro 5 name.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Premier Euro 5",
+      "summary": "Retail motor gasoline in Euro 5 specification.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hi-Cetane Diesel Euro 5",
+      "summary": "Retail high-speed diesel in Euro 5 specification.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Jet fuel",
+      "summary": "Aviation fuel supplied to airlines at airports across the country.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lubricants",
+      "summary": "Engine oils, driveline fluids, metal-working fluids and industrial lubricants, including the Carient, Blaze, DEO and Hygrol ranges.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "LPG and LNG",
+      "summary": "Gaseous fuels supplied to domestic, commercial and industrial customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

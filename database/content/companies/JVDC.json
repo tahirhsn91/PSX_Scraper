@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for JVDC. Every fact is attributable — see sourceNote. No image is attached: Naya Nazimabad's marketing photography is the developer's asset, not licence-cleared.",
+  "symbol": "JVDC",
+  "description": "Javedan Corporation Limited is a Pakistani real-estate development company incorporated in June 1961 and listed on the Pakistan Stock Exchange. Its business is Naya Nazimabad, a gated development on Manghopir Road in Karachi that the company describes as a live, work and play community with education, healthcare and sports facilities. The Arif Habib Group is the company's largest shareholder and business manager.",
+  "headOffice": "1st Floor, Arif Habib Center, 23 M.T. Khan Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 32460717-19",
+  "website": "https://jcl.com.pk",
+  "ceo": "Samad Habib",
+  "sourceNote": "Written from: jcl.com.pk (home, about-us, contact block) and nayanazimabad.com/who-we-are/, /apartments/, /commercial/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Naya Nazimabad — residential development",
+      "summary": "A gated community on Manghopir Road, Karachi, developed on a live, work and play concept, with water, gas and electricity available in the vicinity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Globe Residency Apartments",
+      "summary": "Four- and five-room apartments in Naya Nazimabad, with dedicated parking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Peace Apartment — shops and showrooms",
+      "summary": "Commercial units of 200 to 1,000 sq ft on the upper ground floor, aimed at grocery stores, pharmacies, salons, cafes and brand outlets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Community amenities",
+      "summary": "Jama Masjid, a club house and gymnasium, cricket and football stadiums, and the Ali Habib Medical Center.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

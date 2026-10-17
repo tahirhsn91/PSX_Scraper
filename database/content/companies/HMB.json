@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for HMB. Every fact here is attributable — see sourceNote. No image is attached: a generic bank-branch photograph would imply it is one of HABIBMETRO's own branches.",
+  "symbol": "HMB",
+  "description": "Habib Metropolitan Bank Limited (HABIBMETRO) was incorporated in Pakistan as a public listed company in 1992 and describes itself as a leading trade finance bank, operating more than 550 branches in over 200 cities — including dedicated Islamic branches and Islamic windows — and an offshore banking unit in the Karachi Export Processing Zone. It serves retail, corporate, commercial and Islamic banking customers through mobile and internet banking and a network of more than 600 ATMs. The bank is a subsidiary of Habib Bank AG Zurich.",
+  "headOffice": "Registered / Head Office Building, I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": "+92 21 111 14 14 14",
+  "website": "https://www.habibmetro.com",
+  "ceo": "Khurram Shahzad Khan",
+  "sourceNote": "Written from: https://www.habibmetro.com/about/profile/, https://www.habibmetro.com/about/board-of-directors/, https://www.habibmetro.com/information-center/contact-us/ and the product navigation on https://www.habibmetro.com/sirat/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Current and savings accounts",
+      "summary": "Personal and business current accounts, including Asaan and Basic Banking accounts, and savings accounts such as Saving Plus, Multiplier, Privilege 55+ and Junior Savers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fixed deposits",
+      "summary": "Term deposit products including Mahana Deposit, Premium Deposit, Izafa Certificate and Bharpoor Munafa Term Deposit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Vehicle financing",
+      "summary": "Car financing offered through HABIBMETRO Modaraba, with published eligibility criteria and application process.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate and trade finance",
+      "summary": "Corporate banking, trade finance and structured finance for business customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SME banking",
+      "summary": "Financing facilities and a dedicated application process for small and medium enterprises.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Islamic banking (Sirat)",
+      "summary": "Islamic banking products and services offered through the bank's Sirat brand, its dedicated Islamic branches and Islamic windows.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

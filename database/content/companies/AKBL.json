@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for AKBL. Every fact here is attributable - see sourceNote. No image is attached: none of the bank's own press images is licence-cleared for reuse, and a stock photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AKBL",
+  "description": "Askari Bank Limited is a Pakistani commercial bank that provides personal banking - credit and debit cards, car loans, mortgage accounts and digital banking - alongside business banking through its Corporate and Investment Banking Group. Its Shariah-compliant business, Askari Ikhlas Islamic Banking, operates through 140 dedicated branches offering personal and corporate banking, Islamic treasury, trade services and Banca-Takaful solutions.",
+  "headOffice": "Third Floor, Plot No. 18, NPT Building, F-8 Markaz, Islamabad, Pakistan",
+  "phone": "+92 51 8092000",
+  "website": "https://askaribank.com",
+  "ceo": "Zia Ijaz",
+  "sourceNote": "Written from: askaribank.com/overview, askaribank.com/islamic, askaribank.com/personal/accounts, askaribank.com/about-us/corporate-information/registered-office-head-office, askaribank.com/about-us/corporate-information/team (Our Management tab) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Askari Zabardast Current Account",
+      "summary": "A current account described by the bank as a dynamic, all-in-one banking solution for individuals, sole proprietors and businesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Askari Asaan Savings Account",
+      "summary": "A simplified savings account for unbanked resident Pakistanis, opened with Rs. 100 and a CNIC, with no minimum balance requirement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Askari Sahar Savings Account",
+      "summary": "A savings account designed for women, offering monthly profit payment and no initial deposit requirement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Askari GO Account",
+      "summary": "An account for teenagers aged 13 to under 18, offered in current and savings variants, in both conventional and Islamic forms.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Askari Ikhlas Islamic Banking",
+      "summary": "Shariah-compliant personal and corporate banking, including Qard current accounts, Mudarabah savings and Murabaha, Ijarah and Istisna financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

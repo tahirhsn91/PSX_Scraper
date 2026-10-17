@@ -1,0 +1,53 @@
+{
+  "symbol": "EFERT",
+  "description": "Engro Fertilizers Limited is a fertilizer manufacturer incorporated in Pakistan in 2009 as a wholly owned subsidiary of Engro Corporation Limited, and describes itself as a subsidiary of Engro Corporation and a trusted name for every farmer in Pakistan. It manufactures, purchases and markets fertilizers, seeds and pesticides and provides logistics services, and states that it is the only organisation in the local sector offering fertilizers across all five major categories. Its Daharki site produces urea at a capacity the company puts at 2.2 million tons per year.",
+  "headOffice": "6th Floor, Harbor Front Building, Marine Drive, Block 4, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 111 211 211",
+  "website": "https://www.engrofertilizers.com",
+  "ceo": "Imran Ahmed",
+  "sourceNote": "Written from: engrofertilizers.com/progress, engrofertilizers.com/brands and engrofertilizers.com/contact-us (accessed 2026-10-17); CEO from the PSX company profile dps.psx.com.pk/company/EFERT (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "Engro Urea",
+      "summary": "Nitrogen fertilizer. EFERT built Pakistan's first urea plant in 1968 and now produces 2.2 million tons per year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro Zabardast Urea",
+      "summary": "A next-generation urea launched in 2017, developed in collaboration with Niha Corp USA.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro DAP",
+      "summary": "Di-Ammonium Phosphate, one of the company's straight phosphatic fertilizers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro Ammonium Sulphate",
+      "summary": "A straight fertilizer supplying ammoniacal nitrogen and sulphur to growing plants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro Muriate of Potash (MOP)",
+      "summary": "A straight potassium fertilizer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro SOP",
+      "summary": "A premium, chloride-free form of potassium applied as a straight fertilizer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

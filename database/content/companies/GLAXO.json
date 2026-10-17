@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for GLAXO. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GLAXO",
+  "description": "GlaxoSmithKline Pakistan Limited is the Pakistan operating company of GSK, a global biopharma company, and has been providing medicines and vaccines in the country for over seven decades; its legacy company, Glaxo Laboratories Pakistan Ltd., was the first pharmaceutical company listed on the Karachi Stock Exchange, in 1951. It manufactures through three Global Supply Chain facilities in Karachi — at F-268 SITE, West Wharf and Korangi — which together produce over 430 million packs a year, and its therapy areas include anti-infectives, dermatology, analgesics and vaccines.",
+  "headOffice": "35, Dockyard Road, West Wharf, Karachi 74000, Pakistan",
+  "phone": "+92 21 111 475 725",
+  "website": "https://pk.gsk.com",
+  "ceo": "Erum Shakir Rahim",
+  "sourceNote": "Written from: https://pk.gsk.com/en-pk/ (home), /company/ (GlaxoSmithKline Pakistan Limited section, manufacturing sites), /company/board-of-directors-and-leadership-team/ (CEO) and /contact-us/ (head office, UAN) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Augmentin",
+      "summary": "A key pharmaceutical brand, produced at the company's F-268 SITE facility in Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Amoxil",
+      "summary": "A key pharmaceutical brand, produced at the company's F-268 SITE facility in Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Calpol",
+      "summary": "A key pharmaceutical brand within the company's analgesics range, produced at F-268 SITE.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Velosef",
+      "summary": "A key pharmaceutical brand within the company's anti-infectives range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Betnovate and Dermovate",
+      "summary": "Dermatology brands, manufactured at the company's Karachi sites.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Vaccines",
+      "summary": "Vaccines are one of the therapy areas the company caters to in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

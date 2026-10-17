@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SCBPL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the bank's own premises is available from an open licence source.",
+  "symbol": "SCBPL",
+  "description": "Standard Chartered Bank (Pakistan) Limited describes itself as the oldest and largest international bank in Pakistan, present since 1863, and the first international bank to be awarded an Islamic banking licence and to open an Islamic banking branch. It serves Corporate, Commercial & Institutional Banking and Consumer, Private & Business Banking clients, with a complete suite of Islamic banking products under the Standard Chartered Saadiq brand and digital banking solutions. The bank employs more than 2,500 people in Pakistan and operates 209 touch points — 40 branches, 134 ATMs and 20 CDMs — across 10 cities.",
+  "headOffice": "P.O. Box No. 5556, I.I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 3245 0000",
+  "website": "https://www.sc.com/pk",
+  "ceo": "Rehan Shaikh",
+  "sourceNote": "Written from: https://www.sc.com/pk/about-us/overview/ (head office, telephone), the bank's own press release https://av.sc.com/pk/content/docs/sc-pk-annual-report-profit-before-tax.pdf (25 February 2026 — 'About the Standard Chartered Pakistan', CEO) and https://www.sc.com/pk/banking/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Corporate, Commercial & Institutional Banking",
+      "summary": "Deposits and cash management, trade, advisory services, secured lending, structured financing, and FX forwards and derivatives — for global subsidiaries, international and local corporates, SMEs, financial institutions and sovereign clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consumer, Private & Business Banking",
+      "summary": "Wealth management, deposits, secured lending such as mortgages and overdrafts, and unsecured lending such as credit cards and personal loans, for priority, premium, personal and business banking clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Standard Chartered Saadiq",
+      "summary": "A complete suite of Islamic banking products and services offered under the Saadiq brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Digital banking",
+      "summary": "Online and mobile banking, including the SC Mobile app, SMS banking and transaction alerts.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

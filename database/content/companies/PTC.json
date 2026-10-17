@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for PTC. Every fact here is attributable — see sourceNote. No image is attached. The phone and CEO fields are null: the company's own pages publish a customer helpline and the company secretary's fax rather than a main switchboard, and name no chief executive.",
+  "symbol": "PTC",
+  "description": "Pakistan Telecommunication Company Limited (PTCL) describes itself as the leading information and communication technology service provider in the region, and states that its telephony network is the backbone of the business. It provides fixed-line telephone, broadband internet and television services to homes and businesses, alongside managed network, hosted PBX and security solutions for corporate customers. PTCL is the parent of the mobile operator Ufone (Pak Telecom Mobile Limited), which it describes as a wholly-owned subsidiary; the company's own account records that Etisalat assumed management control of PTCL in 2006 under a deal to buy a 26% stake.",
+  "headOffice": "PTCL Head Office, Room # 17, Ground Floor (Margalla Side), Ufone Tower, Plot # 55-C, Main Jinnah Avenue, Sector F-7/1, Blue Area, Islamabad, Pakistan",
+  "phone": null,
+  "website": "https://ptcl.com.pk",
+  "ceo": null,
+  "sourceNote": "Written from: https://ptcl.com.pk/ , https://ptcl.com.pk/Info/Corporate-Information (Registered Office), https://ptcl.com.pk/Info/Subsidiaries, https://ptcl.com.pk/Home/PageDetail?ItemId=97&linkId=105 (PTCL Brand Philosophy) and the product navigation on https://ptcl.com.pk/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Telephone services",
+      "summary": "Fixed-line telephony, including voice packages, value added services and telephone sets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Internet services",
+      "summary": "Fixed and wireless broadband internet packages, with options such as static IP addresses and unlimited packages.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Television services",
+      "summary": "Television service offered alongside the company's telephone and internet products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Business and managed solutions",
+      "summary": "Corporate connectivity and managed services including managed WAN, LAN, WiFi and surveillance, managed or hosted PBX, SD-WAN and DDoS protection.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ufone — mobile telephony",
+      "summary": "Mobile services provided by Ufone (Pak Telecom Mobile Limited), which PTCL describes as its wholly-owned subsidiary.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for AICL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AICL",
+  "description": "Adamjee Insurance Company Limited is a general insurance company in Pakistan, incorporated as a public listed company on 28 September 1960 and listed on the Pakistan Stock Exchange. It has a regional presence in the United Arab Emirates and writes a diversified portfolio spanning motor, travel, health, property, marine and engineering risks, with a particular standing in oil and gas, wind and thermal energy risks. Its life assurance operations are carried on under a separate entity, Adamjee Life Assurance Company Limited, and Shariah-compliant cover is offered through its Window Takaful Operations.",
+  "headOffice": "Adamjee House, 80/A, Block E-1, Main Boulevard, Gulberg III, Lahore 54000, Pakistan",
+  "phone": "+92 42 35772960-79",
+  "website": "https://www.adamjeeinsurance.com",
+  "ceo": "Muhammad Ali Zeb",
+  "sourceNote": "Written from: https://www.adamjeeinsurance.com/ (home), /about-us (Overview, Our Leadership, Management Committee), /contact-us and /investor-relation (Registered Office Address) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Motor insurance",
+      "summary": "Car insurance for private vehicles, quoted online through the company's own portal.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Travel insurance",
+      "summary": "Travel cover sold directly on the company's website.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Health insurance",
+      "summary": "Individual and family health cover, plus group health insurance for businesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fire, property, marine and engineering insurance",
+      "summary": "Business insurance covering fire and property risks, marine cargo and hull, and engineering risks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Window Takaful Operations",
+      "summary": "A range of Shariah-compliant Takaful products offered through the company's Window Takaful Operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Specialised lines",
+      "summary": "Oil & gas (upstream and midstream), wind and thermal energy risks, kidnap & ransom, professional indemnity and product liability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

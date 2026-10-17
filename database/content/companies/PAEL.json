@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for PAEL. Every fact is attributable — see sourceNote. No image is attached: PEL's product photography is the company's asset, not licence-cleared.",
+  "symbol": "PAEL",
+  "description": "Pak Elektron Limited is a Pakistani manufacturer of home appliances and electrical power equipment, established in 1956 and part of the Saigol Group since 1978. The company runs two divisions: Appliances, which makes refrigerators, air conditioners, washing machines, microwave ovens and LED televisions under the PEL brand, and Power, which produces transformers, switchgear and energy meters for utilities and industry.",
+  "headOffice": "14-KM Ferozepur Road, Lahore 54760, Pakistan",
+  "phone": "+92 42 35920119",
+  "website": "https://pel.com.pk",
+  "ceo": "Muhammad Murad Saigol",
+  "sourceNote": "Written from: pel.com.pk/the-company/, the site's product navigation and footer contact details (read via Wayback Machine snapshot dated 2026-10-03) and PEL's Annual Report 2025 / PSX filing naming the Chief Executive Officer (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Refrigerators",
+      "summary": "Household refrigerators from the Appliances Division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Air conditioners",
+      "summary": "Room air conditioners; PEL began manufacturing air conditioners in 1981 with assistance from Fujitsu of Japan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Washing machines",
+      "summary": "Household washing machines from the Appliances Division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "LED televisions",
+      "summary": "LED televisions sold under the PEL brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Distribution transformers",
+      "summary": "Power Division equipment for utility and industrial distribution networks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Energy meters",
+      "summary": "Electricity meters for utilities; PEL began manufacturing energy meters under an agreement with ABB USA in 1992.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

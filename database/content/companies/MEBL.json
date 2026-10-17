@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for MEBL. Every fact here is attributable - see sourceNote. meezanbank.com sits behind a bot challenge that blocks direct retrieval from this host, so the company's own pages were read through the search index; each claim below is from those pages. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "MEBL",
+  "description": "Meezan Bank Limited describes itself as Pakistan's first and largest Islamic bank, and as one of the fastest growing financial institutions in the country's banking sector. It offers Shariah-compliant banking built on Islamic financing modes rather than lending - Diminishing Musharakah for home finance, Ijarah for car finance, and Mudarabah-based savings accounts.",
+  "headOffice": "Meezan House, C-25 Estate Avenue, SITE, Karachi, Pakistan",
+  "phone": "+92 21 38103500",
+  "website": "https://www.meezanbank.com",
+  "ceo": "Syed Amir Ali",
+  "sourceNote": "Written from: meezanbank.com/about-us, meezanbank.com/investor-relations, meezanbank.com/contact-us (registered office and head office), meezanbank.com/syed-amir-ali-meezan-ceo and meezanbank.com/organizational-chart (President & CEO), meezanbank.com/bachat-account, meezanbank.com/car-ijarah, meezanbank.com/easy-home - read through the search index because the site blocks direct access from this host (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Meezan Bachat Account",
+      "summary": "A savings account providing halal monthly profit for low and middle income customers, with the convenience and services of a regular savings account.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Meezan Car Ijarah",
+      "summary": "The bank's car financing product, described by Meezan as Pakistan's first interest-free car financing, structured on the Islamic financing mode of Ijarah.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Meezan Easy Home",
+      "summary": "Islamic home finance structured on Diminishing Musharakah, in which the customer and the bank take joint ownership of the property and ownership is gradually transferred to the customer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for SNGP. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SNGP",
+  "description": "Sui Northern Gas Pipelines Limited was incorporated as a private limited company in 1963 and converted into a public limited company in January 1964; it is listed on the Pakistan Stock Exchange. It took over the existing Sui-Multan system from the Pakistan Industrial Development Corporation and the Dhulian-Rawalpindi-Wah system from Attock Oil Company Limited, and describes itself as the largest integrated gas company, serving more than 7.40 million consumers in Punjab, Khyber Pakhtunkhwa and Azad Jammu & Kashmir.",
+  "headOffice": "Gas House, 21-Kashmir Road, P.O. Box 56, Lahore 54000, Pakistan",
+  "phone": "+92 42 99082000-06",
+  "website": "https://www.sngpl.com.pk",
+  "ceo": "Amer Tufail",
+  "sourceNote": "Written from: https://www.sngpl.com.pk/ (site footer: Head Office, phone), the Company Profile and Our Management / Message From MD pages, and the Transmission System, Distribution System and RLNG connection pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Gas transmission",
+      "summary": "Operation of the company's transmission system, delivering gas through its high-pressure pipeline network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Gas distribution",
+      "summary": "Distribution of natural gas to domestic, commercial and industrial consumers, including new connections.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "RLNG connections",
+      "summary": "Provision of new domestic and commercial connections on Re-Gasified Liquefied Natural Gas (RLNG) tariff.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Industrial gas supply",
+      "summary": "A dedicated industrial consumer process, services and connection procedure.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Housing society connections",
+      "summary": "New gas connection applications for housing societies.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Third Party Access",
+      "summary": "Access to the company's network under its Third Party Access Arrangement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

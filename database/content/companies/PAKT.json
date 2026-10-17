@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for PAKT. Every fact here is attributable — see sourceNote. No image is attached: Pakistan Tobacco Company's product photography is the company's asset, not licence-cleared.",
+  "symbol": "PAKT",
+  "description": "Pakistan Tobacco Company Limited was incorporated in 1947, immediately after partition, when it took over the business of the Imperial Tobacco Company of India, which had been operational in the subcontinent since 1905. It is part of the British American Tobacco Group, and its own reporting describes it as an Economically Significant Company. It manufactures cigarettes at factories in Akora Khattak, Khyber Pakhtunkhwa and at Kala Gujran, Jhelum.",
+  "headOffice": "Serena Business Complex, Khayaban-e-Suhrwardy, P.O. Box 2549, Islamabad 44000, Pakistan",
+  "phone": "+92 51 208 3200-01",
+  "website": "https://www.ptc.com.pk",
+  "ceo": "Usman Zahur",
+  "sourceNote": "Written from: ptc.com.pk/en/who-we-are/profile-of-company (company history, status of company), ptc.com.pk/en/who-we-are/company-contact-information (registered office, factories), ptc.com.pk/en/who-we-are/governance (board list) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cigarettes",
+      "summary": "Manufactured at the company's Akora Khattak and Jhelum cigarette factories; the company describes cigarettes as remaining at the core of its business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Velo",
+      "summary": "Produced at the company's Velo factory at Kala Gujran, Jhelum, listed alongside its cigarette factories.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

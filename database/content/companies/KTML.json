@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for KTML. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own mills is available from an open licence source.",
+  "symbol": "KTML",
+  "description": "Kohinoor Textile Mills Limited was founded as a private limited entity in 1953 and has been publicly listed since 1968. It is a vertically integrated textile manufacturer whose operations span spinning, weaving, processing and home textiles. Its spinning and home textile units are at Peshawar Road, Rawalpindi, its spinning unit at Gulyana Road, Gujar Khan, and its weaving unit at 8-K.M. Manga Raiwind Road, District Kasur; the company is part of KMLG.",
+  "headOffice": "42-Lawrence Road, Lahore, Pakistan",
+  "phone": "+92 42 3630 2261-62",
+  "website": "https://www.kmlg.com/ktml",
+  "ceo": "Taufique Sayeed Saigol",
+  "sourceNote": "Written from: https://www.kmlg.com/ktml/profile/, https://www.kmlg.com/ktml/governance/ and https://www.kmlg.com/ktml/contact-us/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Cotton and synthetic yarns in a wide range of counts, spun on ring, MVS and open-end rotor machinery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Greige fabric",
+      "summary": "Griege fabrics woven on 384 looms at the Raiwind unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dyed and printed fabric",
+      "summary": "Dyeing and printing of fabrics for the home textile sector at the Rawalpindi unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textile products",
+      "summary": "Bed linen, quilting, embroidery, curtains and similar made-ups, stitched for the export market.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

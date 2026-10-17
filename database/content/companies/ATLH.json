@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for ATLH. Every fact here is attributable — see sourceNote. No image is attached: Atlas Honda's product photography is the company's asset, not licence-cleared.",
+  "symbol": "ATLH",
+  "description": "Atlas Honda Limited is a public listed company incorporated on 16 October 1962, and is a joint collaboration between Honda Motor Company Limited Japan and the Atlas Group. It is principally engaged in the progressive manufacturing and marketing of motorcycles and spare parts, with a production capacity of over 1.5 million units per annum, and also exports its motorcycles and spare parts to Bangladesh and Afghanistan.",
+  "headOffice": "1-McLeod Road, Lahore 54000, Pakistan (registered office); the Karachi plant at F-36, Estate Avenue, S.I.T.E., Karachi 75730 also operates as the head office",
+  "phone": "+92 42 3722 5015-17",
+  "website": "https://www.atlashonda.com.pk",
+  "ceo": "Saquib H. Shirazi",
+  "sourceNote": "Written from: atlashonda.com.pk/the-company/ (The Company, Establishments, CEO's Message), atlashonda.com.pk/contact-us/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "CD70",
+      "summary": "The company's long-running commuter motorcycle, launched in 1976 as a fuel-efficient model and still marketed as an epitome of stylish ride and enduring reliability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "CD70 Dream",
+      "summary": "A variant of the CD70 marketed for a retro look with reliable performance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "CB125F",
+      "summary": "A model the company markets as the iconic CB125F, a blend of style and performance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "CB150F",
+      "summary": "A model the company markets for riders seeking adventure-styled performance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "ICON e:",
+      "summary": "The company's electric motorcycle, listed under its EV line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Genuine spare parts",
+      "summary": "Genuine Atlas Honda spare parts sold through its dealer network, including chain sprocket kits, engine oil, spark plugs, air cleaner elements and brake shoes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

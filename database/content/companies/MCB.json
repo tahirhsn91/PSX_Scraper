@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for MCB. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of MCB's own head office or branches exists on the open licence sources, and a generic bank-building photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "MCB",
+  "description": "MCB Bank Limited is one of Pakistan's oldest banks, incorporated in the private sector in 1947, nationalised in 1974 and privatised in 1991. Its major shareholding is owned by the Nishat Group, and it operates a domestic and international branch network supported by digital banking channels. MCB Islamic Bank Limited is a wholly owned Islamic banking subsidiary, and the bank also holds subsidiaries in investment management, non-bank credit and exchange services.",
+  "headOffice": "MCB Building, 15-Main Gulberg, Jail Road, Lahore, Pakistan",
+  "phone": "+92 42 111 000 111",
+  "website": "https://www.mcb.com.pk",
+  "ceo": "Muhammad Nauman Chughtai",
+  "sourceNote": "Written from: mcb.com.pk — History of MCB Bank, Profile of Bank, Management Team and Contact Us pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Deposit accounts",
+      "summary": "Current, savings and term deposit accounts for personal and business customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consumer loans",
+      "summary": "Car, home and personal finance, including MCB Car4U, MCB Home Loan and MCB Cash4Cash.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Debit and credit cards",
+      "summary": "MCB debit and credit cards, with EMI alliances and merchant discounts.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "MCB Live digital banking",
+      "summary": "The bank's digital banking channel, alongside its ATM network, Raast payments and digital onboarding.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home remittances",
+      "summary": "Remittance services including Burqraftaar and the Pakistan Remittance Initiative.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Wealth management",
+      "summary": "Bancassurance and investment services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

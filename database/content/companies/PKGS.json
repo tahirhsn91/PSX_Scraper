@@ -1,0 +1,53 @@
+{
+  "symbol": "PKGS",
+  "description": "Packages Limited was incorporated in Pakistan in 1956 as a joint venture between the Ali Group of Pakistan and Akerlund & Rausing of Sweden, to convert paper and paperboard into packaging for the consumer industry, and began as a single folding carton unit. Its stated principal activities are to rent out its land and buildings and to manage investments in subsidiary companies, associates and joint ventures — businesses engaged in packaging materials, tissue, consumer products, industrial inks, paper, paperboard and corrugated boxes, BOPP and CPP films, biopharmaceutical products, ground calcium carbonate, corn-based starch, insurance, power generation and real estate.",
+  "headOffice": "Shahrah-e-Roomi, P.O. Amer-sidhu, Lahore-54760, Pakistan",
+  "phone": "+92 42 35811541",
+  "website": "https://www.packages.com.pk",
+  "ceo": "Syed Hyder Ali",
+  "sourceNote": "Written from: packages.com.pk (Packages Limited overview), packages.com.pk/ourstory/folding-carton-packaging and packages.com.pk/contact-us (accessed 2026-10-17); principal activities, address and CEO from the PSX company profile dps.psx.com.pk/company/PKGS (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "Folding cartons",
+      "summary": "The business Packages Limited was established with in 1956: converting paper and paperboard into packaging for the consumer industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Packaging materials",
+      "summary": "Manufactured within the Group; the Company's PSX profile lists packaging materials among the products of the subsidiary, associate and joint-venture companies whose investments it manages.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corrugated boxes",
+      "summary": "Produced by Group companies, as listed in the Company's PSX profile.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Paper and paperboard products",
+      "summary": "Produced by Group companies, as listed in the Company's PSX profile.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tissue and consumer products",
+      "summary": "Produced by Group companies, as listed in the Company's PSX profile.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "BOPP and CPP films",
+      "summary": "Biaxially oriented polypropylene and cast polypropylene films, produced by Group companies as listed in the Company's PSX profile.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

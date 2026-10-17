@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for HALEON. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of Haleon Pakistan's Jamshoro site exists on the open licence sources, and a generic medicine photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "HALEON",
+  "description": "Haleon Pakistan Limited is a consumer healthcare company engaged in the manufacturing, marketing and sale of products across oral health, pain relief, respiratory health, digestive health and vitamins, minerals and supplements. It has been listed on the Pakistan Stock Exchange since March 2017, and its manufacturing site at Jamshoro in Sindh produces the majority of its products. The company describes itself as an independent consumer healthcare company with brands trusted by millions of people across Pakistan.",
+  "headOffice": "11-A, 11th Floor, Sky Tower (East Wing), Dolmen City, HC-3, Block 4, Scheme-5, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 111 425 366",
+  "website": "https://www.haleon.pk",
+  "ceo": "Qawi Naseer",
+  "sourceNote": "Written from: haleon.pk — home, Who We Are, Our Brands, Our Locations and Contact pages, and Haleon Pakistan Limited Annual Report 2025 (https://www.haleon.pk/media/1818/haleon-annual-report-2025.pdf) for principal activities and the chief executive's name (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Panadol",
+      "summary": "The company's flagship analgesic, described by Haleon as Pakistan's leading brand in the analgesics segment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Voltral",
+      "summary": "A topical pain reliever the company describes as one of Pakistan's best-selling.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sensodyne",
+      "summary": "Therapeutic oral-care toothpaste; Haleon describes itself as one of the world's largest providers of specialist oral health products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Parodontax",
+      "summary": "Toothpaste in the company's oral health portfolio, focused on gum health.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Panadol CF",
+      "summary": "Respiratory product for the treatment of cold and flu, sold alongside Panadol CF Day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "CaC 1000 Plus",
+      "summary": "A double calcium formula in the wellness and nutrition range, for maintaining strong bones.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

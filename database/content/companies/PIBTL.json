@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for PIBTL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the terminal exists, and a generic port photograph would imply it is PIBT's facility. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PIBTL",
+  "description": "Pakistan International Bulk Terminal Limited operates the country's first specialised terminal for coal, clinker and cement, set up on a build, operate and transfer basis at Port Qasim at a total cost of US$305 million. The terminal can handle up to 12 million tons of coal and 4 million tons of cement and clinker a year, and is built to deliver coal to power and cement plants using the rail, road and sea networks. PIBT describes the terminal as fully mechanised and built to World Bank Group environmental standards for coal handling.",
+  "headOffice": "2nd Floor, Business Plaza, Mumtaz Hasan Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 3240 0450-3",
+  "website": "https://pibt.com.pk",
+  "ceo": "Sharique Azim Siddiqui",
+  "sourceNote": "Written from: https://pibt.com.pk/ (terminal description, capacity, cost, environmental standards), https://pibt.com.pk/corporate-info/ (registered office, telephone), https://pibt.com.pk/leadership/ (CEO) and https://pibt.com.pk/news-media/ (Reko Diq handling agreement) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Coal import handling",
+      "summary": "Two ship unloading cranes rated at 1,850 tons per hour each, a belt conveyor of 3,600 tons per hour, and coal storage of up to 1 million tons at any time.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cement and clinker export handling",
+      "summary": "One ship loading crane rated at 1,200 tons per hour, five cement silos of 10,000 tons each and clinker storage of up to 200,000 tons.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Truck loading and gate operations",
+      "summary": "A mechanised truck loading station dropping 100 tons a minute into two trucks at once, with four inbound and four outbound lanes and nine weigh bridges.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Copper-gold concentrate handling",
+      "summary": "PIBT announced in January 2026 an agreement with Reko Diq Mining Company for the handling of copper-gold concentrates through the terminal.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

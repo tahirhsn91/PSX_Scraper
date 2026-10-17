@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for AHCL. No image is attached: no licence-cleared photograph of an Arif Habib Group asset exists, and a generic photograph would misrepresent it.",
+  "symbol": "AHCL",
+  "description": "Arif Habib Corporation Limited (AHCL) is the holding company of the Arif Habib Group, one of Pakistan's business groups, and describes itself as the group's flagship company. Its portfolio is spread across fertilizers, financial services, construction materials, industrial metals, dairy farming and energy. The companies it lists under associates and subsidiaries include Fatima Fertilizer, Arif Habib Limited, Aisha Steel Mills, Javedan Corporation, Power Cement, Sachal Energy Development and Arif Habib Consultancy.",
+  "headOffice": "Arif Habib Centre, 23, M.T. Khan Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 3246 0717",
+  "website": "https://www.arifhabibcorp.com",
+  "ceo": "Arif Habib",
+  "sourceNote": "Written from: arifhabibcorp.com — home page, about.php, contact.php, ceo.php, and the associates-and-subsidiaries pages fatima-fert-ltd.php, arif-habib-ltd.php, aisha-steel-ltd.php, power-cement-ltd.php, sachal-energy-ltd.php, javedancorp.php (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fatima Fertilizer Company Limited",
+      "summary": "A fertilizer producer described by AHCL as a joint venture between the Fatima Group and the Arif Habib Group, with plants at Sadiqabad, Sheikhupura and Multan and total annual production capacity of 2.57 million tonnes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Arif Habib Limited",
+      "summary": "The group's securities brokerage and investment banking business, offering equity, fixed income, money market and forex brokerage and corporate advisory services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Aisha Steel Mills Limited",
+      "summary": "A publicly listed flat-rolled steel producer, described by AHCL as one of the key players in Pakistan's flat-rolled steel industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Power Cement Limited",
+      "summary": "A cement producer located at Motorway M9, Nooriabad, Sindh, which manufactures and markets cement and exports clinker and cement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sachal Energy Development (Pvt.) Limited",
+      "summary": "A clean-energy business that supplies power to the national grid through the National Transmission and Despatch Company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Javedan Corporation Limited",
+      "summary": "A group holding whose site — originally a cement plant — became the Naya Nazimabad housing society in Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for HBL. Every fact here is attributable - see sourceNote. No image is attached: the bank's own marketing imagery is not licence-cleared for reuse, and a stock photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "HBL",
+  "description": "Habib Bank Limited is a full-service commercial bank and was the first commercial bank established in Pakistan, in 1947. It operates over 1,740 branches and 2,300+ ATMs globally and serves more than 40 million clients, with operations spanning retail banking, corporate and investment banking, treasury, SME and agriculture banking, financial institutions and global trade services, transaction banking and Islamic banking.",
+  "headOffice": "HBL Tower, Plot No. G-4, KDA Scheme 5, Block 7, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 33116030",
+  "website": "https://www.hbl.com",
+  "ceo": "Muhammad Nassir Salim",
+  "sourceNote": "Written from: hbl.com/about-us, hbl.com/about-us/introduction, hbl.com/about-us/corporate-information, hbl.com/about-us/management (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Retail Banking",
+      "summary": "The bank's retail franchise, described by HBL as the mainstay of the business and the largest retail bank in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate & Investment Banking",
+      "summary": "Financial services to multinational and local corporate clients across the country.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Islamic Banking",
+      "summary": "Shariah-compliant banking offered as one of the bank's key areas of operation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SME & Agriculture Banking",
+      "summary": "Banking services for small and medium enterprises and the agriculture sector.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Treasury",
+      "summary": "Treasury operations, listed by the bank among its key areas of operation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Transaction Banking",
+      "summary": "Transaction banking, and financial institutions and global trade services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

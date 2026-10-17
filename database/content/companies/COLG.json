@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for COLG. Every fact here is attributable — see sourceNote. No image is attached: Colgate-Palmolive's brand photography is the company's asset, not licence-cleared.",
+  "symbol": "COLG",
+  "description": "Colgate-Palmolive (Pakistan) Limited is engaged in the business of manufacturing, import, export and selling consumer products such as oral care products, personal care products, detergents, household cleaning products and other related goods. It was registered on 5 December 1977. On its own site the brand range is organised into oral care, personal care hair, personal care skin, fabric care and surface care.",
+  "headOffice": "Lakson Square Building No. 2, Sarwar Shaheed Road, Karachi, Pakistan",
+  "phone": "+92 21 3840 0000",
+  "website": "https://colgate.com.pk",
+  "ceo": "Zulfiqar Ali Lakhani",
+  "sourceNote": "Written from: colgate.com.pk/for-investors/profile-of-the-company/, colgate.com.pk/governance/board-of-directors/, colgate.com.pk/our-brand/, colgate.com.pk/products/oral-care/, colgate.com.pk/products/fabric-care/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Colgate Tooth Paste",
+      "summary": "The toothpaste arm of the company's oral care range, one of the three oral care categories listed on its site.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Colgate Tooth Brush",
+      "summary": "The toothbrush arm of the company's oral care range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Colgate Mouthwash",
+      "summary": "The mouthwash arm of the company's oral care range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Personal care — hair and skin",
+      "summary": "Hair care and skin care products, listed by the company as 5 hair care and 13 skin care products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fabric care",
+      "summary": "Laundry detergents, a laundry bar and fabric softener — 9 products in the company's fabric care range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Surface care",
+      "summary": "Household surface cleaning products, listed as 12 products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

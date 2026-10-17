@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for POL. No image is attached: no licence-cleared photograph of POL's fields or plant exists, and a generic oilfield photo would imply it is theirs.",
+  "symbol": "POL",
+  "description": "Pakistan Oilfields Limited (POL) is an oil and gas exploration and production company listed on the Pakistan Stock Exchange and a subsidiary of The Attock Oil Company Limited, incorporated in 1950. In addition to exploring for and producing crude oil and gas, its plants manufacture LPG, solvent oil and sulphur, and it markets LPG under its own POLGAS brand as well as through its subsidiary Capgas (Private) Limited. It also operates a network of pipelines transporting its own and other companies' crude oil to Attock Refinery Limited.",
+  "headOffice": "POL House, Morgah, Rawalpindi, Pakistan",
+  "phone": "+92 51 5487589",
+  "website": "https://pakoil.com.pk",
+  "ceo": "Shuaib A. Malik",
+  "sourceNote": "Written from: pakoil.com.pk — company overview / company information pages and the Profiles of Directors PDF linked from the site's downloads (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Crude oil",
+      "summary": "Produced from the company's own and joint-venture exploration and production operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Natural gas",
+      "summary": "Produced alongside crude oil from the company's fields.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "POLGAS — LPG",
+      "summary": "Liquefied petroleum gas manufactured at the company's plants and marketed under its own POLGAS brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Solvent oil",
+      "summary": "Manufactured at the company's plants, alongside LPG and sulphur.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sulphur",
+      "summary": "A by-product manufactured at the company's plants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

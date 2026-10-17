@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for FABL. Only the website is filled: faysalbank.com is behind a Cloudflare bot challenge that refused every request from this host (home page, about-us, contact-us, robots.txt and static assets all returned the 'Just a moment...' interstitial), so no company page could be read and no PSX filing could be retrieved. The remaining fields are null rather than guessed — a wrong head office, phone number, product list or CEO name on a stock page is worse than a blank. Fill them from the company's own pages or a PSX filing when a route to them is available.",
+  "symbol": "FABL",
+  "description": null,
+  "headOffice": null,
+  "phone": null,
+  "website": "https://www.faysalbank.com",
+  "ceo": null,
+  "sourceNote": "Nothing sourced beyond the domain itself: https://www.faysalbank.com/ returned only a Cloudflare challenge to every request from this host on 2026-10-17 (the sole content retrieved earlier was the site's own home page shell, which identifies it as Faysal Bank Limited). No PSX disclosure for this symbol was reachable. All descriptive fields left null deliberately.",
+  "products": []
+}

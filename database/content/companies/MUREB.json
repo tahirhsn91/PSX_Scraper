@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for MUREB. Every fact here is attributable — see sourceNote. No image is attached: product photography on the company's site is its own, and no licence-cleared image is available for reuse.",
+  "symbol": "MUREB",
+  "description": "Murree Brewery Company Limited is a beverage manufacturer established in 1860 at Ghora Galli in the Pir Panjal range, whose registered office and main brewery are now at 3-National Park Road, Rawalpindi. The company produces beers, whiskies, gins, vodkas, rums and brandies, and has extended into non-alcoholic beverages through its Tops Food & Beverages and Murree Sparkletts divisions, with a Murree Glass division as well. Its corporate information page lists factories at Rawalpindi and in the Hattar Industrial Estate, Khyber Pakhtunkhwa.",
+  "headOffice": "3-National Park Road, Chaklala Cantt, Rawalpindi, Punjab, Pakistan",
+  "phone": "+92 51 5567041",
+  "website": "https://murreebrewery.com",
+  "ceo": "Isphanyar M. Bhandara",
+  "sourceNote": "Written from: https://murreebrewery.com/about-us/, https://murreebrewery.com/corporate-information/, https://murreebrewery.com/management/, https://murreebrewery.com/contact-us/, https://murreebrewery.com/alcoholic-products/ and https://murreebrewery.com/non-alcoholic-products/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Beer",
+      "summary": "Beers including Murree Beer, Classic Beer, Millennium Beer, Wheat Beer, Special Strong brew, Stout Beer and Lite Export Pils.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Whisky",
+      "summary": "Whiskies including twelve- and eight-year-old single malts, Murree's Vat No.1, Vintage Gold and Millennium Reserve.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Gin, vodka, rum and brandy",
+      "summary": "Spirits including Silver Top Gin, Sapphire Gin, Murree's Vodka, Green Apple Vodka, Bolskaya Vodka, Murree's Finest Rum and Doctor's Brandy.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bigg carbonated drinks",
+      "summary": "Non-alcoholic fruit carbonated drinks in the Bigg family, in 250 ml and 300 ml cans and larger bottles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tops juices",
+      "summary": "Juices and nectars produced by the Tops Food & Beverages division, offered as Tetra Pak, nectar and juice-in-pouch lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Murree Sparkletts bottled water",
+      "summary": "Drinking water bottled at Hattar in 330 ml, 500 ml, 1.5 L, 5 L, 12 L and 19 L sizes, plus alkaline water and glass-bottled still and sparkling water.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for CNERGY. Every fact is attributable — see sourceNote. No image is attached: the company's own refinery photographs are not licence-cleared, and a stock refinery photo would imply it is this company's facility.",
+  "symbol": "CNERGY",
+  "description": "Cnergyico PK Limited is a Pakistani petroleum company engaged in oil refining, petroleum marketing and petroleum logistics. It operates the country's largest refining complex, with a combined capacity of 156,000 barrels per day at Mouza Kund in Hub, Balochistan, producing LPG, motor gasoline, kerosene, jet fuel, high-speed diesel, naphtha and furnace oil. The company also operates Pakistan's first and only Single Point Mooring offshore terminal and a retail network of more than 475 outlets.",
+  "headOffice": "9th & 10th Floor, The Harbour Front, Dolmen City, HC-3, Block 4, Marine Drive, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 111 222 081",
+  "website": "https://cnergyico.com",
+  "ceo": "Amir Abbassciy",
+  "sourceNote": "Written from: cnergyico.com/ourstory/, /what-we-do/, /fuels/, /ceos-message/, /leadership/ and the site footer contact block (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Motor gasoline",
+      "summary": "Petrol refined at the Hub complex, including high-octane blending component grades.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "High Speed Diesel",
+      "summary": "Diesel produced at the refinery for transport, industrial and power-sector customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Jet fuel",
+      "summary": "Aviation turbine fuel produced at the refining complex.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Furnace oil",
+      "summary": "Fuel oil for power generation and industrial boilers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "LPG",
+      "summary": "Liquefied petroleum gas, one of the gaseous fuels the company produces and markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lubricants",
+      "summary": "Engine oils for gasoline, diesel and motorcycle engines, marketed under the Intelu, Cnergy and Byker brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
