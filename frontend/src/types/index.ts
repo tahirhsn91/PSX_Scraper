@@ -420,6 +420,34 @@ export interface MarketOverview {
   movers: { gainers: Mover[]; losers: Mover[]; mostActive: Mover[] };
 }
 
+export interface SectorConstituent {
+  symbol: string;
+  companyName: string | null;
+  currentPrice: number | null;
+  changePercent: number | null;
+  marketCap: number | null;
+  volume: number | null;
+}
+
+/** One sector's drill-down: aggregate, members, and where the classification came from. */
+export interface SectorDetail {
+  sector: string;
+  count: number;
+  advancers: number;
+  decliners: number;
+  unchanged: number;
+  avgChangePercent: number | null;
+  totalMarketCap: number | null;
+  totalVolume: number | null;
+  /** Provider that supplied the sector label; null when it was never recorded. */
+  source: string | null;
+  /** When the label was last read; null means "not recorded yet", not "today". */
+  updatedAt: string | null;
+  gainers: SectorConstituent[];
+  losers: SectorConstituent[];
+  constituents: SectorConstituent[];
+}
+
 export interface SectorSummary {
   sector: string;
   count: number;

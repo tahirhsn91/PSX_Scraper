@@ -40,6 +40,40 @@ export interface SectorRow {
   decliners: number;
 }
 
+/**
+ * One sector's drill-down: the aggregate, its members, and the provenance of the classification.
+ *
+ * `source` / `updatedAt` are read from the members' newest recorded values. A sector whose members
+ * were written by different providers keeps the most recent source and date — the drill-down is
+ * describing the classification as it currently stands, not each row's history.
+ */
+export interface SectorDetail {
+  sector: string;
+  count: number;
+  advancers: number;
+  decliners: number;
+  unchanged: number;
+  avgChangePercent: number | null;
+  totalMarketCap: number | null;
+  totalVolume: number | null;
+  source: string | null;
+  updatedAt: Date | null;
+  /** The five biggest moves up and down inside the sector. */
+  gainers: SectorConstituent[];
+  losers: SectorConstituent[];
+  /** Every member, biggest gain first — the full table. */
+  constituents: SectorConstituent[];
+}
+
+export interface SectorConstituent {
+  symbol: string;
+  companyName: string | null;
+  currentPrice: number | null;
+  changePercent: number | null;
+  marketCap: number | null;
+  volume: number | null;
+}
+
 /** Market-wide breadth over the newest priced row of every tracked symbol. */
 export interface MarketBreadth {
   advancers: number;
@@ -210,7 +244,7 @@ export class MarketRepository {
       GROUP BY s.sector
       ORDER BY s.sector ASC
     `);
-    return rows.map((r) => ({
+    const mapped: SectorRow[] = rows.map((r) => ({
       sector: r.sector,
       count: r.count,
       avgChangePercent: r.avg_change_percent,
@@ -218,6 +252,123 @@ export class MarketRepository {
       advancers: r.advancers,
       decliners: r.decliners,
     }));
+
+    // A stock with no usable sector is still a stock. Grouping it under "Unclassified" says exactly
+    // what is known — that the source published nothing — where dropping it would quietly shrink
+    // the universe and inventing a sector would be worse.
+    const [unclassified] = await prisma.$queryRaw<Array<{ count: number }>>(Prisma.sql`
+      SELECT COUNT(*)::int AS count FROM stocks s
+      WHERE s.sector IS NULL OR TRIM(s.sector) = '' OR s.sector = 'undefined'
+    `);
+    const unclassifiedCount = unclassified?.count ?? 0;
+    if (unclassifiedCount > 0) {
+      mapped.push({
+        sector: 'Unclassified',
+        count: unclassifiedCount,
+        avgChangePercent: null,
+        totalMarketCap: null,
+        advancers: 0,
+        decliners: 0,
+      });
+    }
+    return mapped;
+  }
+
+  /**
+   * One sector, from the same newest-priced-row join the list uses, so the drill-down and the tile
+   * cannot disagree about a member's move.
+   */
+  async sectorDetail(sector: string): Promise<SectorDetail | null> {
+    const isUnclassified = sector === 'Unclassified';
+    const predicate = isUnclassified
+      ? Prisma.sql`(s.sector IS NULL OR TRIM(s.sector) = '' OR s.sector = 'undefined')`
+      : Prisma.sql`s.sector = ${sector}`;
+
+    const [summary] = await prisma.$queryRaw<
+      Array<{
+        count: number;
+        advancers: number;
+        decliners: number;
+        unchanged: number;
+        avg_change_percent: number | null;
+        total_market_cap: Prisma.Decimal | null;
+        total_volume: bigint | null;
+        source: string | null;
+        updated_at: Date | null;
+      }>
+    >(Prisma.sql`
+      SELECT COUNT(*)::int AS count,
+             COUNT(*) FILTER (WHERE p.change_percent > 0)::int AS advancers,
+             COUNT(*) FILTER (WHERE p.change_percent < 0)::int AS decliners,
+             COUNT(*) FILTER (WHERE p.change_percent = 0)::int AS unchanged,
+             AVG(p.change_percent)::float8 AS avg_change_percent,
+             SUM(p.market_cap)::numeric AS total_market_cap,
+             SUM(p.volume)::bigint AS total_volume,
+             (ARRAY_AGG(s.sector_source ORDER BY s.sector_updated_at DESC NULLS LAST))[1] AS source,
+             MAX(s.sector_updated_at) AS updated_at
+      FROM stocks s
+      JOIN LATERAL (
+        SELECT current_price, change_percent, market_cap, volume
+        FROM stock_prices
+        WHERE stock_id = s.id AND current_price IS NOT NULL
+        ORDER BY last_trade_date DESC NULLS LAST
+        LIMIT 1
+      ) p ON true
+      WHERE ${predicate}
+    `);
+
+    if (!summary || summary.count === 0) return null;
+
+    const rows = await prisma.$queryRaw<
+      Array<{
+        symbol: string;
+        company_name: string | null;
+        current_price: Prisma.Decimal | null;
+        change_percent: Prisma.Decimal | null;
+        market_cap: Prisma.Decimal | null;
+        volume: bigint | null;
+      }>
+    >(Prisma.sql`
+      SELECT s.symbol, s.company_name, p.current_price, p.change_percent, p.market_cap, p.volume
+      FROM stocks s
+      JOIN LATERAL (
+        SELECT current_price, change_percent, market_cap, volume
+        FROM stock_prices
+        WHERE stock_id = s.id AND current_price IS NOT NULL
+        ORDER BY last_trade_date DESC NULLS LAST
+        LIMIT 1
+      ) p ON true
+      WHERE ${predicate}
+      ORDER BY p.change_percent DESC NULLS LAST, s.symbol ASC
+    `);
+
+    const constituents: SectorConstituent[] = rows.map((r) => ({
+      symbol: r.symbol,
+      companyName: r.company_name,
+      currentPrice: r.current_price != null ? Number(r.current_price) : null,
+      changePercent: r.change_percent != null ? Number(r.change_percent) : null,
+      marketCap: r.market_cap != null ? Number(r.market_cap) : null,
+      volume: r.volume != null ? Number(r.volume) : null,
+    }));
+
+    return {
+      sector,
+      count: summary.count,
+      advancers: summary.advancers,
+      decliners: summary.decliners,
+      unchanged: summary.unchanged,
+      avgChangePercent: summary.avg_change_percent,
+      totalMarketCap: summary.total_market_cap != null ? Number(summary.total_market_cap) : null,
+      totalVolume: summary.total_volume != null ? Number(summary.total_volume) : null,
+      source: summary.source,
+      updatedAt: summary.updated_at,
+      gainers: constituents.filter((c) => (c.changePercent ?? 0) > 0).slice(0, 5),
+      losers: constituents
+        .filter((c) => (c.changePercent ?? 0) < 0)
+        .slice(-5)
+        .reverse(),
+      constituents,
+    };
   }
 
   /**

@@ -31,11 +31,18 @@ export async function persistScrapeResult(result: ScrapeResult): Promise<string>
       update: {
         companyName: result.companyName ?? undefined,
         sector: result.sector ?? undefined,
+        // Provenance travels with the value: a sector written without its source is a claim with
+        // no evidence, so the two are set in the same update.
+        ...(result.sector
+          ? { sectorSource: result.sectorSource ?? 'PSX company page', sectorUpdatedAt: new Date() }
+          : {}),
       },
       create: {
         symbol: result.symbol.toUpperCase(),
         companyName: result.companyName,
         sector: result.sector,
+        sectorSource: result.sector ? result.sectorSource ?? 'PSX company page' : null,
+        sectorUpdatedAt: result.sector ? new Date() : null,
       },
     });
 
