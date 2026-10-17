@@ -703,6 +703,12 @@ export function Dashboard() {
         }
         flush
       >
+        {/* The table runs several screens below the page header, so it carries its own freshness
+            line: a reader who sorts by 52-week high should not have to scroll up to learn that the
+            numbers are Friday's. */}
+        <Box sx={{ mb: 1.5 }}>
+          <DataStatus dataset="quotes" />
+        </Box>
         <DataTable
           columns={COLUMNS}
           rows={tableRows}
