@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for AHTM. Every fact is attributable - see sourceNote. No image attached: no licence-cleared photograph of the company's own Muzaffargarh mill is available.",
+  "symbol": "AHTM",
+  "description": "Ahmad Hassan Textile Mills Limited was incorporated in Pakistan in 1989 and listed on the Karachi Stock Exchange in 1990. Its weaving division produces loom-state grey fabric and dyed fabric at a mill on M.M. Road, Chowk Sarwar Shaheed, in Muzaffargarh district, with the head office at 46 Hassan Parwana Colony, Multan. The company reports export sales of more than US$35 million and describes trading as part of its business alongside manufacturing.",
+  "headOffice": "46 Hassan Parwana Colony, Multan, Pakistan",
+  "phone": "+92 61 451 2361",
+  "website": "https://ahtml.com.pk",
+  "ceo": "Muhammad Haris",
+  "sourceNote": "Written from: Ahmad Hassan Textile Mills Limited website (ahtml.com.pk: home, company profile - board of directors, office and factories, contact us) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Grey fabric",
+      "summary": "Loom-state grey fabric from the company's weaving division, which it describes as producing world class loom state grey fabrics.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dyed fabric",
+      "summary": "Dyed fabric finished from its own weaving output, listed by the company alongside grey fabric as one of its products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fabric trading",
+      "summary": "Trading in fabric, which the company lists as a business line alongside manufacturing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

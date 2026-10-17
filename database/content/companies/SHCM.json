@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for SHCM. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available. The company publishes no website, so only the exchange's record of it could be used.",
+  "symbol": "SHCM",
+  "description": "Shadman Cotton Mills Limited was incorporated in Pakistan as a public limited company on 24 November 1979. It is engaged in the manufacturing and sale of yarn and apparel, from its mill on Warburton Road at Kot Shah Mohammad in Nankana Sahib district.",
+  "headOffice": "3.5 KM, Feroz Watoan, Warburton Road, Kot Shah Mohammad, Tehsil & District Nankana Sahib, Pakistan",
+  "phone": null,
+  "website": null,
+  "ceo": "Shahid Mazhar",
+  "sourceNote": "Written from: PSX company profile for SHCM at https://dps.psx.com.pk/company/SHCM (business description, key people, address) (accessed 2026-10-17). The company has no website and publishes no telephone number, so website and phone are null.",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Yarn manufactured and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Apparel",
+      "summary": "Apparel manufactured and sold by the company, alongside yarn.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

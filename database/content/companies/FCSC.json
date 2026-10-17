@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for FCSC. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available. The company publishes little of its own material; fields it does not state are left null rather than filled from directories.",
+  "symbol": "FCSC",
+  "description": "First Capital Securities Corporation Limited was incorporated in Pakistan on 11 April 1994 as a public limited company and is listed on the Pakistan Stock Exchange. Its business is making long and short term investments, money market operations and financial consultancy services.",
+  "headOffice": "First Capital House, 96-B/1, Lower Ground Floor, M.M. Alam Road, Gulberg-III, Lahore, Pakistan",
+  "phone": null,
+  "website": "http://www.pacepakistan.com",
+  "ceo": "Aamna Taseer",
+  "sourceNote": "Written from: PSX company profile page dps.psx.com.pk/company/FCSC — business description, key people, address and declared website; company also files its investor information through pacepakistan.com (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Investment portfolio",
+      "summary": "Long and short term investments held by the company, per its stated business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Money market operations",
+      "summary": "Treasury and money market activity named in the company's stated business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Financial consultancy",
+      "summary": "Financial consultancy services named in the company's stated business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

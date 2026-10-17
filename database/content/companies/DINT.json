@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for DINT. Every fact here is attributable — see sourceNote. No image is attached: the company's own plant photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "DINT",
+  "description": "Din Textile Mills Limited was incorporated in Pakistan on 13 June 1988 and its principal business is the manufacture and sale of yarn and fabric. It runs four spinning units producing mélange and ecru yarns in cotton, polyester-cotton, cotton-viscose and core-spun qualities, a fibre and yarn dyeing unit, and a weaving plant commissioned in 2021 with 144 Picanol OmniPlus i air-jet looms. A captive power plant and a solar plant supply the units, and the company is majority-held by the Din family of the Din Group.",
+  "headOffice": "Din House, 35-A/1, Lalazar Area, Opp. Beach Luxury Hotel, M.T. Khan Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 3561 0001-3",
+  "website": "https://dingroup.com",
+  "ceo": "Shaikh Muhammad Tanveer",
+  "sourceNote": "Written from: dingroup.com/v2 (about, plants and product portfolio), dingroup.com/v2/an-overview-our-success (spinning, dyeing and weaving capacity), dingroup.com/v2/din-melange, dingroup.com/v2/din-komfort-with-lycra, dingroup.com/v2/din-power-plant and dingroup.com/v2/din-solar-plant (products and captive power), dingroup.com/v2/board-of-director (chief executive), dingroup.com/v2/conatct-us (head office and telephone), and the PSX company page for DINT (incorporation date, principal business) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Din Mélange",
+      "summary": "100% cotton two-tone mélange yarn, carded and semi-carded, for knitting and weaving, in counts from 10/1 to 40/1 plus ply yarn; the company says over 2,000 shades are available and that the yarn can be blended with polyester and viscose.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Din Komfort with Lycra",
+      "summary": "A Lycra core-spun yarn sold on its stretch and recovery, used in top- and bottom-weight woven fabric, stretch fabric and denim.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "BCI yarn",
+      "summary": "Better Cotton Initiative cotton yarn — the company states it is an approved BCI supplier.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cone dyed yarn",
+      "summary": "Dyed yarn from the company's fibre and yarn dyeing unit, which it gives an annual dyeing capacity of 4.38 million kg.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric",
+      "summary": "Greige and finished fabric from the weaving plant launched in 2021 with 144 Picanol OmniPlus i air-jet looms, which the company gives an annual capacity of 80.11 million square metres.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Captive power and solar generation",
+      "summary": "A power plant generating electricity for the spinning, weaving and dyeing units so production runs without interruption, and a solar installation of about 5 MW with room to expand to 8 MW.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

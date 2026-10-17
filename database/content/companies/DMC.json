@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for DMC. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "DMC",
+  "description": "D.M. Corporation Limited was incorporated in Pakistan on 28 May 1958 as a public limited company, and was formerly named D.M. Textile Mills Limited. It is listed on the Pakistan Stock Exchange, and its stated principal line of business is real estate development — investment, development, marketing, construction, and the purchase, sale and lease of real estate assets and ancillary activities. Its registered office and mill are in the Westridge Industrial Area of Rawalpindi.",
+  "headOffice": "Westridge Industrial Area, Rawalpindi, Pakistan",
+  "phone": "+92 51 5181977-78",
+  "website": "https://dmtextile.com.pk",
+  "ceo": "Sami Ullah",
+  "sourceNote": "Written from: dmtextile.com.pk — Profile of the Company, Business Activity, Contact and profile-of-directors pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Real estate development",
+      "summary": "Investment, development, marketing and construction of real estate assets, stated by the company as its principal line of business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Real estate sale and leasing",
+      "summary": "Purchase, sale and lease of real estate assets, listed by the company alongside development as part of its business activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for LSECL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "LSECL",
+  "description": "LSE Capital Limited is a corporate advisory house licensed by the SECP as a Consultant to the Issue, working on mergers and acquisitions, corporate finance and restructuring, and initial public offerings. It was founded by a group of value investors and capital-market practitioners, and describes itself as the parent entity of LSE Enterprises, overseeing three group companies that are successor entities of the former Lahore Stock Exchange.",
+  "headOffice": "The Exchange Hub, LSE Plaza, 19 Kashmir Egerton Road, Lahore, Pakistan",
+  "phone": null,
+  "website": "https://capital.lse.com.pk",
+  "ceo": "Aftab Ahmad Ch.",
+  "sourceNote": "Written from: capital.lse.com.pk — introduction, board of directors and registered office pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Mergers and acquisitions advisory",
+      "summary": "Advisory and execution of M&A transactions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate finance and restructuring",
+      "summary": "Corporate finance and restructuring solutions, including transaction structuring through the equity capital markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Initial public offerings",
+      "summary": "IPO services delivered as a Consultant to the Issue licensed by the SECP.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

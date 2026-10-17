@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SUTM. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "SUTM",
+  "description": "Sunrays Textile Mills Limited was incorporated in Pakistan on 27 August 1987 and is principally engaged in the trade, manufacture and sale of yarn. Its mill, on 114 kanals and 10 marlas, is at Khanpur Shumali in District Muzaffargarh, and ginning units and ice factories it has operated under leasing arrangements were not operational during the year. The company is part of the Indus Group and shares its registered office in Karachi with Indus Dyeing & Manufacturing Company Limited.",
+  "headOffice": "Office No. 508, 5th Floor, Beaumont Plaza, Beaumont Road, Civil Lines, Karachi 75530, Pakistan",
+  "phone": "+92 21 111 404 404",
+  "website": "https://indus-group.com",
+  "ceo": "Kashif Riaz",
+  "sourceNote": "Written from: indus-group.com — Sunrays Textile Mills Limited page (company profile, board and registered office) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Yarn manufactured, traded and sold by the company, produced at its mill at Khanpur Shumali, District Muzaffargarh.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

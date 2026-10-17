@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for SIBL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "SIBL",
+  "description": "Security Investment Bank Limited is a non-bank financial company incorporated in 1991 and listed on the Pakistan Stock Exchange, licensed as an NBFC under Section 282C and regulated by the SECP, and built on a promise of prudent, Shariah-compliant growth. It provides car, solar, bike, house and consumer financing to individuals and businesses from offices in Karachi and Islamabad, and states a highest car-financing limit of PKR 7 million.",
+  "headOffice": "502, 5th Floor, Madina City Mall, Abdullah Haroon Road, Saddar, Karachi, Pakistan",
+  "phone": "+92 21 35659750-54",
+  "website": "https://sibl.com.pk",
+  "ceo": "Zafar M. Shaikh",
+  "sourceNote": "Written from: sibl.com.pk — about us page (incorporation, regulation, head office and Islamabad office, financing products) and governance page (management) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Car financing",
+      "summary": "Vehicle financing for individuals, with a stated highest car-financing limit of PKR 7 million.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Solar, bike, house and consumer financing",
+      "summary": "The company lists solar, bike, house and general consumer financing among the options it offers alongside car financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

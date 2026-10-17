@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BTL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "BTL",
+  "description": "Blessed Textiles Limited was incorporated in September 1987 and operates under the common management of the Umer Group, with Bhanero Textile Mills Limited and Faisal Spinning Mills Limited as associated undertakings. It produces yarn and fabric for domestic consumption and international markets from two spinning units totalling 68,640 spindles and a weaving unit of 140 air-jet looms, all at Sheikhupura in Punjab.",
+  "headOffice": "Umer House, Plot 23/1, Sector 23, S.M. Farooq Road, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 35115177-80",
+  "website": "https://www.umergroup.com",
+  "ceo": "Mohammad Amin",
+  "sourceNote": "Written from: umergroup.com — Blessed Textiles Limited corporate information page and the company's corporate briefing session presentation (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "High-quality yarn spun at the company's two spinning units, which together hold 68,640 spindles at Sheikhupura, Punjab.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric",
+      "summary": "Fabric woven on the company's 140 air-jet looms at its weaving unit in Sheikhupura, Punjab.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

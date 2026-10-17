@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for CFL. Every fact is attributable to the company's own website — see sourceNote. No image is attached: none of the company's own product photography carries a licence we can rely on.",
+  "symbol": "CFL",
+  "description": "Crescent Fibres Limited is a Pakistan Stock Exchange-listed spinner that began operations in 1969 and today runs its textile division from two units, at Bhikki in Sheikhupura district, Punjab, and at Nooriabad in Sindh. The company operates 76,176 spindles and specialises in high value-added polyester/cotton, chief value cotton (CVC) and pure cotton yarns, with capacity for 22 million pounds of ring-spun yarn a year. Its original wood-related and chemical divisions have since been discontinued.",
+  "headOffice": "104 Shadman 1, Lahore 54000, Pakistan",
+  "phone": "+92 42 3596 0871-4",
+  "website": "https://crescentfibres.com",
+  "ceo": "Imran Maqbool",
+  "sourceNote": "Written from: https://crescentfibres.com/company-profile/ (incorporation year, units, spindle count, capacity), https://crescentfibres.com/products/ (product range), https://crescentfibres.com/locations/ (registered office, telephone) and https://crescentfibres.com/company-information/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fine-count CVC yarn",
+      "summary": "60% polyester / 40% cotton combed yarns in counts 50/1 to 80/1, spun from imported Supima, CIS and Giza cotton and supplied mainly to weaving mills exporting to the US home-textiles market.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Coarse and medium CVC yarn",
+      "summary": "60% polyester / 40% cotton carded and combed yarns from 10/1 to 40/1 for knitting and weaving.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "65/35 polyester-cotton yarn",
+      "summary": "Carded and combed yarn in the 65/35 blend, counts 10/1 to 20/1, supplied to weavers serving the European market.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "52/48 polyester-cotton yarn",
+      "summary": "Medium-count carded and combed yarn from 20/1 to 40/1 for knitting and weaving.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pure cotton yarn",
+      "summary": "Carded coarse and medium counts from 12/1 to 30/1 for knitting and weaving.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

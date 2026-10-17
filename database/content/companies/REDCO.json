@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for REDCO. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "REDCO",
+  "description": "Redco Textiles Limited was incorporated in Pakistan on 17 October 1991 and describes its operations as vertically integrated from the manufacturing of fibre through to fabric; it is ISO 9001 certified. Its principal activities are the manufacture and sale of yarn and grey fabric. The registered office is at 78-E, Blue Area, Islamabad.",
+  "headOffice": "Redco Plaza, 4th Floor, 78-E, Blue Area, Islamabad 44000, Pakistan",
+  "phone": "+92 51 234 4251-57",
+  "website": "https://redcotextiles.com",
+  "ceo": "Sarah Muhammad Saya",
+  "sourceNote": "Written from: redcotextiles.com — About Us page (company profile, board and contact details) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Yarn manufactured and sold by the company as one of its two principal products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Grey fabric",
+      "summary": "Grey fabric manufactured and sold by the company, produced within its vertically integrated fibre-to-fabric operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

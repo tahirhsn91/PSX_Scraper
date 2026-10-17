@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SNAI. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SNAI",
+  "description": "Sana Industries Limited was established in 1988 to manufacture man-made blended fibre yarns and became a member of the Karachi Stock Exchange in 1989. It describes itself as an entity of the Sanaulla group of companies, and its spinning capacity has grown from 12,000 spindles at inception to 30,720 spindles, with its factory at B-186, H.I.T.E., Hub, Balochistan. The company presents itself as an innovator in new yarn products in the Pakistani market.",
+  "headOffice": "33-D-2, Block 6, P.E.C.H.S., Karachi 75400, Pakistan",
+  "phone": "+92 21 34322556-59",
+  "website": "https://sana-industries.com",
+  "ceo": "Hafiz Mohammed Irfan Nawab",
+  "sourceNote": "Written from: sana-industries.com (about, capacity and history), sana-industries.com/contact-us (head office, phone, factory), sana-industries.com/governance/board-of-directors (chief executive); PSX company profile page dps.psx.com.pk/company/SNAI (principal business) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Man-made blended fibre yarn",
+      "summary": "The company's stated principal business: manufacturing and sale of man-made blended yarn, spun on a 30,720-spindle mill at H.I.T.E., Hub.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

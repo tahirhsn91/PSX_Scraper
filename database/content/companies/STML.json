@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for STML. Every fact is attributable - see sourceNote. No image attached: no licence-cleared photograph of the company's own plant is available.",
+  "symbol": "STML",
+  "description": "Shams Textile Mills Limited was founded in 1968 and began as a composite facility covering spinning, weaving, dyeing and finishing, before narrowing its focus to yarn. It now spins export-quality cotton yarn - carded, combed, multi-count, multi-twist, slub and compact - in counts from 6/s to 60/s, and has built a dedicated unit with capacity of 816,480 kg a month for multi-count, multi-twist and slub yarns. The company also describes work on recycled-material yarns as part of its production.",
+  "headOffice": "8th Floor, Tricon Corporate Center, 73-E, Main Jail Road, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 3576 0381",
+  "website": "https://shams.com.pk",
+  "ceo": "Khalid Bashir",
+  "sourceNote": "Written from: Shams Textile Mills Limited website (shams.com.pk: about, products, plant, board of directors, contact) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Carded cotton yarn",
+      "summary": "Carded cotton yarn in counts 6/s to 60/s.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Combed cotton yarn",
+      "summary": "Combed cotton yarn, produced through its own combing process, in counts 6/s to 60/s.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Slub yarn",
+      "summary": "Slub yarn in counts 6/s to 16/s, in the varieties the market asks for.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Multi-count and multi-twist yarn",
+      "summary": "Multi-count and multi-twist cotton yarns in counts 6/s to 12/s, produced at a dedicated unit with 816,480 kg a month of capacity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Compact yarn",
+      "summary": "Compact-spun cotton yarn in counts 6/s to 60/s.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

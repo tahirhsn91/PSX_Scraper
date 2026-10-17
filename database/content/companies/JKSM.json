@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for JKSM. Every fact is attributable — see sourceNote. No image is attached: the group site carries plant photography with no reuse licence, and a generic mill photograph would imply it is theirs.",
+  "symbol": "JKSM",
+  "description": "J.K. Spinning Mills Limited is the listed spinning company of J.K. Group, incorporated in 1987 as Zeeshan Textile Mills Limited and renamed on 24 November 1994. It runs four spinning units with roughly 183,538 spindles and 6,000 rotors, spinning 100% cotton, PC, PP, PV and viscose yarns in counts from Ne 10s to 170s, with two-for-one twisting for two-fold yarns. The group's fabric division weaves, processes and stitches grey, bleached, dyed and printed fabric and home and institutional textiles.",
+  "headOffice": "29 KM, Sheikhupura Road, Khurrianwala, Faisalabad, Pakistan",
+  "phone": "+92 41 2401011-6",
+  "website": "https://jkgroup.net",
+  "ceo": "Faiq Jawed",
+  "sourceNote": "Written from: https://jkgroup.net/company-information/ (history, incorporation and renaming, spindle capacity), https://jkgroup.net/yarn-division/ (four spinning units, yarn types and count range, TFO twisting), https://jkgroup.net/products/ and https://jkgroup.net/fabric-division/ (grey/bleached/dyed/printed fabric, home and institutional textile), https://jkgroup.net/offices-contact-details/ (head office address and phone), https://jkgroup.net/board-of-directors/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton and blended yarns",
+      "summary": "100% cotton, PC, PP, PV and viscose yarns spun across four units in counts from Ne 10s to 170s.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Two-fold yarns",
+      "summary": "Two-fold yarns made on two-for-one (TFO) twisting machines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Grey, bleached, dyed and printed fabrics",
+      "summary": "Woven fabric from the group's fabric division, supplied grey, bleached, dyed and printed.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textile",
+      "summary": "Home-textile made-ups produced through the group's stitching capacity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Institutional textile",
+      "summary": "Institutional textile ranges, including the healthcare and hospitality lines the group lists.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

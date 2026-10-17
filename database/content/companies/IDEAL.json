@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for IDEAL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "IDEAL",
+  "description": "Ideal Dynamics Limited (formerly Ideal Spinning Mills Limited) was incorporated in Pakistan on 8 June 1989 and describes itself as producing high quality yarn and fabric, having grown from spinning into spinning and weaving within the Ideal Group. Its spinning unit runs high speed ring frames with capacity of up to 31,032 spindles, and its principal activity is the manufacture and sale of yarn, cloth and hosiery products. It is a public limited company listed on the Pakistan Stock Exchange and sits in the Ideal Group alongside Waqas Spinning Mills (Private) Limited and Ideal Rice Industries (Private) Limited, which are separate companies.",
+  "headOffice": "1088 Jail Road, Faisalabad, Pakistan",
+  "phone": "+92 41 2632301-7",
+  "website": "https://idealsm.com",
+  "ceo": "Amjad Saeed",
+  "sourceNote": "Written from: idealsm.com (home, about-us, ideal-spinning-mill, contact-us) and idealsm.com/contact-us (head office, telephone); PSX company profile page dps.psx.com.pk/company/IDEAL (business description, key people, registered address) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spun yarn",
+      "summary": "Produced at the company's spinning unit on high speed ring frames with up to 31,032 spindles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric and cloth",
+      "summary": "Weaving is the company's second manufacturing vertical, alongside spinning.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hosiery products",
+      "summary": "Named in the company's stated principal activity of manufacturing and selling yarn, cloth and hosiery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

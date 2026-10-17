@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for FCIBL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "FCIBL",
+  "description": "First Credit and Investment Bank Limited is an investment bank and a joint venture of the National Bank of Pakistan and the Water and Power Development Authority, licensed by the SECP to provide investment finance services under the NBFC Regulations. It lends to commercial and industrial borrowers through syndication and direct financing against mortgage, hypothecation and receivables, runs a treasury and money-market book, and holds equity and debt investments. On the advisory side it arranges debt and equity, handles mergers and acquisitions and corporate restructuring, and provides feasibility studies and financial modelling.",
+  "headOffice": "2nd Floor, Sidco Avenue Centre, Stratchen Road, R.A. Lines, Karachi 74200, Pakistan",
+  "phone": "+92 21 35658750-52",
+  "website": "https://fcibank.com.pk",
+  "ceo": "Muhammad Mohsin Ali",
+  "sourceNote": "Written from: fcibank.com.pk — company profile, fund based operations, investment banking and advisory services, and board of directors pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fund-based operations",
+      "summary": "Short- and long-term finance for capital expenditure and working capital, largely through syndication and against mortgage, hypothecation and receivables.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Treasury and money market",
+      "summary": "A separate treasury division making short-term placements from the company's own resources and investing in equity and non-equity instruments.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Investment banking and advisory",
+      "summary": "Debt and equity arrangements including TFCs, sukuk, IPOs, rights issues and private placements, plus project financing, mergers and acquisitions, restructuring, feasibility studies and financial modelling.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

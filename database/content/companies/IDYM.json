@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for IDYM. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "IDYM",
+  "description": "Indus Dyeing & Manufacturing Company Limited was incorporated in Pakistan on 23 July 1957 and its principal activity is the manufacturing and sale of yarn, carried out at plants in Karachi, Hyderabad and Muzaffargarh. It is part of the Indus Group, and its subsidiaries are Indus Lyallpur Limited, Indus Home Limited (which itself holds Indus Home USA Inc.) and Indus Wind Energy Limited, with Sunrays Textile Mills Limited as an associated undertaking.",
+  "headOffice": "Office No. 508, 5th Floor, Beaumont Plaza, Beaumont Road, Civil Lines, Karachi 75530, Pakistan",
+  "phone": "+92 21 111 404 404",
+  "website": "https://indus-group.com",
+  "ceo": "Mian Shahzad Ahmed",
+  "sourceNote": "Written from: indus-group.com — Indus Dyeing & Manufacturing Company Limited page (company profile, board, investees and registered office) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Yarn manufactured and sold by the company, produced at its manufacturing facilities in Karachi, Hyderabad and Muzaffargarh.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for PASM. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available. The company's own site is small and several fields it does not publish are left null rather than filled from directories.",
+  "symbol": "PASM",
+  "description": "Paramount Spinning Mills Limited describes its business as the progressive manufacture and sale of cotton yarn, fabric, yarn dyeing and garments, with mills at S.I.T.E. Kotri and on 18-Km Raiwind Road, Lahore, and its registered office at Finlay House on I.I. Chundrigar Road, Karachi. Its stated vision is to rebuild the company and its mission to become again a quality manufacturer of textile products. It is listed on the Pakistan Stock Exchange under the symbol PASM.",
+  "headOffice": "2nd Floor, Finlay House, I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": null,
+  "website": "http://www.gulshan.com.pk/Paramount/",
+  "ceo": "Sohail Maqsood",
+  "sourceNote": "Written from: gulshan.com.pk/Paramount — company information (registered office, mills, NTN, incorporation), vision/mission, governance (chief executive, company secretary) and contact pages; PSX company profile page dps.psx.com.pk/company/PASM (business description, key people) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton yarn",
+      "summary": "Spinning is the company's principal manufacturing activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fabric",
+      "summary": "Woven fabric produced alongside yarn manufacture.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Yarn dyeing",
+      "summary": "In-house yarn dyeing named in the company's stated line of business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Garments",
+      "summary": "Garment manufacturing named in the company's stated line of business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

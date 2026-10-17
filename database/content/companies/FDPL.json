@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for FDPL. Every fact here is attributable — see sourceNote. No image is attached: the building photography on the group's site is not licence-cleared. The company publishes no telephone number on its own profile page, so phone is null rather than taken from a directory. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FDPL",
+  "description": "First Dawood Properties Limited was incorporated in Pakistan on 22 June 1994 as Dawood Leasing Company Limited, was later upgraded to an investment bank as First Dawood Investment Bank Limited, and now carries its present name as part of the First Dawood Group. Its principal line of business is the construction, development and renting-out of properties. It has completed Dawood One, a three-side corner commercial building at Ayubia Commercial, Phase VII (Ext), DHA, Karachi, which is fully rented, and also rents out office premises in Lakson Square Building No. 1, Karachi; it holds an open piece of industrial land in Punjab to be developed or sold as the board decides.",
+  "headOffice": "19th Floor, Tower B, Saima Trade Tower, I. I. Chundrigar Road, Karachi, Pakistan",
+  "phone": null,
+  "website": "https://firstdawood.com/fdibl",
+  "ceo": "Muhammad Rizwan ul Haque",
+  "sourceNote": "Written from: firstdawood.com/fdibl (corporate profile — incorporation, former name as an investment bank, principal line of business, Dawood One, Lakson Square premises, Punjab industrial land and stated strategy) and the PSX company page for FDPL (registered address, chief executive, business description) (accessed 2026-10-17). The company's own page lists no telephone number, so phone is null.",
+  "products": [
+    {
+      "name": "Dawood One, DHA Phase VII (Ext), Karachi",
+      "summary": "The company's first completed building — a three-side corner commercial property at Ayubia Commercial, Phase VII (Ext), DHA, Karachi — which the company reports as fully rented.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lakson Square office premises",
+      "summary": "Office premises in Lakson Square Building No. 1, Karachi, held and rented out.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Industrial land, Punjab",
+      "summary": "An open piece of industrial land in Punjab which the company says will either be developed or sold at the board's decision.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

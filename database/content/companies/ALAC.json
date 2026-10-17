@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ALAC. Every fact is attributable — see sourceNote. No image is attached: the company's plan brochures are its own marketing assets with no licence we can record. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ALAC",
+  "description": "Askari Life Assurance Company Limited was incorporated in Pakistan on 18 August 1992 and is engaged in the life insurance business, including ordinary life business and accidental and health business. Army Welfare Trust is its parent company. It sells through its own branch network and through bancassurance arrangements with Askari Bank Limited and United Bank Limited, and its own site reports more than 250,000 policyholders.",
+  "headOffice": "Office No. 1104, 11th Floor, Emerald Tower, Plot G-19, Block 5, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 111 225 275",
+  "website": "https://askarilife.com",
+  "ceo": "Jehanzeb Zafar",
+  "sourceNote": "Written from: https://askarilife.com/contact-us/ (head office, UAN), https://askarilife.com/ (plans, policyholder count, bancassurance partners with Askari Bank and UBL) and the PSX company profile for ALAC at https://dps.psx.com.pk/company/ALAC (incorporation, business written, Army Welfare Trust as parent, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Savings, child education and retirement plans",
+      "summary": "Individual savings plans, with the company's site offering calculators for savings, child education funding and retirement income.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bancassurance",
+      "summary": "Life insurance distributed through bancassurance arrangements with Askari Bank Limited and United Bank Limited.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Accidental and health business",
+      "summary": "Accident and health cover written alongside the company's ordinary life business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for AMTEX. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of Amtex's own plants exists, and a generic textile-mill photograph would imply it is theirs.",
+  "symbol": "AMTEX",
+  "description": "Amtex Limited describes itself as one of the leading textile manufacturing groups in Pakistan and a vertically integrated group with operations in all sectors of the textile industry from spinning to stitching. The group reports an annual turnover of around US$200 million and employment for about 15,000 families, and presents itself as the largest single source of variety and combination of textile products under one roof. It manufactures home textiles and garments alongside fabrics, with manufacturing processes certified to ISO 9001.",
+  "headOffice": "P-225 Tikka Gali # 2, Montgomery Bazar, Faisalabad, Pakistan",
+  "phone": "+92 41 2428500",
+  "website": "https://amtextile.com",
+  "ceo": "Khurram Iftikhar",
+  "sourceNote": "Written from: https://amtextile.com/zee1/ (company overview, scale, home textile and garment manufacture), https://www.amtextile.com/company.html (vertically integrated group, turnover, employment, ISO certification), https://amtextile.com/zee1/products/fabrics/ (fabric range), https://amtextile.com/zee1/garments/ (garment product line), https://amtextile.com/zee1/home-textile/ (home textile), https://amtextile.com/zee1/contact/ (registered office, phone), https://www.amtextile.com/investors/board_of_directors.pdf (CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fabrics",
+      "summary": "Woven fabric from 1016 mm to 3200 mm width in 100% cotton, poly/cotton, 100% polyester, viscose, acrylic, acetate rayon, triacetate, poly/viscose, poly/acrylic, poly/acetate and polypropylene blends, in plain, twill, drill, satin, dobby and jacquard weaves, supplied grey, bleached, dyed, coated and flocked, or printed (pigment and reactive).",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Garments",
+      "summary": "An apparel division producing light-weight garments — loungewear, sleepwear, casual shirts, hospital wear and scrub sets — and heavy-weight workwear and bottom wear, with in-house garment wet processing for rinse, silicon, stone, enzyme and bleach washes and effects such as distressing and sand blasting.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textile",
+      "summary": "Home-textile piece goods and made-ups, offered in the fabric varieties the company runs and sold both as piece goods and as finished confections.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for IMS. Every fact is attributable — see sourceNote. No image is attached. IMS is an operating brokerage and investment bank, not a fund or a Modaraba.",
+  "symbol": "IMS",
+  "description": "Intermarket Securities Limited is a SECP-licensed brokerage house and TREC holder of the Pakistan Stock Exchange, serving retail, institutional and global investors since 1994. It delivers brokerage, equity research and investment banking, and runs the IMTrade online trading platform as well as Roshan Digital Account services for overseas Pakistanis. It is the flagship of the Intermarket Group.",
+  "headOffice": "5th Floor, Trade Centre, I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": "+92 21 111 467 000",
+  "website": "https://imsecurities.com.pk",
+  "ceo": "Wajid Hussain",
+  "sourceNote": "Written from: https://imsecurities.com.pk/profile/about (company description, licensed brokerage house and TREC holder, since 1994, chairperson's message), https://imsecurities.com.pk/governance/board-of-directors (chief executive), https://imsecurities.com.pk/governance/management-profile (chief executive), https://imsecurities.com.pk/services/ and https://imsecurities.com.pk/imtrade-products/ (service and product lines), https://imsecurities.com.pk/profile/about (structured business data: address and telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Retail brokerage and online trading",
+      "summary": "Retail brokerage with the IMTrade online trading platform for direct access to the Pakistan Stock Exchange.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Equity research",
+      "summary": "Equity research coverage and a research portal for clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Investment banking",
+      "summary": "Investment banking services offered alongside brokerage and research.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "International sales",
+      "summary": "International sales desk serving offshore and non-resident investors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Roshan Digital Account",
+      "summary": "Roshan Digital Account services for overseas Pakistanis investing in Pakistan's capital markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for DEL. Every fact is attributable — see sourceNote. No image is attached. DEL is an operating brokerage, not a fund or a Modaraba.",
+  "symbol": "DEL",
+  "description": "Dawood Equities Limited was incorporated under the Companies Ordinance 1984 on 3 May 2006 and commenced commercial operations on 3 October 2006. It is registered with the Securities and Exchange Commission of Pakistan as a broker and is a corporate member of the Pakistan Stock Exchange, undertaking the sale and purchase of listed securities. Alongside equity brokerage it underwrites initial public offerings, acts as custodian of client securities, and provides research reports.",
+  "headOffice": "17th Floor, Saima Trade Tower-A, I.I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 32271881",
+  "website": "https://dawoodequities.com",
+  "ceo": "Aziz Habib",
+  "sourceNote": "Written from: https://dawoodequities.com/company-profile (incorporation and commencement dates, SECP registration, exchange membership, brokerage services), https://dawoodequities.com/ (equity brokerage, underwriting, custodian services, research), https://dawoodequities.com/RegisteredOffices.html (head office address and telephone), https://dawoodequities.com/BOD.html (board of directors, chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Equity brokerage",
+      "summary": "Sale and purchase of securities listed on the Pakistan Stock Exchange as a corporate member of the exchange.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Underwriting of shares",
+      "summary": "Underwriting of initial public offerings of securities being listed for the first time.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Shares custodian and allied services",
+      "summary": "Custody of client securities and the allied services the company describes alongside it.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Research",
+      "summary": "Research reports produced by the company's research team.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

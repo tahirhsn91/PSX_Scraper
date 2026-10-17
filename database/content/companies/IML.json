@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for IML. Only one service is listed, because that is all the company states it currently does; its vertical farming and housing development work is described as pilot projects, not products. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "IML",
+  "description": "Imperial Limited, formerly Imperial Sugar Limited, was incorporated in Pakistan on 9 May 2007 and is quoted on the Pakistan Stock Exchange. Its principal line of business is investment management: buying, selling, holding or otherwise acquiring and investing the company's capital in financial instruments, without acting as an investment or brokerage company. Its own site describes it as also venturing into vertical farming and housing development, with pilot projects under way.",
+  "headOffice": "Ismail Aiwan-e-Science Building, 205 Ferozepur Road, Lahore 54600, Pakistan",
+  "phone": "+92 42 111 265 669",
+  "website": "http://www.imperiallimited.co",
+  "ceo": "Naveed M. Sheikh",
+  "sourceNote": "Written from: http://www.imperiallimited.co (investment management line of business, vertical farming and housing development pilots, UAN) and the PSX company profile for IML at https://dps.psx.com.pk/company/IML (incorporation, objects, registered office, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Investment management",
+      "summary": "Managing the company's capital through investments in financial instruments, without acting as an investment or brokerage company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

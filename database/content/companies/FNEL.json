@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for FNEL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "FNEL",
+  "description": "First National Equities Limited was incorporated in February 1995 and listed on the Pakistan Stock Exchange in 2004, where it trades under the symbol FNEL as a brokerage house. It provides online equities trading, research, margin financing and margin trading, and was given the exchange's Top Companies Award in 2006. Its associated companies include First Pakistan Securities Limited, Switch Securities (Pvt.) Limited, First Florance Developers (Pvt.) Limited and MCD Pakistan Limited.",
+  "headOffice": "FNE House, 179-B, Abu Bakar Block, New Garden Town, Lahore, Pakistan",
+  "phone": "+92 42 3628 0790",
+  "website": "https://fnetrade.com",
+  "ceo": "Waseem Ahmad Khan",
+  "sourceNote": "Written from: fnetrade.com — About Us page (company introduction, management, associated companies and registered office) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Online equities trading",
+      "summary": "An online trading platform for buying and selling shares on the Pakistan Stock Exchange.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Brokerage",
+      "summary": "Brokerage services, the business the company states it is engaged in.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Research",
+      "summary": "Market research and daily reports, morning briefings and market recaps for clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Margin financing and margin trading",
+      "summary": "Margin financing, margin trading and combined financing products offered to clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for SSML. Every fact here is attributable — see sourceNote. No image is attached: the company's own mill photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SSML",
+  "description": "Saritow Spinning Mills Limited was established in 1987 under the Saigol group of companies and incorporated in Pakistan as a public limited company; it is listed on the Pakistan Stock Exchange and is a spinning unit engaged in the manufacture and sale of yarn. Its mill is at 51-km Multan Road, Phool Nagar, District Kasur in Punjab, with the registered office at Gulberg in Lahore. It produces coarse and fine counts from 16/s to 80/s — carded, combed, slub, Lycra and Siro — in cotton, blended and synthetic yarn.",
+  "headOffice": "17-Aziz Avenue, Canal Bank, Gulberg-V, Lahore, Pakistan",
+  "phone": "+92 42 3571 5029-31",
+  "website": "https://saritowspinningmillsltd.com",
+  "ceo": "Samir Iqbal Saigol",
+  "sourceNote": "Written from: saritowspinningmillsltd.com/introduction (establishment, incorporation, registered office and mill address, telephone), saritowspinningmillsltd.com/products (count range, yarn types and fibre blends) and saritowspinningmillsltd.com/profile_of_board_directors (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton yarn",
+      "summary": "Cotton yarn in coarse and fine counts from 16/s to 80/s, in carded, combed, slub, Lycra and Siro qualities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Blended yarn",
+      "summary": "Blended yarn across the same 16/s to 80/s count range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Synthetic yarn",
+      "summary": "Synthetic yarn across the same 16/s to 80/s count range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

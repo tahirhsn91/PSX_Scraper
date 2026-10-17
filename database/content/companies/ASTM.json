@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for ASTM. Every fact is attributable — see sourceNote. No image is attached: the company publishes product and plant photographs on its own site but no licence permitting reuse, and a generic textile photograph would imply it is theirs.",
+  "symbol": "ASTM",
+  "description": "Asim Textile Mills Limited is a public limited textile company based in Faisalabad, incorporated in 1990 and taken over by its current group around 1994. It manufactures and sells yarn and home textile products, with its mill on Sheikhupura Road and its head office at J.K. House in Madina Town. The home-textile side of the business is presented as finished bed and bath furnishings — sheet sets, duvet sets, comforters and curtains.",
+  "headOffice": "J.K. House, 32-W Main Boulevard, Susan Road, Madina Town, Faisalabad, Pakistan",
+  "phone": "+92 41 8721954-6",
+  "website": "https://asimtextile.com",
+  "ceo": "Zahid Anwar",
+  "sourceNote": "Written from: https://asimtextile.com (company introduction, head office and mill address, telephone), https://asimtextile.com/en/company/information/ (board of directors and chief executive, registered office), https://asimtextile.com/en/products/ (home-textile product range) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Sheet sets",
+      "summary": "Bed sheet sets in the home-textile range the company lists on its product page.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Duvet sets",
+      "summary": "Duvet sets, listed as part of the company's home-textile product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Comforters",
+      "summary": "Comforters, listed as part of the company's home-textile product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Curtains",
+      "summary": "Curtains, listed as part of the company's home-textile product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Yarn",
+      "summary": "The company states that it is primarily engaged in the manufacture and sale of yarn alongside home textile products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
