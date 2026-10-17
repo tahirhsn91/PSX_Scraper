@@ -23,6 +23,13 @@ export const paginationQuery = z.object({
  * rather than reaching the query.
  */
 export const stocksQuery = paginationQuery.extend({
+  /**
+   * A named screen (see services/screenerPresets). The server decides its filters, its ordering
+   * and each row's reason, so the same name means the same list to every client.
+   */
+  preset: z
+    .enum(['gainers', 'losers', 'most_active', 'highest_yield', 'low_pe', 'high_pe'])
+    .optional(),
   sort: z
     .enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points', 'weight', 'dividendYield', 'peRatio', 'pbRatio', 'roe', 'beta'])
     .optional(),

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Box, Button, Grid, MenuItem, TablePagination, TextField } from '@mui/material';
-import { useSectors, useStocks } from '../api/hooks';
+import { Box, Button, Grid, MenuItem, Stack, TablePagination, TextField, Typography } from '@mui/material';
+import { useScreenerPresets, useSectors, useStocks } from '../api/hooks';
 import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column, type SortState } from '../components/ui/DataTable';
@@ -48,8 +48,11 @@ function buildFilters(criteria: Record<string, string>, sector: string): StockFi
  * come from a join), so sorting and filtering both happen server-side — never in the browser.
  */
 export function Screener() {
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const sectorParam = params.get('sector') ?? '';
+  // The preset lives in the URL, so a screen is linkable: "the low-P/E list" is a place, not a
+  // transient piece of component state that dies on refresh.
+  const presetKey = params.get('preset') ?? '';
 
   const [criteria, setCriteria] = useState<Record<string, string>>({});
   const [sector, setSector] = useState(sectorParam);
@@ -58,18 +61,22 @@ export function Screener() {
   const [sort, setSort] = useState<SortState | null>(null);
 
   const { data: sectors } = useSectors();
+  const { data: presetList } = useScreenerPresets();
   const hasFilters = Object.keys(applied).length > 0;
 
   const { data, isLoading, error, refetch } = useStocks(
     page,
     PAGE_SIZE,
     false,
-    (sort?.key as StockSortField) ?? undefined,
+    // A preset carries its own ordering; sending a sort would override what the screen means.
+    presetKey ? undefined : (sort?.key as StockSortField) ?? undefined,
     (sort?.direction as SortOrder) ?? 'asc',
     undefined,
     undefined,
     hasFilters ? applied : undefined,
+    presetKey || undefined,
   );
+  const activePreset = data?.preset;
 
   const setField = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setCriteria((c) => ({ ...c, [key]: e.target.value }));
@@ -84,6 +91,23 @@ export function Screener() {
     setApplied({});
     setPage(1);
     setSort(null);
+    if (presetKey) {
+      const next = new URLSearchParams(params);
+      next.delete('preset');
+      setParams(next, { replace: true });
+    }
+  };
+
+  /** Choose a named screen: its criteria, ordering and reason all come from the server. */
+  const choosePreset = (key: string) => {
+    const next = new URLSearchParams(params);
+    if (key) next.set('preset', key);
+    else next.delete('preset');
+    setParams(next, { replace: true });
+    setPage(1);
+    setSort(null);
+    setApplied({});
+    setCriteria({});
   };
 
   const columns: Column<StockListItem>[] = [
@@ -164,14 +188,28 @@ export function Screener() {
       sortKey: 'roe',
       hideBelow: 'md',
     },
-    {
-      key: 'beta',
-      header: 'Beta',
-      align: 'right',
-      render: (r) => formatNumber(r.beta),
-      sortKey: 'beta',
-      hideBelow: 'md',
-    },
+    ...(presetKey
+      ? []
+      : [
+          {
+            key: 'beta',
+            header: 'Beta',
+            align: 'right' as const,
+            render: (r: StockListItem) => formatNumber(r.beta),
+            sortKey: 'beta' as StockSortField,
+            hideBelow: 'md' as const,
+          },
+        ]),
+    ...(presetKey
+      ? [
+          {
+            key: 'reason',
+            header: 'Why it is here',
+            render: (r: StockListItem) => r.reason ?? DASH,
+            hideBelow: 'md' as const,
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -180,6 +218,34 @@ export function Screener() {
         title="Stock screener"
         subtitle="Filter the whole universe by price, size and fundamentals, then sort any column"
       />
+      <SectionCard title="Named screens" sx={{ mb: 3 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Each screen is defined on the server, so the name means the same thing here as it does in a
+          saved link. Choosing one replaces the filters below.
+        </Typography>
+        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+          {(presetList?.items ?? []).map((p) => (
+            <Button
+              key={p.key}
+              size="small"
+              variant={p.key === presetKey ? 'contained' : 'outlined'}
+              onClick={() => choosePreset(p.key === presetKey ? '' : p.key)}
+            >
+              {p.label}
+            </Button>
+          ))}
+        </Stack>
+        {activePreset ? (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="body2">{activePreset.description}</Typography>
+            {activePreset.caveat ? (
+              <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
+                {activePreset.caveat}
+              </Typography>
+            ) : null}
+          </Box>
+        ) : null}
+      </SectionCard>
       <SectionCard title="Filters" sx={{ mb: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={4}>
@@ -225,12 +291,16 @@ export function Screener() {
       <SectionCard
         title="Results"
         subtitle={
-          data ? `${data.total} matching stock${data.total === 1 ? '' : 's'}` : 'Apply filters to narrow the universe'
+          data
+            ? `${data.total} matching stock${data.total === 1 ? '' : 's'}${
+                activePreset ? ` · ${activePreset.label}` : ''
+              }`
+            : 'Apply filters or pick a screen'
         }
         action={
-          hasFilters ? (
+          hasFilters || presetKey ? (
             <Button size="small" onClick={reset}>
-              Clear filters
+              Clear
             </Button>
           ) : undefined
         }
@@ -249,7 +319,7 @@ export function Screener() {
           onSortChange={setSort}
           // The same 160ms body entrance the dashboard uses: applying a filter, turning a page or
           // re-sorting is a new question, and the rows should arrive as one rather than swap.
-          transitionKey={`${JSON.stringify(applied)}-${page}-${sort?.key ?? 'default'}-${sort?.direction ?? ''}`}
+          transitionKey={`${presetKey}-${JSON.stringify(applied)}-${page}-${sort?.key ?? 'default'}-${sort?.direction ?? ''}`}
           emptyTitle="No matches"
           emptyDescription="Loosen the criteria — the current filters match no tracked stock."
           pagination={
