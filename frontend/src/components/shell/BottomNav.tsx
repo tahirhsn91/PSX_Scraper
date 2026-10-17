@@ -4,7 +4,6 @@ import SyncRoundedIcon from '@mui/icons-material/SyncRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
-import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { layout } from '../../theme/tokens';
 import { isDev } from '../../lib/env';
@@ -13,7 +12,6 @@ const ITEMS = [
   { label: 'Dashboard', to: '/', icon: <HomeRoundedIcon /> },
   { label: 'Screener', to: '/screener', icon: <TuneRoundedIcon /> },
   { label: 'Watchlist', to: '/watchlist', icon: <StarBorderRoundedIcon /> },
-  { label: 'Portfolio', to: '/portfolio', icon: <AccountBalanceWalletRoundedIcon /> },
   ...(isDev ? [{ label: 'Sync Logs', to: '/logs', icon: <SyncRoundedIcon /> }] : []),
 ];
 

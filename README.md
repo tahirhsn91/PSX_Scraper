@@ -1,4 +1,4 @@
-# PSX Stock Data Scraper & Portfolio Backend
+# PSX Stock Data Scraper & Market Research API
 
 Production-oriented full-stack application for collecting, scraping, storing, and managing Pakistan Stock Exchange (PSX) stock data. Built with Clean Architecture and a pluggable scraper framework.
 
