@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for GHNI. Facts come from the company's PSX-filed interim report; gil.com.pk refused this host with a Cloudflare block, so the phone number and any website-only detail are left null rather than guessed. No image is attached.",
+  "symbol": "GHNI",
+  "description": "Ghandhara Industries Limited is a Karachi-based vehicle assembler whose principal activity, as stated in its own filings, is the assembly, progressive manufacturing and sale of Isuzu trucks, buses and pick ups. Incorporated in 1963, its shares are quoted on the Pakistan Stock Exchange.",
+  "headOffice": "F-3, Hub Chowki Road, S.I.T.E., Post Box No. 2706, Karachi 75730, Pakistan",
+  "phone": null,
+  "website": "https://gil.com.pk",
+  "ceo": "Ahmad Kuli Khan Khattak",
+  "sourceNote": "Written from: Ghandhara Industries Limited interim report for the nine months ended 31 March 2026, filed on the Pakistan Stock Exchange — company profile, registered office and note 1 (corporate information) — at financials.psx.com.pk (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Isuzu trucks",
+      "summary": "Assembled and progressively manufactured by the company, per its stated principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Isuzu buses",
+      "summary": "Assembled and progressively manufactured by the company, per its stated principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Isuzu pick ups",
+      "summary": "Assembled and progressively manufactured by the company, per its stated principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

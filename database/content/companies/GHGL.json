@@ -1,0 +1,39 @@
+{
+  "symbol": "GHGL",
+  "description": "Ghani Glass Limited is a glass manufacturer incorporated in Pakistan in 1992 and part of the House of Ghani. It manufactures and sells float glass and glass containers, supplying the pharmaceutical, food and beverage, construction and industrial packaging sectors in domestic and export markets. The company reports seven manufacturing facilities in Pakistan, more than 5,000 customers and an export presence in over 26 countries.",
+  "headOffice": "Ghani Complex, 40-L Model Town Extension, Lahore, Pakistan",
+  "phone": "+92 42 111 949 949",
+  "website": "https://www.ghaniglass.com",
+  "ceo": "Imtiaz Ahmad Khan",
+  "sourceNote": "Written from: ghaniglass.com/about-us, ghaniglass.com (product divisions) and ghaniglass.com/addresses (accessed 2026-10-17); CEO from the PSX company profile dps.psx.com.pk/company/GHGL (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "Float glass",
+      "summary": "Clear, green, brown, blue and grey, and reflective float glass produced for construction and industrial use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pharmaceutical glass containers",
+      "summary": "Glass packaging for the pharmaceutical industry, produced under the company's containers division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Food glass containers",
+      "summary": "Glass containers for food packaging.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Beverage glass containers",
+      "summary": "Glass containers for beverage packaging.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

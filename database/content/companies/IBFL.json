@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for IBFL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of Ibrahim Fibres' own plants exists, and a generic polyester-plant photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "IBFL",
+  "description": "Ibrahim Fibres Limited was incorporated in 1986 as a public limited company and is listed on the Pakistan Stock Exchange; it describes itself as the largest producer of polyester staple fibre and a leading textile manufacturing company in the country, and as the flagship company of the Ibrahim Group. All its manufacturing is at 38th K.M. Faisalabad–Sheikhupura Road, Faisalabad, where three polyester plants have a combined installed capacity of 390,600 tons of PSF a year and four spinning plants run 240,192 spindles. With effect from 1 October 2000 the group's other manufacturing companies — Ibrahim Textile Mills, A. A. Textiles, Zainab Textile Mills and Ibrahim Energy — were merged into the company.",
+  "headOffice": "Ibrahim Centre, 15-Club Road, Faisalabad 38000, Pakistan",
+  "phone": "+92 41 261 7836 (UAN +92 41 111 333 777)",
+  "website": "https://igcpk.com",
+  "ceo": "Muhammad Waseem Mukhtar",
+  "sourceNote": "Written from: https://igcpk.com/about-us (scale, plant capacities), https://igcpk.com/company-profile (incorporation, listing, merger, product range, power), https://igcpk.com/polyester (PSF and polyester chips capacity), https://igcpk.com/contact-us (head office, telephone, UAN) and https://igcpk.com/board-of-directors (CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Polyester Staple Fibre (PSF)",
+      "summary": "Produced across three polyester plants with a combined installed capacity of 390,600 tons a year, in a wide range of varieties, lustres, cut lengths and fineness.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Polyester chips",
+      "summary": "The same three plants can alternatively produce polyester chips instead of PSF.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dyed and hollow fibres",
+      "summary": "Dyed and hollow polyester fibres in siliconised and non-siliconised varieties.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Spun yarn",
+      "summary": "Four spinning plants with 240,192 spindles specialising in finer counts of blended and pure synthetic yarns.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Captive power generation",
+      "summary": "97.2 MW of in-house generation from Niigata engines, a gas turbine, a coal-fired plant and a solar plant, with up to 16 MW from the national grid held as standby.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for SYS. Every fact here is attributable — see sourceNote. No image is attached: Systems Limited's own photography is the company's asset, not licence-cleared.",
+  "symbol": "SYS",
+  "description": "Systems Limited is a public listed company that describes itself as the country's first information technology company, providing business solutions and business process outsourcing services, and as the largest software exporter in Pakistan. It works across digital consulting, business applications, data and analytics, cloud, security and business process services, for industries including communications, banking and financial services, public sector, health and retail. The company states that from its inception it was meant to be an employee-owned enterprise, with its leaders and top performing employees holding 84% of its stock.",
+  "headOffice": "E-1, Sehjpal, Near DHA Phase-VIII (Ex-Air Avenue), Lahore Cantt, Pakistan",
+  "phone": "+92 42 111 797 836",
+  "website": "https://www.systemsltd.com",
+  "ceo": "Asif Peer",
+  "sourceNote": "Written from: systemsltd.com/company-profile (mission, services, subsidiaries, employee ownership), systemsltd.com/company-overview/leadership (Group CEO & Managing Director), and Systems Limited Annual Report 2025, registered address page, at systemsltd.com/sites/default/files/2026-04/Systems%20Limited-Annual%20Report%202025.pdf (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Digital consulting and commerce",
+      "summary": "Digital consulting and strategy, digital commerce and business application services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Business applications and ERP",
+      "summary": "Implementation and support of enterprise applications, delivered through alliances the company lists with Microsoft, SAP, Temenos, Salesforce, IBM and AWS.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Data and analytics",
+      "summary": "Data modernisation, advanced analytics, data management, connected intelligence and generative AI services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cloud, infrastructure and security",
+      "summary": "Cloud operations and migration, cloud application development and integration, digital infrastructure services, managed services and security.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Business process services",
+      "summary": "Business process outsourcing, contact center, digital marketing, finance and accounting, staff augmentation, legal process outsourcing and recruitment process outsourcing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Software engineering and turnkey solutions",
+      "summary": "The company states it deploys and supports ERP, mobile, BPM, turnkey and complex software solutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for ISL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of ISL's own mill exists on the open licence sources, and a generic steel-coil photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ISL",
+  "description": "International Steels Limited is Pakistan's largest flat steel manufacturer and exporter, producing cold rolled, hot dipped galvanized and colour coated steel at its plant on Rehri Road, Landhi, Karachi. A service centre at Bin Qasim shapes flat rolled steel into profiles, cut sheets and slitted coils for industrial and commercial customers. Its cold rolling mill was designed by SMS Siemag of Germany and, after expansion, has capacity for 1,000,000 MT of cold rolled coil a year.",
+  "headOffice": "101, Beaumont Plaza, 10, Beaumont Road, Karachi 75530, Pakistan",
+  "phone": "+92 21 111 019 019",
+  "website": "https://isl.com.pk",
+  "ceo": "Samir M. Chinoy",
+  "sourceNote": "Written from: isl.com.pk — home, Product, About, Leadership and Contact pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cold rolled steel",
+      "summary": "Cold rolled coil from an SMS Siemag mill, 0.15–3.00 mm thick and up to 1,250 mm wide, in drawing to structural grades; annual capacity of 1,000,000 MT after expansion.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hot dipped galvanized steel",
+      "summary": "Steel given a protective zinc coating to prevent rust and corrosion.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Colour coated steel",
+      "summary": "The company's high value-added product, coated with polyester (PE) or polyvinylidene difluoride (PVDF).",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Service centre",
+      "summary": "Shapes flat rolled steel into profiles, custom cut sheets and slitted coils for industrial and commercial applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

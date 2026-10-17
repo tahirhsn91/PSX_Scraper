@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for MARI. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "MARI",
+  "description": "Mari Energies Limited is an integrated energy company whose core business is upstream oil and gas exploration and production. It also has a services division offering gravity and magnetic services, seismic acquisition and processing, mud logging and drilling services for in-house needs and for other exploration and production companies, and it has expanded into minerals mining (copper, gold and rare earth elements) and technology through data centres. Mari Services is its in-house integrated E&P services arm, Mari Minerals (Pvt.) Limited is a wholly owned subsidiary established in 2023, and Mari Technologies Limited is its new subsidiary building large-scale data centres.",
+  "headOffice": "21, Mauve Area, 3rd Road, G-10/4, Islamabad, Pakistan",
+  "phone": "+92 51 111 410 410",
+  "website": "https://www.marienergies.com.pk",
+  "ceo": "Faheem Haider",
+  "sourceNote": "Written from: https://www.marienergies.com.pk/ (CEO / Managing Director, verticals including Mari Services, Mari Minerals and Mari Technologies) and /about-us (Who We Are, Principal Business Activities), plus /contact-us (head office, phone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Oil and gas exploration and production",
+      "summary": "Upstream exploration, drilling, development and production of hydrocarbons, including natural gas, crude oil and condensate.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mari Services",
+      "summary": "An in-house integrated E&P services arm offering exploration and drilling expertise across Pakistan's oil and gas sector, including gravity and magnetic services, seismic acquisition and processing, mud logging and drilling services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mari Minerals (Pvt.) Limited",
+      "summary": "A wholly owned subsidiary established in 2023 as part of the company's diversification, focused on minerals mining including copper, gold and rare earth elements.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mari Technologies Limited",
+      "summary": "A subsidiary establishing large-scale data centres.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

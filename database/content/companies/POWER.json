@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for POWER. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "POWER",
+  "description": "Power Cement Limited, formerly Al-Abbas Cement Limited, was acquired in 2010 by the Arif Habib Group and is engaged in the manufacturing, marketing and sale of cement from a plant at Motorway M9, Nooriabad, Sindh. Its production lines have a nameplate clinker capacity of 10,700 tons per day (3.21 million tons a year), with cement production capacity of 3.37 million tons annually, and it exports clinker and cement to destinations including the Middle East, Sri Lanka, East and West Africa, the United Kingdom and the United States.",
+  "headOffice": "Arif Habib Center, 23, M.T. Khan Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 32468231-32",
+  "website": "https://powercement.com.pk",
+  "ceo": "Muhammad Kashif Habib",
+  "sourceNote": "Written from: https://powercement.com.pk/about-us/ (Company Profile, group, capacities), /our-leadership-team/ (Chief Executive Officer), /contact-us/ (Head Office, phone) and the brand listings on the home page (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Power OPC 53 Grade",
+      "summary": "Ordinary Portland cement brand produced and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Power SRC 53 Grade",
+      "summary": "Sulphate-resisting cement brand produced and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Power Block 53 Grade",
+      "summary": "Masonry/block cement brand produced and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Black Bull and Black Hawk OPC 53 Grade",
+      "summary": "Two further Ordinary Portland cement brands produced and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Qila PPC 43 Grade",
+      "summary": "Portland pozzolana cement brand produced and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Export brands",
+      "summary": "Barwaaqo, Maandeeq and Makicim brands, together with Power brands for Madagascar, the Philippines and Sri Lanka, for export markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

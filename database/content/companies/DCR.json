@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for DCR. A REIT scheme is not an operating company: the fields here describe the Scheme as PSX and the Scheme's own site do, and no photograph is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "DCR",
+  "description": "Dolmen City REIT is a listed, rated, closed-end, perpetual, Shariah-compliant rental REIT scheme, established under a Trust Deed dated 20 January 2015 between Arif Habib Dolmen REIT Management Limited as the REIT Management Company and Central Depository Company of Pakistan Limited as the Trustee. Its two properties are Dolmen Mall Clifton and The Harbour Front in Karachi, with 800,009 sq ft of leasable area and occupancy of 98.5% averaged across the pair. The Scheme reports a fund size of PKR 22,237 million, and property management is carried out by Dolmen Real Estate Management (Private) Limited.",
+  "headOffice": "Arif Habib Centre, 23 M.T. Khan Road, Karachi, Pakistan",
+  "phone": "+92 21 3828 0986",
+  "website": "https://www.arifhabibdolmenreit.com",
+  "ceo": "Muhammad Ejaz",
+  "sourceNote": "Written from: PSX company profile for DCR at https://dps.psx.com.pk/company/DCR (business description, address, CEO and website) and the Scheme's own site https://www.arifhabibdolmenreit.com/properties/dolmen-mall/ (REIT type, properties, leasable area, occupancy, fund size, trustee and property manager) and https://www.arifhabibdolmenreit.com/contact/ (telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Dolmen Mall Clifton",
+      "summary": "A mixed-use complex on the Karachi waterfront made up of four towers — Tower A, Tower B, Harbour Front and Executive Tower — with a three-level shopping mall of about 600,000 sq ft at its base, 542,847 sq ft of it leasable.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "The Harbour Front",
+      "summary": "A 19-floor office building within the Dolmen Mall Clifton complex, with 257,162 sq ft of leasable area and reported occupancy of 100%.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

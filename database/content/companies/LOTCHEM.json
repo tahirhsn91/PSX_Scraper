@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for LOTCHEM. The company now presents itself on its own site as Noventra Limited (formerly LOTTE Chemical Pakistan Ltd.), while PSX still lists the Lotte Chemical Pakistan Limited name. PTA is the only product the company says it makes, so the product list has one item rather than padding. No image is attached.",
+  "symbol": "LOTCHEM",
+  "description": "Lotte Chemical Pakistan Limited — which now presents itself as Noventra Limited (formerly LOTTE Chemical Pakistan Ltd.) — is a supplier of purified terephthalic acid (PTA), the base raw material for Pakistan's textile and PET packaging industries, used in polyester staple fibre, polyester filament yarn and PET. Its plant at Port Qasim, Karachi was built in 1998 using ICI's technology and operates under a technology licence from Invista Performance Technologies. The company focuses on meeting Pakistan's PTA demand, exporting only when domestic demand slows.",
+  "headOffice": "EZ/1/P-4, Eastern Industrial Zone, Port Qasim, PO Box 723, Karachi 74200, Pakistan",
+  "phone": "+92 21 3472 6005",
+  "website": "https://www.lottechem.pk",
+  "ceo": "Adnan Afridi",
+  "sourceNote": "Written from: lottechem.pk — home page (brand transition notice and registered address), pta, specifications and board-of-directors pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Purified Terephthalic Acid (PTA)",
+      "summary": "White crystalline powder supplied as the base raw material for polyester staple fibre, polyester filament yarn and PET, produced at the company's Port Qasim plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

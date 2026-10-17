@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for BNWM. No image is attached: no licence-cleared photograph of the Bannu mill exists, and a generic textile photograph would imply it is theirs.",
+  "symbol": "BNWM",
+  "description": "Bannu Woollen Mills Limited is a wool textile manufacturer based at D.I. Khan Road in Bannu, Khyber Pakhtunkhwa. It describes itself as a textile composite company specialising in wool spinning, weaving and finishing, and its stated mission is to be a lead producer of quality woollen and blended fabrics, blankets and shawls.",
+  "headOffice": "D.I. Khan Road, Bannu, Khyber Pakhtunkhwa, Pakistan",
+  "phone": "+92 928 615131",
+  "website": "https://www.bwm.com.pk",
+  "ceo": "Shahnaz Sajjad Ahmad",
+  "sourceNote": "Written from: bwm.com.pk — about.php (registered office and contacts) and the vision & mission page bwm.com.pk/about.php?mSecId=1; and the company's Annual Report 2026 (66th) filed on the Pakistan Stock Exchange, board of directors and registered office pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Woollen and blended fabrics",
+      "summary": "The company's stated mission is to be a lead producer of quality woollen and blended fabrics.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Blankets",
+      "summary": "Woollen and blended blankets, named in the company's vision and mission statement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Shawls",
+      "summary": "Woollen and blended shawls, named in the company's vision and mission statement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

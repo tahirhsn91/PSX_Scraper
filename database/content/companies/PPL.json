@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for PPL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of a PPL field exists on the open licence sources, and a generic rig photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PPL",
+  "description": "Pakistan Petroleum Limited is engaged in exploration, prospecting, development and production of oil, natural gas and mineral resources. At 30 June 2025 it reported 21 producing fields — nine operated and twelve partner-operated — and 46 exploratory blocks (excluding blocks relinquished or provisionally awarded), with its share of national output at about 19% of local gas production and about 16% of local oil production. Its associated company Pakistan Minerals (Pvt) Limited holds an indirect 25% non-operating share in the Reko Diq copper and gold project.",
+  "headOffice": "P.I.D.C. House, Dr. Ziauddin Ahmed Road, P.O. Box 3942, Karachi 75530, Pakistan",
+  "phone": "+92 21 111 568 568",
+  "website": "https://www.ppl.com.pk",
+  "ceo": "Mohammad Khalid Rehman",
+  "sourceNote": "Written from: PPL Corporate Briefing Session 2024-25 (https://dps.psx.com.pk/download/document/265418.pdf) and PPL Half Yearly Report for the period ended 31 December 2025 (https://dps.psx.com.pk/download/document/270567.pdf); ppl.com.pk home page for the MD & CEO's title (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Natural gas",
+      "summary": "Gas production of about 0.56 Bcfd, roughly 19% of Pakistan's local gas production as at 30 June 2025.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Crude oil",
+      "summary": "Oil production of about 10.1 KBOPD, about 16% of local oil production.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

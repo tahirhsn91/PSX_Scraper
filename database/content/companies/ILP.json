@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for ILP. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities is available from an open licence source.",
+  "symbol": "ILP",
+  "description": "Interloop Limited started in Faisalabad in 1992 with ten knitting machines and today describes itself as a vertically integrated manufacturer of hosiery, denim, knitted apparel and seamless activewear. It employs 37,000 people, with operations in Pakistan, Sri Lanka and China, and supplies some of the world's leading brands and retailers. The company describes itself as the largest listed apparel company on the Pakistan Stock Exchange.",
+  "headOffice": "1 KM, Khurrianwala–Jaranwala Road, Khurrianwala, Faisalabad, Pakistan",
+  "phone": "+92 41 4360400",
+  "website": "https://interloop-pk.com",
+  "ceo": "Navid Fazil",
+  "sourceNote": "Written from: https://interloop-pk.com/about-us, https://interloop-pk.com/contact-us, https://interloop-pk.com/ (hosiery, denim, apparel, activewear volumes) and https://interloop-pk.com/investors/governance (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Hosiery",
+      "summary": "Socks and hosiery, with capacity of 861 million pairs annually.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Denim",
+      "summary": "Denim garments, with capacity of 14 million garments annually.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Knitted apparel",
+      "summary": "Knitted apparel, with capacity of 43 million garments annually.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Seamless activewear",
+      "summary": "Seamless activewear, with capacity of 11 million garments annually.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

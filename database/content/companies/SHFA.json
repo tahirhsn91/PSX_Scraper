@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for SHFA. No image is attached: photography of the hospital is the company's own and not licence-cleared for reuse here.",
+  "symbol": "SHFA",
+  "description": "Shifa International Hospitals Limited (SIHL) is a JCI-accredited quaternary care hospital group based in Islamabad, offering over 45 medical specialties. Through a network of hospitals, clinics, pharmacies and laboratories, plus the eShifa digital health platform, it provides integrated care both onsite and at home. It is also engaged in organ transplantation, diagnostics, medical education, research and community service in collaboration with Shifa Tameer-e-Millat University and Shifa Foundation.",
+  "headOffice": "Pitras Bukhari Road, Sector H-8/4, Islamabad, Pakistan",
+  "phone": "+92 51 846 4646",
+  "website": "https://shifa.com.pk",
+  "ceo": "Dr. Zeeshan Bin Ishtiaque",
+  "sourceNote": "Written from: shifa.com.pk — company-overview, bod (board of directors) and contact-us pages, including the subsidiary and associated company listings (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Shifa International Hospital, Islamabad",
+      "summary": "The group's quaternary care hospital at Pitras Bukhari Road, H-8/4, Islamabad, offering over 45 medical specialties.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Shifa National Hospital Faisalabad",
+      "summary": "A hospital company listed by SIHL among its subsidiary companies.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Shifa Medical Center Islamabad",
+      "summary": "A medical centre company listed by SIHL among its subsidiary companies.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "eShifa — digital and home health",
+      "summary": "The company's digital health platform and home health service, which it describes as delivering care at home.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Diagnostics and pharmacy services",
+      "summary": "Laboratory and pharmacy services operating across the group's network of hospitals and clinics.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

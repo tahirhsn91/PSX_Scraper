@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for UBL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "UBL",
+  "description": "United Bank Limited was founded in 1959 and operates one of the largest branch networks in Pakistan, with over 1,933 branches and 2,300 ATMs, together with its branchless banking proposition UBL Omni; the bank says the network and its digital banking services together serve over 11 million customers. Its Islamic banking business, UBL Ameen, operates 722 branches supported by over 500 Islamic banking windows within conventional branches, and the bank is a partner in the State Bank of Pakistan's Roshan Digital initiative. UBL is part of Bestway Group, the diversified multinational group whose interests include banking, cement, wholesale and pharmacy.",
+  "headOffice": "11th Floor, UBL Head Office, I.I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 111 825 888",
+  "website": "https://ubldigital.com",
+  "ceo": "Muhammad Jawaid Iqbal",
+  "sourceNote": "Written from UBL's own site ubldigital.com: /AboutUBL/AboutUs (company description, branch and customer numbers, UBL Ameen, Bestway Group), /AboutUBL/PresidentMessage and /AboutUBL/BoardofDirectors (President & CEO), /Investor-Relations (UBL Head Office address) and /More/ContactUs (UAN) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Current, savings and term deposit accounts",
+      "summary": "Rupee and foreign currency current accounts, savings accounts and term deposits, including UBL Mahana Aamdani and Asaan accounts.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consumer lending and cards",
+      "summary": "Home finance (UBL Address), car finance (UBL Drive), personal loans (UBL CashPlus, UBL Ready Line), secured personal loans, and debit and credit card products including the UBL Noor card range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "UBL Ameen Islamic banking",
+      "summary": "Shariah-compliant banking through 722 UBL Ameen branches and over 500 Islamic banking windows.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "UBL Omni branchless banking",
+      "summary": "Branchless banking and digital wallet services, including home remittance wallet accounts.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home remittances and Roshan Digital",
+      "summary": "Remittance services for the Pakistani diaspora and a partner role in the State Bank's Roshan Digital initiative.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Digital banking",
+      "summary": "UBL Digital app and internet banking, with digital account opening, Raast payments, QR payments and POS/online payment acceptance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

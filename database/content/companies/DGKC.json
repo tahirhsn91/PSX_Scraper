@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for DGKC. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plants is available from an open licence source.",
+  "symbol": "DGKC",
+  "description": "D.G. Khan Cement Company Limited is a public limited company incorporated in Pakistan and listed on the Pakistan Stock Exchange. It is primarily engaged in the production and sale of clinker, Ordinary Portland Cement and Sulphate Resistant Cement. The company operates four cement plants on dry-process technology — two at Dera Ghazi Khan, one at Khairpur in Chakwal district and one at Hub in Lasbela district, Balochistan — giving it a production capacity of 22,400 tons per day.",
+  "headOffice": "Nishat House, 53-A, Lawrence Road, Lahore, Pakistan",
+  "phone": "+92 42 111 11 33 33",
+  "website": "https://www.dgcement.com",
+  "ceo": "Raza Mansha",
+  "sourceNote": "Written from: https://www.dgcement.com/aboutCompany.html, https://www.dgcement.com/management.html, https://www.dgcement.com/products.html and https://www.dgcement.com/generalContact.html (registered office, UAN) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Clinker",
+      "summary": "Clinker, which the company produces and sells alongside its cement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ordinary Portland Cement",
+      "summary": "The company's general-purpose cement, monitored for chemical composition and grinding fineness to meet Pakistani and British standards.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sulphate Resistant Cement",
+      "summary": "A cement with low C3A content for sulphate-bearing soils and water, which the company says also meets low-alkali criteria.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

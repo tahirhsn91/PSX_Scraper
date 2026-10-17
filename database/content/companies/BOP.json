@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for BOP. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BOP",
+  "description": "The Bank of Punjab was constituted pursuant to the BOP Act, 1989 and was given the status of a scheduled bank by the State Bank of Pakistan in 1994. It is principally engaged in commercial banking and related services, with its head office in Lahore, and its portfolio covers retail, consumer finance, agriculture, SME and corporate banking as well as Islamic banking windows. Punjab Modaraba Services (Pvt) Limited is a wholly owned subsidiary of the bank.",
+  "headOffice": "BOP Tower, 10-B, Block E-II, Main Boulevard, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 35783700-10",
+  "website": "https://www.bop.com.pk",
+  "ceo": "Zafar Masud",
+  "sourceNote": "Written from: https://www.bop.com.pk/About-Us, /Profile%20of%20Company, /Contact-Us (Head Office/Registered Address) and /Media (which labels Zafar Masud 'President & CEO – BOP') (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Retail banking accounts",
+      "summary": "Current and PLS saving accounts including BOP Tijarat Account, BOP Life Current Account, BOP Salary Plus Account and BOP Youth Education Account.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Retail finance",
+      "summary": "CarGar car lease, Apna Ghar house financing, Advance Salary Personal Loan and BOP Solar financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Agriculture finance",
+      "summary": "Kissan Dost Production Loan, BOP Tractor Lease, cold storage and livestock development finance facilities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate and SME banking",
+      "summary": "Corporate banking for business and institutional clients, alongside a dedicated SME product set and digital SME finance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Islamic banking windows",
+      "summary": "Shariah-compliant banking offered through Islamic banking windows in its branch network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home remittance and Roshan Digital Account",
+      "summary": "Home remittance services and the Roshan Digital Account for overseas Pakistanis.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

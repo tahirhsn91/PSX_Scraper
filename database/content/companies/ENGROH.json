@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for ENGROH. No image is attached: no licence-cleared photograph of an Engro facility exists, and a generic plant photograph would imply it is theirs.",
+  "symbol": "ENGROH",
+  "description": "Engro Holdings, formerly Dawood Hercules Corporation, is the holding company and investing platform of the Engro enterprise. Its largest investment is in Engro Corporation, its wholly owned subsidiary and the management arm of the enterprise, which manages a portfolio including Engro Fertilizers, Engro Polymer & Chemicals, Engro Energy, Engro Eximp FZE and Engro Enfrashare. It also invests in businesses outside the Engro group, providing capital, professional networks and governance standards.",
+  "headOffice": "19th Floor, The Harbour Front Building, HC-3 Marine Drive, Block 4, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 3568 6001",
+  "website": "https://www.engro.com",
+  "ceo": "Abdul Samad Dawood",
+  "sourceNote": "Written from: engro.com — overview, our-investment, leadership and contact-us pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Engro Corporation",
+      "summary": "Engro Holdings' largest investment and wholly owned subsidiary, which the company describes as the management arm of the enterprise and portfolio manager for the Engro businesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro Fertilizers",
+      "summary": "A fertilizer business in Engro Corporation's portfolio which, per Engro Holdings, operates the second-largest single train urea plant in the world and produces Zabardast Urea, a zinc-coated fertilizer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro Polymer & Chemicals",
+      "summary": "The petrochemical business in the portfolio, described by Engro Holdings as the sole manufacturer of PVC resin in the country.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro Connect — tower infrastructure",
+      "summary": "Engro Holdings describes Engro Connect, a wholly owned subsidiary of Engro Corporation, as home to Pakistan's largest independent tower platform, comprising Engro Enfrashare and Deodar with over 14,000 towers nationwide.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engro Energy",
+      "summary": "The group's energy interests, which Engro Holdings describes as ranging from mining indigenous fuel and generating power for the grid to operating gas terminals.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FrieslandCampina Engro Pakistan",
+      "summary": "A dairy business Engro Holdings describes as its strategic partnership with Royal FrieslandCampina of the Netherlands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

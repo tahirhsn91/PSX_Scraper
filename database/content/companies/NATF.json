@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for NATF. Every fact is attributable — see sourceNote. No image is attached: pack shots of National Foods' own products are the company's marketing assets and are not licence-cleared here. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "NATF",
+  "description": "National Foods Limited was founded in 1970 as a spice company and describes itself as a leading multi-category food company in Pakistan, with a portfolio that now spans recipe mixes, condiments, salt, pickles, mayonnaise, desserts, jams and seasonings. The company says its products are purpose-made for convenience and easy preparation, and it has international offices in Canada, the United States and the United Kingdom alongside its Karachi head office. It is listed on the Pakistan Stock Exchange.",
+  "headOffice": "12/CL-6, Claremont Road, Civil Lines, Karachi 75530, Pakistan",
+  "phone": "+92 21 3566 2687",
+  "website": "https://www.nfoods.com",
+  "ceo": "Abrar Hasan",
+  "sourceNote": "Written from: https://www.nfoods.com/our-story/who-we-are/ (founding, categories, positioning), https://www.nfoods.com/contact-us/ (head office address, telephone, international offices), https://www.nfoods.com/governance/ (board of directors and CEO) and the brand pages under https://www.nfoods.com/our-food/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Recipe mixes",
+      "summary": "Spice and lentil mixes for traditional dishes — the range includes Haleem, Chapli Kabab and broast mixes, a quick-cook Haleem and a meat tenderizer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Salt",
+      "summary": "Refined iodized salt, free-flowing and food grade, plus an iodized Pink Himalayan salt.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ketchup",
+      "summary": "Tomato ketchup sold as National Ketchup Zaroori.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pickles",
+      "summary": "Mixed pickle in a range of pack sizes, and a Crushed Pickle the company describes as the first of its kind in the category.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mayonnaise",
+      "summary": "Mayonnaise made with real eggs and enriched with Omega 3 & 6 and Vitamin A.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
