@@ -4,12 +4,13 @@ import { useTheme } from '@mui/material/styles';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded';
 import { Link as RouterLink } from 'react-router-dom';
-import { useMarketOverview } from '../api/hooks';
+import { useMarketOverview, useMarketStatus } from '../api/hooks';
 import { StatTile } from './ui/StatTile';
 import { SectionCard } from './ui/SectionCard';
 import { ChangePill } from './ui/ChangePill';
 import { LiveNumber } from './ui/LiveNumber';
 import { formatCount, formatNumber, formatVolume, DASH } from '../lib/format';
+import { sessionPhrase } from '../lib/session';
 import type { Mover } from '../types';
 
 /** Movers shown per list before expanding. */
@@ -173,8 +174,12 @@ function BreadthBar({ up, flat, down }: { up: number; flat: number; down: number
  */
 export function MarketOverview() {
   const { data, isLoading } = useMarketOverview();
+  const { data: status } = useMarketStatus();
   const [expanded, setExpanded] = useState(false);
   if (!data && !isLoading) return null;
+  // "This session" is only true while the exchange is open; on a weekend the numbers are Friday's,
+  // and the label has to say so or the whole card reads as live.
+  const when = sessionPhrase(status);
   const breadth = data?.breadth;
   const movers = data?.movers;
   const hasMore =
@@ -190,7 +195,7 @@ export function MarketOverview() {
         <Grid item xs={12} md={7}>
           <SectionCard
             title="Market breadth"
-            subtitle="Advancers and decliners across every tracked symbol this session"
+            subtitle={`Advancers and decliners across every tracked symbol ${when}`}
             sx={{ height: '100%' }}
           >
             {/*
@@ -216,7 +221,7 @@ export function MarketOverview() {
                     tone="up"
                     fill
                     centered
-                    footer={hint('Stocks that rose this session')}
+                    footer={hint('Stocks that rose')}
                   />
                 </Grid>
                 <Grid item xs={6} md={4}>
@@ -226,7 +231,7 @@ export function MarketOverview() {
                     tone="down"
                     fill
                     centered
-                    footer={hint('Stocks that fell this session')}
+                    footer={hint('Stocks that fell')}
                   />
                 </Grid>
                 <Grid item xs={6} md={4}>
@@ -236,7 +241,7 @@ export function MarketOverview() {
                     tone="muted"
                     fill
                     centered
-                    footer={hint('Stocks that were flat this session')}
+                    footer={hint('Stocks that were flat')}
                   />
                 </Grid>
                 <Grid item xs={6} md={4}>
@@ -252,7 +257,7 @@ export function MarketOverview() {
                     }
                     fill
                     centered
-                    footer={hint('Total shares traded this session')}
+                    footer={hint('Total shares traded')}
                   />
                 </Grid>
                 <Grid item xs={6} md={4}>
@@ -275,13 +280,23 @@ export function MarketOverview() {
                 </Grid>
               </Grid>
               {breadth && (
-                <BreadthBar up={breadth.advancers} flat={breadth.unchanged} down={breadth.decliners} />
+                <>
+                  <BreadthBar up={breadth.advancers} flat={breadth.unchanged} down={breadth.decliners} />
+                  {/* The spec asks for traded value "only if the source publishes it". None of the
+                      sources this app reads does: we have share counts, not rupees. Saying so once
+                      is better than a rupee figure derived from price × volume, which would be an
+                      estimate dressed as a fact. */}
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1.5 }}>
+                    Traded value · not published by the sources this app reads. Volume above is
+                    shares, not rupees; no rupee total is estimated.
+                  </Typography>
+                </>
               )}
             </Box>
           </SectionCard>
         </Grid>
         <Grid item xs={12} md={5}>
-          <SectionCard title="Top movers" subtitle="Largest percentage moves this session" sx={{ height: '100%' }}>
+          <SectionCard title="Top movers" subtitle={`Largest percentage moves ${when}`} sx={{ height: '100%' }}>
             {isLoading || !movers ? (
               /*
                 The loading shape mirrors the loaded one — three groups of a caption plus a preview
