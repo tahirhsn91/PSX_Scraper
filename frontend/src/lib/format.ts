@@ -80,7 +80,7 @@ export function formatSigned(value: number | null | undefined, digits = 2): stri
 }
 
 /**
- * A point move with its direction glyph, e.g. `▲ 412.35` (#181).
+ * A point move with its direction glyph, e.g. `▲ 412.35` (#190).
  *
  * Points answer "how far", the percentage answers "how much" — an index is quoted in both, and the
  * percentage alone hides the size of the move: +0.4% on KSE-100 is a very different number of
