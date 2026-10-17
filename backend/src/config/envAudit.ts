@@ -63,6 +63,11 @@ export const FEATURE_SETTINGS: FeatureSetting[] = [
     effect: 'default 0 * * * *: full board sync / index cadence',
     effective: () => env.CRON_EXPRESSION,
   },
+  {
+    name: 'COMPANY_PROFILE_SYNC_CRON',
+    effect: 'default 0 2 * * 6: company write-ups sync each Saturday 02:00 UTC (07:00 PKT)',
+    effective: () => env.COMPANY_PROFILE_SYNC_CRON,
+  },
 ];
 
 /**

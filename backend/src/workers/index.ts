@@ -7,6 +7,7 @@ import {
   INDEX_QUEUE,
   QUOTE_QUEUE,
   UNIVERSE_QUEUE,
+  COMPANY_PROFILE_QUEUE,
 } from "../jobs/queues";
 import { registerScheduler } from "../jobs/scheduler";
 import { processSyncJob } from "./syncProcessor";
@@ -15,6 +16,7 @@ import { processHistoryJob } from "./historyProcessor";
 import { processIndexJob } from "./indexProcessor";
 import { processQuotePollJob } from "./quoteProcessor";
 import { processUniverseJob } from "./universeProcessor";
+import { processCompanyProfileSyncJob } from "./companyProfileProcessor";
 import { env } from "../config";
 import { logger } from "../utils/logger";
 import { browserPool } from "../scrapers/browserPool";
@@ -52,6 +54,12 @@ async function main() {
     connection,
     concurrency: 1,
   });
+  // No browser and no network: 511 local upserts. Serial anyway, so two runs cannot interleave
+  // their delete-and-recreate of the same profile's products.
+  const companyProfileWorker = new Worker(COMPANY_PROFILE_QUEUE, processCompanyProfileSyncJob, {
+    connection,
+    concurrency: 1,
+  });
 
   for (const w of [
     syncWorker,
@@ -60,6 +68,7 @@ async function main() {
     indexWorker,
     quoteWorker,
     universeWorker,
+    companyProfileWorker,
   ]) {
     w.on("completed", (job) =>
       logger.info("job.completed", { queue: w.name, id: job.id }),
@@ -86,6 +95,7 @@ async function main() {
       indexWorker.close(),
       quoteWorker.close(),
       universeWorker.close(),
+      companyProfileWorker.close(),
     ]);
     await browserPool.close();
     await disconnectPrisma();

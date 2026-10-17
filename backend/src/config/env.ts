@@ -76,6 +76,17 @@ const envSchema = z.object({
    */
   LOGO_REFRESH_CRON: z.string().default('30 2 * * *'),
   /**
+   * The company-profile sync. The write-ups are editorial files committed under
+   * `database/content/companies`; they change when a person edits them, not with the market, so
+   * they are re-read weekly instead of on every deploy. 02:00 UTC Saturday is 07:00 PKT — the
+   * weekend, after a week of deploys have landed and before the board opens.
+   */
+  COMPANY_PROFILE_SYNC_ENABLED: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((v) => v === 'true'),
+  COMPANY_PROFILE_SYNC_CRON: z.string().default('0 2 * * 6'),
+  /**
    * The exchange's published market holidays - the gate the index session stamp reads. One request
    * to `www.psx.com.pk` a day, so a daily pre-open tick rather than a session cadence: PSX
    * republishes the table rarely, and 02:15 UTC is 07:15 PKT, ahead of the 09:30 open.
