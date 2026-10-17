@@ -7,6 +7,7 @@ import { syncService } from '../services/sync.service';
 import { marketCapService } from '../services/marketCap.service';
 import { stockLogoService } from '../services/stockLogo.service';
 import { companyProfileService } from '../services/companyProfile.service';
+import { SCREENER_PRESETS, presetSummaries } from '../services/screenerPresets';
 import { valid } from '../middleware/validate';
 import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, candlesQuery } from '../validators/schemas';
 
@@ -36,7 +37,43 @@ function toStockFilters(q: StocksQuery): StockFilters | undefined {
 
 export const listStocks: RequestHandler = async (req, res) => {
   const q = valid<StocksQuery>(req, 'query');
-  res.json(await stockService.list(q.page, q.limit, q.sort, q.order, q.group, q.index, toStockFilters(q)));
+  const preset = q.preset ? SCREENER_PRESETS[q.preset] : undefined;
+
+  // A preset supplies its own criteria and ordering; explicit screener filters may narrow it
+  // further (a preset inside a sector), but they cannot widen what the preset means.
+  const filters = preset ? { ...preset.filters, ...(toStockFilters(q) ?? {}) } : toStockFilters(q);
+  const sort = q.sort ?? preset?.sort;
+  const order = q.sort ? q.order : preset?.order ?? q.order;
+
+  const result = await stockService.list(q.page, q.limit, sort, order, q.group, q.index, filters);
+
+  if (preset) {
+    const start = (result.page - 1) * result.limit;
+    // The rank is absolute across pages, so page two's first row is #26, not #1.
+    result.items = result.items.map((row, i) => ({
+      ...row,
+      reason: preset.reason(row, start + i + 1, result.total),
+    }));
+  }
+
+  res.json({
+    ...result,
+    ...(preset
+      ? {
+          preset: {
+            key: preset.key,
+            label: preset.label,
+            description: preset.description,
+            caveat: preset.caveat,
+          },
+        }
+      : {}),
+  });
+};
+
+/** The preset catalogue, for the screener's chips. */
+export const listPresets: RequestHandler = async (_req, res) => {
+  res.json({ items: presetSummaries() });
 };
 
 export const getStock: RequestHandler = async (req, res) => {

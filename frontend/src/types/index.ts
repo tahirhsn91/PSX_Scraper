@@ -74,6 +74,8 @@ export interface CandleSeries {
 export type SortOrder = 'asc' | 'desc';
 
 export interface StockListItem {
+  /** Present only when the row came from a named screen: why this row is on the list. */
+  reason?: string;
   id: string;
   symbol: string;
   companyName: string | null;
@@ -143,7 +145,20 @@ export interface Paginated<T> {
 export type StockListGroup = 'kse100' | 'rest';
 
 /** The stocks list, with both group sizes when a scoped request was made. */
+/**
+ * A named screen as the server defines it. The label and the one-line description are shown next to
+ * the results, so the reader can see the rule that produced them.
+ */
+export interface ScreenerPreset {
+  key: string;
+  label: string;
+  description: string;
+  caveat?: string;
+}
+
 export interface StocksPage extends Paginated<StockListItem> {
+  /** Echoed by the server when `preset` was requested, including any limitation worth printing. */
+  preset?: ScreenerPreset;
   /**
    * Present when `group` or `index` was sent — a filtered list still reports the universe it was
    * drawn from. That is what lets the "Tracked stocks" card count every tracked symbol in any
