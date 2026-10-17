@@ -8,6 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import type { IndexSummary } from '../types';
 import { MiniIndexChart } from './MiniIndexChart';
+import { LiveNumber } from './ui/LiveNumber';
 import { formatRelative, formatVolume } from '../lib/format';
 import { isStaleReading } from '../lib/freshness';
 
@@ -101,6 +102,7 @@ const TOP = 3;
 
 /** One tile. Kept as a component so the featured tile and the rest cannot drift apart. */
 function IndexTile({ index, featured = false }: { index: IndexSummary; featured?: boolean }) {
+  const theme = useTheme();
   const direction = directionOf(index.changePercent ?? index.change);
   const tone = toneOf(direction);
 
@@ -117,6 +119,17 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
         display: 'flex',
         flexDirection: 'column',
         ...(featured ? { borderColor: 'primary.main', borderWidth: 2 } : {}),
+        // These cards are destinations, and a 2px lift is the smallest signal that the whole card
+        // is the target rather than its title. Transform and shadow only — no layout.
+        transition: `transform 160ms ${theme.app.motion.easing}, box-shadow 160ms ${theme.app.motion.easing}`,
+        '@media (hover: hover)': {
+          '&:hover': { transform: 'translateY(-2px)', boxShadow: theme.shadows[2] },
+        },
+        // A lift is still motion: the card does not need to move for someone who asked it not to.
+        '@media (prefers-reduced-motion: reduce)': {
+          transition: 'none',
+          '&:hover': { transform: 'none' },
+        },
       }}
     >
       {/* A real link, not a clickable box: the board is a list of destinations, and this way it
@@ -156,7 +169,7 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
           variant={featured ? 'h4' : 'h5'}
           sx={{ mt: 0.25, fontVariantNumeric: 'tabular-nums', letterSpacing: featured ? '-.5px' : undefined }}
         >
-          {index.value === null ? '—' : formatLevel(index.value)}
+          <LiveNumber value={index.value} format={formatLevel} flash />
         </Typography>
 
         {/* The tile's foot, pushed to the bottom of the card: on a row where a card is stretched by
@@ -186,7 +199,11 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
             fontWeight={700}
             sx={{ color: tone.ink, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}
           >
-            {index.changePercent === null ? '—' : `${GLYPH[direction]} ${Math.abs(index.changePercent).toFixed(2)}%`}
+            <LiveNumber
+              value={index.changePercent}
+              format={(n) => `${GLYPH[directionOf(n)]} ${Math.abs(n).toFixed(2)}%`}
+              flash
+            />
           </Typography>
         </Stack>
 
