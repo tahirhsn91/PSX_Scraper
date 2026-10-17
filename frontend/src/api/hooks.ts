@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
-  ScreenerPreset, SectorDetail, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
+  ScreenerPreset, SectorDetail, IndicatorsResponse, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
   StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod,
@@ -339,6 +339,16 @@ export const useSectors = () =>
   useQuery({
     queryKey: keys.sectors,
     queryFn: async () => (await api.get<{ items: SectorSummary[] }>('/market/sectors')).data,
+  });
+
+/** Technical indicators for a symbol's current range (cached server-side for five minutes). */
+export const useIndicators = (symbol: string, range: string) =>
+  useQuery({
+    queryKey: ['indicators', symbol, range],
+    queryFn: async () =>
+      (await api.get<IndicatorsResponse>(`/stocks/${symbol}/indicators`, { params: { range } })).data,
+    enabled: Boolean(symbol),
+    staleTime: 5 * 60 * 1000,
   });
 
 /** One sector's drill-down by name (the name is a query parameter — several contain a slash). */

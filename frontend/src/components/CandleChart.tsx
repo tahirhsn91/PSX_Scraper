@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { Box, Stack, ToggleButton, ToggleButtonGroup, Typography, useTheme } from '@mui/material';
 import {
   createChart, ColorType, type IChartApi, type ISeriesApi, type UTCTimestamp,
 } from 'lightweight-charts';
@@ -56,6 +56,13 @@ export function CandleChart({
   const sma20Ref = useRef<ISeriesApi<'Line'> | null>(null);
   const sma50Ref = useRef<ISeriesApi<'Line'> | null>(null);
   const sma200Ref = useRef<ISeriesApi<'Line'> | null>(null);
+  /**
+   * EMA overlays. Two series per convention would clutter the chart by default, so they start off:
+   * the reader turns them on when comparing a faster average with the SMA.
+   */
+  const ema20Ref = useRef<ISeriesApi<'Line'> | null>(null);
+  const ema50Ref = useRef<ISeriesApi<'Line'> | null>(null);
+  const [overlays, setOverlays] = useState<{ sma: boolean; ema: boolean }>({ sma: true, ema: false });
   const dataRef = useRef<CandleSeries | undefined>(data);
   /** Which preset the current view is showing, so a redraw does not yank a panned view back. */
   const appliedRef = useRef<HistoryRange | null>(null);
@@ -93,6 +100,32 @@ export function CandleChart({
       sum += items[i].close;
       if (i >= period) sum -= items[i - period].close;
       if (i >= period - 1) out.push({ time: items[i].time as unknown as UTCTimestamp, value: sum / period });
+    }
+    return out;
+  };
+
+  /**
+   * EMA over the series' closes, seeded with the SMA of the first `period` closes — the same
+   * convention the API's indicator engine uses, so the line here matches the Technical section.
+   */
+  const ema = (items: Candle[], period: number) => {
+    const out: { time: UTCTimestamp; value: number }[] = [];
+    const alpha = 2 / (period + 1);
+    let prev: number | null = null;
+    let sum = 0;
+    for (let i = 0; i < items.length; i++) {
+      const close = items[i].close;
+      if (prev === null) {
+        sum += close;
+        if (i >= period) sum -= items[i - period].close;
+        if (i >= period - 1) {
+          prev = sum / period;
+          out.push({ time: items[i].time as unknown as UTCTimestamp, value: prev });
+        }
+        continue;
+      }
+      prev = close * alpha + prev * (1 - alpha);
+      out.push({ time: items[i].time as unknown as UTCTimestamp, value: prev });
     }
     return out;
   };
@@ -163,6 +196,8 @@ export function CandleChart({
     if (sma20Ref.current) sma20Ref.current.setData(sma(items, 20));
     if (sma50Ref.current) sma50Ref.current.setData(sma(items, 50));
     if (sma200Ref.current) sma200Ref.current.setData(sma(items, 200));
+    if (ema20Ref.current) ema20Ref.current.setData(ema(items, 20));
+    if (ema50Ref.current) ema50Ref.current.setData(ema(items, 50));
     if (items.length === 0) return;
 
     // Move the viewport only when the preset changed (or on first draw) — not on every data
@@ -229,6 +264,9 @@ export function CandleChart({
     sma20Ref.current = chart.addLineSeries({ color: sma20, lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
     sma50Ref.current = chart.addLineSeries({ color: sma50, lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
     sma200Ref.current = chart.addLineSeries({ color: sma200, lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
+    // EMAs reuse the SMA palette slots: the point is the shape, and the toggle names which is which.
+    ema20Ref.current = chart.addLineSeries({ color: sma20, lineWidth: 1, lineStyle: 2, priceLineVisible: false, lastValueVisible: false });
+    ema50Ref.current = chart.addLineSeries({ color: sma50, lineWidth: 1, lineStyle: 2, priceLineVisible: false, lastValueVisible: false });
     chartRef.current = chart;
     // Whatever data we already hold goes in immediately: the data effect below will not fire
     // again just because the chart was rebuilt.
@@ -244,6 +282,8 @@ export function CandleChart({
       sma20Ref.current = null;
       sma50Ref.current = null;
       sma200Ref.current = null;
+      ema20Ref.current = null;
+      ema50Ref.current = null;
       appliedRef.current = null;
     };
   }, [height, chartUp, chartDown, chartGold, chartGrid, chartText, volumeUp, volumeDown, sma20, sma50, sma200]);
@@ -252,6 +292,16 @@ export function CandleChart({
   useEffect(() => {
     draw(data, range, false);
   }, [data]);
+
+  // Overlay toggles change visibility only — the series are already drawn from the same candles,
+  // so switching one on never refetches history.
+  useEffect(() => {
+    sma20Ref.current?.applyOptions({ visible: overlays.sma });
+    sma50Ref.current?.applyOptions({ visible: overlays.sma });
+    sma200Ref.current?.applyOptions({ visible: overlays.sma });
+    ema20Ref.current?.applyOptions({ visible: overlays.ema });
+    ema50Ref.current?.applyOptions({ visible: overlays.ema });
+  }, [overlays]);
 
   // Choosing a range moves the window.
   useEffect(() => {
@@ -278,5 +328,28 @@ export function CandleChart({
       }`
     : 'Price chart';
 
-  return <Box ref={boxRef} role="img" aria-label={label} sx={{ width: '100%', height }} />;
+  return (
+    <Box>
+      <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
+        <ToggleButtonGroup
+          size="small"
+          value={Object.entries(overlays).filter(([, v]) => v).map(([k]) => k)}
+          onChange={(_, v: string[]) => setOverlays({ sma: v.includes('sma'), ema: v.includes('ema') })}
+        >
+          <ToggleButton value="sma" sx={{ textTransform: 'none', py: 0.25, px: 1.25 }} aria-label="Simple moving averages">
+            SMA
+          </ToggleButton>
+          <ToggleButton value="ema" sx={{ textTransform: 'none', py: 0.25, px: 1.25 }} aria-label="Exponential moving averages">
+            EMA
+          </ToggleButton>
+        </ToggleButtonGroup>
+        <Typography variant="caption" color="text.secondary" sx={{ alignSelf: 'center' }}>
+          {overlays.sma ? 'SMA 20/50/200' : ''}
+          {overlays.sma && overlays.ema ? ' · ' : ''}
+          {overlays.ema ? 'EMA 20/50' : ''}
+        </Typography>
+      </Stack>
+      <Box ref={boxRef} role="img" aria-label={label} sx={{ width: '100%', height }} />
+    </Box>
+  );
 }
