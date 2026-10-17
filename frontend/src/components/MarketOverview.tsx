@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Box, Button, Grid, Skeleton, Stack, Typography } from '@mui/material';
+import { Box, Button, Collapse, Grid, Skeleton, Stack, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded';
 import { Link as RouterLink } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { useMarketOverview } from '../api/hooks';
 import { StatTile } from './ui/StatTile';
 import { SectionCard } from './ui/SectionCard';
 import { ChangePill } from './ui/ChangePill';
+import { LiveNumber } from './ui/LiveNumber';
 import { formatCount, formatNumber, formatVolume, DASH } from '../lib/format';
 import type { Mover } from '../types';
 
@@ -24,44 +26,142 @@ function hint(text: string) {
   );
 }
 
-function MoverList({ title, movers, limit }: { title: string; movers: Mover[]; limit: number }) {
+function MoverRow({ mover }: { mover: Mover }) {
+  return (
+    <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+      <Stack spacing={0.25} sx={{ minWidth: 0 }}>
+        <Typography
+          component={RouterLink}
+          to={`/stocks/${mover.symbol}`}
+          variant="body2"
+          noWrap
+          sx={{
+            fontWeight: 600,
+            color: 'text.primary',
+            textDecoration: 'none',
+            '&:hover': { textDecoration: 'underline' },
+          }}
+        >
+          {mover.symbol}
+        </Typography>
+        <Typography variant="caption" color="text.secondary" noWrap>
+          {mover.companyName ?? DASH}
+        </Typography>
+      </Stack>
+      <Stack direction="row" spacing={1} alignItems="center" sx={{ flexShrink: 0 }}>
+        <Typography variant="body2" sx={{ fontVariantNumeric: 'tabular-nums' }}>
+          <LiveNumber value={mover.currentPrice} format={formatNumber} flash />
+        </Typography>
+        <ChangePill value={mover.changePercent} flash />
+      </Stack>
+    </Stack>
+  );
+}
+
+/**
+ * One movers group: the first three rows, then the rest behind a disclosure.
+ *
+ * The extra rows are mounted only while expanded (`unmountOnExit`) and each one enters 30ms after
+ * the one above it, so the group reads as unfolding rather than as five rows appearing at once.
+ * Nothing animates on collapse beyond the height, and the stagger cannot replay while the list is
+ * being polled: a poll replaces the data, not the mount.
+ */
+function MoverList({
+  title,
+  movers,
+  expanded,
+}: {
+  title: string;
+  movers: Mover[];
+  expanded: boolean;
+}) {
+  const theme = useTheme();
   if (movers.length === 0) return null;
+  const preview = movers.slice(0, PREVIEW);
+  const rest = movers.slice(PREVIEW, FULL);
   return (
     <Box>
       <Typography variant="overline" sx={{ color: 'text.secondary', lineHeight: 1.2 }}>
         {title}
       </Typography>
       <Stack spacing={0.5} sx={{ mt: 1 }}>
-        {movers.slice(0, limit).map((m) => (
-          <Stack key={m.symbol} direction="row" spacing={1} alignItems="center" justifyContent="space-between">
-            <Stack spacing={0.25} sx={{ minWidth: 0 }}>
-              <Typography
-                component={RouterLink}
-                to={`/stocks/${m.symbol}`}
-                variant="body2"
-                noWrap
-                sx={{
-                  fontWeight: 600,
-                  color: 'text.primary',
-                  textDecoration: 'none',
-                  '&:hover': { textDecoration: 'underline' },
-                }}
-              >
-                {m.symbol}
-              </Typography>
-              <Typography variant="caption" color="text.secondary" noWrap>
-                {m.companyName ?? DASH}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexShrink: 0 }}>
-              <Typography variant="body2" sx={{ fontVariantNumeric: 'tabular-nums' }}>
-                {formatNumber(m.currentPrice)}
-              </Typography>
-              <ChangePill value={m.changePercent} />
-            </Stack>
-          </Stack>
+        {preview.map((m) => (
+          <MoverRow key={m.symbol} mover={m} />
         ))}
+        {rest.length > 0 && (
+          <Collapse in={expanded} unmountOnExit timeout={250}>
+            <Stack
+              spacing={0.5}
+              sx={{
+                '@keyframes mover-in': {
+                  from: { opacity: 0, transform: 'translateY(6px)' },
+                  to: { opacity: 1, transform: 'none' },
+                },
+              }}
+            >
+              {rest.map((m, i) => (
+                <Box
+                  key={m.symbol}
+                  sx={{ animation: `mover-in 220ms ${theme.app.motion.easing} ${i * 30}ms both` }}
+                >
+                  <MoverRow mover={m} />
+                </Box>
+              ))}
+            </Stack>
+          </Collapse>
+        )}
       </Stack>
+    </Box>
+  );
+}
+
+/**
+ * The breadth bar: one thin strip, advancers → unchanged → decliners, sized by count.
+ *
+ * The six tiles give the exact figures; this gives the shape. It scales in from the left once on
+ * mount, then the segments re-proportion on a change. Only `flex-grow` and the container's
+ * `transform` animate — the strip is 6px tall, so the layout work of three flex children is not
+ * measurable next to the wash it saves the reader from doing in their head.
+ */
+function BreadthBar({ up, flat, down }: { up: number; flat: number; down: number }) {
+  const theme = useTheme();
+  const total = up + flat + down;
+  if (total === 0) return null;
+
+  const segment = (count: number, color: string) => (
+    <Box
+      sx={{
+        flexGrow: count,
+        flexBasis: 0,
+        minWidth: count > 0 ? 3 : 0,
+        bgcolor: color,
+        transition: `flex-grow ${theme.app.motion.slow} ${theme.app.motion.easing}`,
+      }}
+    />
+  );
+
+  return (
+    <Box
+      role="img"
+      aria-label={`${up} advancers, ${flat} unchanged, ${down} decliners`}
+      sx={{
+        mt: 2,
+        display: 'flex',
+        gap: '2px',
+        height: 6,
+        borderRadius: `${theme.app.radii.pill}px`,
+        overflow: 'hidden',
+        transformOrigin: 'left',
+        animation: `breadth-in 500ms ${theme.app.motion.easing} both`,
+        '@keyframes breadth-in': {
+          from: { transform: 'scaleX(0)', opacity: 0 },
+          to: { transform: 'scaleX(1)', opacity: 1 },
+        },
+      }}
+    >
+      {segment(up, theme.palette.up.main)}
+      {segment(flat, theme.palette.text.disabled)}
+      {segment(down, theme.palette.down.main)}
     </Box>
   );
 }
@@ -77,7 +177,6 @@ export function MarketOverview() {
   if (!data && !isLoading) return null;
   const breadth = data?.breadth;
   const movers = data?.movers;
-  const limit = expanded ? FULL : PREVIEW;
   const hasMore =
     !expanded &&
     movers != null &&
@@ -108,26 +207,77 @@ export function MarketOverview() {
               arrives, so there is nothing left to shift. A dash is already this app's convention for
               a value that is not known yet.
             */}
-            <Grid container spacing={2} sx={{ height: '100%', alignContent: 'stretch' }}>
-              <Grid item xs={6} md={4}>
-                <StatTile label="Advancers" value={breadth ? formatCount(breadth.advancers) : DASH} tone="up" fill centered footer={hint('Stocks that rose this session')} />
+            <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <Grid container spacing={2} sx={{ flexGrow: 1, alignContent: 'stretch' }}>
+                <Grid item xs={6} md={4}>
+                  <StatTile
+                    label="Advancers"
+                    value={<LiveNumber value={breadth?.advancers} format={formatCount} countUp flash />}
+                    tone="up"
+                    fill
+                    centered
+                    footer={hint('Stocks that rose this session')}
+                  />
+                </Grid>
+                <Grid item xs={6} md={4}>
+                  <StatTile
+                    label="Decliners"
+                    value={<LiveNumber value={breadth?.decliners} format={formatCount} countUp flash />}
+                    tone="down"
+                    fill
+                    centered
+                    footer={hint('Stocks that fell this session')}
+                  />
+                </Grid>
+                <Grid item xs={6} md={4}>
+                  <StatTile
+                    label="Unchanged"
+                    value={<LiveNumber value={breadth?.unchanged} format={formatCount} countUp flash />}
+                    tone="muted"
+                    fill
+                    centered
+                    footer={hint('Stocks that were flat this session')}
+                  />
+                </Grid>
+                <Grid item xs={6} md={4}>
+                  <StatTile
+                    label="Volume"
+                    value={
+                      <LiveNumber
+                        value={breadth?.totalVolume}
+                        format={(n) => formatVolume(n) ?? DASH}
+                        countUp
+                        flash
+                      />
+                    }
+                    fill
+                    centered
+                    footer={hint('Total shares traded this session')}
+                  />
+                </Grid>
+                <Grid item xs={6} md={4}>
+                  <StatTile
+                    label="New highs"
+                    value={<LiveNumber value={breadth?.newHighs} format={formatCount} countUp flash />}
+                    fill
+                    centered
+                    footer={hint('At or above a 52-week high')}
+                  />
+                </Grid>
+                <Grid item xs={6} md={4}>
+                  <StatTile
+                    label="New lows"
+                    value={<LiveNumber value={breadth?.newLows} format={formatCount} countUp flash />}
+                    fill
+                    centered
+                    footer={hint('At or below a 52-week low')}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={6} md={4}>
-                <StatTile label="Decliners" value={breadth ? formatCount(breadth.decliners) : DASH} tone="down" fill centered footer={hint('Stocks that fell this session')} />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <StatTile label="Unchanged" value={breadth ? formatCount(breadth.unchanged) : DASH} tone="muted" fill centered footer={hint('Stocks that were flat this session')} />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <StatTile label="Volume" value={breadth ? formatVolume(breadth.totalVolume) ?? DASH : DASH} fill centered footer={hint('Total shares traded this session')} />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <StatTile label="New highs" value={breadth ? formatCount(breadth.newHighs) : DASH} fill centered footer={hint('At or above a 52-week high')} />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <StatTile label="New lows" value={breadth ? formatCount(breadth.newLows) : DASH} fill centered footer={hint('At or below a 52-week low')} />
-              </Grid>
-            </Grid>
+              {breadth && (
+                <BreadthBar up={breadth.advancers} flat={breadth.unchanged} down={breadth.decliners} />
+              )}
+            </Box>
           </SectionCard>
         </Grid>
         <Grid item xs={12} md={5}>
@@ -151,9 +301,9 @@ export function MarketOverview() {
               </Stack>
             ) : (
               <Stack spacing={2} sx={{ height: '100%' }}>
-                <MoverList title="Gainers" movers={movers.gainers} limit={limit} />
-                <MoverList title="Losers" movers={movers.losers} limit={limit} />
-                <MoverList title="Most active" movers={movers.mostActive} limit={limit} />
+                <MoverList title="Gainers" movers={movers.gainers} expanded={expanded} />
+                <MoverList title="Losers" movers={movers.losers} expanded={expanded} />
+                <MoverList title="Most active" movers={movers.mostActive} expanded={expanded} />
                 {hasMore && (
                   <Button
                     size="small"
