@@ -1,5 +1,6 @@
 import { useSectors } from '../api/hooks';
 import { PageHeader } from '../components/ui/PageHeader';
+import { DataStatus } from '../components/ui/DataStatus';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { ChangePill } from '../components/ui/ChangePill';
@@ -65,6 +66,7 @@ export function Sectors() {
       <PageHeader
         title="Sectors"
         subtitle="Every sector on the exchange, with its average move and market size"
+        meta={<DataStatus dataset="quotes" />}
       />
       {rows.length > 0 && (
         <SectionCard

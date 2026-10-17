@@ -7,6 +7,7 @@ import { calendarQuery } from '../validators/schemas';
 const router = Router();
 
 router.get('/overview', asyncHandler(ctrl.marketOverview));
+router.get('/status', asyncHandler(ctrl.marketStatus));
 router.get('/sectors', asyncHandler(ctrl.sectors));
 router.get('/dividends', validate(calendarQuery, 'query'), asyncHandler(ctrl.dividends));
 

@@ -70,6 +70,9 @@ model StockPrice {
 
   @@unique([stockId, lastTradeDate])
   @@index([stockId, lastTradeDate(sort: Desc)])
+  // The data-status endpoint asks for the newest session across the whole table; without this the
+  // answer is a sequential scan (see migration 0021).
+  @@index([lastTradeDate(sort: Desc)])
   @@map("stock_prices")
 }
 

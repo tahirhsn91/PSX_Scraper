@@ -4,7 +4,7 @@ import type {
   Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
-  StockProfileResponse,
+  StockProfileResponse, MarketStatus,
 } from '../types';
 
 /** Stable string for a filters object, so the query key changes only when the criteria change. */
@@ -40,6 +40,7 @@ export const keys = {
   // different series at the same symbol, and without it one would be served the other's cache.
   indexHistory: (symbol: string, limit: number) => ['index-history', symbol, limit] as const,
   marketOverview: ['market', 'overview'] as const,
+  marketStatus: ['market', 'status'] as const,
   sectors: ['market', 'sectors'] as const,
   dividends: ['market', 'dividends'] as const,
 };
@@ -299,6 +300,21 @@ export const useMarketOverview = (poll: boolean | number = false) =>
     queryFn: async () => (await api.get<MarketOverview>('/market/overview')).data,
     refetchInterval: typeof poll === 'number' ? poll : poll ? 30000 : false,
     ...(poll ? { staleTime: 0 } : {}),
+  });
+
+/**
+ * Session state and dataset freshness, for the small "as of" line under a page title.
+ *
+ * Polled on the minute: it can only change at a session boundary or when a sync lands, the payload
+ * is four indexed lookups, and an open tab that never polls would go on claiming "live" long after
+ * the feed stopped.
+ */
+export const useMarketStatus = () =>
+  useQuery({
+    queryKey: keys.marketStatus,
+    queryFn: async () => (await api.get<MarketStatus>('/market/status')).data,
+    refetchInterval: 60000,
+    staleTime: 30000,
   });
 
 /** One aggregate row per sector, for the sector browser. */

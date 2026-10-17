@@ -65,3 +65,25 @@ export function isMarketOpen(now: Date, window: SessionWindow = {}): boolean {
   const minutes = pkt.getUTCHours() * 60 + pkt.getUTCMinutes();
   return minutes >= open && minutes <= close;
 }
+
+/** Minutes past midnight on the Karachi wall clock — the clock the session is written in. */
+export function pktMinutes(now: Date): number {
+  const pkt = new Date(now.getTime() + PKT_OFFSET_MS);
+  return pkt.getUTCHours() * 60 + pkt.getUTCMinutes();
+}
+
+/**
+ * Where an instant sits in the trading day, ignoring the calendar.
+ *
+ * Weekends and listed holidays are the caller's business (see `marketCalendar.service`), because
+ * only that module can tell a holiday Wednesday from a trading one. This answers the narrower
+ * question the status endpoint needs: before the bell, inside the session, or after it.
+ */
+export function sessionPhase(now: Date, window: SessionWindow = {}): 'pre' | 'open' | 'post' {
+  const open = window.openMinutes ?? DEFAULT_OPEN_MINUTES;
+  const close = window.closeMinutes ?? DEFAULT_CLOSE_MINUTES;
+  const minutes = pktMinutes(now);
+  if (minutes < open) return 'pre';
+  if (minutes <= close) return 'open';
+  return 'post';
+}
