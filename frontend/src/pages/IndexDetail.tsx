@@ -19,7 +19,7 @@ import { StatePanel } from '../components/ui/StatePanel';
 import { CandleChart } from '../components/CandleChart';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { useIndex, useIndexCandles, useStocks } from '../api/hooks';
-import { DASH, formatCount, formatDateTime, formatNumber, formatRelative } from '../lib/format';
+import { DASH, formatCount, formatDateTime, formatNumber, formatPoints, formatRelative } from '../lib/format';
 import { isStaleReading } from '../lib/freshness';
 import { indexMetaDescription, indexMetaTitle } from '../lib/seo';
 import { usePageMeta } from '../lib/usePageMeta';
@@ -205,8 +205,21 @@ export function IndexDetail() {
             footer={
               <Stack direction="row" spacing={1} alignItems="center">
                 <ChangePill value={data.changePercent} variant="soft" />
-                <Typography variant="caption" color="text.secondary">
-                  {change == null ? DASH : `${change > 0 ? '+' : ''}${formatNumber(change)}`}
+                {/* The point move, in the same green/red as the pill (#181). */}
+                <Typography
+                  variant="caption"
+                  fontWeight={600}
+                  sx={{
+                    color:
+                      change == null || change === 0
+                        ? 'text.secondary'
+                        : change > 0
+                          ? 'success.main'
+                          : 'error.main',
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
+                  {change == null ? DASH : `${formatPoints(change)} pts`}
                 </Typography>
               </Stack>
             }
