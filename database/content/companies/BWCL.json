@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for BWCL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of one of Bestway Cement's own plants exists on the open licence sources, and a generic cement-plant photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BWCL",
+  "description": "Bestway Cement Limited is a Pakistani cement producer and, in its group's words, the country's largest cement manufacturer. It operates five plants — Hattar and Farooqia in Khyber Pakhtunkhwa, and Chakwal, Kallar Kahar and Mianwali in Punjab — producing ordinary Portland and special-purpose cements under brands including Bestway, Pakcem, Stallion, Ecocem and Duracem, alongside tile adhesives and grouts. The company is part of the Bestway Group.",
+  "headOffice": "Bestway Building, 19-A, College Road, F-7 Markaz, Islamabad 44000, Pakistan",
+  "phone": "+92 51 265 4856-64",
+  "website": "https://www.bestway.com.pk",
+  "ceo": "Lord Zameer Choudrey",
+  "sourceNote": "Written from: bestway.com.pk — home page, Board of Directors (chief executive listing), Contact Information, Plant Sites, Domestic Products and Cement Production pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "BESTWAY All Purpose Cement",
+      "summary": "Ordinary Portland cement for general construction — pavements, bridges, buildings, floor slabs, culverts and precast blocks; complies with PS 232:2008 (R) 53 Grade and EN 197-1 CEM I 42,5 N.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PAKCEM",
+      "summary": "All-purpose cement that the company says was the first product in Pakistan to deliver up to 10,000 PSI strength.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "STALLION",
+      "summary": "Early-setting cement for the precast segment, formulated so formwork can be released sooner while keeping a high-quality finish.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "ECOCEM",
+      "summary": "Economy cement for price-conscious construction, positioned by the company as a balance between cost and strength (EN 197-1 CEM II/B-M 42,5 N).",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "DURACEM",
+      "summary": "General-purpose ordinary Portland cement to ASTM C150 Type I, for pavements, bridges, buildings and precast products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "XTREME Tile Bond",
+      "summary": "Floor and wall tile adhesive, described by the company as anti-sagging with 9–10 hours of open time and no curing required.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for INIL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "INIL",
+  "description": "International Industries Limited is a manufacturer of steel and polymer pipes, tubes and fittings, incorporated in Pakistan in 1948 and quoted on the Pakistan Stock Exchange. It is a core member of the Amir S. Chinoy (ASC) Group, which also includes International Steels Limited and Pakistan Cables Limited, and it operates through subsidiaries: IIL Australia Pty Limited (wholly owned), IIL Americas Inc. in Toronto, INIL Europe Limited in Ireland, and IIL Trading Pvt. Limited in Pakistan.",
+  "headOffice": "101, Beaumont Plaza, 10 Beaumont Road, Karachi 75530, Pakistan",
+  "phone": "+92 21 111 019 019",
+  "website": "https://iil.com.pk",
+  "ceo": "Zain K. Chinoy",
+  "sourceNote": "Written from: https://iil.com.pk/en/page/company/about-us (company profile, group and subsidiaries), /en/page/investors/company-information (Registered Office, Chief Executive Officer) and /en/contact (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Steel pipes & tubes",
+      "summary": "Galvanized iron pipes, pre-galvanized tubes, hollow structural sections (HSS), API line pipe, MS and black pipe, cold rolled steel tubing and fire fighting pipe.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "IIL Safescaf scaffolding pipe",
+      "summary": "A scaffolding pipe made by the company for construction use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Stainless steel tubes",
+      "summary": "Stainless steel tube ranges sold under the company's FORZA (400 series), COSMO (300 series) and Econic (200 series) grades.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Polymer pipes & fittings",
+      "summary": "HDPE water pipe (Megaflo), MDPE gas pipe (Flexflo), HDPE duct and CorruDuct pipe, PPRC pipes and fittings, and UPVC pipes and fittings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engineering solutions",
+      "summary": "An engineering solutions offering listed alongside the company's pipe and tube product lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "IIL Trading",
+      "summary": "A Pakistan-based subsidiary trading business representing brands such as Milwaukee, Fischer and Mapei.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

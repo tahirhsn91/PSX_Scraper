@@ -1,0 +1,32 @@
+{
+  "symbol": "IMAGE",
+  "description": "Image Pakistan Limited was established in 1993 as a fabric manufacturing company and describes itself as one of Pakistan's leading fashion and retail houses. Its principal activity is the manufacturing and sale of embroidered fabric and ready-to-wear garments under the brand name Image, with Schiffli embroidered fabric long associated with the company. It sells unstitched and ready-to-wear collections through stores in five cities in Pakistan and online, and states it was the first Pakistani seller to list on Amazon.",
+  "headOffice": "F/538, S.I.T.E., Karachi-75700, Pakistan",
+  "phone": null,
+  "website": "https://imagepakistan.net",
+  "ceo": "Asad Ahmad",
+  "sourceNote": "Written from: imagepakistan.net/about-us and imagepakistan.net (accessed 2026-10-17); registered office and CEO from the PSX company profile dps.psx.com.pk/company/IMAGE and Image Pakistan Limited's Annual Report 2025 on dps.psx.com.pk (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "Schiffli embroidered fabric",
+      "summary": "Embroidered fabric the company describes as renowned for its classic aesthetic and premium quality in the textile field for decades.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Unstitched collections",
+      "summary": "Unstitched fabric collections for women, one of the two collection types the company offers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ready-to-wear collections",
+      "summary": "Ready-to-wear garments sold under the Image brand, the company's other collection type.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

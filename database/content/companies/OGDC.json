@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for OGDC. Every fact here is attributable - see sourceNote. ogdcl.com sits behind a bot challenge that blocks direct retrieval from this host, so the company's own pages and its own published report were read through the search index. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "OGDC",
+  "description": "Oil & Gas Development Company Limited (OGDCL) is Pakistan's leading exploration and production company, maintaining a portfolio that spans both mature and frontier regions. Its core business is the exploration and production of hydrocarbons - crude oil, natural gas, LPG and sulphur - which it supplies to state-owned entities and to midstream and downstream companies.",
+  "headOffice": "OGDCL House, Plot No. 3, Jinnah Avenue, Blue Area, Islamabad 44000, Pakistan",
+  "phone": "+92 51 9209811-8",
+  "website": "https://www.ogdcl.com",
+  "ceo": "Ahmed Hayat Lak",
+  "sourceNote": "Written from: ogdcl.com/core-business, ogdcl.com/what-we-do/exploring-energy, ogdcl.com/operations/commercial (hydrocarbon products), ogdcl.com/registered-offices and ogdcl.com/corporate-information (registered office and telephone), ogdcl.com/who-we-are/leadership-governance/board-of-directors/ahmed-hayat-lak, and the company's Annual Report 2026 published on ogdcl.com - read through the search index because the site blocks direct access from this host (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Crude oil",
+      "summary": "Crude oil produced by the company and supplied to state-owned entities and midstream and downstream companies.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Natural gas",
+      "summary": "Natural gas produced and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Liquefied Petroleum Gas (LPG)",
+      "summary": "LPG produced by the company as one of its hydrocarbon products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sulphur",
+      "summary": "Sulphur, produced alongside crude oil, gas and LPG and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

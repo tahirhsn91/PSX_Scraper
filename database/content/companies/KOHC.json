@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for KOHC. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of Kohat Cement's own plant exists, and a generic cement-plant photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "KOHC",
+  "description": "Kohat Cement Company Limited operates a cement plant on Rawalpindi Road at Kohat, which began as a 1,000 TPD Romanian line installed by the State Cement Corporation of Pakistan in 1984 and was privatised by the Government of Pakistan in open bidding in 1992. The company produces ordinary Portland grey cement under the brand 'Kohat Cement' and white Portland cement under 'Kohat Super White', and has since converted its lines to coal firing, added a white cement plant, a new 6,700 TPD grey cement line and a standby power plant. It was listed on the stock exchanges of Pakistan in 1994 and entered export markets in 2002.",
+  "headOffice": "36-37-P, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 111 111 5225",
+  "website": "https://www.kohatcement.com",
+  "ceo": "Nadeem Atta Sheikh",
+  "sourceNote": "Written from: https://www.kohatcement.com/about_history.aspx (incorporation, privatisation, expansions, listing, exports), https://www.kohatcement.com/head_office.aspx and https://www.kohatcement.com/about_corp_info.aspx (head office, telephone, registered office), https://www.kohatcement.com/about_board.aspx (Chief Executive), https://www.kohatcement.com/portland_cement.aspx and https://www.kohatcement.com/white_cement.aspx (brands and specifications) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Kohat Cement — grey Portland cement",
+      "summary": "Ordinary Portland grey cement sold under the 'Kohat Cement' brand, compliant with PS 232-2008 Grade 53, ASTM C 150 Type I & III and EN 197-1 CEM I 42.5 R, in 50 kg paper and polypropylene bags.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Kohat Super White — white Portland cement",
+      "summary": "White Portland cement for architectural, ornamental and terrazzo applications and for fixing tiles and marble, compliant with PS 1630, ASTM C 150 and EN 197-1, in 40 and 50 kg paper and polypropylene bags.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bulk cement",
+      "summary": "Bulk cement is offered alongside the bagged product.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for UPFL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of a UPFL product exists on the open licence sources, and a generic food photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "UPFL",
+  "description": "Unilever Pakistan Foods Limited manufactures and sells consumer and commercial food products under the brand names Rafhan, Knorr, Hellmann's, Energile and Glaxose-D. Its range covers noodles, sauces, desserts and nutrition products, and a food-service division, Unilever Food Solutions, supplies professional products to commercial kitchens. The company reports that Knorr Noodles led its volume growth in 2025.",
+  "headOffice": "Avari Plaza, Fatima Jinnah Road, Karachi 75530, Pakistan",
+  "phone": "+92 21 3566 0062",
+  "website": "https://www.unilever.pk",
+  "ceo": "Amir R. Paracha",
+  "sourceNote": "Written from: unilever.pk — Investor Relations page (registered office and contact details), Annual Reports page, and Unilever Pakistan Foods Limited Annual Report 2025 (https://www.unilever.pk/files/unilever-pakistan-foods-limited-annual-report-2025.pdf) for principal activities, brands and board (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Knorr Noodles",
+      "summary": "Instant noodles; the company reports Knorr Noodles led its volume growth in 2025.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Knorr sauces and seasonings",
+      "summary": "Sauces, ketchup and seasoning range, including access packs and a Knorr Professional line for food service.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Rafhan",
+      "summary": "Dessert mixes the company calls its local jewel in the desserts category, positioned around festive occasions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hellmann's",
+      "summary": "Mayonnaise and dressings brand in the company's portfolio.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Unilever Food Solutions",
+      "summary": "The company's food-service division, supplying professional products such as the Knorr Professional Pan-Asian range to commercial kitchens.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

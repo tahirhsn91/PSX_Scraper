@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for ABL. Every fact is attributable — see sourceNote. No image is attached: the bank's own imagery is not licence-cleared and a generic bank-branch photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ABL",
+  "description": "Allied Bank Limited is a Pakistani commercial bank that started in Lahore as Australasia Bank in 1942 and took its present name in 2005, after its ownership was transferred to a consortium comprising the Ibrahim Group in August 2004. It offers universal banking services while placing major emphasis on retail banking, with a network of over 1,500 online branches and more than 1,500 ATMs in Pakistan. Its parent company is Ibrahim Holdings (Private) Limited and its subsidiaries are ABL Asset Management Company and ABL Exchange (Private) Limited.",
+  "headOffice": "3 Tipu Block, Main Boulevard, New Garden Town, Lahore 54000, Pakistan",
+  "phone": "+92 42 3588 0043 (UAN 042 111 225 225)",
+  "website": "https://www.abl.com",
+  "ceo": "Aizid Razzaq Gill",
+  "sourceNote": "Written from: https://www.abl.com/the-bank/ (bank history, branch and ATM network, universal banking), https://www.abl.com/the-bank/company-information/?id=855 (registered and head office, telephone, board of directors, parent and subsidiary companies) and the bank's own product pages under https://www.abl.com/personal/ and https://www.abl.com/business-banking/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Deposit accounts",
+      "summary": "Current, savings and term accounts, including Allied Current Account, Allied Easy Current Account, Allied Asaan Account, Allied PLS Savings Account and Allied Term Plus Deposits.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consumer financing",
+      "summary": "Allied Car Finance, Allied Home Finance, Allied Personal Finance, Allied Solar System Finance and Allied Scooty Finance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Islamic banking",
+      "summary": "Islamic deposit and financing products listed under the bank's Islamic banking section, including the Allied Aitebar current, savings and remittance accounts.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SME and agriculture financing",
+      "summary": "Allied Fast Finance, Allied Business Finance and Allied Warehouse Financing for SMEs, and agriculture financing through designated branches.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Digital banking",
+      "summary": "myABL internet and mobile banking, myABL Wallet, RAAST payments, Allied Pay and myABL WhatsApp banking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

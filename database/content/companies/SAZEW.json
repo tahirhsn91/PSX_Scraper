@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for SAZEW. Every fact is attributable — see sourceNote. No image is attached: the company's vehicle photography is its own marketing asset and is not licence-cleared here. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SAZEW",
+  "description": "Sazgar Engineering Works Limited was established in 1991 and, in its own words, became a household name for 3-wheeler vehicles and automotive wheel rims for the tractor industry. It is a public limited company listed on the Pakistan Stock Exchange, manufactures at 18-KM Raiwind Road, Lahore, and says its three-wheelers are exported to more than 20 countries. Its product range covers petrol and CNG three-wheelers, the electric eVe rickshaw, tractor wheel rims, and HAVAL and BAIC passenger vehicles listed in its products menu.",
+  "headOffice": "88-Ali Town, Thokar Niaz Baig, Raiwind Road, Lahore, Pakistan",
+  "phone": "+92 42 3529 1573-74",
+  "website": "https://sazgarautos.com",
+  "ceo": "Mian Asad Hameed",
+  "sourceNote": "Written from: https://sazgarautos.com/home (history, products, exports, registered office and telephone), https://sazgarautos.com/corporate-information/ (status and registration), https://sazgarautos.com/board-of-directors/ (CEO), https://sazgarautos.com/products/, https://sazgarautos.com/eve/ and https://sazgarautos.com/tractor-wheel-rims/ (product ranges) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Deluxe Mini Cab three-wheelers",
+      "summary": "200cc water-cooled four-stroke CNG/petrol rickshaws with disc brakes, offered in Deluxe, Royal Deluxe and Deluxe XL variants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Seven- and nine-seater three-wheelers",
+      "summary": "Seven-seater models carrying six passengers plus driver, and nine-seaters, used for fixed routes and shuttle services as well as by families.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cargo loaders",
+      "summary": "Shandar 150, Jaandar 200 and Cargo 100 loaders, in standard and front-hood versions, for goods carrying.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "eVe electric rickshaw",
+      "summary": "A battery-electric three-wheeler offered with 72V batteries from 90Ah to 160Ah, 2-3 kW motors and an approximate range of 100 to 210 km.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tractor wheel rims",
+      "summary": "Wheel rims for Fiat and Massey Ferguson tractors, made with CNC flash butt welders, rim rolling machines and presses up to 600 tons.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HAVAL passenger vehicles",
+      "summary": "The company's products menu lists HAVAL Pakistan passenger vehicles, and the HAVAL site is published as 'GWM Sazgar'; BAIC vehicles are listed alongside it.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

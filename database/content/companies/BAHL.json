@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for BAHL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the bank's own premises is available from an open licence source.",
+  "symbol": "BAHL",
+  "description": "Bank AL Habib Limited was incorporated as a public limited company in October 1991 and started banking operations in 1992, sponsored by the Dawood Habib Group. It operates a countrywide branch and sub-branch network and also has a Wholesale Branch in the Kingdom of Bahrain, Malaysia and Representative Offices in Dubai, Istanbul, Beijing and Kenya. Its subsidiaries are AL Habib Capital Markets (Private) Limited, AL Habib Asset Management Limited and AL Habib Exchange Company (Private) Limited.",
+  "headOffice": "Mackinnons Building, I.I. Chundrigar Road, Karachi, Pakistan (principal office; registered office: 126-C, Old Bahawalpur Road, Multan)",
+  "phone": "+92 21 3241 2421",
+  "website": "https://www.bankalhabib.com",
+  "ceo": "Mansoor Ali Khan",
+  "sourceNote": "Written from: https://www.bankalhabib.com/about-us (company history, principal office, registered office, subsidiaries) and the bank's own Annual Report 2025 at https://www.bankalhabib.com/files/download/reports/Annual-Report-2025.pdf (chief executive), https://www.bankalhabib.com/accounts/current, https://www.bankalhabib.com/accounts/saving, https://www.bankalhabib.com/debit-cards, https://www.bankalhabib.com/credit-cards, https://www.bankalhabib.com/home-remittance and https://islamic.bankalhabib.com (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Current accounts",
+      "summary": "Current accounts including AL Habib Current Plus and the AL Habib Signature Account, the latter offering personalised service and premium benefits.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Savings accounts",
+      "summary": "Savings accounts including the AL Habib Freelancer Savings Account for freelancers and IT/ITES exporters, with monthly profit payout.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Debit cards",
+      "summary": "VISA and PayPak debit cards with EMV chip and 3D Secure, plus a Freelancer (FCY) debit card for spending from a USD Exporters' Special Foreign Currency Account.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Credit cards",
+      "summary": "Green, Gold and Platinum credit cards for existing account holders, with up to 51 credit-free days and reward points on spending.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home remittance",
+      "summary": "AL Habib Remit, which lets overseas Pakistanis send money to Pakistan through the bank's agents free of cost to the remitter and the beneficiary.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Islamic banking — AL Habib Islamic",
+      "summary": "Shariah-compliant personal banking, cash management and trade finance facilities offered under AL Habib Islamic.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

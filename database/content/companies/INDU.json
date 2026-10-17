@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for INDU. No image is attached: manufacturer photography of these vehicles is not licence-cleared for reuse, and a stock car photo would misstate it as IMC's product.",
+  "symbol": "INDU",
+  "description": "Indus Motor Company Limited (IMC) is a joint venture between certain companies of the House of Habib of Pakistan, Toyota Motor Corporation and Toyota Tsusho Corporation of Japan, incorporated in 1989. It manufactures and markets Toyota brand vehicles in Pakistan, including the Corolla and Yaris in the passenger car segment, Hilux in light commercial vehicles, and Fortuner and Corolla Cross in the SUV segment. Its manufacturing facility and offices are on a 109.5-acre site at Port Qasim, Karachi.",
+  "headOffice": "Plot No. N.W.Z/P-1, Port Qasim Authority, Karachi, Pakistan",
+  "phone": "+92 21 3472 1100",
+  "website": "https://toyota-indus.com",
+  "ceo": "Ali Asghar Jamali",
+  "sourceNote": "Written from: toyota-indus.com/corporate — company profile and contact details (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Toyota Corolla",
+      "summary": "The company's C-segment sedan, which IMC describes as the best-selling sedan in that category.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Toyota Yaris",
+      "summary": "A passenger car model manufactured and marketed by IMC in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Toyota Hilux",
+      "summary": "The company's light commercial vehicle, sold in several variants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Toyota Fortuner",
+      "summary": "An SUV model in IMC's SUV line-up.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Toyota Corolla Cross",
+      "summary": "Launched in FY 2023-24, which IMC describes as the first 'Make in Pakistan' hybrid electric vehicle.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

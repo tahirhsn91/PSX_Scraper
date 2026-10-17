@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for MLCF. Every fact is attributable — see sourceNote. No image is attached: the CC-licensed cement-plant photographs available are of plants elsewhere, and using one would state — without saying it — that the picture is of Maple Leaf's facility.",
+  "symbol": "MLCF",
+  "description": "Maple Leaf Cement Factory Limited is a Pakistani cement producer established in 1956 through a collaboration between the West Pakistan Industrial Development Corporation and the Government of Canada. It operates the country's largest single-site cement production facility, at Iskanderabad in district Mianwali, with four grey-cement production lines and a dedicated white-cement line, and total installed clinker capacity of 7.8 million tonnes a year. The company is a key entity within the Kohinoor Maple Leaf Group.",
+  "headOffice": "42 Lawrence Road, Lahore 54000, Pakistan",
+  "phone": "+92 42 36302261-62",
+  "website": "https://www.kmlg.com",
+  "ceo": "Sayeed Tariq Saigol",
+  "sourceNote": "Written from: kmlg.com/mlcfl/profile/, /mlcfl/contact-us/, /mlcfl/ordinary-portland-cement, /mlcfl/sulphate-resistant-cement, /mlcfl/low-alkali-cement, /mlcfl/white-cement, /mlcfl/wall-coat, and Maple Leaf Cement's PSX notice re-appointing the Chief Executive Officer effective 1 January 2026 (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ordinary Portland Cement",
+      "summary": "Grey cement for mortar and concrete in general construction, such as houses and buildings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sulphate Resistant Cement (SRC)",
+      "summary": "A waterproofing cement with tri-calcium aluminate held below 5%, for basements, deep foundations, canal lining, waterways and dams.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Low Alkali Cement",
+      "summary": "Cement that resists the alkali-silica reaction, used in moisture-resistant construction such as airports, runways and dams.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "White Cement",
+      "summary": "White Portland cement for decorative work and prestige projects, typically precast cladding panels.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Wall Coat",
+      "summary": "A three-in-one base coat, primer and matte finish for cement-plastered walls and ceilings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

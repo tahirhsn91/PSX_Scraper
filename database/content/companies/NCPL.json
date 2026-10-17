@@ -1,0 +1,25 @@
+{
+  "symbol": "NCPL",
+  "description": "Nishat Chunian Power Limited is a public limited company incorporated in Pakistan on 23 February 2007 as a power generation project commissioned under the Government of Pakistan's 2002 Power Policy. It builds, owns, operates and maintains a fuel-fired power station with a gross capacity of 200 MW and a net capacity of 195.722 MW — an RFO-fired reciprocating engine combined cycle plant using 11 Wartsila 18V46 engine sets and one heat recovery steam turbine. It sells its output to Central Power Purchasing Agency (Guarantee) Limited under a 25-year power purchase agreement that commenced on 21 July 2010, with commercial operations from July 2010.",
+  "headOffice": "Nishat House, 53-A, Lawrence Road, Lahore, Pakistan",
+  "phone": "+92 42 35761730-9",
+  "website": "https://www.ncpower.com.pk",
+  "ceo": "Farrukh Ifzal",
+  "sourceNote": "Written from: ncpower.com.pk/about-us/overview and ncpower.com.pk (accessed 2026-10-17); registered address and CEO from the PSX company profile dps.psx.com.pk/company/NCPL (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "RFO-fired combined cycle power generation",
+      "summary": "A 200 MW gross (195.722 MW net) residual furnace oil-fired reciprocating engine combined cycle plant, comprising 11 Wartsila 18V46 engine sets and one heat recovery steam turbine with Converteam and ABB alternators.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Power sold under a 25-year PPA",
+      "summary": "Electricity supplied to the company's sole customer, Central Power Purchasing Agency (Guarantee) Limited, under a power purchase agreement that commenced on 21 July 2010.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

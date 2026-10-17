@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for FFL. Every fact here is attributable — see sourceNote. No image is attached: Fauji Foods' pack photography is the company's asset, not licence-cleared.",
+  "symbol": "FFL",
+  "description": "Fauji Foods Limited was founded in 2015 after the acquisition of Noon Pakistan Limited, a company with an over 50-year dairy legacy that was incorporated in 1966. It operates under the umbrella of the Fauji Group of Companies, with major shareholding by FFBL. Its brands are Nurpur — relaunched as the House of Nurpur in May 2016 — and Dostea, a liquid tea whitener introduced in February 2016.",
+  "headOffice": "42 CCA, DHA Phase-VIII (Ex Park View), Lahore, Pakistan",
+  "phone": "+92 42 3713 6315-17",
+  "website": "https://www.faujifoods.com",
+  "ceo": "Usman Zaheer Ahmad",
+  "sourceNote": "Written from: faujifoods.com/who-we-are (Our Heritage, Corporate Profile, Our Leadership), faujifoods.com/brands/nurpur (Product Line), faujifoods.com/investors/governance (registered office), homepage product notes on Dostea (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Nurpur Original UHT Milk",
+      "summary": "UHT milk produced from freshly collected full cream milk, ultra-high-temperature treated and packed in Tetra and Ecolean packs.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nurpur Flavoured Milk",
+      "summary": "A sweetened dairy product made with milk, sugar, flavourings and permitted food colours, UHT treated.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nurpur Dairy Cream",
+      "summary": "A dairy cream produced from fresh milk, ultra-high-temperature treated and packed in Tetra packaging.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nurpur Butter",
+      "summary": "Butter produced from fresh dairy cream — the product the brand is best known for.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nurpur Cheese",
+      "summary": "Cheese in three variants: Mozzarella, Cheddar and American Burger Slices.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dostea",
+      "summary": "A liquid tea whitener made from skimmed milk, vegetable fat and sugar, pasteurised and UHT treated, packed in Tetra and Ecolean packs.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

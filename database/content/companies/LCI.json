@@ -1,0 +1,53 @@
+{
+  "symbol": "LCI",
+  "description": "Lucky Core Industries Limited is a manufacturing and trading company incorporated in Pakistan and a subsidiary of Lucky Cement Limited. It manufactures polyester staple fibre, POY chips, soda ash, specialty chemicals, sodium bicarbonate, pharmaceuticals and polyurethanes, markets seeds, pharmaceuticals and animal health products, and merchanting general chemicals. The company reports five business verticals, a workforce of over 2,400 and eight manufacturing locations nationwide.",
+  "headOffice": "5 West Wharf, Karachi-74000, Pakistan",
+  "phone": "+92 21 323 13717",
+  "website": "https://luckycore.com",
+  "ceo": "Samar Hayat",
+  "sourceNote": "Written from: luckycore.com (homepage, business verticals), luckycore.com/en/about/our-leadership and luckycore.com/en/contact (accessed 2026-10-17); business description and address from the PSX company profile dps.psx.com.pk/company/LCI (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "Polyester",
+      "summary": "Terylene polyester staple fibre, brought to Pakistan by the company in 1982, and POY chips serving the textile industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Soda Ash",
+      "summary": "Soda ash supplied as an essential raw material for industries including glass, paper and detergents.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Chemicals",
+      "summary": "General chemicals, specialty chemicals, polyurethanes and masterbatches, supplied across Pakistan's industrial landscape.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Agri Sciences",
+      "summary": "Seeds, agrochemicals and micronutrients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pharmaceuticals",
+      "summary": "Primary and specialty care pharmaceutical products, including life-saving drugs, which the company imports, manufactures, markets and distributes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Animal Health",
+      "summary": "Animal health products for livestock and poultry farm management.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

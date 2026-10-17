@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for NML. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility or products was available, and a generic photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "NML",
+  "description": "Nishat Mills Limited is the flagship company of Nishat Group, established in 1951, and describes itself as one of the most modern, largest vertically integrated textile companies in Pakistan. It is engaged in textile manufacturing — spinning, combing, weaving, bleaching, dyeing, printing, stitching and apparel — and in buying, selling and dealing in yarn, linen, cloth and other fabrics made from raw cotton and synthetic fibre, as well as in generating, distributing, supplying and selling electricity.",
+  "headOffice": "7, Main Gulberg, Lahore, Pakistan",
+  "phone": "+92 42 35716351-59",
+  "website": "https://nishatmillsltd.com",
+  "ceo": "Mian Umer Mansha",
+  "sourceNote": "Written from: https://nishatmillsltd.com/ (home), /profile/ (company profile and business description), /board-of-directors/ (Chief Executive Officer), /contact/ (Head Office) and the /spinning/, /weaving/, /processing/, /home-textile/, /garments/ and /power-generation/ product pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spinning — yarn",
+      "summary": "Ring-spun cotton and blended yarns, with 251,808 spindles and 7,320 rotors across seven spinning units and a capacity of 270 tons per day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Weaving — fabric",
+      "summary": "931 air jet looms producing approximately 30 million square metres of cotton and poly cotton fabric per month.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Processing — finished fabric",
+      "summary": "Fabric processing with capacity for 104 million metres of fabric per annum, handling twills, drills, canvases, poplins and stretch fabrics.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textile",
+      "summary": "Quilt covers, valances, quilted throw-overs, flat and fitted sheets, baby sets, table linen, curtains and pillow cases, made in two stitching facilities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Garments",
+      "summary": "Men's and women's garment manufacturing with capacity of 14.40 million garments per annum.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Captive power generation",
+      "summary": "Captive co-generation power plants supplying in-house energy requirements at its spinning, weaving, processing, stitching and apparel units.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

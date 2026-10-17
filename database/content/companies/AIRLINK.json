@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for AIRLINK. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of Airlink's own facility exists on the open licence sources, and a generic phone-assembly photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AIRLINK",
+  "description": "Air Link Communication Limited is a Lahore-based technology company founded in 2010 that began as a distributor for global smartphone brands and has since expanded into local manufacturing, retail and technology solutions. Its wholly owned subsidiary Select Technologies (Pvt.) Ltd. runs its assembly facilities, and the company's Lahore plant assembles smartphones and Xiaomi smart TVs. It also distributes brands including Xiaomi, Tecno, Samsung, Hisense, Apple (as an authorised reseller), iMiki and Acer.",
+  "headOffice": "152/1 M, Quaid-e-Azam Industrial Estate, Kot Lakhpat, Lahore, Pakistan",
+  "phone": "+92 42 111 667 468",
+  "website": "https://airlinkcommunication.com",
+  "ceo": "Muzzaffar Hayat Piracha",
+  "sourceNote": "Written from: airlinkcommunication.com — Company Profile, Manufacturing, Governance and Contact Us pages, and the company's own Air Link Communication Limited profile PDF at https://airlink.pk/data/alcprofilev1.pdf (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Smartphones",
+      "summary": "Assembled at the company's Lahore manufacturing facility, which it describes as capable of assembling 12 million devices annually.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Xiaomi smart TVs",
+      "summary": "Google-certified smart TVs manufactured for Xiaomi in screen sizes from 32\" to 65\", with an annual production capacity of 360,000 units.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Smart gadgets",
+      "summary": "Smart devices and gadgets assembled by Select Technologies (Pvt.) Ltd., the company's wholly owned manufacturing subsidiary.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Brand distribution",
+      "summary": "Distribution of global smartphone and consumer-electronics brands, including Xiaomi, Tecno, Samsung, Hisense, Apple (authorised reseller), iMiki and Acer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

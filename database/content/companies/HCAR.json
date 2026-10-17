@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for HCAR. Every fact is attributable — see sourceNote. No image is attached: Honda's vehicle photography is the manufacturer's asset, not licence-cleared for this use.",
+  "symbol": "HCAR",
+  "description": "Honda Atlas Cars (Pakistan) Limited is a joint venture between Honda Motor Company Limited of Japan and the Atlas Group of Companies in Pakistan, incorporated in November 1992. It assembles Honda passenger cars at its plant on Multan Road at Manga Mandi, Lahore, and sells them through a nationwide network of 3S, 2S and 1S dealerships. Its locally assembled line-up covers the Civic, City, BR-V and HR-V, while the Accord and CR-V are offered as imports.",
+  "headOffice": "43 km, Multan Road, Manga Mandi, Lahore, Pakistan",
+  "phone": "+92 42 35384671-80",
+  "website": "https://www.honda.com.pk",
+  "ceo": "Masaya Wakuda",
+  "sourceNote": "Written from: honda.com.pk/abouthonda and honda.com.pk/investorRelations (company profile; read via Wayback Machine snapshots dated 2026) and Honda Atlas Cars' PSX quarterly report naming Masaya Wakuda as President & CEO (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Honda City",
+      "summary": "Locally assembled CKD sedan offered in three variants, including the Aspire. The City joined the line-up in 1997.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Honda Civic",
+      "summary": "Locally assembled CKD sedan in three variants — Standard, Oriel and RS. The Civic was the first model built at the plant, from 1994.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Honda BR-V",
+      "summary": "Locally assembled CKD model, added to the line-up in 2017.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Honda HR-V",
+      "summary": "Locally assembled CKD model added in 2022, offered in VTI, VTI-S and e:HEV hybrid variants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Honda Accord",
+      "summary": "Imported sedan, offered in a 1.5L Turbo variant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Honda CR-V",
+      "summary": "Imported model, one of the two vehicles the company brings in rather than assembles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

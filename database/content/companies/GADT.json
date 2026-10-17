@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for GADT. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of Gadoon's own plants exists, and a generic textile-mill photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GADT",
+  "description": "Gadoon Textile Mills Limited was established in 1988 and describes itself as one of the largest spinning units in Pakistan, manufacturing and processing all types of cotton and manmade fibres at plants in Karachi and Gadoon Amazai in Khyber Pakhtunkhwa. It runs spinning, knitting and dairy divisions: the spinning division produces a wide range of cotton, blended and synthetic yarns, the knitting division makes bed linen, and the dairy division produces and sells milk from a herd of over 1,300 animals. The company presents itself within the Yunus Brothers Group on its group profile page.",
+  "headOffice": "7-A, Muhammad Ali Housing Society, Abdul Aziz Haji Hashim Tabba Street, Karachi 75350, Pakistan",
+  "phone": "+92 21 3520 5479-80",
+  "website": "https://gadoontextile.com",
+  "ceo": "Muhammad Sohail Tabba",
+  "sourceNote": "Written from: https://gadoontextile.com/who-we-are and https://gadoontextile.com/about-us (incorporation, scale, plants, products), https://gadoontextile.com/contact-us (head office, phone), https://gadoontextile.com/management-team (CEO), https://gadoontextile.com/group-profile, https://gadoontextile.com/spinning-division-product-portfolio/, https://gadoontextile.com/knitting-division and https://gadoontextile.com/dairy-division (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spinning division — yarn",
+      "summary": "Carded and combed cotton yarn, CVC and poly/cotton blends, fancy, melange, neppy, open-end, slub, core-spun, TFO and zero-twist yarns, in counts the company lists from NE 6/1 up to NE 160.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Knitting division — bed linen",
+      "summary": "Knitted fitted sheets, jersey pillow covers, jersey and terry sheet sets, duvet sets and nursery sheets, in cotton, polyester and blended qualities for institutional and export customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dairy division",
+      "summary": "Production and sale of milk from a dairy farm with a herd of over 1,300 animals, with milk stored in insulated chilled tankers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

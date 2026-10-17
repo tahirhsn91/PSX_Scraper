@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for JDWS. Every fact here is attributable - see sourceNote. No image is attached: no licence-cleared photograph of JDW's own mills exists, and a generic sugar-mill photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "JDWS",
+  "description": "JDW Sugar Mills Limited's principal activity is the production and sale of crystalline sugar, carried out through three sugar mills - JDW Unit-I and Unit-II in District Rahim Yar Khan and Unit-III in District Ghotki, Sindh - together with Deharki Sugar Mills (Pvt.) Limited, which the company describes as its subsidiary. It also runs high-pressure co-generation plants at Unit-II (26.6 MW) and Unit-III (26.8 MW) and manages sugarcane corporate farms over 26,380 acres in Punjab and Sindh.",
+  "headOffice": "17-Abid Majeed Road, Lahore Cantt, Pakistan",
+  "phone": "+92 42 36664891-96",
+  "website": "https://jdw-group.com",
+  "ceo": "Raheal Masud",
+  "sourceNote": "Written from: jdw-group.com (home), jdw-group.com/ProfileOfCompany, jdw-group.com/Segments/Sugar, jdw-group.com/Governance/BoardofDirectors (Chief Executive Officer), jdw-group.com/Contact-Us (head office telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Crystalline sugar",
+      "summary": "The company's principal product, produced at its three sugar mills and sold as crystalline sugar.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Electricity from co-generation",
+      "summary": "Two high-pressure co-generation plants - 26.6 MW at Unit-II (Sadiqabad) and 26.8 MW at Unit-III (Ghotki) - commissioned in 2014.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate farming",
+      "summary": "Management of sugarcane corporate farms over 26,380 acres in Punjab and Sindh, supplying cane to the company's mills.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

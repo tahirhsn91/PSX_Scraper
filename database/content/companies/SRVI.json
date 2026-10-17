@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for SRVI. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of a Servis factory or product exists on the open licence sources, and a generic shoe photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SRVI",
+  "description": "Service Industries Limited's stated principal activities are the purchase, manufacture and sale of footwear, tyres and tubes and technical rubber products, and its group describes itself as the largest manufacturer of footwear, tyres and tubes in Pakistan. Footwear is made at factories in Gujrat and Muridke, while the tyre range covers motorcycle, bicycle and other applications. In 2019 the group entered a strategic joint venture with Chaoyang Long March Tyre Co. Ltd. that established Pakistan's first dedicated radial truck and bus tyre plant.",
+  "headOffice": "Servis House, 2-Main Gulberg, Jail Road, Lahore 54662, Pakistan",
+  "phone": "+92 42 3575 1990-6",
+  "website": "https://servisgroup.com",
+  "ceo": "Arif Saeed",
+  "sourceNote": "Written from: servisgroup.com — Company Profile, Overview, Board of Directors Profile, Contact Us and home pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Footwear",
+      "summary": "Footwear manufactured at the group's Gujrat and Muridke factories and sold under the Servis brand through a retail network of more than 280 stores.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tyres and tubes",
+      "summary": "Motorcycle, bicycle and other tyres and tubes; the group describes itself as the largest exporter of tyres and tubes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Technical rubber products",
+      "summary": "Technical rubber products, named among the company's stated principal activities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Servis Genuine Parts",
+      "summary": "Premium motorcycle spare parts, launched by the group in 2015.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Radial truck and bus tyres",
+      "summary": "Truck and bus radial tyres from Service Long March Tyres Limited, the group's joint venture with Chaoyang Long March Tyre Co. Ltd.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

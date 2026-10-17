@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for CHCC. Every fact here is attributable - see sourceNote. The company's own domain (cheratcement.com) did not respond from this host; the sources used are the Ghulam Faruque Group's Cherat Cement pages, which PSX lists as the company's website, and PSX-filed company documents. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "CHCC",
+  "description": "Cherat Cement Company Limited is a Ghulam Faruque Group company principally engaged in the manufacturing, marketing and sale of cement. Its plant is located at Village Lakrai, District Nowshera, Khyber Pakhtunkhwa, and its main product is Ordinary Portland Cement branded Cherat, joined by composite cement under the Cherat Khyber brand. The company was incorporated in Pakistan in 1981 and listed on the Pakistan Stock Exchange in 1993.",
+  "headOffice": "Head office: Modern Motors House, Beaumont Road, Karachi 75530, Pakistan. Registered office: Village Lakrai, P.O. Box 28, Nowshera, Khyber Pakhtunkhwa, Pakistan",
+  "phone": "+92 21 111 000 009",
+  "website": "https://gfg.com.pk/cccl/",
+  "ceo": "Azam Faruque",
+  "sourceNote": "Written from: gfg.com.pk/cccl (Ghulam Faruque Group Cherat Cement page - company products, head office, factory and UAN; PSX lists www.gfg.com.pk as the company's website) and the company's PSX-filed notice 'Appointment of Chairman and Chief Executive Officer' dated 16 October 2024 re-appointing Azam Faruque as Chief Executive Officer, plus the company's PSX-filed annual report for the year ended 30 June 2026 (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ordinary Portland Cement - Cherat",
+      "summary": "The company's main product: Ordinary Portland Cement manufactured under the Cherat brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Composite Cement - Cherat Khyber",
+      "summary": "Portland Composite Cement, introduced by the company under the Cherat Khyber brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Clinker",
+      "summary": "Clinker produced from a mix of local and imported inputs; Line III lifted clinker capacity to more than 14,700 tons per day and total capacity to more than 4.5 million tons per annum.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

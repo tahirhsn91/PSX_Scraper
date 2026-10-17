@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for PSEL. Every fact here is attributable - see sourceNote. No image is attached: hotel photography on the brand site is not licence-cleared for reuse. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PSEL",
+  "description": "Pakistan Services Limited is principally engaged in the hotel business and owns and operates the Pearl Continental Hotels chain in Pakistan. It manages six luxury hotels - at Karachi, Lahore, Rawalpindi, Bhurban, Malam Jabba and Muzaffarabad - comprising 1,445 rooms, with its registered office in Islamabad.",
+  "headOffice": "1st Floor, NESPAK House, G-5/2, Islamabad, Pakistan",
+  "phone": "+92 51 2272890-8",
+  "website": "https://www.psl.com.pk",
+  "ceo": "Bastien Paul Emile Blanc",
+  "sourceNote": "Written from: psl.com.pk/profile.php, psl.com.pk/hotels.php, psl.com.pk/contactus.php, psl.com.pk/directors.php (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Pearl-Continental Hotel, Karachi",
+      "summary": "One of the six Pearl-Continental hotels operated by the company; Club Road, Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pearl-Continental Hotel, Lahore",
+      "summary": "One of the six Pearl-Continental hotels operated by the company; Shahrah-e-Quaid-e-Azam, Lahore.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pearl-Continental Hotel, Rawalpindi",
+      "summary": "One of the six Pearl-Continental hotels operated by the company; The Mall Road, Rawalpindi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pearl-Continental Hotel, Bhurban",
+      "summary": "One of the six Pearl-Continental hotels operated by the company; Murree Hills, Bhurban.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pearl-Continental Hotel, Muzaffarabad",
+      "summary": "One of the six Pearl-Continental hotels operated by the company; Upper Chatter, Muzaffarabad.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pearl-Continental Hotel, Malam Jabba",
+      "summary": "One of the six luxury hotels the company states it manages, at Malam Jabba.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

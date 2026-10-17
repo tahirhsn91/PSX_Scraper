@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for KAPCO. Every fact here is attributable — see sourceNote. No image is attached: KAPCO's plant photography is the company's asset, not licence-cleared.",
+  "symbol": "KAPCO",
+  "description": "Kot Addu Power Company Limited was incorporated in April 1996 as a public limited company with the objective of acquiring the Kot Addu Power Plant from WAPDA, and was privatised in June 1996. Its principal activities are the ownership, operation and maintenance of the 1,600 MW nameplate capacity multi-fuel power plant at Kot Addu, Punjab, which it describes as Pakistan's largest combined cycle power plant. It sells the electrical energy produced to its single customer, the Central Power Purchasing Agency (Guarantee) Limited.",
+  "headOffice": "5-B/3, Gulberg-III, Lahore 54660, Pakistan (corporate office); registered office at Office No. 309, 3rd Floor, Evacuee Trust Complex, Agha Khan Road, F-5/1, Islamabad",
+  "phone": "+92 42 3577 2912-20",
+  "website": "https://www.kapco.com.pk",
+  "ceo": "Waqar Ahmad Khan",
+  "sourceNote": "Written from: kapco.com.pk homepage (company history), ?page_id=1460 (Our Business), ?page_id=451 (Office Addresses & Contacts), ?page_id=1486 (Senior Management) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Kot Addu Power Plant",
+      "summary": "A 1,600 MW multi-fuel (gas, light sulphur furnace oil and high speed diesel) combined cycle plant comprising 10 gas turbines and 5 steam turbines installed in five phases between 1985 and 1997, divided into three energy blocks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Electricity supply to CPPA-G",
+      "summary": "The plant's electrical output is sold to the company's single customer, the Central Power Purchasing Agency (Guarantee) Limited.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

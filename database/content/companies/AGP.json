@@ -1,0 +1,53 @@
+{
+  "symbol": "AGP",
+  "description": "AGP Limited began commercial operations in 1989 as an independent pharmaceutical manufacturing company in Karachi. It manufactures, markets and sells pharmaceuticals and healthcare products in the domestic and export market, growing through licensing arrangements with international companies as well as its own brands, and describes itself as one of the largest pharmaceutical companies in Pakistan. Its product list blends its own range of branded generics with branded products it licenses from principals abroad.",
+  "headOffice": "B-23-C, S.I.T.E. Area, Karachi-75700, Pakistan",
+  "phone": "+92 21 111 247 247",
+  "website": "https://agp.com.pk",
+  "ceo": "Muhammad Kamran Nasir",
+  "sourceNote": "Written from: agp.com.pk/company/about-agp, agp.com.pk/products/product-list and agp.com.pk/products (accessed 2026-10-17); CEO from AGP's half-yearly report for the period ended 30 June 2026 (agp.com.pk/wp-content/uploads/2026/08/AGP-Half-Yearly-Report-June-2026-Final.pdf) and the PSX company profile dps.psx.com.pk/company/AGP (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "AGP branded generics",
+      "summary": "The company's own range of branded generic medicines, listed on its product page across therapeutic classes including anti-infectives, cardiovascular, diabetes, CNS and gastro-intestinal products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Rigix",
+      "summary": "An AGP brand; the company states it owns the manufacturing and marketing rights in Pakistan for Rigix, along with Ceclor, Keflex and Nebcin.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ceclor",
+      "summary": "An international brand for which AGP states it owns the manufacturing and marketing rights in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Keflex",
+      "summary": "An international brand for which AGP states it owns the manufacturing and marketing rights in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nebcin",
+      "summary": "An international brand for which AGP states it owns the manufacturing and marketing rights in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Licensed and contract-manufactured products",
+      "summary": "Manufacturing and marketing under licensing arrangements with international pharmaceutical companies, alongside AGP's own brands; the company also describes a new product development team formulating new drugs.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for KEL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists on the open licence sources.",
+  "symbol": "KEL",
+  "description": "K-Electric Limited is a power utility that has been supplying Karachi for over 100 years, serving more than 3.7 million customers across a 6,500 square kilometre network spanning Karachi, Dhabeji and Gharo in Sindh and Uthal, Vinder and Bela in Balochistan. It describes itself as Pakistan's only vertically integrated power utility, managing generation, transmission and distribution across the whole energy value chain, with 2,397 MW of its own installed generation capacity supplemented by purchases from external producers and the National Grid. The utility was privatised in 2005.",
+  "headOffice": "KE House, 39-B, Sunset Boulevard, Phase-II, Defence Housing Authority, Karachi, Pakistan",
+  "phone": "+92 21 111 537 211",
+  "website": "https://ke.com.pk",
+  "ceo": "Syed Muhammad Taha",
+  "sourceNote": "Written from: https://ke.com.pk/who-we-are/, https://ke.com.pk/company-profile/, https://ke.com.pk/contact-us/, https://ke.com.pk/generation/ and https://ke.com.pk/board-of-directors/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Electricity distribution",
+      "summary": "Distribution of electricity to more than 3.7 million residential, commercial, industrial and agricultural customers across Karachi and parts of Sindh and Balochistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Power generation",
+      "summary": "Generation from the company's own units, with an installed capacity of 2,397 MW, supplemented by 2,283 MW sourced from external producers including the National Grid.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Transmission",
+      "summary": "Transmission of power across its network, including interconnection with the National Grid through the 500 kV KKI and 220 kV Dhabeji grids.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

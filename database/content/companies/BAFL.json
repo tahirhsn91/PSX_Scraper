@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for BAFL. Every fact is attributable — see sourceNote. No image is attached: the bank's own imagery is not licence-cleared and a stock photograph of a branch would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BAFL",
+  "description": "Bank Alfalah Limited is a Pakistani commercial bank with more than 1,200 branches across 250 cities and an international presence in the UAE, Bangladesh, Bahrain and Afghanistan. The institution was acquired as Habib Credit and Exchange Bank Limited by the Abu Dhabi Group, led by founder chairman Sheikh Nahayan Mabarak Al Nahayan, and renamed Bank Alfalah. It now offers conventional and Islamic banking to customers, private-sector firms and governments across corporate and investment banking, consumer banking, securities brokerage, and small and medium enterprise and agriculture financing.",
+  "headOffice": "B.A. Building, I.I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 111 225 111",
+  "website": "https://www.bankalfalah.com",
+  "ceo": "Atif Bajwa",
+  "sourceNote": "Written from: https://www.bankalfalah.com/about-bank-alfalah/ (branch network, international presence, heritage, product scope, head office and telephone) and https://www.bankalfalah.com/management/ (board of directors and President & CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Conventional and Islamic banking",
+      "summary": "The bank describes a comprehensive suite of conventional and Islamic banking solutions, with Islamic banking run as its own business group under a Group Head Islamic Banking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consumer banking",
+      "summary": "Retail banking for individual customers, including accounts, cards and consumer finance, alongside premier banking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate and investment banking",
+      "summary": "Corporate and investment banking services for customers, private-sector firms and governments, together with treasury and capital markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SME and agriculture financing",
+      "summary": "Financing for small and medium enterprises and for agriculture, listed among the bank's diversified portfolio.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Digital banking",
+      "summary": "Digital channels across a network of over 100,000 digital touchpoints — ATMs, CDMs and CCDMs — plus Alfa internet and mobile banking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for FCCL. Every fact here is attributable - see sourceNote. No image is attached: no licence-cleared photograph of FCCL's own plants exists, and a generic cement-plant photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FCCL",
+  "description": "Fauji Cement Company Limited (FCCL) is a Fauji Foundation company that manufactures and sells cement and tile bond. It describes itself as Pakistan's third largest cement producer, with an annual production capacity of 10.6 million tons across four cement plants - at Jhang Bahtar, Nizampur, Wah and Dera Ghazi Khan - and a polypropylene cement bag plant at Hattar. The company also states that it is the largest cement supplier to all major hydro power projects in Pakistan.",
+  "headOffice": "Fauji Towers, Block III, 68 Tipu Road, Chaklala, Rawalpindi, Pakistan",
+  "phone": "+92 51 9280075",
+  "website": "https://fccl.com.pk",
+  "ceo": "Qamar Haris Manzoor",
+  "sourceNote": "Written from: fccl.com.pk/eng/corporate-overview, fccl.com.pk/eng/products, fccl.com.pk/eng/contact, and the company's quarterly report for the period ended 31 March 2026 published on fccl.com.pk (registered office, telephone and Chief Executive / MD) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ordinary Portland Cement",
+      "summary": "General-purpose cement produced by the company, with the company stating compressive strength of up to 10,000 PSI at 28 days.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sulphate Resistant Cement",
+      "summary": "Cement for construction exposed to sulphate attack.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Portland Composite Cement 32.5 R",
+      "summary": "Composite cement offered in the 32.5 R class.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Low Alkali Cement 42.5 and 52.5",
+      "summary": "Low alkali cement in 42.5 and 52.5 grades.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pamir Cement (Green Cement)",
+      "summary": "The company's green cement product.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fauji Tile Bond",
+      "summary": "Tile bond adhesive manufactured and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

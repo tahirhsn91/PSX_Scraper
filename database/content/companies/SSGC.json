@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SSGC. Every fact here is attributable - see sourceNote. No image is attached: the company's own site imagery is not licence-cleared for reuse. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SSGC",
+  "description": "Sui Southern Gas Company Limited is a natural gas utility engaged in the transmission and distribution of natural gas in its franchise provinces of Sindh and Balochistan since 1954, with over 4,200 km of transmission and around 50,000 km of distribution pipelines. It purchases gas from onshore indigenous gas fields as well as RLNG re-gasification terminals and supplies some 3.5 million customers. It also operates a meter manufacturing plant assembling G-4 and G-16 domestic gas meters.",
+  "headOffice": "SSGC Head Office, Sir Shah Suleman Road, Gulshan-e-Iqbal, Karachi, Pakistan",
+  "phone": "+92 21 9902 1000",
+  "website": "https://www.ssgc.com.pk",
+  "ceo": "Muhammad Amin Rajput",
+  "sourceNote": "Written from: ssgc.com.pk/web/?page_id=68 (company profile), ssgc.com.pk/web/?page_id=6244 (Chairman, MD and DMD), ssgc.com.pk home page (head office address and telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Natural gas transmission and distribution",
+      "summary": "Transmission over more than 4,200 km of pipelines up to 42 inches in diameter, and distribution over around 50,000 km, in Sindh and Balochistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "RLNG supply",
+      "summary": "Regasified LNG purchased from re-gasification terminals and supplied alongside indigenous gas to customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "LPG marketing and distribution - SSGC-LPG Ltd.",
+      "summary": "The company states that SSGC-LPG Ltd. is its wholly-owned, fully integrated subsidiary engaged in the marketing and distribution of LPG across Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Gas meters",
+      "summary": "Domestic G-4 and G-16 gas meters assembled and manufactured at the company's meter manufacturing plant, to European standards.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

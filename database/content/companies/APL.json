@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for APL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of an APL outlet or terminal is available, and a generic forecourt photo would imply it is theirs.",
+  "symbol": "APL",
+  "description": "Attock Petroleum Limited is a Pakistani oil marketing company incorporated in December 1995, supplying fuels, lubricants and LPG through a nationwide network of more than 750 retail outlets and eight bulk oil terminals. Its commercial range covers motor gasoline, high-speed diesel, furnace oil, kerosene, light diesel oil, jet fuel, naphtha, solvents and bitumen, sold to industry, power producers, agriculture and government customers. Aviation refuelling at Islamabad International Airport is run through a joint venture with Pakistan State Oil, and the company has also set up electric-vehicle charging stations in Islamabad.",
+  "headOffice": "Attock House, Morgah, Rawalpindi, Pakistan",
+  "phone": "+92 51 5127250-4",
+  "website": "https://www.apl.com.pk",
+  "ceo": "Shuaib A. Malik",
+  "sourceNote": "Written from: apl.com.pk/corporate/company-profile/, /corporate/board-of-directors/, /retail-network/, /oil-terminals/, /commercial/, /aviation/, /lubricants/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Premier Motor Gasoline",
+      "summary": "Petrol supplied through APL's multi-fuel retail outlets and to commercial and industrial customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "High Speed Diesel",
+      "summary": "Diesel for vehicles, generators and industrial users, including cement plants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Furnace fuel oil",
+      "summary": "Industrial fuel for power generation, boilers, furnaces and bunkering; a residual high-viscosity grade is produced for power plants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Jet fuel",
+      "summary": "Jet A and Jet A-1 aviation fuel; refuelling at Islamabad International Airport operates through a joint venture with Pakistan State Oil.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lubricants",
+      "summary": "Attock-branded engine oils and industrial lubricants, covering automotive and industrial requirements.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "LPG",
+      "summary": "Liquefied petroleum gas sold by the company; APL also runs an LPG distributorship programme.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

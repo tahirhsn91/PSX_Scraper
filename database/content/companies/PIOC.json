@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for PIOC. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant is available from an open licence source.",
+  "symbol": "PIOC",
+  "description": "Pioneer Cement Limited was incorporated in Pakistan as a public company limited by shares on 9 February 1986 and its shares are quoted on the Pakistan Stock Exchange. Its principal activity is the manufacturing and sale of cement, produced at a plant located at Chenki, District Khushab, in central Punjab. The company markets Ordinary Portland Cement and Sulphate Resistant Cement.",
+  "headOffice": "64-B/I, Gulberg-III, Lahore, Pakistan",
+  "phone": "+92 42 3750 3570-72",
+  "website": "https://pioneercement.com",
+  "ceo": "Sayeed Tariq Saigol",
+  "sourceNote": "Written from: https://pioneercement.com/ (products, head office), https://pioneercement.com/about-us/company-profile/ and https://pioneercement.com/about-us/our-management/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ordinary Portland Cement",
+      "summary": "OPC, which the company describes as an ideal building material for almost all structural work including all kinds of concrete construction.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sulphate Resistant Cement",
+      "summary": "SRC, for construction where sulphate salts are present in the soil or saline water, particularly foundations and areas subject to sulphate attack.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

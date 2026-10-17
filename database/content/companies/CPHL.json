@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for CPHL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant is available, and a generic pharmaceutical photo would imply it is theirs.",
+  "symbol": "CPHL",
+  "description": "Citi Pharma Limited is a Pakistani pharmaceutical manufacturer whose plant sits on 47 acres at 3 km Head Balloki Road near Bhai Pheru, Kasur, with more than 800,000 sq ft of covered area. Production there began in 1996 and formulation manufacturing was established in 2003, and the company now makes active pharmaceutical ingredients, finished formulations and nutraceuticals. It describes its 25,000 sq ft research and development facility as Pakistan's largest pharmaceutical R&D laboratory.",
+  "headOffice": "588-Q Block, M.A. Johar Town, Lahore, Punjab, Pakistan",
+  "phone": "+92 49 3516587",
+  "website": "https://www.citipharma.com.pk",
+  "ceo": "Rizwan Ahmad",
+  "sourceNote": "Written from: https://www.citipharma.com.pk/about-us/, https://www.citipharma.com.pk/contact-us/, https://www.citipharma.com.pk/api/, https://www.citipharma.com.pk/formulations/, https://www.citipharma.com.pk/nutraceuticals/ and the company's Directors' Profile PDF at https://www.citipharma.com.pk/wp-content/uploads/2026/10/Directors-Profile.pdf (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Active pharmaceutical ingredients (APIs)",
+      "summary": "Bulk APIs across analgesic, antibiotic, anti-diabetic, anti-ulcer and cardiovascular classes, including paracetamol, ciprofloxacin, amoxicillin, metformin HCl and omeprazole, as listed on the company's API page.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Finished formulations",
+      "summary": "Finished dosage pharmaceutical formulations, the business the company established at its Kasur plant in 2003.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nutraceuticals",
+      "summary": "Vitamin, mineral and supplement tablets including Vitamina-Z, Vitolux, Cidoxon, Redcal and Jonty-OD, with compositions and pack sizes published by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
