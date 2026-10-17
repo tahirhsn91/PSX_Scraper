@@ -30,6 +30,8 @@ router.get(
 router.post('/market-cap/refresh', mutationLimiter, asyncHandler(ctrl.refreshMarketCaps));
 router.post('/beta/refresh', mutationLimiter, asyncHandler(ctrl.refreshBeta));
 router.post('/logos/refresh', mutationLimiter, asyncHandler(ctrl.refreshStockLogos));
+// Before `/:symbol`, or "presets" would be read as a ticker.
+router.get('/presets', asyncHandler(ctrl.listPresets));
 router.get('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.getStock));
 router.delete('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.deleteStock));
 router.post('/:symbol/sync', mutationLimiter, validate(symbolParam, 'params'), asyncHandler(ctrl.syncStock));

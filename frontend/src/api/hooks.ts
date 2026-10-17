@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
-  Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
+  ScreenerPreset, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
   StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod,
@@ -65,16 +65,21 @@ export const useStocks = (
   group?: StockListGroup,
   index?: string,
   filters?: StockFilters,
+  /**
+   * A named screen. When set, the server supplies the criteria, the ordering and each row's
+   * reason, so the client must not also send a sort — it would fight the preset.
+   */
+  preset?: string,
 ) =>
   useQuery({
     // The sort belongs in the key: a different order is a different page of data, not a
     // re-render of this one.
-    queryKey: keys.stocks(page, limit, sort, order, group, index, filters),
+    queryKey: [...keys.stocks(page, limit, sort, order, group, index, filters), preset ?? ''],
     queryFn: async () => {
       // Undefined params are dropped from the query string by axios, so "no scope" really is
       // no `group` / `index` on the wire rather than an empty one. Screener/watchlist filters are
       // spread in, with `symbols` joined back to a comma string.
-      const params: Record<string, unknown> = { page, limit, sort, order, group, index };
+      const params: Record<string, unknown> = { page, limit, sort, order, group, index, preset };
       if (filters) {
         for (const [k, v] of Object.entries(filters)) {
           if (v != null) params[k] = k === 'symbols' ? (v as string[]).join(',') : v;
@@ -341,4 +346,15 @@ export const useDividends = () =>
   useQuery({
     queryKey: keys.dividends,
     queryFn: async () => (await api.get<DividendData>('/market/dividends')).data,
+  });
+
+/**
+ * The named screens the screener offers. The definitions come from the server so the chips, the
+ * criteria they apply and the reason printed on each row cannot drift apart between clients.
+ */
+export const useScreenerPresets = () =>
+  useQuery({
+    queryKey: ['screener', 'presets'],
+    queryFn: async () => (await api.get<{ items: ScreenerPreset[] }>('/stocks/presets')).data,
+    staleTime: 60 * 60 * 1000,
   });
