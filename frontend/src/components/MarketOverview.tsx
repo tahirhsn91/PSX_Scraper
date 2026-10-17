@@ -331,6 +331,19 @@ export function MarketOverview() {
                     Show more movers
                   </Button>
                 )}
+                {/*
+                  The expander is for a glance; the page is for the ranking. It names the window and
+                  the liquidity rule, which a three-row preview cannot.
+                */}
+                <Button
+                  size="small"
+                  fullWidth
+                  component={RouterLink}
+                  to="/movers"
+                  sx={{ mt: hasMore ? 0.5 : 'auto' }}
+                >
+                  Full rankings
+                </Button>
                 {expanded && (
                   <Button
                     size="small"
