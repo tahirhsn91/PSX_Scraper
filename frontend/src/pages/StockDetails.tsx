@@ -28,6 +28,7 @@ import { QuickJumpNav, type QuickJumpSection } from '../components/QuickJumpNav'
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { PageHeader } from '../components/ui/PageHeader';
+import { DataStatus } from '../components/ui/DataStatus';
 import { SectionCard } from '../components/ui/SectionCard';
 import { Reveal } from '../components/ui/Reveal';
 import { StatTile } from '../components/ui/StatTile';
@@ -376,6 +377,7 @@ export function StockDetails() {
         crumbs={[{ label: 'Market board', to: '/' }, { label: data.symbol }]}
         meta={
           <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center">
+            <DataStatus dataset="quotes" />
             {isDev && data.lastSync && (
               <Chip
                 size="small"

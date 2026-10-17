@@ -1,5 +1,6 @@
 import { useDividends } from '../api/hooks';
 import { PageHeader } from '../components/ui/PageHeader';
+import { DataStatus } from '../components/ui/DataStatus';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { formatNumber, formatDate, DASH } from '../lib/format';
@@ -87,6 +88,7 @@ export function Dividends() {
       <PageHeader
         title="Dividends"
         subtitle="Upcoming announcements and the market's highest yields — the source carries only the announcement date"
+        meta={<DataStatus dataset="dividends" />}
       />
       <SectionCard
         title="Upcoming dividends"

@@ -426,3 +426,35 @@ export interface DividendData {
   upcoming: DividendEvent[];
   topYield: YieldRow[];
 }
+
+/** How current a dataset is — the words the API is willing to stand behind. */
+export type DatasetStatus = 'live' | 'delayed' | 'end-of-day' | 'stale' | 'unavailable';
+
+export interface DatasetFreshness {
+  /** ISO instant of the newest stored reading, or null when nothing is stored. */
+  asOf: string | null;
+  status: DatasetStatus;
+  source: string;
+  ageSeconds: number | null;
+}
+
+export type SessionLabel = 'open' | 'pre-open' | 'post-close' | 'weekend' | 'holiday';
+
+/**
+ * Session state and per-dataset freshness from `GET /market/status`. One payload for the whole
+ * app, so that the dashboard, a stock page and the dividends table cannot disagree about whether
+ * the market is open or how old the numbers are.
+ */
+export interface MarketStatus {
+  now: string;
+  marketDate: string;
+  lastSessionDate: string | null;
+  session: 'open' | 'closed';
+  sessionLabel: SessionLabel;
+  datasets: {
+    quotes: DatasetFreshness;
+    indices: DatasetFreshness;
+    candles: DatasetFreshness;
+    dividends: DatasetFreshness;
+  };
+}

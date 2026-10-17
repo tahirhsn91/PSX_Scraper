@@ -26,6 +26,7 @@ import { IndicesPanel } from "../components/IndicesPanel";
 import { MarketOverview } from "../components/MarketOverview";
 import { WatchButton } from "../components/WatchButton";
 import { PageHeader } from "../components/ui/PageHeader";
+import { DataStatus } from "../components/ui/DataStatus";
 import { SectionCard } from "../components/ui/SectionCard";
 import { Reveal } from "../components/ui/Reveal";
 import { StatTile } from "../components/ui/StatTile";
@@ -34,7 +35,7 @@ import { LiveNumber } from "../components/ui/LiveNumber";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { DataTable, type Column, type SortState } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
-import { DASH, formatCount, formatMarketCap, formatNumber, formatRelative, formatRupees, formatSigned } from "../lib/format";
+import { DASH, formatCount, formatMarketCap, formatNumber, formatRupees, formatSigned } from "../lib/format";
 import { isDev } from "../lib/env";
 import { isPsxSessionOpen } from "../lib/session";
 import type { StockListItem, StockSortField, SortOrder } from "../types";
@@ -427,15 +428,6 @@ export function Dashboard() {
     return () => clearTimeout(t);
   }, [isLoading]);
 
-  const newestReading = useMemo(() => {
-    const stamps = (data?.items ?? [])
-      .map((s) => s.lastSyncedAt)
-      .filter((v): v is string => Boolean(v))
-      .map((v) => new Date(v).getTime())
-      .filter((n) => Number.isFinite(n));
-    return stamps.length > 0 ? new Date(Math.max(...stamps)) : null;
-  }, [data]);
-
   const submit = () => {
     const s = symbol.trim().toUpperCase();
     if (!/^[A-Z0-9]{1,12}$/.test(s)) return;
@@ -564,9 +556,8 @@ export function Dashboard() {
     <Box>
       <PageHeader
         title="Market board"
-        subtitle={`${formatCount(universeCount)} tracked securities${
-          newestReading ? ` · newest reading ${formatRelative(newestReading)}` : ""
-        }`}
+        subtitle={`${formatCount(universeCount)} tracked securities`}
+        meta={<DataStatus dataset="quotes" session />}
         actions={
           <>
             {isDev && (
