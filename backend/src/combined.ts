@@ -25,12 +25,13 @@ import { env } from './config';
 import { logger } from './utils/logger';
 import { disconnectPrisma } from './database/prisma';
 import { createRedisConnection } from './jobs/connection';
-import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE, QUOTE_QUEUE } from './jobs/queues';
+import { SYNC_QUEUE, SYNC_ALL_QUEUE, HISTORY_QUEUE, QUOTE_QUEUE, COMPANY_PROFILE_QUEUE } from './jobs/queues';
 import { registerScheduler } from './jobs/scheduler';
 import { processSyncJob } from './workers/syncProcessor';
 import { processSyncAllJob } from './workers/syncAllProcessor';
 import { processHistoryJob } from './workers/historyProcessor';
 import { processQuotePollJob } from './workers/quoteProcessor';
+import { processCompanyProfileSyncJob } from './workers/companyProfileProcessor';
 import { browserPool } from './scrapers/browserPool';
 
 async function main() {
@@ -61,7 +62,14 @@ async function main() {
     concurrency: 1,
   });
 
-  for (const w of [syncWorker, syncAllWorker, historyWorker, quoteWorker]) {
+  // The weekly company-profile sync is cheap (local files, no browser) and the scheduler that
+  // registers it runs in this process, so its consumer has to live here too.
+  const companyProfileWorker = new Worker(COMPANY_PROFILE_QUEUE, processCompanyProfileSyncJob, {
+    connection,
+    concurrency: 1,
+  });
+
+  for (const w of [syncWorker, syncAllWorker, historyWorker, quoteWorker, companyProfileWorker]) {
     w.on('completed', (job) => logger.info('job.completed', { queue: w.name, id: job.id }));
     w.on('failed', (job, err) =>
       logger.error('job.failed', { queue: w.name, id: job?.id, error: err.message }),
@@ -80,6 +88,7 @@ async function main() {
       syncAllWorker.close(),
       historyWorker.close(),
       quoteWorker.close(),
+      companyProfileWorker.close(),
     ]);
     await browserPool.close();
     await disconnectPrisma();

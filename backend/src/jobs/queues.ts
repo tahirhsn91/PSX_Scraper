@@ -93,6 +93,9 @@ export interface IndexBoardJobData { trigger: 'cron' }
 export interface IndexContributionJobData { trigger: 'cron' }
 export interface QuotePollJobData { trigger: 'manual' | 'cron' }
 
+/** The weekly company-profile sync takes no argument beyond who asked for it. */
+export interface CompanyProfileSyncJobData { trigger: 'manual' | 'cron' }
+
 const connection = createRedisConnection();
 
 export const syncQueue = new Queue<SyncJobData>(SYNC_QUEUE, {
@@ -285,6 +288,48 @@ export const universeQueue = new Queue<UniverseJobData>(UNIVERSE_QUEUE, {
 });
 
 /**
+ * The company-profile sync, on a queue of its own.
+ *
+ * Every other schedule here rides an existing queue because the work is the same kind — light
+ * HTTP, or browser-bound, or per-symbol fan-out. This one is none of those: it reads the
+ * committed `database/content/companies/*.json` files and upserts ~511 profiles in local
+ * transactions. No network, no browser, no fan-out. A separate queue means the weekly job cannot
+ * sit behind quote ticks or a browser-bound sync, and its failures get their own line on the
+ * status endpoint instead of disappearing into `quote-sync`.
+ *
+ * `attempts: 2`: a malformed content file will not fix itself, but a database blip during 511
+ * upserts might, and the run is idempotent — a retry re-writes the same rows.
+ */
+export const COMPANY_PROFILE_QUEUE = 'company-profile-sync';
+export const COMPANY_PROFILE_SYNC_JOB = 'company-profile-sync';
+
+export const companyProfileQueue = new Queue<CompanyProfileSyncJobData>(COMPANY_PROFILE_QUEUE, {
+  connection,
+  defaultJobOptions: {
+    attempts: 2,
+    backoff: { type: 'exponential', delay: 30_000 },
+    removeOnComplete: { age: 7 * 86400, count: 20 },
+    removeOnFail: { age: 7 * 86400, count: 20 },
+  },
+});
+
+/**
+ * Queue the company-profile sync on demand — the same job the weekend schedule runs.
+ *
+ * The id is timestamped rather than fixed: a manual run while the weekly one is queued is a
+ * different request, and stale finish-state must not block a re-add.
+ */
+export async function enqueueCompanyProfileSync(
+  trigger: CompanyProfileSyncJobData['trigger'] = 'manual',
+) {
+  return companyProfileQueue.add(
+    COMPANY_PROFILE_SYNC_JOB,
+    { trigger },
+    { jobId: `company-profile-sync-${Date.now()}` },
+  );
+}
+
+/**
  * Every queue the dashboard reports on, keyed by the name it is displayed under.
  *
  * One map, two consumers: `GET /sync/status` reports each queue's counts and failures from it,
@@ -299,6 +344,7 @@ export const monitoredQueues: Record<MonitoredQueueName, Queue> = {
   [INDEX_QUEUE]: indexQueue,
   [QUOTE_QUEUE]: quoteQueue,
   [UNIVERSE_QUEUE]: universeQueue,
+  [COMPANY_PROFILE_QUEUE]: companyProfileQueue,
 };
 
 /**

@@ -15,6 +15,8 @@ import {
   SESSION_CANDLE_JOB,
   UNIVERSE_PASS_JOB,
   universeQueue,
+  companyProfileQueue,
+  COMPANY_PROFILE_SYNC_JOB,
 } from "./queues";
 import { indexRepository } from "../repositories/index.repository";
 
@@ -302,6 +304,48 @@ async function registerLogoRefreshSchedule(): Promise<void> {
   logger.info('scheduler.logo_refresh_registered', { cron: env.LOGO_REFRESH_CRON });
 }
 
+/**
+ * Register the company-profile sync.
+ *
+ * Weekly, over the weekend: these are editorial write-ups that change when a person edits the
+ * committed files, not with the market. The job reads them from disk — no network, no browser — so
+ * it belongs outside session hours; 02:00 UTC Saturday is 07:00 PKT, after a week's deploys have
+ * landed and before the board opens.
+ *
+ * Same pattern reconciliation as every schedule here: BullMQ keys a repeatable by pattern, so a
+ * changed cron must not leave the old one ticking beside the new one.
+ */
+async function registerCompanyProfileSchedule(): Promise<void> {
+  for (const job of await companyProfileQueue.getRepeatableJobs()) {
+    if (job.name !== COMPANY_PROFILE_SYNC_JOB || job.pattern === env.COMPANY_PROFILE_SYNC_CRON) continue;
+    await companyProfileQueue.removeRepeatableByKey(job.key);
+    logger.info('scheduler.company_profile_pattern_replaced', {
+      was: job.pattern,
+      now: env.COMPANY_PROFILE_SYNC_CRON,
+    });
+  }
+
+  if (!env.COMPANY_PROFILE_SYNC_ENABLED) {
+    // Switched off: drop a registration left by an earlier configuration, so an upgrade that
+    // disables the pass does not keep ticking.
+    for (const job of await companyProfileQueue.getRepeatableJobs()) {
+      if (job.name === COMPANY_PROFILE_SYNC_JOB) await companyProfileQueue.removeRepeatableByKey(job.key);
+    }
+    logger.info('scheduler.company_profile_disabled');
+    return;
+  }
+
+  await companyProfileQueue.add(
+    COMPANY_PROFILE_SYNC_JOB,
+    { trigger: 'cron' },
+    {
+      repeat: { pattern: env.COMPANY_PROFILE_SYNC_CRON },
+      jobId: 'scheduled-company-profile-sync',
+    },
+  );
+  logger.info('scheduler.company_profile_registered', { cron: env.COMPANY_PROFILE_SYNC_CRON });
+}
+
 export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
   await registerKse100MembershipSchedule();
@@ -312,6 +356,7 @@ export async function registerScheduler(): Promise<void> {
   await registerUniversePassSchedule();
   await registerIndexBoardSchedule();
   await registerIndexContributionSchedule();
+  await registerCompanyProfileSchedule();
 
   await syncAllQueue.add(
     "scheduled-sync-all",

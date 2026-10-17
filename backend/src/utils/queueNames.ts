@@ -12,6 +12,7 @@ export const MONITORED_QUEUES = [
   'index-sync',
   'quote-sync',
   'universe-sync',
+  'company-profile-sync',
 ] as const;
 
 export type MonitoredQueueName = (typeof MONITORED_QUEUES)[number];
