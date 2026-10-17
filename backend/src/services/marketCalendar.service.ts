@@ -165,3 +165,36 @@ export async function holidayOn(date: Date): Promise<HolidayRow | null | undefin
 export async function tradingDayState(date: Date): Promise<TradingDayState> {
   return classifyTradingDay(date, await holidayOn(date));
 }
+
+/**
+ * Walk back from `date` to the most recent day the exchange actually traded.
+ *
+ * The point is the quote row key. A reading taken on a Saturday still carries Friday's prices, but
+ * the session stamp used to be "today", so the hourly sync wrote a *Saturday session* into the
+ * price table — 2,101 such rows across five weekends on the dev database. The next run then
+ * compared the source's change% (measured against Friday's close) with a previous close that was
+ * already Saturday's copy of Friday's price, implied 0%, and rejected a perfectly good number:
+ * that is the PARTIAL storm this fixes.
+ *
+ * The time of day is preserved (16:00 PKT), because that is the row-key convention every writer
+ * shares. `unknown` keeps the reading where it is: an unreadable calendar must not silently move
+ * today's prices into yesterday.
+ */
+export async function walkBackToTradingDay(
+  date: Date,
+  stateOf: (d: Date) => Promise<TradingDayState> = tradingDayState,
+  maxDays = 10,
+): Promise<Date | null> {
+  let day = new Date(date);
+  for (let i = 0; i < maxDays; i += 1) {
+    const state = await stateOf(day);
+    if (state === 'trading' || state === 'unknown') return day;
+    day = new Date(day.getTime() - 24 * 60 * 60 * 1000);
+  }
+  return null;
+}
+
+/** `walkBackToTradingDay` against the real calendar. */
+export async function tradingDayOnOrBefore(date: Date): Promise<Date | null> {
+  return walkBackToTradingDay(date, tradingDayState);
+}

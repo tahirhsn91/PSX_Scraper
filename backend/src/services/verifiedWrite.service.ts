@@ -3,6 +3,7 @@ import { persistScrapeResult } from '../repositories/scrapeResult.repository';
 import { median, previousCloseBefore, recentVolumes } from '../repositories/stockPrice.repository';
 import { env } from '../config';
 import { betaService } from './beta.service';
+import { tradingDayOnOrBefore } from './marketCalendar.service';
 import { childLogger } from '../utils/logger';
 import {
   type ScrapedQuote,
@@ -93,11 +94,39 @@ export function rejectionSummary(verification: VerificationResult): string | und
   return rejected.map((v) => `${v.field}: ${v.reason ?? 'rejected'}`).join('; ');
 }
 
+/**
+ * Keep the session stamp on a day the exchange traded.
+ *
+ * The company page carries no trade date, so a sync run on a Saturday stamped its reading as a
+ * Saturday session: a row that never existed, carrying Friday's prices. Because the next run then
+ * measured the source's change% against that copy rather than Thursday's close, the verification
+ * implied 0.00% and rejected a correct number — the source of the PARTIAL storm in #195.
+ *
+ * Done here, at the single door every write goes through, rather than in each scraper: the manual
+ * sync, the universe pass and the quote poll all reach the table this way.
+ */
+async function clampSessionStamp(result: ScrapeResult): Promise<{ from: string; to: string } | null> {
+  const raw = result.price?.lastTradeDate;
+  if (!raw) return null;
+  const date = new Date(raw);
+  if (Number.isNaN(date.getTime())) return null;
+
+  const day = await tradingDayOnOrBefore(date);
+  if (!day || day.getTime() === date.getTime()) return null;
+
+  result.price!.lastTradeDate = day.toISOString();
+  return { from: raw, to: day.toISOString() };
+}
+
 export async function verifyAndPersist(
   result: ScrapeResult,
   opts: { stockId: string | null; now?: Date; log?: ReturnType<typeof childLogger> },
 ): Promise<VerifiedWrite> {
   const now = opts.now ?? new Date();
+  const clamped = await clampSessionStamp(result);
+  if (clamped) {
+    opts.log?.info('write.session_clamped', clamped);
+  }
   const quote = toScrapedQuote(result.symbol, result);
   const verification = verifyQuote(quote, await buildContext(opts.stockId, quote.sessionDate, now));
 
