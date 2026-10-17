@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for WAVESAPP. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "WAVESAPP",
+  "description": "Waves Home Appliances Limited (formerly Samin Textiles Limited) is a public limited company listed on the Pakistan Stock Exchange that manufactures, assembles and wholesales domestic consumer appliances and other light engineering products. It is a subsidiary of Waves Corporation Limited (formerly Waves Singer Pakistan Limited). The Waves appliance business itself dates from 1971, when the group introduced Pakistan's first deep freezer in Lahore; refrigerators followed in 1976, split air conditioners in 2002 and washing machines in 2004.",
+  "headOffice": "9 KM Multan Road, Hanjarwal, Lahore, Pakistan",
+  "phone": "+92 42 3541 5421-5",
+  "website": "https://waves.net.pk",
+  "ceo": "Haroon Ahmad Khan",
+  "sourceNote": "Company website (waves.net.pk: about, products, contact) and the PSX Data Portal company record for WAVESAPP, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Refrigerators",
+      "summary": "Refrigerator production began in 1976 and is one of the group's longest-running appliance lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Deep freezers",
+      "summary": "The product the business was founded on: Waves introduced Pakistan's first deep freezer in 1971.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Split air conditioners",
+      "summary": "Added to the range in 2002.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Washing machines",
+      "summary": "Waves began washing-machine manufacturing in Pakistan in 2004.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Microwave ovens and water heaters",
+      "summary": "Small kitchen and winter appliances in the current range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commercial chest coolers and visi coolers",
+      "summary": "Coolers sold for retail and commercial use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

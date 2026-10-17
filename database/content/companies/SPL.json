@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SPL",
+  "description": "Sitara Peroxide Limited produces hydrogen peroxide in Pakistan. It is part of the Sitara group, whose chemical business began with the commissioning of Sitara Chemical Industries Limited in 1981. The company says its plant equipment was imported from manufacturers in the United States and Europe and its chemicals are produced using technology from AK-KIM.",
+  "headOffice": "Mumtaz Hasan Road, Karachi, Pakistan",
+  "phone": null,
+  "website": "https://sitaraperoxide.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website (sitaraperoxide.com.pk home page), read 2026-10-17. The site gives only a street address in Karachi and a fax number; no telephone number was published.",
+  "products": [
+    {
+      "name": "Hydrogen peroxide",
+      "summary": "The company's single reported product line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

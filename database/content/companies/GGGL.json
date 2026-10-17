@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for GGGL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "GGGL",
+  "description": "Ghani Global Glass Limited is a Lahore-based glass manufacturer incorporated in October 2007 as Ghani Tableware (Private) Limited, renamed Ghani Global Glass Limited in 2009 and listed on the Pakistan Stock Exchange in December 2014 through a merger with Libas Textiles Limited. It makes glass tubes, glassware, vials, ampoules and chemicals, largely for the pharmaceutical and healthcare industries, at a plant on Lahore–Multan Road at Phool Nagar, District Kasur. It is a subsidiary of Ghani Global Holdings Limited.",
+  "headOffice": "10-N, Model Town Extension, Lahore 54000, Pakistan",
+  "phone": "+92 42 3516 1424-5",
+  "website": "https://ghaniglobalglass.com",
+  "ceo": "Atique Ahmad Khan",
+  "sourceNote": "Company website (ghaniglobalglass.com: our company, contact us) and the PSX Data Portal company record for GGGL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Glass tubes",
+      "summary": "Glass tubing drawn on the company's furnace lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pharmaceutical vials and ampoules",
+      "summary": "Primary glass packaging for the healthcare industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Glassware",
+      "summary": "Domestic and commercial glassware, the business the company was originally formed for as Ghani Tableware.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Chemicals",
+      "summary": "Chemical products manufactured and sold alongside the glass lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

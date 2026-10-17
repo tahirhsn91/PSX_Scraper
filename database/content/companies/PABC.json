@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for PABC. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "PABC",
+  "description": "Pakistan Aluminium Beverage Cans Limited (PABC) is Pakistan's first aluminium beverage can manufacturer, incorporated in December 2014, with commercial production starting in September 2017 at M-3 Industrial City, Faisalabad. Its annual capacity has been raised from 700 million cans at start-up to 1,200 million cans, and it supplies customers in Pakistan and abroad. The company listed on the Pakistan Stock Exchange in July 2021.",
+  "headOffice": "PHA Flat No. 04, Block No. 12, G-8/4, Islamabad (registered office); main office and production facility at Plot 29-30, Main Boulevard, M-3 Industrial City, Sahianwala, Faisalabad",
+  "phone": "+92 41 8731364",
+  "website": "https://www.pkbevcan.com",
+  "ceo": "Zain Ashraf Mukaty",
+  "sourceNote": "Company website (pkbevcan.com: about-us, company information, contact) and the PSX company profile (dps.psx.com.pk/company/PABC: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Aluminium beverage cans",
+      "summary": "Two-piece aluminium beverage cans produced at M-3 Industrial City, Faisalabad, with annual capacity raised to 1,200 million cans; sold in Pakistan and exported.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

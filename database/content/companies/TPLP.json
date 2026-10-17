@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for TPLP. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "TPLP",
+  "description": "TPL Properties Limited is a real estate company incorporated on 14 February 2007, converted to a public company and listed on the Pakistan Stock Exchange in 2016, and part of the TPL group. It offers development services, facility management and fund management, with an investment portfolio spanning residential, commercial, retail, hospitality and logistics warehousing, and it seeks LEED Gold certification for its projects. Its first commercial project, Centrepoint, was completed in 2013 and later acquired by a leading bank as its head office.",
+  "headOffice": "20th Floor, Sky Tower-East Wing, Dolmen City, HC-3, Block 4, Abdul Sattar Edhi Avenue, Clifton, Karachi, Pakistan",
+  "phone": null,
+  "website": "https://tplproperty.com",
+  "ceo": "Muhammad Ali Jameel",
+  "sourceNote": "Company website (tplproperty.com: our story, contact us) and the PSX Data Portal company record for TPLP, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Centrepoint",
+      "summary": "The company's first commercial development, completed in 2013 and later acquired by a leading bank to serve as its head office.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "One Hoshang",
+      "summary": "A residential development in the company's portfolio.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "The Mangrove",
+      "summary": "A mixed-use development at Korangi Creek, Karachi, with a dedicated biodiversity park.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

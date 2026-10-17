@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for ICCI. Every fact is attributable — see sourceNote. The company's principal activity was formally changed to warehousing, so the grey-fabric business is described as its former line rather than a current product. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "ICCI",
+  "description": "ICC Industries Limited, formerly ICC Textiles Limited, was incorporated in Pakistan on 25 May 1989 and is listed on the Pakistan Stock Exchange. It formerly manufactured and sold grey fabric and rented out vacant buildings and open areas of its premises; during the most recent year its principal activity was changed to providing warehousing services to customers. Its head office is at 242-A, Anand Road, Upper Mall, Lahore.",
+  "headOffice": "242-A, Anand Road, Upper Mall, Lahore 54000, Pakistan",
+  "phone": "+92 42 3575 1765",
+  "website": "http://icctextiles.com",
+  "ceo": "Javaid S. Siddiqi",
+  "sourceNote": "PSX Data Portal company record for ICCI (business description and key people) and the company website icctextiles.com (company profile, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Warehousing services",
+      "summary": "Warehousing provided to customers from the company's premises, its principal activity after the change of business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

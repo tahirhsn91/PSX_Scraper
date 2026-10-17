@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for DNCC. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists, and a generic cement-industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "DNCC",
+  "description": "Dandot Cement Company Limited was incorporated in 1980 and began production in 1983, when Pakistan's cement sector was state-owned under the State Cement Corporation. Its plant, installed in 1982 and supplied and erected by Mitsubishi Heavy Industries of Japan, was designed for 1,000 tonnes of clinker a day and was later optimised by FLSmidth of Denmark to 1,600 tonnes a day. The company passed through the Chakwal Group, Gharibwal Cement and the Three Star Group, and has since been acquired by Calicom Industries (Private) Limited. It produces ordinary Portland grey cement and sells it nationwide through dealers and distributors.",
+  "headOffice": "5-Zafar Ali Road, Gulberg V, Lahore, Pakistan",
+  "phone": "+92 42 111 184 184",
+  "website": "https://www.dandotcement.com",
+  "ceo": null,
+  "sourceNote": "Written from: https://www.dandotcement.com/profile.html (incorporation, start of production, plant history, capacity and optimisation, successive owners) and https://www.dandotcement.com/generalbusinessactivities.html (ordinary Portland grey cement, dealer and distributor network, registered office address and telephone) (accessed 2026-10-17). No chief executive is named on the pages read, so ceo is null.",
+  "products": [
+    {
+      "name": "Ordinary Portland grey cement",
+      "summary": "The company's stated product, sold in local markets through a nationwide network of dealers and distributors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for PKGI. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Head office address, telephone and chief executive are null — the company's site publishes none of them.",
+  "symbol": "PKGI",
+  "description": "The Pakistan General Insurance Company Limited (PGI) is a Pakistani general insurer incorporated in 1947, the year of independence, and describes itself as protecting Pakistan for more than 75 years. It writes motor, property and fire, marine, engineering, bonds and guarantees, and corporate and miscellaneous general insurance. The company suspended business and was revived in the last quarter of 2024 with a strengthened capital structure; its chairman describes it as having re-entered the market with rebuilt governance, professional management and upgraded systems.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://pgi.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website (pgi.com.pk: 'incorporated in 1947' heritage statement, the product lines listed, SECP regulation, and the chairman's message describing the revival of the company in the last quarter of 2024), read 2026-10-17. No head office address, telephone number or chief executive is published on the pages read; the only executive named is the chief financial officer and deputy managing director, so ceo is null.",
+  "products": [
+    {
+      "name": "Motor insurance",
+      "summary": "Comprehensive and third-party cover for cars, motorcycles and commercial vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Property and fire insurance",
+      "summary": "Cover for homes and valuables against fire, theft, natural disasters and personal liability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Marine insurance",
+      "summary": "Cargo and hull cover for import, export and domestic shipments.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engineering insurance",
+      "summary": "Cover for construction projects, machinery breakdown and industrial plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bonds and guarantees",
+      "summary": "Performance bonds, tender guarantees and financial guarantees for contractors and businesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate and miscellaneous",
+      "summary": "Group health, corporate liability and other specialised cover for businesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

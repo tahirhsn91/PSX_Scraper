@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for KHTC. Every fact here is attributable — see sourceNote. ceo is null: the website publishes a directors' and management page but names no chief executive there. No image is attached: brand pack photography is the company's own.",
+  "symbol": "KHTC",
+  "description": "Khyber Tobacco Company Limited was established in 1954 and is a cigarette manufacturer and tobacco exporter based at Nowshera Road, Mardan in Khyber Pakhtunkhwa. The company says it has built research and development in blending formulas and sells its brands in both domestic and export markets.",
+  "headOffice": "Nowshera Road, Mardan, Khyber Pakhtunkhwa, Pakistan",
+  "phone": "+92 937 844639",
+  "website": "https://khybertobacco.com",
+  "ceo": null,
+  "sourceNote": "Company website (khybertobacco.com: about, our-brands, footer contact information), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Gold Street International",
+      "summary": "A cigarette brand the company lists among its own brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Gold Street Classic",
+      "summary": "A cigarette brand the company lists among its own brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tobacco export",
+      "summary": "Tobacco and cigarettes sold to export markets, which the company describes as part of its business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

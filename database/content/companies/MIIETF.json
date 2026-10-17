@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "MIIETF",
+  "description": "Mahaana Islamic Index Exchange Traded Fund (MIIETF) is a Shariah-compliant exchange-traded fund managed by Mahaana Wealth Limited and listed on the Pakistan Stock Exchange; it describes itself as Pakistan's first broader-index Islamic ETF. It tracks the performance of the top 30 Shariah-compliant companies in Pakistan, giving exposure across oil and gas exploration, fertiliser, cement, power and commercial banks.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://mahaana.com",
+  "ceo": null,
+  "sourceNote": "Company website (mahaana.com: MIIETF fund page and FAQs), read 2026-10-17.",
+  "products": []
+}

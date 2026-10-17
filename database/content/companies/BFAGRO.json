@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BFAGRO",
+  "description": "Barkat Frisian Agro Limited is a joint venture between the Buksh Group, a Pakistani family group with interests in poultry, textiles, feed and steel, and the Frisian Egg Group of the Netherlands, which has produced egg products for more than three decades with facilities in the Netherlands, Egypt, China and Pakistan. The company produces value-added egg products to European standards for food categories that use eggs, including bakery, confectionery and food dressings.",
+  "headOffice": "Office No. 601, 6th Floor, Balad Trade Center-III (BTC-3), Khayaban-e-Jami, Block-7, Plot D-75, Clifton, Karachi, Pakistan",
+  "phone": null,
+  "website": "https://www.barkatfrisian.com",
+  "ceo": null,
+  "sourceNote": "Company website (barkatfrisian.com: about, why-us), read 2026-10-17. The site lists factory addresses at Bin Qasim, Karachi and at Plot No. 51, Phase II, M-3 Industrial City, Faisalabad, but publishes no telephone number.",
+  "products": [
+    {
+      "name": "Value-added egg products",
+      "summary": "Processed egg products for bakery, confectionery and food dressings, produced to European standards.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

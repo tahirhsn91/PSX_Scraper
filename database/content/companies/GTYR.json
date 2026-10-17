@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for GTYR. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GTYR",
+  "description": "Ghandhara Tyre and Rubber Company Limited — The General Tyre and Rubber Company of Pakistan until its name change — is the country's first and largest automotive tyre manufacturer, producing steel-belted tubeless radial tyres for cars, SUVs and 4x4 vehicles and bias-ply tyres for light trucks, trucks and buses, tractors, rickshaws, motorcycles, excavators and OTR applications. It was established in 1963 by General Tire International Corporation of the USA at Landhi, Karachi and began production in July 1964; in September 2024 it entered a seven-year technical assistance agreement with Shandong Huasheng Rubber Co. Ltd. of China.",
+  "headOffice": "H-23/2, Landhi Industrial Trading Estate, Landhi, Karachi, Pakistan",
+  "phone": "+92 21 35080172",
+  "website": "https://gtr.com.pk",
+  "ceo": "Hussain Kuli Khan",
+  "sourceNote": "Company website (gtr.com.pk: profile of company, contact info) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Passenger car radial tyres",
+      "summary": "Steel-belted tubeless radials for cars, SUVs and 4x4 vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Truck, bus and light truck tyres",
+      "summary": "Bias-ply and radial tyres for commercial vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tractor, motorcycle and OTR tyres",
+      "summary": "Tyres for tractors, rickshaws, motorcycles, excavators and off-the-road equipment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

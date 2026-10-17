@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BATA. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "BATA",
+  "description": "Bata Pakistan Limited is a footwear manufacturer and retailer incorporated in Pakistan in 1951 as Bata Shoe Company (Pakistan) Limited, which went public in 1979. It has been selling in Pakistan since 1942, manufactures footwear for all segments and sells accessories and hosiery, through more than 500 retail outlets, registered wholesale dealers and sales offices across the country, and also exports. Its parent is Bafin B.V. (Netherlands) and the ultimate parent is Compass Limited, Bermuda.",
+  "headOffice": "Batapur, G.T. Road, Lahore, Pakistan",
+  "phone": "+92 42 3276 1261",
+  "website": "https://bata.com.pk",
+  "ceo": "Ahsan Umar",
+  "sourceNote": "Company website (bata.com.pk: about us) and the PSX Data Portal company record for BATA, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Footwear",
+      "summary": "Shoes for men, women and children across price segments, made in the company's own plants and through outsourced manufacturing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Accessories and hosiery",
+      "summary": "Accessories and hosiery items sold alongside footwear.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

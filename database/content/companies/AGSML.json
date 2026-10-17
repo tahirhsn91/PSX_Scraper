@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for AGSML. Every fact here is attributable — see sourceNote. No image is attached: the company's site carries no licence-cleared photography of its own mill. Add imagePath/imageSource/imageLicence together when a real one is available. Head office address, telephone and chief executive are null: the site names executive directors but no chief executive, and publishes no address.",
+  "symbol": "AGSML",
+  "description": "Abdullah Shah Ghazi Sugar Mills Limited is a Pakistani sugar producer, incorporated on 25 February 1984 as a private limited company under the name Al-Asif Sugar Mills Limited and converted to a public limited company on 11 February 1990. Its mill at Gharo in district Thatta, Sindh has an installed capacity of 3,000 tons of cane per day and produces refined white sugar. The Macca Group acquired the company in March 2008 and now holds over 90 per cent of it; for years the mill operated under a toll manufacturing agreement with Dewan Sugar Mills Limited, which the Macca Group management terminated so that the company now works independently.",
+  "headOffice": null,
+  "phone": null,
+  "website": "http://asgsml.com",
+  "ceo": null,
+  "sourceNote": "Company website (asgsml.com home page: incorporation on 25 February 1984, conversion to public limited on 11 February 1990, 3,000 TCD mill at Gharo, district Thatta, Macca Group's March 2008 acquisition and over 90 per cent holding, termination of the Dewan Sugar toll manufacturing agreement; /corporate-information for the board, which lists executive directors but no chief executive), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Refined white sugar",
+      "summary": "Produced at the company's 3,000 tons-of-cane-per-day mill at Gharo, district Thatta, Sindh.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

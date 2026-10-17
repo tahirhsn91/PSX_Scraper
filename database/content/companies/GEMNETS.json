@@ -1,0 +1,68 @@
+{
+  "_comment": "Editorial content for GEMNETS. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GEMNETS",
+  "description": "Nets International Communication Limited (NETS) is a Pakistani ICT and telecommunications solutions provider, listed on the Pakistan Stock Exchange in 2025. The business started in 1983 as National Engineers, a technology-solutions company, and today delivers access networks, enterprise data networks, cybersecurity, cloud and automation, managed services, resource outsourcing and extra-low-voltage systems. Its customers are telecom operators, banks and insurers, public-sector entities, universities and hospitals, served from offices in Lahore, Islamabad, Karachi and overseas.",
+  "headOffice": "Office No. 3, Level 8, Arfa Software Technology Park, Ferozepur Road, Lahore, Pakistan",
+  "phone": "+92 42 3597 2019",
+  "website": "https://nets-international.com",
+  "ceo": null,
+  "sourceNote": "Company website (nets-international.com: about-us, contact-us) and the company's PSX information memorandum (psx.com.pk, 28-04-2025), read 2026-10-17. The memorandum names the Pakistan CEO only as 'Mr. Nadeem', so the ceo field is left empty.",
+  "products": [
+    {
+      "name": "Access Networks",
+      "summary": "Fibre-to-the-x and mobile access-network deployment and support.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Enterprise Data Networks",
+      "summary": "Enterprise networking solutions, delivered largely on Cisco and Dell infrastructure.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cybersecurity",
+      "summary": "Security products and services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cloud & Automation",
+      "summary": "Cloud and automation solutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Managed Services",
+      "summary": "Managed and outsourced operations, including O&M support contracts.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Resource Outsourcing",
+      "summary": "Supply of technical resources to operator and enterprise clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Extra Low Voltage (ELV)",
+      "summary": "ELV systems for buildings and sites.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "EV",
+      "summary": "Electric-vehicle related solutions listed among the company's offerings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

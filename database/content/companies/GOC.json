@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for GOC. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "GOC",
+  "description": "GOC (Pak) Limited is a Sialkot-based sports goods manufacturer, incorporated in 1964 as a Pakistani-British joint venture with H.J. Gray & Sons of Cambridge, England. It has made hockey sticks since 1965 — including the U-shaped 'novelty' head developed with Dutch technical know-how — and added a hand-sewn cricket ball unit in 1973 producing under the Duke & Sons and Gray-Nicolls brands. Output runs at more than 160,000 hockey sticks and around 100,000 cricket balls a year, sold through a network of marketing agents at home and abroad.",
+  "headOffice": "Small Industrial Estate, Sialkot",
+  "phone": "+92 52 111 462 111",
+  "website": "https://gocpak.com",
+  "ceo": "Khawar Anwar Khawaja",
+  "sourceNote": "Company website (gocpak.com: industrial-profile, contact) and the PSX company profile (dps.psx.com.pk/company/GOC: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Hockey sticks",
+      "summary": "Wooden hockey sticks made at Sialkot, including the U-shaped 'novelty' head design developed with know-how from the Netherlands; more than 160,000 a year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cricket balls",
+      "summary": "Hand-sewn cricket balls produced under the Duke & Sons and Gray-Nicolls brands, around 100,000 a year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for GCIL. Every fact here is attributable — see sourceNote. No head office address is published on the pages read — the site's contact page renders its address block client-side — so headOffice is null rather than borrowed from a group company. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GCIL",
+  "description": "Ghani Chemical Industries Limited is a manufacturer of medical and industrial gases, which describes itself as Pakistan's largest such producer. It inherited the business of Ghani Gases (Private) Limited, incorporated in November 2007 and converted to a public company in 2008; under a scheme sanctioned by the Lahore High Court in 2019 that company's manufacturing undertaking was transferred to Ghani Chemical Industries, which is listed on the Pakistan Stock Exchange. The company's product range runs from oxygen, nitrogen and argon to medical gases, gas-handling equipment and welding consumables.",
+  "headOffice": null,
+  "phone": "+92 42 3516 1424",
+  "website": "https://ghanichemicals.com",
+  "ceo": "Masroor Ahmad Khan",
+  "sourceNote": "Company website ghanichemicals.com — home and about pages (Ghani Gases origin, incorporation and listing history, medical and industrial gases, online purity analysers, largest producer claim), board-of-directors page (Masroor Ahmad Khan named chief executive officer/executive director), investor-grievances page (voice and UAN numbers) and the product list on the site's quote form (product names), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Industrial and medical gases",
+      "summary": "Oxygen, nitrogen, argon, carbon dioxide, acetylene, nitrous oxide, helium and refrigerant gases.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Medical gas services",
+      "summary": "Pain relief gases, oxygen concentrators and pharmacopoeia-grade gases produced to European Pharmacopoeia standards.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Calcium carbide",
+      "summary": "Calcium carbide, listed among the company's products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Welding consumables and gas equipment",
+      "summary": "Migwire and gas regulators.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ethylene ripener",
+      "summary": "Ethylene ripener, listed among the company's products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

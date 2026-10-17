@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for EXIDE. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "EXIDE",
+  "description": "Exide Pakistan Limited manufactures and sells batteries, battery chemicals and acid, and supplies solar energy solutions. It was incorporated in 1953 in association with Chloride Group Plc of the United Kingdom and listed on the Karachi Stock Exchange, now the Pakistan Stock Exchange, in 1982.",
+  "headOffice": "A-44, Hill Street, off Manghopir Road, S.I.T.E., Karachi, Pakistan",
+  "phone": "+92 21 32593371",
+  "website": "https://exide.com.pk",
+  "ceo": "Arshad Shehzada",
+  "sourceNote": "Company website (exide.com.pk: company-profile, contact — office, factory and telephone) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Automotive batteries",
+      "summary": "Lead-acid batteries for cars and other vehicles, the company's original product line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Battery chemicals and acid",
+      "summary": "Manufacture and sale of battery chemicals and acid.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Solar energy solutions",
+      "summary": "Solar energy solutions supplied alongside the battery range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

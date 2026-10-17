@@ -1,0 +1,33 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PAKOXY",
+  "description": "Pakistan Oxygen Limited supplies industrial, medical and specialty gases, and says it has served the development of Pakistan's industrial gases industry for more than 70 years. It counts more than 4,000 customers across chemicals and petrochemicals, steel, food and healthcare, and runs 24-hour operations at ten major industrial locations in the country. Alongside gases it supplies gas-handling equipment and welding hardgoods.",
+  "headOffice": "P.O. Box 4845, Dockyard Road, West Wharf, Karachi 74000, Pakistan",
+  "phone": "+92 21 32313361",
+  "website": "https://pakoxygen.com",
+  "ceo": null,
+  "sourceNote": "Company website (pakoxygen.com: about, contact, product navigation), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Industrial gases",
+      "summary": "Oxygen, nitrogen, argon, dissolved acetylene, carbon dioxide and hydrogen, supplied to industries from chemicals to steel and glass.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Medical gases",
+      "summary": "Oxygen and nitrous oxide for healthcare customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Gas handling equipment and hardgoods",
+      "summary": "Welding electrodes, wires, machines and gas and arc equipment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

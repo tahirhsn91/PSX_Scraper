@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for AVN. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AVN",
+  "description": "Avanceon Limited is a Pakistani industrial automation and systems-integration company listed on the Pakistan Stock Exchange. It designs and implements industrial control and automation systems, manufacturing execution systems, industrial data and analytics platforms, and provides managed support and cybersecurity for plant systems. Its customers are concentrated in food and beverage, consumer packaged goods, water and wastewater, life sciences, specialty chemicals and metals. The business now trades as Actemium Avanceon, having merged with VINCI Energies' Actemium network.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://www.avanceon.com",
+  "ceo": null,
+  "sourceNote": "Company website (avanceon.com: home, solutions, Actemium Avanceon company history), read 2026-10-17. No office address, phone number or named chief executive is published on the pages read, so those fields are left empty.",
+  "products": [
+    {
+      "name": "Industrial Strategy",
+      "summary": "Digital strategy work that maps business goals, technology investment and operational readiness for manufacturers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Industrial Controls & Automation",
+      "summary": "Control-system design and implementation, from PLCs to full-scale integration.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Industrial Intelligence",
+      "summary": "SCADA, MES and analytics solutions for real-time visibility and decision-making.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Industrial Reliability",
+      "summary": "Managed services: 24/7 system monitoring, proactive maintenance and OT cybersecurity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

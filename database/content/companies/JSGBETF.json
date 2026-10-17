@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "JSGBETF",
+  "description": "JS Global Banking Sector Exchange Traded Fund (JSGBETF) is an open-ended exchange-traded fund listed on the Pakistan Stock Exchange that tracks the JS Global Banking Sector Index (JSGBKTI), an index constituted by its management company. Launched in September 2023, it holds an almost entirely commercial-bank portfolio and was described by its sponsor as Pakistan's first brokerage-launched ETF, issued under SECP sandbox guidelines.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://jsglobalonline.com",
+  "ceo": null,
+  "sourceNote": "The fund's MUFAP-format monthly report for July 2026 (PSX data portal) and the JS Global ETF page, read 2026-10-17.",
+  "products": []
+}

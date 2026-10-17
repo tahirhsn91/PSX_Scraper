@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for AGHA. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "AGHA",
+  "description": "Agha Steel Industries Limited, incorporated in 2013, operates a steel melting and rolling complex at Port Qasim, Karachi, with annual melting capacity of 450,000 tonnes and rolling capacity of 250,000 tonnes. It produces billets and deformed reinforcing bars to ASTM and British standards, and describes its electric arc furnace as the only one in Pakistan's private sector.",
+  "headOffice": "Plot No. NWIZ/1/P-133, SP-6, D-2, Port Qasim Authority, Karachi",
+  "phone": "+92 21 111 112 442",
+  "website": "https://aghasteel.com",
+  "ceo": "Hussain Iqbal Agha",
+  "sourceNote": "Company website (aghasteel.com: home, product & quality, reach us) and the PSX company profile (dps.psx.com.pk/company/AGHA: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Deformed steel rebars",
+      "summary": "Reinforcement bars to ASTM A615 Grade 60 and Grade 80, BS 4449 G500+ and earthquake-resistant ASTM A706.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Billets",
+      "summary": "Steel billets from the company's melting operation at Port Qasim.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

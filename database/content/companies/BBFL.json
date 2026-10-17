@@ -1,0 +1,33 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BBFL",
+  "description": "Big Bird Foods Limited was incorporated on 21 September 2011 to set up a poultry processing unit supplying processed chicken. It runs integrated poultry production and describes its aim as consistent availability of traceable, hygienic and economical chicken meat and processed chicken products.",
+  "headOffice": "2-A, Ahmed Block, New Garden Town, Lahore, Pakistan",
+  "phone": "+92 42 35835373",
+  "website": "https://bigbirdfoods.com",
+  "ceo": null,
+  "sourceNote": "Company website (bigbirdfoods.com: company-profile, products), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Chicken nuggets",
+      "summary": "Classic, tempura and spicy variants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Burger patties",
+      "summary": "Classic and spicy chicken patties.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ready-to-cook chicken",
+      "summary": "A range of further processed chicken products for retail.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ALNRS. Every fact here is attributable — see sourceNote. No image is attached: the company's own site photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Chief executive is null: no page read names one.",
+  "symbol": "ALNRS",
+  "description": "Al-Noor Sugar Mills Limited is a Pakistani agro-industrial company founded in 1969 that has grown beyond sugar milling into a diversified business: sugar remains central, and the company also produces MDF board under the Lasani brand and generates power. It is part of the Al-Noor group and describes itself as playing a role in Pakistan's agro-industrial economy.",
+  "headOffice": "96-A, Sindhi Muslim Housing Society, Karachi 74400, Pakistan",
+  "phone": null,
+  "website": "https://alnoorsugar.co",
+  "ceo": null,
+  "sourceNote": "Company website (alnoorsugar.co/about: founding in 1969, sugar as the core business, MDF board production under the Lasani brand, power generation; /contact for the head office address), read 2026-10-17. No telephone number is rendered on the contact page and no chief executive is named, so both fields are null.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "Cane sugar, the company's core business since 1969.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lasani MDF board",
+      "summary": "Medium-density fibreboard sold under the Lasani brand — the company's diversification away from sugar.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Power generation",
+      "summary": "Electricity generation, part of the company's stated strategic diversification.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

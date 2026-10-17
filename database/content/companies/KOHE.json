@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for KOHE. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "KOHE",
+  "description": "Kohinoor Energy Limited owns, operates and maintains a 124 MW furnace-oil-fired power station on the Raiwind road outside Lahore — one of Pakistan's earliest independent power projects, established jointly by the Saigols Group and Toyota Tsusho Corporation. The company sells its entire output to the Water and Power Development Authority under a 30-year power purchase agreement that began in June 1997.",
+  "headOffice": "301, 3rd Floor, Green Trust Tower, Blue Area, Islamabad, Pakistan",
+  "phone": "+92 51 2828941",
+  "website": "https://kel.com.pk",
+  "ceo": "M. Zeid Yousuf Saigol",
+  "sourceNote": "Company website (kel.com.pk: company-profile, contact-us) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Furnace-oil-fired power generation — 124 MW",
+      "summary": "A 124 MW net (131.44 MW gross) furnace-oil station near Raiwind, Lahore, with three ABB 63 MVA step-up transformers. WAPDA is the sole customer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

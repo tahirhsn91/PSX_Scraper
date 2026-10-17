@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for RPL. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "RPL",
+  "description": "Roshan Packages Limited is a packaging manufacturer established in 2002 within the Roshan Group, producing corrugated packaging, flexible packaging and co-extruded films from two plants, and serving textile, food and beverage, pharmaceutical and FMCG customers. The company states that a recycled-paper mill at Sheikhupura is being developed in stages, with bank financing approved.",
+  "headOffice": "325 G-III, M.A. Johar Town, Lahore, Pakistan",
+  "phone": "+92 42 3529 0734",
+  "website": "https://www.roshanpackages.com.pk",
+  "ceo": "Tayyab Aijaz Qureshi",
+  "sourceNote": "Company website (roshanpackages.com.pk: about, products, CEO message, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Corrugated packaging",
+      "summary": "Corrugated board and boxes produced at the company's corrugation plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Flexible packaging",
+      "summary": "Laminated rolls and sheets, wrappers, wrap-around labels and shrink-wrap films for food, confectionery, beverage and FMCG customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Co-extruded films",
+      "summary": "Co-extruded film solutions produced at a dedicated plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

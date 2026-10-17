@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for GCWL. Every fact here is attributable — see sourceNote. Ghani ChemWorld states that it is a wholly owned subsidiary of Ghani Chemical Industries and describes the transfer of the calcium carbide project under a court-sanctioned scheme; that is repeated as the company words it. No current chief executive is published on the pages read, so ceo is null. No image is attached.",
+  "symbol": "GCWL",
+  "description": "Ghani ChemWorld Limited was incorporated as a public limited company on 31 July 2024 as a wholly owned subsidiary of Ghani Chemical Industries Limited, within the Ghani Global Group. It was formed to take over the calcium carbide project from Ghani Chemical Industries under a demerger/merger scheme approved by the Lahore High Court on 20 February 2025, under which the project's concessions, licences, incentives and tax holidays were transferred to it. Its calcium carbide plant is in Hattar Special Economic Zone and the company states that the project is the first of its kind in Pakistan.",
+  "headOffice": "10-N, Model Town Extension, Lahore 54000, Pakistan",
+  "phone": "+92 42 111 442 641",
+  "website": "https://ghanichemworld.com",
+  "ceo": null,
+  "sourceNote": "Company website ghanichemworld.com — about page (incorporation 31 July 2024, CUIN, wholly owned subsidiary of GCIL, Lahore High Court scheme of 20 February 2025, calcium carbide project transfer, Hattar Special Economic Zone plant, group listing history), industry page (calcium carbide and gas regulators) and contact page (Lahore address, UAN), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Calcium carbide",
+      "summary": "Calcium carbide, a greyish-white crystalline solid used to produce acetylene gas for industrial applications, made at the company's Hattar plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Gas regulators",
+      "summary": "Gas regulators, listed among the company's products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

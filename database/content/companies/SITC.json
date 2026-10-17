@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SITC",
+  "description": "Sitara Chemical Industries Limited operates what its chief executive describes as the largest chlor-alkali chemical complex in Pakistan, at 32 km on the Sheikhupura Road outside Faisalabad. The company commissioned its plant in 1981 and has grown production capacity from 30 tonnes a day in 1984 to 630 tonnes a day, with annual turnover above Rs 30 billion.",
+  "headOffice": "32 KM, Sheikhupura Road, Faisalabad, Pakistan",
+  "phone": "+92 41 4689141-5",
+  "website": "https://www.sitara.com.pk",
+  "ceo": "Muhammad Adrees",
+  "sourceNote": "Company website (sitara.com.pk: corporate-profile, ceo-profile), read 2026-10-17; commissioning date from the Sitara Peroxide Limited website, which records Sitara's entry into chemicals in 1981.",
+  "products": [
+    {
+      "name": "Caustic soda",
+      "summary": "Chlor-alkali production, expanded from 30 tonnes a day in 1984 to 630 tonnes a day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

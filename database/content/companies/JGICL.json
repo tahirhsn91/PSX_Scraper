@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for JGICL. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Head office address and telephone are null because no page read publishes them.",
+  "symbol": "JGICL",
+  "description": "Jubilee General Insurance Company Limited is one of Pakistan's three largest general insurers by gross direct premium, in operation since 1953 and now in its eighth decade. It writes general insurance for corporate, commercial and individual clients through a nationwide branch network, and since May 2015 has also run Window Takaful operations for Shariah-compliant cover. Its major shareholders include the Aga Khan Hospital and Medical College Foundation and Habib Bank Limited, and it is listed on the Pakistan Stock Exchange.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://jubileegeneral.com.pk",
+  "ceo": "Azfar Arshad",
+  "sourceNote": "Company website (jubileegeneral.com.pk/company-overview: 1953 establishment, 'Big Three' position, shareholding, May 2015 Window Takaful launch; /takaful/management-team for the managing director and chief executive), read 2026-10-17. No head office address or telephone number is published on the pages read, so both are null.",
+  "products": [
+    {
+      "name": "General insurance",
+      "summary": "Fire, marine, motor, accident and engineering cover for corporate, commercial and individual policyholders, sold through the company's branch network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Window Takaful operations",
+      "summary": "Shariah-compliant general takaful cover, launched by the company in May 2015 alongside its conventional business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

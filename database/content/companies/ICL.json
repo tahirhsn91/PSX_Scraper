@@ -1,0 +1,33 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ICL",
+  "description": "Ittehad Chemicals Limited is a Pakistani chlor-alkali manufacturer whose complex at Kala Shah Kaku in Sheikhupura district began production in 1964. The company was nationalised in 1972 and privatised in 1995, and after successive capacity expansions its plant can produce 425 tonnes a day of caustic soda. It also makes liquid chlorine, hydrochloric acid, sodium sulphate, sodium hypochlorite, calcium chloride and carbon dioxide, sold across Pakistan and exported to the GCC. In 2019 it diversified into surfactants (LABSA and SLES).",
+  "headOffice": "Town House No. 43-H/II, 43rd Street, Block-6, P.E.C.H.S., Karachi, Pakistan",
+  "phone": "+92 21 34527314-15",
+  "website": "https://ittehadchemicals.com",
+  "ceo": null,
+  "sourceNote": "Company website (ittehadchemicals.com: who-we-are, contact-us), read 2026-10-17. Address and phone are the Karachi office published on the contact page; the manufacturing complex is at Kala Shah Kaku, Sheikhupura.",
+  "products": [
+    {
+      "name": "Caustic soda",
+      "summary": "The company's principal product, with plant capacity of 425 tonnes a day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Chlor-alkali and allied chemicals",
+      "summary": "Liquid chlorine, hydrochloric acid, sodium sulphate, sodium hypochlorite, calcium chloride and carbon dioxide.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Surfactants",
+      "summary": "LABSA and SLES grades, a diversification the company entered in 2019.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

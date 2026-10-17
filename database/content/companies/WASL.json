@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for WASL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "WASL",
+  "description": "WASL Mobility Modaraba, formerly First Prudential Modaraba, was floated in December 1989 as a perpetual, multipurpose Modaraba. Through successive amalgamations and acquisitions it came under the management of WASL Investment Finance Limited, which acquired its management company, since renamed WASL Modaraba Management Company. It is engaged in Shariah-compliant leasing of two- and three-wheelers — both combustion and electric variants — offering non-collateralised Ijarah rentals and Musharakah financing, working with gig-economy platforms as well as retail customers, and runs a pilot electric-rickshaw fleet.",
+  "headOffice": "Office # 818, 8th Floor, High Q Tower, Jail Road, Gulberg V, Lahore, Pakistan",
+  "phone": "+92 42 3513 511",
+  "website": "https://wasl.com.pk",
+  "ceo": "Syed Shahid Owais",
+  "sourceNote": "Written from: https://wasl.com.pk/about-us-mobility-modaraba (flotation year, management history, mobility leasing business, Ijarah and Musharakah structures, EV rickshaw fleet), https://wasl.com.pk/contact-mobility-modaraba (Lahore and Karachi office addresses and telephones) and https://wasl.com.pk/our-team-mobility-modaraba/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Two- and three-wheeler leasing",
+      "summary": "Shariah-compliant leasing of motorcycles, scooters and auto rickshaws, in combustion and EV variants, on non-collateralised Ijarah and Musharakah structures.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "EV rickshaw fleet",
+      "summary": "An electric-rickshaw fleet operated by the Modaraba, described by it as being at pilot stage.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

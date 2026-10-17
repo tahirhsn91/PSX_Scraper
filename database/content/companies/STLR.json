@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for STLR. Every fact here is attributable — see sourceNote. No image is attached. STLR is not a company: it is the separate trading line for the right shares issued by Supernet Technologies Limited, so it carries no business description of its own beyond that entitlement.",
+  "symbol": "STLR",
+  "description": "STLR is the Pakistan Stock Exchange trading line for the right shares issued by Supernet Technologies Limited (STL), not a separate company. It represents the entitlement to subscribe for new STL shares under that rights issue, and trades as a security in its own right until the entitlement is exercised or lapses. For the underlying business, see the Supernet Technologies Limited record.",
+  "headOffice": null,
+  "phone": null,
+  "website": null,
+  "ceo": null,
+  "sourceNote": "PSX listing data (the symbol is returned by the exchange feed as 'Supernet Technologies Limited (Right)') and the company's rights offer document filed with PSX, read 2026-10-17.",
+  "products": []
+}

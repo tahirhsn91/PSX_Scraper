@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for PAKD. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PAKD",
+  "description": "Pak Datacom Limited is a Pakistani data-communications operator and a subsidiary of the Telecom Foundation. Incorporated in 1992 and in commercial operation since July 1994, it provides end-to-end data communication through satellite VSAT (SCPC, DAMA and iDirect), terrestrial networks and radio links, and builds networks to individual customer requirements. It is listed on the Pakistan Stock Exchange.",
+  "headOffice": "3rd Floor, Umer Plaza, Jinnah Avenue, Blue Area, Islamabad, Pakistan",
+  "phone": "+92 51 2344 123",
+  "website": "https://pakdatacom.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website (pakdatacom.com.pk: about us, contact), read 2026-10-17. No chief executive is named on the pages read, so ceo is left empty.",
+  "products": [
+    {
+      "name": "Satellite VSAT services",
+      "summary": "SCPC, DAMA and iDirect satellite data services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Terrestrial networks",
+      "summary": "Wired and wireless terrestrial data-network services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Radio links",
+      "summary": "Radio-based data connectivity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "IT solutions and training",
+      "summary": "IT solutions and training services listed in the company's offering.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for UVIC. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. The chief executive is null because the company's published board listings render the chief executive and chair roles ambiguously and could not be resolved without guessing.",
+  "symbol": "UVIC",
+  "description": "The Universal Insurance Company Limited is a Pakistani general insurer based in Lahore, operating from Universal Insurance House on Shahrah-e-Quaid-e-Azam. It writes general insurance and runs a separate risk-management team and an engineering group that work with clients to identify exposures and advise on loss prevention, alongside technically qualified staff in civil, mechanical, metallurgy and electronics disciplines.",
+  "headOffice": "Universal Insurance House, 63 Shahrah-e-Quaid-e-Azam, Lahore 54000, Pakistan",
+  "phone": "+92 42 3735 5426",
+  "website": "https://uic.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website (uic.com.pk registered-office page: head office address, telephone, fax and registration number; the home page for the risk-management and engineering-team description), read 2026-10-17. A note on the source: the site's home page also carries a block of unrelated injected text, so only the corporate-information and address content was used. Quarterly reports on the site list the chief executive and chairman inconsistently across tables, so ceo is null.",
+  "products": []
+}

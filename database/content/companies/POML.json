@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for POML. Every fact here is attributable — see sourceNote. ceo is null: the governance page publishes no director profiles naming a chief executive. No image is attached: the brand pack shots are the company's own.",
+  "symbol": "POML",
+  "description": "Punjab Oil Mills Limited is an Islamabad-based manufacturer of edible oils and fats, making cooking and baking mediums and speciality fats under the CanOlive, Zaiqa, Naturelle and Tru Bru brands. It also markets a Naturelle foods range and Tru Bru coffee, and holds ISO 9001, ISO 14001, OHSAS 18001, FSSC 22000 and Halal certification.",
+  "headOffice": "Plot No. 26-28, Industrial Triangle, Kahuta Road, Humak Road, Islamabad, Pakistan",
+  "phone": "+92 51 4490017-21",
+  "website": "https://punjaboilmills.com",
+  "ceo": null,
+  "sourceNote": "Company website (punjaboilmills.com: about-us, contact-us, product pages), read 2026-10-17.",
+  "products": [
+    {
+      "name": "CanOlive",
+      "summary": "Cooking oil and banaspati ghee, the company's flagship edible oil brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Zaiqa",
+      "summary": "Cooking oil and banaspati ghee.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Naturelle",
+      "summary": "Cooking oil, banaspati, sarson ka tel, and a packaged foods range including canned food, ready-to-eat, cooking aid and pickles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tru Bru",
+      "summary": "Instant coffee in Classic and Premium variants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

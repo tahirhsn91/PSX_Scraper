@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GGL",
+  "description": "Ghani Global Holdings Limited is the principal holding company of the Ghani Global group, managing strategic investments since 2007. It was incorporated on 19 November 2007 as Ghani Gases (Private) Limited, converted into a public company in February 2008 and listed on the Pakistan Stock Exchange in January 2010 as Ghani Gases Limited. It took its present name on 28 August 2019 under a reconstruction scheme sanctioned by the Lahore High Court, and on 8 July 2019 transferred its manufacturing undertaking to its subsidiary Ghani Chemical Industries Limited — leaving the listed entity as a holding company.",
+  "headOffice": "10-N, Model Town Extension, Lahore 54000, Pakistan",
+  "phone": "+92 42 35161424-5",
+  "website": "https://ghaniglobalholdings.com",
+  "ceo": null,
+  "sourceNote": "Company website (ghaniglobalholdings.com: about, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Ghani Chemical Industries Limited",
+      "summary": "The listed company's manufacturing undertaking, transferred to this subsidiary company on 8 July 2019.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

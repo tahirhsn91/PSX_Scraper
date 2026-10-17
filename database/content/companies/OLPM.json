@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for OLPM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "OLPM",
+  "description": "OLP Modaraba is an Islamic financial institution listed on the Pakistan Stock Exchange, incorporated in 1987 as First Grindlays Modaraba and controlled by ANZ Grindlays Bank, which Standard Chartered Bank Pakistan Limited acquired in 2000, when the Modaraba became Standard Chartered Modaraba. ORIX Leasing Pakistan acquired it in 2016 and renamed it ORIX Modaraba; it was later rebranded OLP Modaraba at group level. It finances plant, machinery, equipment, vehicles and housing under Islamic finance structures, and operates from Karachi, Lahore and Islamabad.",
+  "headOffice": "601, 6th Floor, Syedna Tahir Saifuddin Memorial Trust Building, Beaumont Road, Civil Lines, Karachi, Pakistan",
+  "phone": "+92 21 3834 1168",
+  "website": "https://www.olpmodaraba.com",
+  "ceo": "Waqas Ahmad Khwaja",
+  "sourceNote": "Written from: https://www.olpmodaraba.com/about-us/ (incorporation and ownership history, business, office cities), https://www.olpmodaraba.com/contact-us/ (Karachi office address and telephone), https://www.olpmodaraba.com/our_team/ (Managing Director/CEO) and the Products menu on the site (product list) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ijarah",
+      "summary": "Islamic lease financing of plant, machinery, equipment and vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Diminishing Musharika",
+      "summary": "Diminishing Musharaka financing, including a dedicated house-finance variant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Murabaha and Salam",
+      "summary": "Murabaha cost-plus sale financing and Salam forward-purchase financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Istisna",
+      "summary": "Istisna financing for manufactured goods.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Certificate of Musharaka",
+      "summary": "Musharaka certificate-based financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for FECTC. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists, and a generic cement-industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FECTC",
+  "description": "Fecto Cement Limited was established in 1981 and began production on 1 January 1990. Its plant at Sangjani, near Islamabad, is described by the company as Pakistan's first anti-pollution cement plant and the first of its kind in South Asia, with a rated capacity of 780,000 tonnes of clinker a year; the plant was erected by Fuller International of the United States. Fecto Cement is the listed cement company of the Fecto group.",
+  "headOffice": "Plot # 60-C, Khayaban-e-Shahbaz, Phase VI, Defence Housing Authority, Karachi, Pakistan",
+  "phone": "+92 21 3524 8921-3",
+  "website": "https://fectogroup.com",
+  "ceo": "Mohammed Yasin Fecto",
+  "sourceNote": "Written from: https://fectogroup.com/ (establishment in 1981 and start of production), https://fectogroup.com/fecto-cement/ (Sangjani plant, anti-pollution claim, clinker capacity, Fuller International), https://fectogroup.com/contact-us/ (head office address, telephones) and https://fectogroup.com/profile-of-board-of-directors/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cement — Sangjani plant",
+      "summary": "Cement from the company's plant at Sangjani near Islamabad, with a rated capacity of 780,000 tonnes of clinker a year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

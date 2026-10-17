@@ -1,0 +1,47 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "UNITY",
+  "description": "Unity Foods Limited describes its purpose as providing food for life, transforming crops into products for the food sector. Its portfolio spans premium edible oils, fortified staples (flour, rice, kitchen essentials, lentils and pulses, and salt), frozen foods, confectionery and bakery products, specialised fats, and animal feed ingredients for poultry and livestock. It is a public listed company with Wilmar Pakistan Holdings as an associated concern holding more than 20% of its shares.",
+  "headOffice": "Unity Tower, 8-C, P.E.C.H.S. Block-6, Jamshed Town, Karachi East, Sindh, Pakistan",
+  "phone": "+92 21 34373605-7",
+  "website": "https://unityfoods.pk",
+  "ceo": "Amir Altaf Qureshi",
+  "sourceNote": "Company website (unityfoods.pk: company-profile, board-of-directors, contact-us, company information), read 2026-10-17. The shareholding relationship is stated by the company in its own list of associated concerns.",
+  "products": [
+    {
+      "name": "Edible oils and fats",
+      "summary": "Premium edible oils, banaspati and specialised fats.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fortified staples",
+      "summary": "Flour, rice, kitchen essentials, lentils and pulses, and salt.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Frozen foods",
+      "summary": "A frozen foods range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Confectionery and bakery",
+      "summary": "Confectionery and bakery products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Animal feed ingredients",
+      "summary": "Feed ingredients for poultry and livestock.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

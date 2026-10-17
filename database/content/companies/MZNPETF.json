@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "MZNPETF",
+  "description": "Meezan Pakistan Exchange Traded Fund (MZNPETF) is a Shariah-compliant exchange-traded fund managed by Al Meezan Investment Management Limited and listed on the Pakistan Stock Exchange. It uses a replication strategy to track the Meezan Pakistan Index, which comprises Shariah-compliant equities selected with weight given to market capitalisation and traded value, and keeps at least 85% of assets in index constituents.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://almeezangroup.com",
+  "ceo": null,
+  "sourceNote": "Company website (almeezangroup.com: Meezan Pakistan Exchange Traded Fund overview and fund facts), read 2026-10-17.",
+  "products": []
+}

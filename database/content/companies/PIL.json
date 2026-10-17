@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for PIL. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Head office address and telephone are null: the company's site publishes neither.",
+  "symbol": "PIL",
+  "description": "PICIC Insurance Limited is a Pakistani general insurer writing all classes of general insurance business. It presents itself as a specialist underwriter that identifies clients' risk exposures and advises on them, backing that with an in-house IT system for underwriting, policy issuance and claims processing. It is a small listed insurer, and its own site gives a paid-up capital of Rs 350 million.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://picicinsurance.com",
+  "ceo": "Moiz Ali",
+  "sourceNote": "Company website (picicinsurance.com about page: general insurance company dealing with all classes of general insurance, paid-up capital of Rs 350 million, underwriting and claims approach; the management page naming Mr Moiz Ali as managing director and chief executive), read 2026-10-17. No head office address or telephone is published there, so both are null.",
+  "products": []
+}

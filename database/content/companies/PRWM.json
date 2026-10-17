@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for PRWM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "PRWM",
+  "description": "Prosperity Weaving Mills Limited is a public limited company incorporated in Pakistan on 20 November 1991 and listed on the Pakistan Stock Exchange, part of the Nagina Group. Its principal activity is manufacturing and selling woven cloth, with its head office at Nagina House in Gulberg III, Lahore.",
+  "headOffice": "Nagina House, 91-B/1, M.M. Alam Road, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3575 6270-7",
+  "website": "https://nagina.com",
+  "ceo": "Raza Ellahi Shaikh",
+  "sourceNote": "PSX Data Portal company record for PRWM (business description, key people, address) and the Nagina Group website nagina.com (contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Woven cloth",
+      "summary": "Greige woven fabric manufactured and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

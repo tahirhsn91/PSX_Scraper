@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for WAFI. Every fact here is attributable — see sourceNote. No image is attached. Shell-branded imagery belongs to Shell Brands International and is not used here.",
+  "symbol": "WAFI",
+  "description": "Wafi Energy Pakistan Limited, formerly Shell Pakistan, traces its commercial presence in Pakistan to 1947 and is the exclusive licensee of the Shell fuel and lubricants brand in the country. It operates a network of more than 680 Shell retail sites, nationwide oil terminals and a lubricants blending plant, and describes itself as the largest private investor in the White Oil Pipeline operated by Pak-Arab Pipeline Company. Wafi Energy Holding, based in the UAE, acquired an 87.78% stake in 2024, and the company was renamed from Shell Pakistan Limited in 2025.",
+  "headOffice": "6 Ch. Khaliquzzaman Road, Karachi 75530, Pakistan",
+  "phone": "+92 21 111 888 222",
+  "website": "https://wafi-energy.com",
+  "ceo": "Zubair Shaikh",
+  "sourceNote": "Company website (wafi-energy.com: about us, corporate information, our leadership, results announcements), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Shell retail fuels",
+      "summary": "Fuel sold through a network of more than 680 Shell-branded retail sites.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Shell lubricants",
+      "summary": "Lubricants blended at the company's plant and sold under Shell brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Terminals and supply",
+      "summary": "Nationwide oil terminal facilities and trading and supply operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

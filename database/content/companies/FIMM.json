@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for FIMM. Every fact here is attributable — see sourceNote. No image is attached. FIMM is the unusual case in this batch: a modaraba that trades rather than finances, so its products are real goods rather than financing modes.",
+  "symbol": "FIMM",
+  "description": "First Imrooz Modaraba is a modaraba listed on the Pakistan Stock Exchange, formed in September 1993 and in commercial operation since 1994. Unlike most modarabas it does not provide financial services: it trades in industrial raw materials for paints and coatings, pharmaceuticals, food, agriculture, personal care, household and textile manufacturers, and runs the supply chain from import and warehousing to delivery. It is managed by AR Management Services (Private) Limited.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://www.firstimrooz.com",
+  "ceo": null,
+  "sourceNote": "Modaraba website (firstimrooz.com: home, about us), read 2026-10-17. The site's contact page could not be retrieved, so headOffice, phone and ceo are left empty.",
+  "products": [
+    {
+      "name": "Industrial raw materials",
+      "summary": "Trading and supply of industrial raw materials to paint, coatings, pharmaceutical, food, agriculture, personal-care, household and textile manufacturers, from import through warehousing to delivery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

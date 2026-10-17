@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for GATI. Every fact here is attributable — see sourceNote. No image is attached: the company's plant photographs are not licence-cleared.",
+  "symbol": "GATI",
+  "description": "Gatron (Industries) Limited belongs to the Gani and Tayub (G&T) Group and has operated since 1980, producing polyester filament yarn at its factory in Hub, Balochistan; the company describes itself as Pakistan's largest producer of polyester filament yarn. It added a PET line in 1988, PET preforms in 2004, recycled polyester yarn under the Ecoron brand in 2017 and knitted fabrics in 2022.",
+  "headOffice": "11th Floor, G&T Tower, #18 Beaumont Road, Civil Lines-10, Karachi 75530, Pakistan",
+  "phone": "+92 21 35659500-10",
+  "website": "https://gatron.com",
+  "ceo": "Shabbir Diwan",
+  "sourceNote": "Company website (gatron.com: about-us, governance, contact-us), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Polyester filament yarn",
+      "summary": "The company's original and largest product line, made at its Hub, Balochistan plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PET resin",
+      "summary": "Polyester resin for packaging, introduced on the company's PET line in 1988.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PET preforms",
+      "summary": "Preforms for bottling and container production, added in 2004.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ecoron recycled polyester yarn",
+      "summary": "Recycled polyester yarn made from post-consumer polyester such as plastic bottles and containers, introduced in 2017.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Knitted fabrics",
+      "summary": "Knitted fabrics for the textile and apparel industry, added in 2022.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

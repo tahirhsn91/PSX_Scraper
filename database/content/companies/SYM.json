@@ -1,0 +1,61 @@
+{
+  "_comment": "Editorial content for SYM. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SYM",
+  "description": "Symmetry Group Limited is a Pakistani digital technology and experiences company listed on the Pakistan Stock Exchange. It works on the digitalisation of marketing, sales and other consumer-facing functions, organised around four areas — transformation, interactive marketing, commerce and mobility — and sells the resulting products through its own brands, including Symmetry Digital, Iris Digital, SymmetryTrade, Corral, Survit, Mobits and Influsense.ai. Its clients are mainly in telecom, banking and finance, FMCG, real estate and pharmaceuticals.",
+  "headOffice": "Plot No. 56-A, Khalid Commercial, Street 2, Phase 7 Extension, D.H.A., Karachi, Pakistan",
+  "phone": "+92 21 3517 1991",
+  "website": "https://symmetrygroup.biz",
+  "ceo": "Sarocsh Ahmed",
+  "sourceNote": "Company website (symmetrygroup.biz: about-us company, contact-us), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Transformation",
+      "summary": "Digital strategy, consulting and transformation engagements.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Interactive marketing",
+      "summary": "Digital and interactive marketing services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commerce",
+      "summary": "Digital commerce services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mobility",
+      "summary": "Mobile and mobility products and services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Symmetry Digital",
+      "summary": "Group digital brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SymmetryTrade",
+      "summary": "Group commerce brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Influsense.ai",
+      "summary": "Group AI and influencer-analytics brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for ORM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ORM",
+  "description": "Orient Rental Modaraba is a multi-purpose, perpetual Modaraba formed by spinning off the generator rental and operation-and-maintenance divisions of Orient Energy Systems, which is owned by the Modaraba's major sponsors. It is managed by Eman Management (Private) Limited and offers Shariah-compliant equipment rental on Ijarah, currently gas and diesel generators with turnkey solutions including aftersales support and operations and maintenance. It has stated an intention to add commercial vehicles, material handling equipment and construction machinery to its portfolio.",
+  "headOffice": "1st Floor, Sulaiman Centre, Plot No SC-5, Sector 15, Brookes Chowrangi, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 3432 5687-89",
+  "website": "https://www.orientmodaraba.com",
+  "ceo": null,
+  "sourceNote": "Written from: https://www.orientmodaraba.com/about-us/company (formation by spin-off from Orient Energy Systems, management company, Ijarah rental business and planned diversification) and https://www.orientmodaraba.com/contact-us/ (registered and corporate office addresses, telephone) (accessed 2026-10-17). No chief executive is named on the pages read, so the field is null.",
+  "products": [
+    {
+      "name": "Generator rental",
+      "summary": "Rental of gas and diesel generators on Ijarah, with turnkey solutions including aftersales support and operations and maintenance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
