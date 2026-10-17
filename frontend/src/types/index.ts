@@ -420,6 +420,35 @@ export interface MarketOverview {
   movers: { gainers: Mover[]; losers: Mover[]; mostActive: Mover[] };
 }
 
+export interface IndicatorPoint {
+  date: string;
+  value: number | null;
+}
+
+/** One indicator as the API returns it, with the parameters and window it was computed over. */
+export interface IndicatorSeries {
+  name: string;
+  params: Record<string, number>;
+  windowStart: string | null;
+  windowEnd: string | null;
+  unadjusted: true;
+  insufficientData: boolean;
+  requiredSessions: number;
+  availableSessions: number;
+  points: IndicatorPoint[];
+}
+
+export interface IndicatorsResponse {
+  symbol: string;
+  range: string;
+  sessions: number;
+  from: string | null;
+  to: string | null;
+  skipped: number;
+  sanitised: number;
+  series: IndicatorSeries[];
+}
+
 export interface SectorConstituent {
   symbol: string;
   companyName: string | null;
