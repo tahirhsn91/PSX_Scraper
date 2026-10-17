@@ -29,6 +29,7 @@ import { PageHeader } from "../components/ui/PageHeader";
 import { SectionCard } from "../components/ui/SectionCard";
 import { StatTile } from "../components/ui/StatTile";
 import { ChangePill } from "../components/ui/ChangePill";
+import { LiveNumber } from "../components/ui/LiveNumber";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { DataTable, type Column, type SortState } from "../components/ui/DataTable";
 import { useToast } from "../components/ui/ToastProvider";
@@ -225,7 +226,9 @@ const COLUMNS: Column<StockListItem>[] = [
     width: "8.4%",
     sortKey: "price",
     mobileRole: "meta",
-    render: (s) => formatNumber(s.currentPrice),
+    // The one figure in the table that is read as a price and polled while it is on screen: a
+    // flash on change is the difference between "this table is live" and "this table might be".
+    render: (s) => <LiveNumber value={s.currentPrice} format={formatNumber} flash />,
   },
   {
     key: "change",
@@ -240,6 +243,7 @@ const COLUMNS: Column<StockListItem>[] = [
         // Tinted rather than solid: twenty filled red pills in one column shout, and the sign plus
         // the glyph already carry the direction.
         variant="soft"
+        flash
         title={s.change != null ? `${s.change > 0 ? "+" : ""}${s.change}` : undefined}
       />
     ),
@@ -567,7 +571,20 @@ export function Dashboard() {
             {isDev && (
               <Button
                 variant="outlined"
-                startIcon={<SyncIcon />}
+                startIcon={
+                  <SyncIcon
+                    sx={
+                      syncingAll
+                        ? {
+                            // The label says "Syncing…"; the icon says it is still moving. One
+                            // rotation per second, linear, so it reads as a spinner and not a wink.
+                            animation: 'sync-spin 1.1s linear infinite',
+                            '@keyframes sync-spin': { to: { transform: 'rotate(360deg)' } },
+                          }
+                        : undefined
+                    }
+                  />
+                }
                 disabled={syncingAll || syncAll.isPending}
                 onClick={() => setConfirmSyncAll(true)}
               >
@@ -593,7 +610,7 @@ export function Dashboard() {
       >
         <StatTile
           label="Tracked stocks"
-          value={formatCount(universeCount)}
+          value={<LiveNumber value={universeCount} format={formatCount} countUp flash />}
           footer={
             <Typography variant="caption" color="text.secondary">
               {data ? `${data.items.length} on this page` : "loading…"}
@@ -603,7 +620,15 @@ export function Dashboard() {
         {isDev && (
           <StatTile
             label="Active syncs"
-            value={formatCount(inFlightCount)}
+            value={
+              <LiveNumber
+                value={inFlightCount}
+                format={formatCount}
+                countUp
+                flash
+                pulse={inFlightCount > 0}
+              />
+            }
             footer={
               <Typography variant="caption" color="text.secondary">
                 {syncingAll ? "syncing now" : "idle"}
@@ -614,7 +639,7 @@ export function Dashboard() {
         {isDev && (
           <StatTile
             label="Waiting"
-            value={formatCount(queuedCount)}
+            value={<LiveNumber value={queuedCount} format={formatCount} countUp flash />}
             footer={
               <Typography variant="caption" color="text.secondary">
                 queued plus delayed
@@ -625,7 +650,7 @@ export function Dashboard() {
         {isDev && (
           <StatTile
             label="Failed"
-            value={formatCount(failedCount)}
+            value={<LiveNumber value={failedCount} format={formatCount} countUp flash />}
             tone={failedCount > 0 ? "down" : "muted"}
             footer={
               <Typography variant="caption" color="text.secondary">
@@ -698,6 +723,10 @@ export function Dashboard() {
           onRetry={handleRetry}
           sort={tableSort}
           onSortChange={handleSortChange}
+          // A new sort, page or member list is a new question; the body fades in for 160ms rather
+          // than swapping under the reader. A poll changes the data, not this key, so it never
+          // replays on its own.
+          transitionKey={`${universe}-${tableSort.key}-${tableSort.direction}-${page}`}
           emptyTitle={
             universe === "kse100"
               ? "No KSE-100 members tracked"
