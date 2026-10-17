@@ -30,8 +30,12 @@ export const stocksQuery = paginationQuery.extend({
   preset: z
     .enum(['gainers', 'losers', 'most_active', 'highest_yield', 'low_pe', 'high_pe'])
     .optional(),
+  /** Window for the period-return filter and column. Sessions, not calendar days (see the repo). */
+  returnPeriod: z.enum(['1w', '1m', '3m', '6m', '1y']).optional(),
+  minReturn: z.coerce.number().min(-100).max(100000).optional(),
+  maxReturn: z.coerce.number().min(-100).max(100000).optional(),
   sort: z
-    .enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points', 'weight', 'dividendYield', 'peRatio', 'pbRatio', 'roe', 'beta'])
+    .enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points', 'weight', 'dividendYield', 'peRatio', 'pbRatio', 'roe', 'beta', 'return'])
     .optional(),
   order: z.enum(['asc', 'desc']).default('asc'),
   /**

@@ -56,6 +56,14 @@ export interface StockListItem {
    * beside the index it moved.
    */
   pointsIndex?: string;
+  /**
+   * Price return over the selected period, in percent, dividends excluded. Present only when the
+   * query asked for it; **null means the stock has fewer sessions of history than the period needs**
+   * (never 0, which would claim it was flat).
+   */
+  periodReturn?: number | null;
+  /** Sessions of history the return was computed over, capped at the period's session count + 1. */
+  returnSessions?: number | null;
   /** Ratio fields for the screener. Present on every list row (one indexed lookup); null when the
    *  source published none. The plain board ignores them — the mapper keeps them optional. */
   peRatio?: number | null;
@@ -107,6 +115,8 @@ export const SORTABLE_COLUMNS = {
   pbRatio: 'r.pb_ratio',
   roe: 'r.roe',
   beta: 'r.beta',
+  /** Price return over the selected period — computed by the `pr` lateral (see RETURN_SESSIONS). */
+  return: 'pr.ret',
 } as const;
 
 export type StockSortField = keyof typeof SORTABLE_COLUMNS;
@@ -164,6 +174,56 @@ export function buildListFilter(group?: StockListGroup, index?: string): Prisma.
  * Screener filters. Every field optional; an absent field is not a criterion. Ratio criteria read
  * the symbol's newest ratio row, price criteria read its newest priced row.
  */
+/**
+ * How many sessions back each period return is measured — PSX trades roughly 250 days a year, so
+ * these are the conventional session counts, not calendar arithmetic: "1M" is 21 sessions, which
+ * is about a month of trading and never lands on a weekend or a holiday.
+ */
+export const RETURN_SESSIONS = { '1w': 5, '1m': 21, '3m': 63, '6m': 126, '1y': 252 } as const;
+
+export type ReturnPeriod = keyof typeof RETURN_SESSIONS;
+
+/** True when the query needs the period-return lateral at all (a filter, or a sort by it). */
+export function hasReturnRequest(filters?: StockFilters, sort?: StockSortField): boolean {
+  return (
+    sort === 'return' ||
+    Boolean(filters && (filters.returnPeriod != null || filters.minReturn != null || filters.maxReturn != null))
+  );
+}
+
+/**
+ * The period-return lateral: one row per stock with its return over `back` sessions and how many
+ * sessions it actually has (capped at `back`).
+ *
+ * `back` is a bound parameter, and it only ever comes from RETURN_SESSIONS. The window is applied
+ * inside a LIMIT so this reads at most `back` rows per stock rather than the whole history.
+ * A stock with fewer than `back` sessions gets a NULL return — never 0%, which would read as
+ * "flat" when the truth is "unknown".
+ */
+const returnLateral = (back: number) => Prisma.sql`
+  LEFT JOIN LATERAL (
+    WITH r AS (
+      -- One price per session *date*: last_trade_date is a timestamp and a synced day can hold
+      -- several snapshots, so counting rows would make "1M" mean 21 snapshots instead of 21
+      -- sessions (ABOT read 3.54% that way against 3.17% by sessions). The day's last snapshot
+      -- wins, which is the same rule the chart's candle builder applies.
+      SELECT close, ROW_NUMBER() OVER (ORDER BY d DESC) AS rn
+      FROM (
+        SELECT DISTINCT ON (last_trade_date::date)
+          last_trade_date::date AS d,
+          close
+        FROM stock_prices
+        WHERE stock_id = s.id AND close IS NOT NULL
+        ORDER BY last_trade_date::date DESC, last_trade_date DESC
+      ) per_day
+      LIMIT ${back}
+    )
+    SELECT
+      (MAX(close) FILTER (WHERE rn = 1) / NULLIF(MAX(close) FILTER (WHERE rn = ${back}), 0) - 1) * 100 AS ret,
+      MAX(rn)::int AS available
+    FROM r
+  ) pr ON true`;
+
 export interface StockFilters {
   sector?: string;
   minPrice?: number;
@@ -179,6 +239,13 @@ export interface StockFilters {
   minDividendYield?: number;
   minRoe?: number;
   maxDebtToEquity?: number;
+  /**
+   * Price return over the last N sessions, dividends excluded. `returnPeriod` picks N and must be
+   * present whenever a return is filtered or sorted on; the controller defaults it to one month.
+   */
+  returnPeriod?: ReturnPeriod;
+  minReturn?: number;
+  maxReturn?: number;
   /** A specific set of symbols (a watchlist). Bound as a parameter, never assembled into the text. */
   symbols?: string[];
 }
@@ -215,6 +282,9 @@ function buildScreenerClauses(filters?: StockFilters): Prisma.Sql[] {
   if (filters.minDividendYield != null) c.push(Prisma.sql`r.dividend_yield >= ${filters.minDividendYield}`);
   if (filters.minRoe != null) c.push(Prisma.sql`r.roe >= ${filters.minRoe}`);
   if (filters.maxDebtToEquity != null) c.push(Prisma.sql`r.debt_to_equity <= ${filters.maxDebtToEquity}`);
+  // Period return. The `pr` lateral is joined whenever either bound is present (hasReturnRequest).
+  if (filters.minReturn != null) c.push(Prisma.sql`pr.ret >= ${filters.minReturn}`);
+  if (filters.maxReturn != null) c.push(Prisma.sql`pr.ret <= ${filters.maxReturn}`);
   // A watchlist: bound as an array through `unnest`, exactly like the market-cap gap-fill does.
   if (filters.symbols && filters.symbols.length > 0) {
     c.push(Prisma.sql`s.symbol IN (SELECT unnest(${filters.symbols}::text[]))`);
@@ -285,6 +355,9 @@ type RawStockListRow = {
   beta?: Prisma.Decimal | null;
   debt_to_equity?: Prisma.Decimal | null;
   eps?: Prisma.Decimal | null;
+  /** Selected only when the query joined the period-return lateral. */
+  period_return?: Prisma.Decimal | null;
+  return_sessions?: number | null;
 };
 
 /** One mapping for both list and search — they read the same columns and must agree. */
@@ -328,6 +401,12 @@ function toListItem(r: RawStockListRow): StockListItem {
   if (r.beta != null) item.beta = Number(r.beta);
   if (r.debt_to_equity != null) item.debtToEquity = Number(r.debt_to_equity);
   if (r.eps != null) item.eps = Number(r.eps);
+  // Period return is present only when the query asked for it — and it is explicitly null, not 0,
+  // when the stock has fewer sessions of history than the period needs.
+  if (r.period_return !== undefined) {
+    item.periodReturn = r.period_return != null ? Number(r.period_return) : null;
+    item.returnSessions = r.return_sessions ?? null;
+  }
   return item;
 }
 
@@ -542,6 +621,10 @@ export class StockRepository {
           filters.maxChangePercent != null),
     );
     const needsRatioJoin = hasRatioFilters(filters);
+    const needsReturns = hasReturnRequest(filters, sort);
+    // One row per stock; `available` lets the UI say "insufficient history" instead of printing a
+    // return computed from whatever few sessions exist.
+    const prJoin = needsReturns ? returnLateral(RETURN_SESSIONS[filters?.returnPeriod ?? '1m'] + 1) : null;
     const [rows, totals] = await Promise.all([
       prisma.$queryRaw<RawStockListRow[]>(Prisma.sql`
         SELECT s.id, s.symbol, s.company_name, s.sector, s.logo_url,
@@ -552,6 +635,7 @@ export class StockRepository {
                pt.points, pt.weight, pt.index_symbol AS points_index_symbol,
                r.pe_ratio, r.pb_ratio, r.dividend_yield, r.roe, r.beta,
                r.debt_to_equity, r.eps
+               ${needsReturns ? Prisma.raw(', pr.ret AS period_return, pr.available AS return_sessions') : Prisma.empty}
         FROM stocks s
         LEFT JOIN LATERAL (
           SELECT current_price, change, change_percent, volume, market_cap, week52_high,
@@ -579,6 +663,7 @@ export class StockRepository {
           FROM ratios WHERE stock_id = s.id
           ORDER BY created_at DESC LIMIT 1
         ) r ON true
+        ${prJoin ?? Prisma.empty}
         ${where}
         -- Prisma.raw, not a bound parameter: ORDER BY cannot take one. The string is safe by
         -- construction — it is assembled from the SORTABLE_COLUMNS literals and an enum the
@@ -608,6 +693,7 @@ export class StockRepository {
           ) r ON true`
             : Prisma.sql``
         }
+        ${prJoin ?? Prisma.empty}
         ${where}
       `),
     ]);
