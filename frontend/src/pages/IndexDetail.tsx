@@ -240,6 +240,7 @@ export function IndexDetail() {
       </Grid>
 
       <SectionCard
+        reveal
         title="Index chart"
         subtitle={
           mode === 'tradingview'
@@ -306,6 +307,7 @@ export function IndexDetail() {
           A read that failed says so, so it cannot be mistaken for an index with no members. */}
       <Box sx={{ mt: 3 }}>
         <SectionCard
+          reveal
           title="Constituents"
           subtitle={
             constituentsFailed

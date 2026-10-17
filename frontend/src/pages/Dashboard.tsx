@@ -27,6 +27,7 @@ import { MarketOverview } from "../components/MarketOverview";
 import { WatchButton } from "../components/WatchButton";
 import { PageHeader } from "../components/ui/PageHeader";
 import { SectionCard } from "../components/ui/SectionCard";
+import { Reveal } from "../components/ui/Reveal";
 import { StatTile } from "../components/ui/StatTile";
 import { ChangePill } from "../components/ui/ChangePill";
 import { LiveNumber } from "../components/ui/LiveNumber";
@@ -671,14 +672,21 @@ export function Dashboard() {
         </Box>
       )}
 
-      <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
+      <Reveal>
+        <IndicesPanel indices={indexBoard?.items} isLoading={indicesLoading} isError={indicesError} />
+      </Reveal>
 
-      <MarketOverview />
+      <Reveal>
+        <MarketOverview />
+      </Reveal>
 
-      <FailuresPanel status={status} />
+      <Reveal>
+        <FailuresPanel status={status} />
+      </Reveal>
 
       <SectionCard
         title="Tracked securities"
+        reveal
         subtitle={
           universe === "kse100"
             ? "The KSE-100's published members, 99 of them tracked here. Click a column to sort them on the server"
