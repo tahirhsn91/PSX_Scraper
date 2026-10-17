@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for RUPL. Every fact here is attributable — see sourceNote. ceo is null: neither the group website nor the FY2025 annual report names a chief executive. No image is attached.",
+  "symbol": "RUPL",
+  "description": "Rupali Polyester Limited is the listed company of the Rupali Group, a Lahore-based petrochemicals business that makes the primary raw materials for Pakistan's downstream textile industry. The group describes itself as one of the largest producers of polyester filament yarn (PFY) and a leading producer of polyester staple fibre (PSF) in Pakistan, with customers in knitting, weaving, bed sheets, sportswear and water-jet weaving. It was the founding sponsor of Soneri Bank and has more recently moved into coal-fired power generation to supply its own plants.",
+  "headOffice": "Rupali House, 241-242 Upper Mall Scheme, Anand Road, Lahore 54000, Pakistan",
+  "phone": "+92 42 3571 3101-4",
+  "website": "https://rupaligroup.com",
+  "ceo": null,
+  "sourceNote": "Company website (rupaligroup.com: home, contact) and the company's FY2025 annual report, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Polyester filament yarn (PFY)",
+      "summary": "The group's main product and the fibre behind its position in knitting, weaving, bed sheets and sportswear fabrics.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Polyester staple fibre (PSF)",
+      "summary": "Staple fibre, of which the group describes itself as a leading Pakistani producer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

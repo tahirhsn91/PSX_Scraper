@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for FEROZ. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FEROZ",
+  "description": "Ferozsons Laboratories Limited was established in 1954 as one of Pakistan's first pharmaceutical manufacturers and is now in its seventh decade. It imports, manufactures and sells pharmaceutical products and medical devices, with leading brands in gastroenterology, hepatology, cardiology and oncology, and sells into a growing number of export markets.",
+  "headOffice": "5 KM Sundar Raiwind Road, Raiwind, Lahore 54000, Pakistan",
+  "phone": "+92 42 36026700",
+  "website": "https://www.ferozsons-labs.com",
+  "ceo": "Osman Khalid Waheed",
+  "sourceNote": "Company website (ferozsons-labs.com: about, contact — corporate headquarters and registered office) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Pharmaceuticals — gastroenterology, hepatology, cardiology, oncology",
+      "summary": "Branded prescription medicines across the therapeutic areas the company names as its key franchises.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Medical devices",
+      "summary": "Import, distribution and sale of medical devices alongside its pharmaceutical range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

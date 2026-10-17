@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SPSL. Every fact here is attributable — see sourceNote. No image is attached. The cold-chain and EV-charging items on the site are presented by the company as future projects and are not listed as products.",
+  "symbol": "SPSL",
+  "description": "Sitara Petroleum Service Limited is a petroleum retail and distribution company that operates fuel stations and supplies lubricants, and describes its ambition as being a leading integrated petroleum, retail, logistics and storage company.",
+  "headOffice": "Ground Floor, 83-A, E/1 Main Boulevard Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3640 8500",
+  "website": "https://sitarapetroleum.com",
+  "ceo": "Zaheer Baig",
+  "sourceNote": "Company website (sitarapetroleum.com: company profile, businesses, CEO message), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Retail fuel network",
+      "summary": "Fuel stations operated across the company's retail network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fuel products",
+      "summary": "Petroleum fuels sold through the retail network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Convenience stores",
+      "summary": "Convenience retail at the company's fuel stations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Car wash and extra services",
+      "summary": "Car wash and additional services offered at stations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

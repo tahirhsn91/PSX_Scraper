@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for PTL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PTL",
+  "description": "Panther Tyres Limited manufactures and sells tyres and tubes for vehicles, along with lubricants and spare parts, at a purpose-built factory on a 30-acre site at 29.5 km on the Sheikhupura Road. Founded in 1983 as Mian Tyre and Rubber Company, it became a public limited company in 2003, took the Panther Tyres name in 2011 and listed on the Pakistan Stock Exchange in February 2021; in 2019 it produced Pakistan's first locally made 350 kg OTR tyre.",
+  "headOffice": "Panther House, 97-B, Aziz Avenue, Jail Road, Lahore, Pakistan",
+  "phone": null,
+  "website": "https://panthertyres.com",
+  "ceo": "Mian Faisal Iftikhar",
+  "sourceNote": "Company website (panthertyres.com: about us, status of the company, contact — head office and plant) and the PSX company profile record, read 2026-10-17. No telephone number was found on the contact page.",
+  "products": [
+    {
+      "name": "Tyres and tubes",
+      "summary": "Vehicle tyres and tubes made at the Sheikhupura Road plant, including passenger, commercial and OTR tyres.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lubricants",
+      "summary": "Lubricants sold alongside the tyre range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Spare parts",
+      "summary": "Automotive spare parts distributed through the company's network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

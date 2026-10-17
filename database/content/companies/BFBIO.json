@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BFBIO. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BFBIO",
+  "description": "BF Biosciences Limited is an 80:20 joint venture between Ferozsons Laboratories Limited and the Bagó Group of Argentina, and Pakistan's first biopharmaceutical production facility, designed to USFDA standards. Its plant, completed in 2009 on a 27-acre site in Lahore, makes biological medicines to treat cancer and hepatitis C for local and export markets. A second line, adding high-speed pre-filled syringes, a lyophiliser and a combi filling line, was built to extend capacity to biologicals, non-biologicals and selected vaccines.",
+  "headOffice": "197-A, The Mall, Rawalpindi, Pakistan",
+  "phone": "+92 42 36026700",
+  "website": "https://bfbio.com",
+  "ceo": "Muhammad Farhan Rafiq",
+  "sourceNote": "Company website (bfbio.com: profile-of-company, contact) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Biopharmaceuticals — oncology and hepatitis C",
+      "summary": "Biological medicines manufactured at the Lahore plant for domestic and export markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Line II — pre-filled syringes and lyophilised products",
+      "summary": "A brownfield expansion adding a high-speed pre-filled syringe line, a 42 square metre lyophiliser and a combi filling line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

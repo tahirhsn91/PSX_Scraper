@@ -1,0 +1,33 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "NRSL",
+  "description": "Nimir Resins Limited was incorporated on 17 December 1964 as Reichhold Resins (Pakistan) Private Limited and listed on the Pakistan Stock Exchange in May 1992. Renamed in November 1997 after its acquisition by a Saudi group, it describes itself as the pioneer of alkyd resins in Pakistan, having introduced them in 1964. Its portfolio covers coatings, emulsion and polyester resins, optical brightening agents, pulp and paper chemicals, textile chemicals, monomers, solvents and adhesives.",
+  "headOffice": "122-B, New Muslim Town, Lahore, Pakistan",
+  "phone": "+92 42 35926090-93",
+  "website": "https://nimir.com.pk/nrl/",
+  "ceo": null,
+  "sourceNote": "Company website (nimir.com.pk/nrl and the coatings-emulsions-polyester page), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Coatings resins",
+      "summary": "Alkyd and modified alkyd resins, amino resins, saturated polyesters, urethane alkyds, rosin-modified resins, epoxy esters, acrylic resins and metal driers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Emulsion binders",
+      "summary": "Emulsion binders, wetting agents, antifoams, liquid polymeric pigments and emulsifiers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Polyester resins",
+      "summary": "Unsaturated polyester resins for composites, including general-purpose UPR and gel coats, chemical-resistant UPR, pigment dispersion resins and accelerators.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

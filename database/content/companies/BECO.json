@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BECO. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "BECO",
+  "description": "Beco Steel Limited, formerly Ravi Textile Mills Limited, took its present name in 2021 after a reverse merger brought two melting units and one re-rolling unit into the listed company. It manufactures steel and allied products at Badami Bagh, Lahore, and is led by a third-generation steel manufacturing family whose business began in 1962.",
+  "headOffice": "79-Peco Road, Badami Bagh, Lahore",
+  "phone": "+92 42 111 112 326",
+  "website": "https://becosteel.com",
+  "ceo": "Ali Shafique Chaudhary",
+  "sourceNote": "Company website (becosteel.com: who we are, products, contact) and the PSX company profile (dps.psx.com.pk/company/BECO: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Billets",
+      "summary": "Steel billets from the company's melting units at Badami Bagh, Lahore.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Rolled steel products",
+      "summary": "Girders cut to custom lengths, T-iron bars and rounded steel bars from the re-rolling unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

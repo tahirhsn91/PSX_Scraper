@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SINDM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SINDM",
+  "description": "Sindh Modaraba is a perpetual, multi-dimensional non-trading Modaraba formed under the Modaraba Companies and Modaraba (Floatation and Control) Ordinance, 1980. It operates in Ijarah, Musharakah and Murabahah financing and invests in marketable securities. It is managed by Sindh Modaraba Management Limited, a company wholly owned by the Government of Sindh.",
+  "headOffice": "1st Floor, Imperial Court, Dr. Ziauddin Ahmed Road, Karachi-75530, Pakistan",
+  "phone": "+92 21 3564 0708-9",
+  "website": "https://www.sindhmodarabaltd.com",
+  "ceo": "Abdul Rauf Chandio",
+  "sourceNote": "Written from: https://www.sindhmodarabaltd.com/ (business lines, management company and its ownership), https://www.sindhmodarabaltd.com/contact.php (address and telephone) and https://www.sindhmodarabaltd.com/management-profile.php (chief executive — the site lists Mr. Abdul Rauf Chandio as Executive Director & Chief Executive Officer of Sindh Modaraba Management Limited, the Modaraba's manager) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ijarah",
+      "summary": "Ijarah lease financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Musharakah",
+      "summary": "Musharaka financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Murabahah",
+      "summary": "Murabaha cost-plus financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Investment in marketable securities",
+      "summary": "Investment of the Modaraba's funds in marketable securities, as described among its operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

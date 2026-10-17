@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for AGTL. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "AGTL",
+  "description": "Al-Ghazi Tractors Limited was incorporated in June 1983 and privatised in December 1991. It is a subsidiary of the Al-Futtaim group of Dubai and assembles New Holland tractors in Pakistan, with CNH Industrial as its technology partner.",
+  "headOffice": "10 KM Sheikhupura Road, Lahore, Pakistan",
+  "phone": "+92 42 3730 682",
+  "website": "https://www.alghazitractors.com",
+  "ceo": "Yasin Seker",
+  "sourceNote": "Company website (alghazitractors.com: about us, other details, management, tractors), read 2026-10-17.",
+  "products": [
+    {
+      "name": "NH 480s tractor",
+      "summary": "New Holland 480s tractor model in the company's product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "NH 480pp tractor",
+      "summary": "New Holland 480pp tractor model in the company's product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "NH Ghazi tractor",
+      "summary": "New Holland Ghazi tractor model in the company's product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

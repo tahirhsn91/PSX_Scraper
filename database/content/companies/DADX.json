@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for DADX. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "DADX",
+  "description": "Dadex Eternit Limited, incorporated in 1959, manufactures and sells construction materials, principally piping systems and allied products made from chrysotile cement, rubber and plastics, along with imported pipe fittings and building products. Its range covers polyethylene, polypropylene random and uPVC pipe systems, chrysotile cement pressure and sewer pipes, roofing, and architectural cladding and curtain wall.",
+  "headOffice": "Dadex House, 34-A/1, Block 6, P.E.C.H.S., Shahrah-e-Faisal, Karachi-75400",
+  "phone": "+92 21 111 000 789",
+  "website": "http://www.dadex.com",
+  "ceo": "Sikander Dada",
+  "sourceNote": "Company website (dadex.com: products & services, contact us) and the PSX company profile (dps.psx.com.pk/company/DADX: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Thermoplastic pipe systems",
+      "summary": "Polyethylene, polypropylene random (Polydex) and uPVC pipes for water and gas distribution, cable ducts, soil waste and vent, sewerage and tubewell casing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Chrysotile cement pipes and roofing",
+      "summary": "Chrysotile cement pressure and sewer pipes, corrugated roofing sheets and nalidar beams.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Architectural cladding and curtain wall",
+      "summary": "Cladding and curtain wall products and services, including project work.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

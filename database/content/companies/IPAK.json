@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for IPAK. Every fact here is attributable — see sourceNote. No image is attached; add imagePath/imageSource/imageLicence together only when a licensed image of the company's own plant is available.",
+  "symbol": "IPAK",
+  "description": "International Packaging Films Limited (IPAK) is a Pakistani manufacturer of packaging films, founded in 2017 as a greenfield project to produce BOPP films at Raiwind, Lahore, and headquartered in Karachi. It makes transparent, metallized, white, cavitated and matte BOPP films and exports to a number of countries. The group has since added subsidiaries for cast polypropylene films (CPAK) and BOPET films (PETPAK), and an export arm, IPAK Connect, based in Dubai.",
+  "headOffice": "Plot # 40-L-1, P.E.C.H.S. Block 6, Karachi 75400, Pakistan",
+  "phone": "+92 21 3438 4044",
+  "website": "https://ipak.com.pk",
+  "ceo": "Naveed Godil",
+  "sourceNote": "Company website (ipak.com.pk: about IPAK, product portfolio, contact us, board of directors), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Transparent BOPP films",
+      "summary": "High-transparency, high-gloss films with low SIT and a wide seal range, used mainly for printing and lamination.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Metallized films",
+      "summary": "Used in lamination for single- and two-ply packaging structures for snacks, biscuits, confectionery and bakery products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "White films",
+      "summary": "High-gloss, milky-white films used for biscuit, confectionery, chocolate and ice-cream packaging.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cavitated / pearlized films",
+      "summary": "Low-density, high-yield films giving improved aesthetics and a light barrier at lower material cost.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Matte films",
+      "summary": "High-haze films that reduce light reflection, used for printing, web lamination and paper/board lamination.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

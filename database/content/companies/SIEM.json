@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for SIEM. Every fact here is attributable — see sourceNote. No image is attached. The chief executive is listed on Siemens' own Pakistan leadership page as Managing Director; head office address and telephone were not captured from a Siemens source in this pass and are left null.",
+  "symbol": "SIEM",
+  "description": "Siemens (Pakistan) Engineering Company Limited was incorporated in Pakistan in 1953, though Siemens opened its first office in what is now Pakistan in Lahore in 1922. It is a public limited company quoted on the Pakistan Stock Exchange, principally engaged in executing projects under contracts and in the manufacturing, sale and installation of electronic and electrical capital goods.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://www.siemens.com/en-us/company/investor-relations-pakistan/",
+  "ceo": "Syed Muhammad Daniyal",
+  "sourceNote": "Siemens investor relations pages for Pakistan (company overview, leadership), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Contract project execution",
+      "summary": "Execution of electrification, automation and infrastructure projects under contract.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Electrical and electronic capital goods",
+      "summary": "Manufacture, sale and installation of electrical and electronic capital goods.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

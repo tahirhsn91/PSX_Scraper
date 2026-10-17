@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for STJT. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "STJT",
+  "description": "Shahtaj Textile Limited is a public limited company incorporated in January 1990 and listed on the Pakistan Stock Exchange, a Shahnawaz Group company. It manufactures and sells greige fabric, which it supplies to processing and export houses in Pakistan and to foreign buyers. Commercial production began in January 1992 and the mills, near Lahore, now run 179 Toyoda and Picanol air-jet looms with backup power generation.",
+  "headOffice": "Shahnawaz Building, 19-Dockyard Road, West Wharf, Karachi 74000, Pakistan",
+  "phone": "+92 21 3231 3934-8",
+  "website": "https://www.shahtaj.com",
+  "ceo": "Taqi Mohammad",
+  "sourceNote": "Company website (shahtaj.com: about us, contact) and the PSX Data Portal company record for STJT, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Greige fabric",
+      "summary": "Unbleached woven fabric produced on 179 Toyoda and Picanol air-jet looms.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

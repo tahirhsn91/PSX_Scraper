@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for SLM. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SLM",
+  "description": "Service Long March Tyres (Private) Limited manufactures all-steel radial tyres for trucks, buses, light trucks and off-the-road use — the first all-steel radial truck and bus tyre made in Pakistan — and exports to customers in the USA, Brazil, the Middle East and Asia. The company was incorporated in January 2020 and is part of the Servis Group.",
+  "headOffice": "Servis House, 2-Main Gulberg, Lahore, Pakistan",
+  "phone": "+92 323 7568973",
+  "website": "https://slmtires.com",
+  "ceo": "Omar Saeed",
+  "sourceNote": "Company website (slmtires.com: home, about-us, contact) and the PSX company profile record, read 2026-10-17. The telephone number is published on the site as 0323-SLMTYRE.",
+  "products": [
+    {
+      "name": "Long haul TBR tyres",
+      "summary": "Ultra-premium long-haul and regional all-position on-road truck and bus radials.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Regional tyres",
+      "summary": "Five-rib regional and all-position steer tyres for mixed use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "On/off-road tyres",
+      "summary": "All-steel radials for mixed road and off-road service, including light truck and OTR applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

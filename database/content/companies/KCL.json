@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for KCL. Every fact is attributable — see sourceNote. The company's own website did not respond when checked, so no website is given. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "KCL",
+  "description": "Karam Ceramics Limited is a tile manufacturer incorporated in Pakistan on 8 April 1979 as a public limited company and listed on the Pakistan Stock Exchange. Its registered office is in S.M.C.H.S., Karachi, and its principal activity is the manufacturing and sale of wall and floor tiles.",
+  "headOffice": "A-31, S.M.C.H.S., Karachi, Pakistan",
+  "phone": null,
+  "website": null,
+  "ceo": "Syed Mazhar Ali Nasir",
+  "sourceNote": "PSX Data Portal company record for KCL (business description, key people, address), read 2026-10-17. The company website karamceramics.com did not respond on that date.",
+  "products": [
+    {
+      "name": "Wall tiles",
+      "summary": "Ceramic wall tiles for interior use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Floor tiles",
+      "summary": "Ceramic floor tiles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

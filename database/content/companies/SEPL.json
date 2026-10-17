@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SEPL. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "SEPL",
+  "description": "Security Papers Limited was established in 1965 and became a joint venture of Iran, Turkey and Pakistan in 1967 under the RCD — now ECO — protocol. Its business, then and now, is the manufacture of banknote paper and other security paper, produced at its mill on Jinnah Avenue, Malir Halt, Karachi.",
+  "headOffice": "Jinnah Avenue, Malir Halt, Karachi 75100, Pakistan",
+  "phone": "+92 21 9924 8285",
+  "website": "https://security-papers.com",
+  "ceo": "Imran Qureshi",
+  "sourceNote": "Company website (security-papers.com: about us, addresses, board of directors), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Banknote paper",
+      "summary": "Paper manufactured for banknote production.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Educational certificates",
+      "summary": "Security paper for educational certificates.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Financial instruments",
+      "summary": "Security paper for financial instruments.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Other security papers",
+      "summary": "Other security paper products made at the Malir Halt mill.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

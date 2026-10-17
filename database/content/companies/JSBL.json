@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for JSBL. Every fact is attributable — see sourceNote. No image is attached: the institution's own imagery is not licence-cleared and a stock photograph of a branch or office would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "JSBL",
+  "description": "JS Bank Limited was incorporated in Pakistan as a public limited company on 15 March 2006, and dates its origins to Jahangir Siddiqui & Co. Limited's acquisition of Citicorp Investment Bank Limited in 1999, which formed Jahangir Siddiqui Investment Bank Limited. The bank describes itself as one of the fastest growing banks in Pakistan with a domestic and international presence and a leadership position in digital financial services, SME and consumer lending.",
+  "headOffice": "Shaheen Commercial Complex, Dr. Ziauddin Ahmed Road, Karachi-74200, Pakistan",
+  "phone": "+92 21 111 654 321",
+  "website": "https://www.jsbl.com",
+  "ceo": "Basir Shamsie",
+  "sourceNote": "Written from: https://www.jsbl.com/about-us/ (incorporation, origins via Citicorp Investment Bank acquisition, self-description of the franchise) and https://www.jsbl.com/contact-us/ (head office address and telephone), https://www.jsbl.com/about-us/management-team/ (President and Chief Executive Officer) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Consumer lending",
+      "summary": "Consumer finance propositions including JS GharApna home finance for buying or building a house.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SME and commercial banking",
+      "summary": "SME and commercial lending, cash management and trade services for businesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Digital financial services",
+      "summary": "Digital banking and payments, an area the bank says it leads in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

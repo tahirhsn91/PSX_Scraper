@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for GEMPACRA. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "GEMPACRA",
+  "description": "The Pakistan Credit Rating Agency Limited (PACRA) is a credit rating agency — the first established in Pakistan — that assesses the creditworthiness of companies and of specific debt instruments and publishes the resulting ratings. It was incorporated in 1994 as a joint venture between the International Finance Corporation, Fitch Ratings and the Lahore Stock Exchange, and its shares trade on the Pakistan Stock Exchange under the symbol GEMPACRA. It is recognised as a national rating agency by the SECP and as an external credit assessment institution by the State Bank of Pakistan.",
+  "headOffice": "Awami Complex, FB-1, Usman Block, New Garden Town, Lahore",
+  "phone": "+92 42 3586 9504-6",
+  "website": "https://www.pacra.com",
+  "ceo": "Usman Haider",
+  "sourceNote": "PSX company profile (dps.psx.com.pk/company/GEMPACRA: business description, key people, address) and the company's own website (pacra.com: about-us, products, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Credit ratings",
+      "summary": "Entity and instrument credit ratings — forward-looking opinions on the ability of an issuer or a specific instrument to meet its financial obligations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Other rating opinions",
+      "summary": "Relative opinions, gradings and rankings covering funds, security brokers, asset managers and real estate projects.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

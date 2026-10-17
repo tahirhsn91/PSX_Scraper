@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "JSMFETF",
+  "description": "JS Momentum Factor Exchange Traded Fund (JSMFETF) is a smart-beta exchange-traded fund managed by JS Investments Limited and listed on the Pakistan Stock Exchange in January 2022. It tracks the JS Momentum Factor Index, which screens PSX stocks for liquidity and free float and then selects large- and mid-capitalisation companies showing relatively higher price momentum, rebalancing every 30 days.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://jsil.com",
+  "ceo": null,
+  "sourceNote": "Company website (jsil.com: JS Momentum Factor ETF page, key facts and index methodology), read 2026-10-17.",
+  "products": []
+}

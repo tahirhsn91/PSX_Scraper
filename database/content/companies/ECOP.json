@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for ECOP. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ECOP",
+  "description": "EcoPack Limited has manufactured PET preforms and bottles since 1993 and describes itself as one of Pakistan's leading manufacturers of them. Its plant is in Hattar Industrial Estate, Khyber Pakhtunkhwa, with offices in Rawalpindi, Lahore and Karachi, and it uses European and Canadian machinery to make bottles and preforms from 240 ml to 12 litres. It says it is a premier vendor of beverage and edible-oil packaging to multinational and national companies in Pakistan and abroad, and holds ISO certifications.",
+  "headOffice": "Hattar Industrial Estate, Khyber Pakhtunkhwa, Pakistan",
+  "phone": "+92 51 5974 098-99",
+  "website": "https://ecopack.com.pk",
+  "ceo": "Hussain Jamil",
+  "sourceNote": "Written from: https://ecopack.com.pk/ (operating since 1993, PET preforms and bottles, Hattar Industrial Estate location and other offices, machinery, size range, customers, ISO certifications), https://ecopack.com.pk/contact/ (telephone) and https://ecopack.com.pk/company-information/ (chief executive; product applications) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "PET bottles",
+      "summary": "PET bottles from 240 ml to 12 litres for beverages, edible oil, pharma and other applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PET preforms",
+      "summary": "Preforms for carbonated soft drinks, warm-fill juices, water, pharma, syrups, squashes and edible oil.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

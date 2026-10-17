@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for GAMON. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GAMON",
+  "description": "Gammon Pakistan Limited was incorporated on 12 August 1947 as a public company limited by shares, and its shares are quoted on the Pakistan Stock Exchange. It is principally engaged in the execution of civil construction works, specialising in concrete and structural works. The company has taken part in Indus Basin projects as part of a consortium, including the Mailsi Siphon project and an aggregate supply contract, and lists Gammon Pakistan Pre-Cast Limited, The General Tyre & Rubber Company and other Bibojee Group companies among its associates.",
+  "headOffice": "Gammon House, 400/2, Peshawar Road, Rawalpindi 46000, Pakistan",
+  "phone": "+92 334 049 3434",
+  "website": "http://www.gammonpakistan.com",
+  "ceo": "Khalid Kuli Khan Khattak",
+  "sourceNote": "Written from: http://www.gammonpakistan.com/profile.php (incorporation, listing, civil construction business, concrete and structural specialisation, Indus Basin projects, associated companies) and http://www.gammonpakistan.com/contact.php (Rawalpindi address and telephone), http://www.gammonpakistan.com/governance.php (Director/Chief Executive Officer) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Civil construction",
+      "summary": "Execution of civil construction works, specialising in concrete and structural works, including large water-infrastructure contracts as part of consortia.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

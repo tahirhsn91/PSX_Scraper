@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for UDLI. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "UDLI",
+  "description": "UDL International Limited is the entity that survived the April 2024 merger of First UDL Modaraba into it, and is the listed arm of a UDL group that began in 1887 as distributor of W.D. & H.O. Wills cigarettes. Its stated principal line of business is to provide services and trade in products permissible under law, and it is focused on Islamic financial services through its subsidiary UDL Financial Services Limited. The company says it plans to expand into FMCG, skin care and food brands.",
+  "headOffice": "1st Floor, Business Enclave, 77-C, 12th Commercial Street, Off Khayaban-e-Ittihad, DHA Phase II (Extension), Karachi",
+  "phone": "+92 21 3531 0561-5",
+  "website": "https://www.udl.com.pk",
+  "ceo": "Shuja Malik",
+  "sourceNote": "Company website (udl.com.pk: group profile, corporate information, contact) and the PSX company profile (dps.psx.com.pk/company/UDLI: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Islamic financial services",
+      "summary": "Shariah-compliant financial services offered through the subsidiary UDL Financial Services Limited.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

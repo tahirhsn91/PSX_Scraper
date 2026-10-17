@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ZTL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "ZTL",
+  "description": "Zephyr Textiles Limited was incorporated in Pakistan on 26 February 1999, converted to a public limited company in October 2004 and is listed on the Pakistan Stock Exchange. It manufactures, dyes and trades woven cloth and towels for home textiles and fashion, running 281 air-jet looms with a capacity of about 80,000 metres of fabric a day, roughly 70% of it for home furnishing.",
+  "headOffice": "3rd Floor, IEP Building, 97 B/D-I, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3578 2905",
+  "website": "https://zephyrtextiles.com",
+  "ceo": "Mussaid Hanif",
+  "sourceNote": "Company website (zephyrtextiles.com: home, contact) and the PSX Data Portal company record for ZTL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Woven fabric",
+      "summary": "Greige and finished woven fabric, including high-density percales and satins.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Terry towels",
+      "summary": "Towels produced on 34 Picanol and 9 Dornier looms, with a towel division capacity of about 300 tons a month.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textiles",
+      "summary": "Home-textile products accounting for roughly 70% of fabric production.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

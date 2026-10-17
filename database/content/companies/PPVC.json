@@ -1,0 +1,26 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PPVC",
+  "description": "Pakistan PVC Limited, which sells under the SHAVYL name, runs a chlor-alkali and PVC complex producing PVC resins and processing those and other thermoplastic compounds into finished and semi-finished products. The plant is at Shaffiabad, Gharo in Thatta district, 66 km from Karachi, with a second facility for pipes and fittings. The complex was built in the mid-1960s in collaboration with Shin-Etsu Chemical and Sekisui Chemical of Japan, and the company began producing PVC pipes in 1966. Its pipe plant has since been rebuilt around extrusion machinery from Toshiba, Wavin and Sekisui.",
+  "headOffice": "Sector I-9, Industrial Area, Islamabad, Pakistan",
+  "phone": "+92 51 4430317",
+  "website": "https://shavyl.com",
+  "ceo": null,
+  "sourceNote": "Company website (shavyl.com: about-us, status-registered-address), read 2026-10-17. The address given is the registered office; manufacturing is at Shaffiabad, Gharo, Thatta district.",
+  "products": [
+    {
+      "name": "PVC pipes and fittings",
+      "summary": "SHAVYL-branded pipes and fittings produced at the company's extrusion facility.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PVC resins and compounds",
+      "summary": "PVC resin production and compounding of PVC and other thermoplastics into finished and semi-finished products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

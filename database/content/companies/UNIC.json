@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for UNIC. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "UNIC",
+  "description": "The United Insurance Company of Pakistan Limited is a Pakistani general insurer with its head office at UIG House in Lahore and its registered office in Karachi. It writes general insurance and also operates Window Takaful business under the Tameem-United name, and it carries insurer financial strength ratings of AA+ from PACRA and VIS. It is a public interest company listed on the Pakistan Stock Exchange.",
+  "headOffice": "UIG House, 01, Upper Mall, Lahore, Pakistan",
+  "phone": "+92 42 3577 6475",
+  "website": "https://theunitedinsurance.com",
+  "ceo": "Mian M.A. Shahid",
+  "sourceNote": "Company website (uig.com.pk/united-insurance-registered-office: head office address and telephone, registered office at 204 Madina City Mall, Abdullah Haroon Road, Karachi; theunitedinsurance.com/corporate-profile for company status, the PACRA and VIS AA+ insurer financial strength ratings and the chief executive Mian M.A. Shahid; a site news item for the Tameem-United Window Takaful operations), read 2026-10-17.",
+  "products": [
+    {
+      "name": "General insurance",
+      "summary": "Conventional general insurance cover for individuals and businesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tameem-United Window Takaful",
+      "summary": "The company's Shariah-compliant window takaful operations, which it has partnered with Pak Suzuki to offer a motor insurance solution.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for TBL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TBL",
+  "description": "Treet Battery Limited manufactures lead-acid batteries — automotive, maintenance-free, deep-cycle and gel types for vehicles, UPS and solar systems — and is extending into lithium batteries. Incorporated in 2019 as a subsidiary of the listed Treet Corporation Limited, it runs its head office at Kot Lakhpat in Lahore and a manufacturing facility at M-3 Industrial City, Faisalabad.",
+  "headOffice": "72B, Peco Road, Kot Lakhpat Industrial Area, Lahore 54770, Pakistan",
+  "phone": "+92 42 111187338",
+  "website": "https://treetbattery.com",
+  "ceo": "Syed Sheharyar Ali",
+  "sourceNote": "Company website (treetbattery.com: home, contact — head office and manufacturing facilities) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Automotive batteries",
+      "summary": "Lead-acid batteries for vehicles, made with the Korean technology the company cites on its site.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Deep-cycle batteries",
+      "summary": "Deep-cycle batteries for UPS and solar energy storage.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lithium batteries",
+      "summary": "Lithium batteries, a newer addition to the company's range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for FANM. Every fact here is attributable — see sourceNote. No image is attached. FANM is an Islamic financing vehicle that also trades commodities; the one branded product it publishes is listed.",
+  "symbol": "FANM",
+  "description": "First Al-Noor Modaraba is a perpetual, multi-purpose modaraba — a listed Islamic financing vehicle — managed by Al-Noor Modaraba Management (Private) Limited. It began operations in November 1992 as a specific-purpose trading modaraba and was converted to a multi-purpose perpetual modaraba in 1995. It provides Shariah-compliant financing through ijara, murabaha, musharaka and musawamah, invests in equities, and has traded commodities since inception, including basmati rice under its Shalamar brand.",
+  "headOffice": "96-A, Sindhi Muslim Housing Society, Karachi, Pakistan",
+  "phone": "+92 21 3455 8268",
+  "website": "https://fanm.co",
+  "ceo": null,
+  "sourceNote": "Modaraba website (fanm.co: home, company information, contact), read 2026-10-17. No chief executive is named on the pages read, so ceo is left empty.",
+  "products": [
+    {
+      "name": "Shalamar basmati rice",
+      "summary": "Super kernel basmati rice sold under the Shalamar brand, for local and export sale.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commodity trading",
+      "summary": "Trading in commodities including pulses and dates.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

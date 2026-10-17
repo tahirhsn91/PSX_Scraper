@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SMCPL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists, and a generic cement-industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SMCPL",
+  "description": "Safe Mix Concrete Limited is a ready-mix concrete producer that describes itself as the pioneer of Pakistan's ready-mix concrete industry and the only listed ready-mix concrete company in the country. It belongs to the Arif Habib group, has operated since 2005, and supplies ready-mix concrete from a plant at Global Industry, North Nazimabad, Karachi, with a fleet of 22 transit mixers and an office in Lahore.",
+  "headOffice": "Plot # 1, Global Industry, Nusrat Bhutto Colony, Opposite Jamia Usmania, North Nazimabad, Karachi, Pakistan",
+  "phone": "+92 42 3577 7909",
+  "website": "https://safemixlimited.com",
+  "ceo": "Samad A. Habib",
+  "sourceNote": "Written from: https://safemixlimited.com/ (Arif Habib group, ready-mix pioneer, only listed ready-mix company, since 2005), https://safemixlimited.com/product.php (ready-mix concrete description and 22 transit mixers) and https://safemixlimited.com/contact-us.php (Karachi plant address and Lahore office telephone) and https://safemixlimited.com/directors.php (chief executive, in post since 2019) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ready-mix concrete",
+      "summary": "Ready-mix concrete supplied from the company's Karachi plant, using a fleet of 22 transit mixers, for foundations, retaining walls, utility encasements and decorative stamped, coloured and exposed-aggregate finishes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

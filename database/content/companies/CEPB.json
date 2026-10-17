@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for CEPB. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "CEPB",
+  "description": "Century Paper & Board Mills Limited manufactures and markets paper, board and related products, and is the flagship company of the Lakson Group and a market leader in packaging boards in Pakistan. Established in 1984, it runs a 162-acre plant with an annual output of about 280,000 tons and has invested in a solar plant and a Rs 250 million waste-water treatment facility.",
+  "headOffice": "Lakson Square, Building No. 2, Sarwar Shaheed Road, Karachi 74200, Pakistan",
+  "phone": "+92 21 38400000",
+  "website": "https://www.centurypaper.com.pk",
+  "ceo": "Aftab Ahmad",
+  "sourceNote": "Company website (centurypaper.com.pk: about — output, plant area, 1984; contact — head office and telephone) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Packaging boards",
+      "summary": "Packaging board grades, the segment in which the company describes itself as a market leader.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Paper and board products",
+      "summary": "Paper and board manufacture and marketing across the company's range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

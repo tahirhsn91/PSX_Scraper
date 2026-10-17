@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "WAHDAT",
+  "description": "Wahdat Poultry Farm Limited is a Pakistani poultry enterprise producing eggs, using modern farming technology and what it describes as high standards of hygiene and nutrition. The company has set out plans for an egg processing plant to support its expansion.",
+  "headOffice": "G-2, Shah Tower, E-11/2, Islamabad, Pakistan",
+  "phone": "+92 51 111 924 328",
+  "website": "https://wahdatpoultryfarm.com",
+  "ceo": null,
+  "sourceNote": "Company website (wahdatpoultryfarm.com: about-us, contact), read 2026-10-17; the egg-processing plant is from the company's own news item on its site.",
+  "products": [
+    {
+      "name": "Eggs",
+      "summary": "Premium quality table eggs produced at the company's farms.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

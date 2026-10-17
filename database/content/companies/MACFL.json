@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for MACFL. Every fact here is attributable — see sourceNote. No image is attached; a generic film-plant photograph would imply it is Macpac's own.",
+  "symbol": "MACFL",
+  "description": "Macpac Films Limited is a Pakistani manufacturer of biaxially-oriented polypropylene (BOPP) films, which it describes as the pioneer of BOPP film production in the country. It makes plain, sealable and value-added films on Brückner lines at a factory in the Eastern Industrial Zone, Port Qasim, Karachi, and has supplied packaging films for more than two decades.",
+  "headOffice": "Plot No. 44-C, Block-6, P.E.C.H.S., Main Razi Road, Karachi, Pakistan",
+  "phone": "+92 21 3430 5810",
+  "website": "https://www.macpacfilms.com",
+  "ceo": "Najm-ul-Hassan",
+  "sourceNote": "Company website (macpacfilms.net: about us, board of directors, contact addresses), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Plain BOPP films",
+      "summary": "Biaxially-oriented polypropylene films produced on Brückner lines, corona-treated for printability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sealable BOPP films",
+      "summary": "Sealable film grades for flexible packaging structures.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Value-added films",
+      "summary": "Modified films developed for specific barrier, slip and sealing requirements.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

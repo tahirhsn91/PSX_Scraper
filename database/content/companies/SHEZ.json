@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SHEZ",
+  "description": "Shezan International Limited has been a Pakistani food brand since 1964, making a range of products from the fruit and vegetables grown in its own orchards. The company describes itself as internationally recognised and sells on the quality and taste of its range.",
+  "headOffice": "56 – Bund Road, Lahore 54500, Pakistan",
+  "phone": "+92 42 37466900-04",
+  "website": "https://shezan.com",
+  "ceo": null,
+  "sourceNote": "Company website (shezan.com: home, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Fruit and vegetable based foods",
+      "summary": "The company makes its range from fruit and vegetables grown in its own orchards.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

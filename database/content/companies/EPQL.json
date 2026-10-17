@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for EPQL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "EPQL",
+  "description": "Engro Powergen Qadirpur Limited operates a 217 MW combined-cycle power plant that runs on high-sulphur permeate gas from the Qadirpur gas field — gas that had previously been wasted — with high-speed diesel as backup fuel. The plant comprises a 127 MW gas turbine, a 110 MW steam turbine and a 400 tonnes/hour heat recovery steam generator. It is 69% owned by Engro Corporation through Engro Energy.",
+  "headOffice": "16th Floor, The Harbor Front Building, HC-3, Marine Drive, Block 4, Clifton, Karachi",
+  "phone": null,
+  "website": "https://www.engroenergy.com",
+  "ceo": "Athar Abrar Khawaja",
+  "sourceNote": "Engro Energy website (engroenergy.com: Engro Powergen Qadirpur page) and the PSX company profile (dps.psx.com.pk/company/EPQL: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Combined-cycle power generation",
+      "summary": "A 217 MW combined-cycle plant — 127 MW gas turbine, 110 MW steam turbine and a 400 t/h heat recovery steam generator — fuelled by permeate gas from the Qadirpur field.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

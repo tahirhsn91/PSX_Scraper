@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for ARPL. Every fact here is attributable — see sourceNote. No current chief executive is published on the pages read, so ceo is null. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available. The 75% shareholding is stated by the company about its parent, Archroma Textiles GmbH.",
+  "symbol": "ARPL",
+  "description": "Archroma Pakistan Limited is a limited liability company incorporated and domiciled in Pakistan and listed on the Pakistan Stock Exchange, 75% owned by Archroma Textiles GmbH of Reinach, Switzerland. It manufactures, imports and sells chemicals, dyestuffs and coatings, adhesives and sealants, and also acts as an indenting agent. The company serves the textile, packaging and paper, and coatings markets, and traces its heritage through Sandoz, Clariant and Hoechst to 1886.",
+  "headOffice": "1-A/1, Sector 20, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "022-111-275-786",
+  "website": "https://archroma.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website archroma.com.pk — about page (registered office address, listing, parent company and its 75% holding, business lines, heritage) and contact page (registered head office telephone and UAN, plus plant and Lahore office numbers), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Textile dyes and specialty chemicals",
+      "summary": "Dyes and specialty chemicals for branded and performance textiles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Paper and packaging chemicals",
+      "summary": "Specialty chemicals for the packaging and paper markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Coatings, adhesives and sealants",
+      "summary": "Coatings, adhesive and sealant products, which the company also imports and sells.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Indenting agency",
+      "summary": "The company acts as an indenting agent in addition to manufacturing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for ALTN. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "ALTN",
+  "description": "Altern Energy Limited, incorporated in 1995 and a subsidiary of Descon Engineering Limited, owns and operates a 32 MW gas-fired thermal power plant that began commercial operations in June 2001. It supplies electricity to the Water and Power Development Authority, under a 30-year power purchase agreement with the Central Power Purchasing Agency (Guarantee) Limited, and also holds direct and indirect investments in other power-sector companies.",
+  "headOffice": "Descon Headquarters, 18-km Ferozepur Road, Lahore",
+  "phone": "+92 42 3599 0034",
+  "website": "https://alternenergypk.com",
+  "ceo": "Umer Shehzad Sheikh",
+  "sourceNote": "Company website (alternenergypk.com: home, investors relations, contact) and the PSX company profile (dps.psx.com.pk/company/ALTN: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Gas-fired power generation",
+      "summary": "A 32 MW thermal power plant, in commercial operation since June 2001, selling its output to the Central Power Purchasing Agency (Guarantee) Limited.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

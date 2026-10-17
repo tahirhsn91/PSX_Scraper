@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for ZUMA. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ZUMA",
+  "description": "Zuma Resources Limited, formerly Bilal Fibres Limited, is a Pakistan Stock Exchange-listed company that describes its purpose as connecting local capital with global opportunities. Its stated projects are a global marketplace for eSIMs and a set of AI agents for marketing, support, assistance and productivity. It has a wholly owned UK subsidiary, Zuma Global Ltd.",
+  "headOffice": "Building 90/50, 4th Floor, Block B, Broadway Commercial, Phase 8, D.H.A., Lahore, Pakistan",
+  "phone": "+92 311 5050575",
+  "website": "https://zumaresources.ltd",
+  "ceo": null,
+  "sourceNote": "Company website (zumaresources.ltd: home, projects, investor relations, contact), read 2026-10-17. No chief executive is named on the site, so ceo is left empty.",
+  "products": [
+    {
+      "name": "eSIM Global Marketplace",
+      "summary": "Global marketplace for eSIMs with instant setup and data plans.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "AI Agents",
+      "summary": "AI agents for marketing, support, assistance and productivity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for MDTL. Every fact here is attributable — see sourceNote. No image is attached. The company publishes no website of its own, so website, head office, phone and CEO are left empty.",
+  "symbol": "MDTL",
+  "description": "Media Times Limited is a Pakistani media company operating in print, electronic and digital media. Its business units are the Daily Times English-language newspaper, the Sunday Times magazine distributed with it, the Urdu daily Aaj Kal, Business Plus TV and Zaiqa TFC, together with the digital and social-media operations of those titles.",
+  "headOffice": null,
+  "phone": null,
+  "website": null,
+  "ceo": null,
+  "sourceNote": "The company's own corporate briefing presentation filed with the Pakistan Stock Exchange (dps.psx.com.pk, corporate briefing November 2025), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Daily Times",
+      "summary": "English-language daily newspaper, printed from Lahore, Karachi and Islamabad.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sunday Times",
+      "summary": "Weekly magazine distributed with the Sunday edition of Daily Times.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Aaj Kal",
+      "summary": "Urdu-language daily newspaper.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Business Plus TV",
+      "summary": "Business television channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Zaiqa TFC",
+      "summary": "Food channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

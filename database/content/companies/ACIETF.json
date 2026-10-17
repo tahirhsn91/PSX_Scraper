@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "ACIETF",
+  "description": "Alfalah Consumer Index Exchange Traded Fund (ACIETF) is an open-ended exchange-traded fund listed on the Pakistan Stock Exchange and managed by Alfalah Asset Management Limited. It tracks an index of at most 20 stocks drawn from consumer-facing sectors, periodically rebalanced and reconstituted, with a single stock capped at 10% of index weight, aiming to give investors a concentrated exposure to Pakistani consumer demand.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://alfalahamc.com",
+  "ceo": null,
+  "sourceNote": "Alfalah Asset Management fund page and the fund's offering document (alfalahamc.com), read 2026-10-17.",
+  "products": []
+}

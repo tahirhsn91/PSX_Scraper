@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for HRPL. Every fact here is attributable — see sourceNote. No image is attached: the company's own product photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Chief executive is null: no page read names one.",
+  "symbol": "HRPL",
+  "description": "Habib Rice Products Limited makes rice-based starch sugars, protein concentrates and derivatives, and describes itself as the world's most diversified producer of rice products and the only fully vertically integrated one — sourcing paddy directly from farmers, processing it into syrups and derivatives, and converting some of the output into confectionery sold to households at retail. It has been developing this range since 1980, and its products are ingredients for the food, confectionery and pharmaceutical industries. The company operates alongside subsidiary companies.",
+  "headOffice": "2nd Floor, UBL Building, I.I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 3241 1887",
+  "website": "https://habibriceproducts.com",
+  "ceo": null,
+  "sourceNote": "Company website (habibriceproducts.com/about-us: the rice-based starch sugars, protein concentrates and derivatives, the claim to be the most diversified and only fully vertically integrated producer, development since 1980, the subsidiary companies and the confectionery retail business; /contact-us for the head office address and telephone and the plant telephone), read 2026-10-17. No chief executive is named on the pages read, so the field is null.",
+  "products": [
+    {
+      "name": "Rice syrups",
+      "summary": "Clarified rice syrups, brown rice syrups and rice syrup solids used as ingredients in food and confectionery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "High fructose syrup",
+      "summary": "A high-fructose syrup produced from rice, part of the company's starch-sugar range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Polyols — maltitol and sorbitol syrup",
+      "summary": "Maltitol syrup and sorbitol syrup for food, confectionery and pharmaceutical use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Maltodextrins",
+      "summary": "Maltodextrin powders produced from rice starch.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Protein concentrates",
+      "summary": "Rice protein concentrates, produced alongside the starch sugars from the same paddy.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Confectionery",
+      "summary": "Retail confectionery made from the company's own rice-derived ingredients and sold to household consumers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

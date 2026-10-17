@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for WTL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "WTL",
+  "description": "WorldCall Telecom Limited is a Pakistani telecommunications operator providing wireless local loop, long-distance and international telephony, operation and maintenance of public payphones, and cable broadband. It also re-broadcasts international and national satellite and terrestrial television and radio signals under licences from the Pakistan Telecommunications Authority and PEMRA. Incorporated in March 2001, it began commercial operations in December 2004 and is listed on the Pakistan Stock Exchange.",
+  "headOffice": "Plot No. 112-113, Block S, Quaid-e-Azam Industrial Estate, Kot Lakhpat, Lahore, Pakistan",
+  "phone": "+92 42 3540 0609",
+  "website": "https://worldcall.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website (worldcall.com.pk: CompanyProfile, ContactUs), read 2026-10-17. The company's board page names no current chief executive, so ceo is left empty.",
+  "products": [
+    {
+      "name": "Wireless Local Loop",
+      "summary": "WLL telephony services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Long Distance & International",
+      "summary": "LDI telephony services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Public payphones",
+      "summary": "Operation and maintenance of the public payphone network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cable broadband",
+      "summary": "Broadband internet service.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "TV and radio re-broadcasting",
+      "summary": "Re-broadcasting of satellite and terrestrial television and radio signals.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

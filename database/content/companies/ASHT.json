@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for ASHT. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "ASHT",
+  "description": "Ashfaq Textile Mills Limited is a public limited, quoted company established in 1988 that manufactures and sells woven fabrics. Its mill runs 243 Sulzer shuttleless looms under one roof of about 200,000 square feet in Faisalabad, and it also provides sizing and conversion services.",
+  "headOffice": "8-A, Officers Colony No. 1, Susan Road, Faisalabad, Pakistan",
+  "phone": "+92 41 2435 101-4",
+  "website": "https://www.ashfaqtextile.com",
+  "ceo": "Ashfaq Ahmad",
+  "sourceNote": "Company website (ashfaqtextile.com: home, company information, contact us) and the PSX Data Portal company record for ASHT, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Woven fabrics",
+      "summary": "Greige and finished woven fabric produced on 243 Sulzer shuttleless looms.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sizing and conversion services",
+      "summary": "Sizing and conversion work carried out for third parties.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

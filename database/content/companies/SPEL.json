@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SPEL. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "SPEL",
+  "description": "SPEL Limited is a Pakistani manufacturer of technology-intensive plastic products, established in 1982 and listed on the Pakistan Stock Exchange in 2015. It makes automotive parts, FMCG and disposable packaging, and exports knobs, centre caps and similar components to more than seven countries.",
+  "headOffice": "127-S, Quaid-e-Azam Industrial Estate Township, Kot Lakhpat, Lahore, Pakistan",
+  "phone": "+92 42 3511 5506",
+  "website": "https://spelgroup.com",
+  "ceo": "Zia Hyder Naqi",
+  "sourceNote": "Company website (spelgroup.com: home/about, our management, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Automotive parts",
+      "summary": "Moulded plastic components supplied to vehicle and tractor manufacturers including Toyota, Honda, Suzuki and Millat Tractors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FMCG packaging",
+      "summary": "Plastic packaging for FMCG brands including PTC, Colgate-Palmolive and Unilever.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Disposable packaging",
+      "summary": "Food-industry disposable packaging produced under food-safety standards.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Export products",
+      "summary": "Knobs, centre caps, batons and spinner knobs made for export.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

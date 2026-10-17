@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for STL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "STL",
+  "description": "Supernet Technologies Limited is a Pakistani ICT company and a subsidiary of Telecard Limited, listed on the Pakistan Stock Exchange. It supplies connectivity, security, power, IT infrastructure and software solutions to enterprises, telecom operators, government and defence customers. The Supernet business has operated since 1995, when it began as a dial-up internet service provider, and its engineering staff are present at more than 200 locations in Pakistan.",
+  "headOffice": "4th Floor, Tower B, World Trade Center, Block 5, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 3855 0000",
+  "website": "https://supernet-technologies.com",
+  "ceo": "Jamal Nasir Khan",
+  "sourceNote": "Company website (supernet-technologies.com: home, company information, our leadership, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Connectivity",
+      "summary": "National and international connectivity services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Security",
+      "summary": "Security solutions, including managed security through the group's Supersecure business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Power Solutions",
+      "summary": "Power solutions for ICT and site infrastructure.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "IT & Infrastructure Solutions",
+      "summary": "Data-centre, end-user computing and infrastructure solutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Software & Applications",
+      "summary": "Software and application solutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

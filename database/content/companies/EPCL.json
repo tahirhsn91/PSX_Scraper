@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for EPCL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "EPCL",
+  "description": "Engro Polymer & Chemicals Limited describes itself as Pakistan's only integrated producer of PVC resin and caustic soda. Alongside PVC it produces sodium hypochlorite, hydrochloric acid and hydrogen peroxide, producing ethylene dichloride and vinyl chloride monomer at its plant in the Port Qasim area of Karachi. Its PVC suspension resin is sold in several grades for different processing methods, and caustic soda is supplied both as a 50% liquid and as 99% flakes.",
+  "headOffice": "8th Floor, The Harbour Front Building, Marine Drive, Block 4, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 111 411 411",
+  "website": "https://engropolymer.com",
+  "ceo": "Abdul Qayoom Shaikh",
+  "sourceNote": "Company website engropolymer.com — who-we-are overview (only integrated PVC resin and caustic soda producer, product list, EDC and VCM at Port Qasim, resin grades, caustic soda forms), contact-us page (head office address and telephone) and leadership page (Abdul Qayoom Shaikh named chief executive officer), read 2026-10-17.",
+  "products": [
+    {
+      "name": "PVC suspension resin",
+      "summary": "The company's primary product, produced in grades AU 58, AU 60, AU 72, AU 67R and AU 67S for different processing methods.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Caustic soda",
+      "summary": "Caustic soda supplied as a 50% liquid and as 99% flakes, distributed in epoxy-lined tankers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sodium hypochlorite",
+      "summary": "Sodium hypochlorite, one of the company's chlor-alkali products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hydrochloric acid",
+      "summary": "Hydrochloric acid, produced alongside the company's chlor-alkali products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hydrogen peroxide",
+      "summary": "Hydrogen peroxide, listed among the company's products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "EDC and VCM",
+      "summary": "Ethylene dichloride and vinyl chloride monomer, produced at the Port Qasim plant as intermediates for PVC.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

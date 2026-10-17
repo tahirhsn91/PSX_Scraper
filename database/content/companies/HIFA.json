@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for HIFA. This symbol is a fund unit line, not an operating company: the sector label 'close-end mutual fund' in our own data is out of date. Described from the scheme's offering document only. headOffice and phone are null — the fund has no office of its own; HBL Asset Management Limited is the management company. products is empty: a scheme has no products.",
+  "symbol": "HIFA",
+  "description": "HBL Investment Fund is an equity mutual fund managed by HBL Asset Management Limited. It was constituted as the closed-end PICIC Investment Fund and was converted into an open-end scheme, with its Class A units issued on 2 July 2018; that class is frozen and no longer open to fresh investment. The fund's stated objective is to maximise the wealth of unit holders by investing primarily in listed equities.",
+  "headOffice": null,
+  "phone": null,
+  "website": null,
+  "ceo": null,
+  "sourceNote": "HBL Investment Fund Consolidated Offering Document (hblasset.com, consolidated to 8 September 2025), read 2026-10-17.",
+  "products": []
+}

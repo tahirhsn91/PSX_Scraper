@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for PICT. Every fact here is attributable — see sourceNote. No image is attached: the terminal's own photographs are not licence-cleared.",
+  "symbol": "PICT",
+  "description": "Pakistan International Container Terminal Limited operates a container terminal at Karachi Port and, according to the company, is the only port operator in the country listed on the Pakistan Stock Exchange. It is a member of the ICTSI Group, the Philippines-incorporated global port operator. PICT was granted a 21-year build, operate and transfer contract by the Karachi Port Trust for the construction, development, operation and management of a common-user terminal at Karachi Port, running from 18 June 2002 to 17 June 2023; during that concession the terminal had an annual handling capacity of more than 750,000 TEUs and was equipped with six ship-to-shore cranes.",
+  "headOffice": "D-36, Block-2, Clifton, Karachi, Sindh, Pakistan",
+  "phone": "+92 21 35878094-95-96",
+  "website": "https://pict.com.pk",
+  "ceo": "Muhammad Anjum Naseem",
+  "sourceNote": "Company website (pict.com.pk: home, about, contact, management-team), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Container terminal operations",
+      "summary": "Container terminal management services at Karachi Port, with an annual handling capacity of more than 750,000 TEUs and six ship-to-shore cranes during the concession period.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Build, operate and transfer concession",
+      "summary": "A 21-year BOT contract from the Karachi Port Trust for a common-user container terminal at Karachi Port, 18 June 2002 to 17 June 2023.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

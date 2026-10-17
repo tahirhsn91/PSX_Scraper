@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for IBLHL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "IBLHL",
+  "description": "IBL HealthCare Limited markets, sells and distributes healthcare products, and began in 1997 as a wholly owned subsidiary of The Searle Company Limited before converting to a public limited company. It works as a marketing affiliate, building its portfolio in infant formula, adult nutrition and medical disposable products under licensing arrangements with international companies including Mead Johnson Nutrition, Nestlé Health Science, Meditech and Mepaco.",
+  "headOffice": "2nd Floor, One IBL Centre, Plot No. 1, Block 7 & 8, DMCHS, Tipu Sultan Road, off Shahrah-e-Faisal, Karachi, Pakistan",
+  "phone": "+92 21 3717 0200",
+  "website": "https://iblhc.com",
+  "ceo": "Sheraz Khan",
+  "sourceNote": "Company website (iblhc.com: profile-of-company — registered address and contact details) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Infant formula and adult nutrition",
+      "summary": "Nutritional products marketed under licensing agreements with international manufacturers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Medical disposables",
+      "summary": "Medical disposable and hospital products distributed through the company's marketing network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

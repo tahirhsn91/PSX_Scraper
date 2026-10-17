@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for TSML. Every fact here is attributable — see sourceNote. No current chief executive is stated in the sources read, so ceo is null rather than inferred from a director's leadership role. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TSML",
+  "description": "Tandlianwala Sugar Mills Limited started in 1992 as a single sugar mill and now operates as a group of three sugar mills, two ethanol distilleries and a carbon dioxide plant. Unit 1 at Kanjwani, Tandlianwala in Faisalabad district produces sugar, ethanol and CO2; Unit 2 at Zamand on the Indus Highway in Dera Ismail Khan and Unit 3 at Rehman Hajra in Muzaffargarh produce sugar, the third also with ethanol.",
+  "headOffice": "66-L, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 3575 4701",
+  "website": "https://www.tsmlgroup.com",
+  "ceo": null,
+  "sourceNote": "Company website tsmlgroup.com — home page (founded 1992, three sugar mills, two ethanol distilleries and a CO2 plant) and contact page (registered/corporate office at 66-L Gulberg-II Lahore with telephone, and the three plant locations with their products), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "Sugar produced at all three of the company's units — Kanjwani, Zamand and Rehman Hajra.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ethanol",
+      "summary": "Ethanol from the group's two distilleries, at Kanjwani and Rehman Hajra.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Carbon dioxide",
+      "summary": "CO2 captured at the Kanjwani unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

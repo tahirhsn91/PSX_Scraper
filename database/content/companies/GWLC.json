@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for GWLC. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists, and a generic cement-industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GWLC",
+  "description": "Gharibwal Cement Limited was incorporated on 29 December 1960 and its shares are quoted on the Pakistan Stock Exchange. Its plant at Ismailwal, 30 km along the Pind Dadan Khan–Jhelum road in Tehsil Choa Saidan Shah, District Chakwal, has an installed clinker capacity of 7,500 tonnes per day, fed by company-owned limestone and shale quarries, and a second line of up to 10,000 tonnes per day is under development. The company runs 38.5 MW of in-house generation, a 20 MW waste-heat recovery plant and a 24.5 MW solar plant, and sells cement under the Paidar brand.",
+  "headOffice": "Pace Tower, 1st Floor, 27 H-Block, College Road, Gulberg-II, Lahore, Pakistan",
+  "phone": "+92 42 36060 600",
+  "website": "http://www.gharibwalcement.com",
+  "ceo": null,
+  "sourceNote": "Written from: http://www.gharibwalcement.com/company.html (incorporation, listing, plant location and clinker capacity, quarries and conveyor, captive generation, WHR and solar, Line-II project, head office) and http://www.gharibwalcement.com/ContactUs.html (Pace Tower address and UAN) and http://www.gharibwalcement.com/Product.html (OPC and Paidar brand) (accessed 2026-10-17). No chief executive is named on the pages read, so ceo is null.",
+  "products": [
+    {
+      "name": "Paidar Cement — ordinary Portland cement",
+      "summary": "OPC for general construction, with 28-day strength of up to 10,000 PSI, meeting PS 232-2008 (R), BS 12:1996, ASTM C-150 Type I and BS EN-197-1 according to the company; supplied in 50 kg paper or polypropylene bags, or in bulk.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

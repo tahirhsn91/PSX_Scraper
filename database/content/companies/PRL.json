@@ -1,0 +1,61 @@
+{
+  "_comment": "Editorial content for PRL. Every fact here is attributable — see sourceNote. phone is null: the company publishes only a postal address and email contacts. No image is attached.",
+  "symbol": "PRL",
+  "description": "Pakistan Refinery Limited was established in 1960 and operates from a main refinery at Korangi Creek and a crude terminal at Keamari in Karachi, with a processing capacity of about 50,000 barrels per day. It refines imported and local crude oil into petroleum fuels supplied to oil marketing companies and institutional clients, and is taking forward a Refinery Expansion & Upgrade Project (REUP) aimed at producing cleaner fuels to international specifications.",
+  "headOffice": "P.O. Box 4612, Korangi Creek Road, Karachi 75190, Pakistan",
+  "phone": null,
+  "website": "https://www.prl.com.pk",
+  "ceo": "Mohsin Ali Mangi",
+  "sourceNote": "Company website (prl.com.pk: about, fuel-types, board-of-directors), read 2026-10-17.",
+  "products": [
+    {
+      "name": "High Speed Diesel (HSD)",
+      "summary": "Diesel refined to national standards for transport and industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Motor Spirit (petrol)",
+      "summary": "Petrol for the domestic market.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Jet fuels",
+      "summary": "JP-1 commercial and JP-8 military aviation fuel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "High Sulfur Furnace Oil (HSFO)",
+      "summary": "Furnace oil for power generation and industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Kerosene",
+      "summary": "Kerosene refined at the Korangi Creek refinery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Naphtha",
+      "summary": "Naphtha, a petrochemical feedstock.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Liquefied Petroleum Gas (LPG)",
+      "summary": "LPG produced at the refinery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

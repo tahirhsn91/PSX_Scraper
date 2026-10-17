@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "NBPGETF",
+  "description": "NBP Pakistan Growth Exchange Traded Fund (NBPGETF) is an open-ended exchange-traded fund managed by NBP Fund Management Limited and listed on the Pakistan Stock Exchange. It tracks the NBP Pakistan Growth Index, a portfolio of 15 blue-chip KSE-100 companies across seven sectors selected on market capitalisation, liquidity and volume.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://nbpfunds.com",
+  "ceo": null,
+  "sourceNote": "Company website (nbpfunds.com: NBP Pakistan Growth ETF fund page and fund facts), read 2026-10-17.",
+  "products": []
+}

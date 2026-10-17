@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for BAPL. Every fact here is attributable — see sourceNote. No telephone number is published on the pages read, so phone is null. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BAPL",
+  "description": "Bawany Air Products Limited is a public limited company incorporated in Pakistan on 16 August 1978 and listed on the Pakistan Stock Exchange. It produces and trades oxygen gas, dissolved acetylene and nitrogen gas at manufacturing facilities in Hub Industrial Estate, Tehsil Hub, Balochistan, and its registered office is on the R.C.D. Highway at Mouza Pathara in the same district.",
+  "headOffice": "Khasra No. 52/53, R.C.D. Highway, Mouza Pathara, Tehsil Hub, Lasbella District, Balochistan, Pakistan",
+  "phone": null,
+  "website": "https://bawanyair.com",
+  "ceo": "Naim Anwar",
+  "sourceNote": "Company website bawanyair.com — our company profile page (incorporation 16 August 1978, listing, products and manufacturing location, registered office address) and corporate information page (directors' shareholding table naming Mr. Naim Anwar as director/chief executive officer), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Oxygen gas",
+      "summary": "Oxygen gas, produced and traded by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dissolved acetylene",
+      "summary": "Dissolved acetylene, produced and traded by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nitrogen gas",
+      "summary": "Nitrogen gas, produced and traded by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

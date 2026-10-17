@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BUXL. Every fact here is attributable — see sourceNote. No current chief executive is published on the pages read, so ceo is null. Phone is null: the company's website lists only regional sales managers' mobile numbers. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BUXL",
+  "description": "Buxly Paints Limited traces its origin to 1933, when Khan Rahim Bux Khan began manufacturing paints in Hyderabad-Deccan, and to 1948, when the family set up the first paint factory in the new state of Pakistan. The company was incorporated in April 1954 and converted to a public limited company in 1985. Since 2000 its major shareholders' stake has been held by Slot-Rapid Limited of the United Kingdom, and Berger Paints Pakistan Limited owns 19% of the company. It makes decorative paints and specialised coatings including epoxies, polyurethanes and chlorinated rubber, and has supplied the Pakistan Army, Navy and Air Force.",
+  "headOffice": "X-3, Manghopir Road, S.I.T.E., Karachi 75700, Pakistan",
+  "phone": null,
+  "website": "https://buxly.com",
+  "ceo": null,
+  "sourceNote": "Company website buxly.com — about-us page (1933 founding, 1948 factory, 1954 incorporation, 1985 public listing, Slot-Rapid takeover, Berger's 19% holding, product range and defence customers) and the annual report PDF hosted on the same site (registered office at X-3, Manghopir Road, S.I.T.E., Karachi), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Decorative paints",
+      "summary": "Decorative paints for the retail and project market.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Specialised industrial coatings",
+      "summary": "Epoxies, polyurethanes, chlorinated rubber and other sophisticated coatings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

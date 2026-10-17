@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for BLUEX. Every fact here is attributable — see sourceNote. No image is attached: none of the company's own facility photographs is licence-cleared, and a generic courier photo would be dishonest.",
+  "symbol": "BLUEX",
+  "description": "Blue-Ex Limited is a Karachi-based e-commerce logistics company, incorporated in 2005 as Universal Network Systems (Private) Limited. It launched the BlueEX brand and nationwide cash-on-delivery shipments in 2011, and describes itself as Pakistan's only fully integrated standalone e-commerce logistics player, covering the whole value chain from first-mile to last-mile delivery. It acquired the freight company UFS in 2023 and changed its name from Universal Network Systems Limited to Blue-EX Limited in 2024. The company says it is the only IATA-certified courier company in Pakistan.",
+  "headOffice": "Plot # 5, Banglore Town, Near Awami Markaz, Shahrah-e-Faisal, Karachi, Pakistan",
+  "phone": "+92 21 111 258339",
+  "website": "https://blue-ex.com",
+  "ceo": "Imran Baxamoosa",
+  "sourceNote": "Company website (blue-ex.com: company-profile, company-history, management, company-information), read 2026-10-17.",
+  "products": [
+    {
+      "name": "E-commerce logistics",
+      "summary": "Cash-on-delivery shipments, e-distribution and last-mile delivery for online retailers, the business the company started in 2011.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Warehousing and e-fulfilment",
+      "summary": "Fulfilment and warehousing services, including the Bluekart e-commerce platform and the OLS open-listing system for warehouse products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Courier and freight",
+      "summary": "Domestic and international courier, international and domestic freight, and crowd-sourced delivery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Technology services",
+      "summary": "E-commerce ERP, application development and hosted call-centre services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

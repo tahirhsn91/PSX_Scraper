@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for SBL. Every fact is attributable — see sourceNote. No image is attached: the institution's own imagery is not licence-cleared and a stock photograph of a branch or office would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SBL",
+  "description": "Samba Bank Limited is a commercial bank operating in Pakistan and a subsidiary of Saudi National Bank of the Kingdom of Saudi Arabia, which holds 84.51% of its shares. It traces its roots to the Saudi banking group then known as Samba Financial Group, which acquired a majority stake in Crescent Commercial Bank in Pakistan in 2007 and rebranded it as Samba Bank; after Samba Financial Group merged with National Commercial Bank in 2021 the parent became Saudi National Bank, while the Samba brand continues in Pakistan. It operates as a full-service bank across consumer, corporate, investment banking and capital markets, is expanding into private banking, wealth management and transaction services, and runs both conventional and Islamic banking.",
+  "headOffice": "5th Floor, Sidco Avenue Centre, Maulana Deen Muhammad Wafai Road, Karachi, Pakistan",
+  "phone": "+92 21 3246 422",
+  "website": "https://www.samba.com.pk",
+  "ceo": "Rashid Jahangir",
+  "sourceNote": "Written from: https://www.samba.com.pk/about-us (parent and shareholding, Crescent Commercial Bank acquisition and rebranding, SNB merger, business scope, conventional and Islamic banking) and the bank's head office address and telephone as printed on its published accounts; registrar/registered office details appear on https://dps.psx.com.pk/company/SBL, which also gives the CEO (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Consumer banking",
+      "summary": "Retail accounts, cards and consumer finance, including Samba Gold priority banking and Roshan Digital Services for non-resident Pakistanis.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate and investment banking",
+      "summary": "Corporate and investment banking, trade and project finance, plus capital markets and treasury services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Islamic banking",
+      "summary": "Shariah-compliant banking offered alongside conventional banking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

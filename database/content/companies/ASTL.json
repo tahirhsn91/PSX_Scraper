@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ASTL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "ASTL",
+  "description": "Amreli Steels Limited, incorporated in 1984, manufactures steel reinforcement bars and billets at its plant in Dhabeji, Sindh. Its Maxima bars conform to ASTM A615 in sizes from 10 mm to 40 mm, and its Ultima bars to ASTM A706 for high-seismic zones; the company also produces bars to BS 4449:2005. Every heat is tested in its own laboratory with universal testing machines and metallographic analysis.",
+  "headOffice": "F-11, Ibrahim Rehmatullah Road, KDA Scheme 1, Karsaz, Karachi",
+  "phone": "+92 21 111 267 354",
+  "website": "https://amrelisteels.com",
+  "ceo": "Shayan Akberali",
+  "sourceNote": "Company website (amrelisteels.com: products, the legacy, investor relations) and the PSX company profile (dps.psx.com.pk/company/ASTL: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Maxima bars",
+      "summary": "Deformed reinforcement bars to ASTM A615, in sizes from 10 mm to 40 mm, in standard 12-metre lengths.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ultima bars",
+      "summary": "Earthquake-resistant reinforcement bars to ASTM A706 for high seismic zones.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Billets",
+      "summary": "Steel billets produced at the company's Dhabeji plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

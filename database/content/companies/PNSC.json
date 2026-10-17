@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for PNSC. Every fact here is attributable — see sourceNote. No image is attached: the fleet photography on the company site is not licence-cleared.",
+  "symbol": "PNSC",
+  "description": "Pakistan National Shipping Corporation describes itself as the country's leading maritime enterprise, offering integrated shipping, logistics and marine engineering services. It manages a diversified fleet and states that it operates across the tanker, bulk, chartering and container segments. Beyond shipping, its services include technical and commercial vessel management, ship repairs, agency and stevedoring, port logistics, ship and port equipment repair, and commercial property leasing.",
+  "headOffice": "PNSC Building, M.T. Khan Road, Karachi, Pakistan",
+  "phone": "+92 21 99203980-99",
+  "website": "https://pnsc.com.pk",
+  "ceo": "Syed Jarar Haider Kazmi",
+  "sourceNote": "Company website (pnsc.com.pk: home, contact-us, corporate-information), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Ocean freight and chartering",
+      "summary": "Liner and chartering services across dry bulk, break bulk, liquid bulk and container cargo, including project cargo handling.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "NVOCC and freight forwarding",
+      "summary": "Non-vessel operating common carrier and freight forwarding services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Port operations and agency services",
+      "summary": "Stevedoring, agency and port logistics services for vessels calling at Pakistani ports.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ship management and repairs",
+      "summary": "Technical and commercial vessel management, ship management and operations, and ship and port equipment repair through the company's workshop.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commercial leasing services",
+      "summary": "Leasing of the corporation's commercial property.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

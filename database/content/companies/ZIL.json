@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for ZIL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of ZIL's own plant exists on the open licence sources. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ZIL",
+  "description": "ZIL Limited is a Pakistani soap and personal-care manufacturer. The business began in 1954 with a skin-cleansing soap range, made at a factory in Hyderabad, and grew from there; it was converted into a public limited company in November 1986 (the name Zulfeqar Industries Ltd. dates from 1980) and listed on the Karachi and Lahore stock exchanges. Its brands today are built around Capri soaps and hand wash, HYPRO antibacterial soap, Opal soap and the HYPE body spray. Head office is in Karachi, with sales and distribution across the country.",
+  "headOffice": "Ground Floor, Bahria Complex III, M.T. Khan Road, Karachi, Pakistan",
+  "phone": "+92 21 3563 0251",
+  "website": "https://www.zil.com.pk",
+  "ceo": "Irfan-ul-Haq",
+  "sourceNote": "Company website (zil.com.pk: about-us, our-brands, management-committee, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Capri Soap",
+      "summary": "The company's flagship soap brand, sold in variants including Capri Glow, with moisturising aloe, protection tea tree and strawberry variants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Capri Hand Wash",
+      "summary": "Liquid hand wash range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HYPRO Antibacterial Soap",
+      "summary": "Antibacterial soap positioned on daily hygiene.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Opal Soap",
+      "summary": "Economy soap brand in beauty and anti-bacterial variants, aimed at the lower-price segment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HYPE",
+      "summary": "Body spray launched under the Capri umbrella, aimed at younger consumers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

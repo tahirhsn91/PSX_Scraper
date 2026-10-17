@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for MRNS. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "MRNS",
+  "description": "Mehran Sugar Mills Limited is a public limited company founded in 1965 and quoted on the Pakistan Stock Exchange, which describes itself as a leading producer and marketer of both white and brown sugar in Pakistan. Its mill is at Deh Daro Sutha on the Tando Adam Road in Tando Allahyar, Sindh. The company also holds investments in an ethanol facility and in other listed companies, and states that its purpose is to use its molasses and bagasse to produce ethanol and power respectively.",
+  "headOffice": "14th Floor, Dolmen City Executive Tower, Marine Drive, Block 4, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 3529 7814",
+  "website": "https://www.mehransugar.com",
+  "ceo": "Ahmed Ebrahim Hasham",
+  "sourceNote": "Company website mehransugar.com — at-a-glance page (founding year, white and brown sugar, investments), profile page (registered/head office and telephone, mill address, use of molasses and bagasse) and board-of-directors page (Ahmed Ebrahim Hasham named chief executive officer), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White refined sugar",
+      "summary": "Refined white cane sugar, one of the company's two principal products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Brown sugar",
+      "summary": "Brown sugar, which the company produces and markets alongside white sugar.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Molasses",
+      "summary": "A by-product of sugar production, which the company states is used to produce ethanol.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bagasse",
+      "summary": "A by-product of cane crushing, which the company states is used to generate power.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

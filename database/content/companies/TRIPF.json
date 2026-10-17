@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for TRIPF. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "TRIPF",
+  "description": "Tri-Pack Films Limited, a subsidiary of Packages Limited, was incorporated in 1993 to produce biaxially oriented polypropylene (BOPP) film in Pakistan. It has grown from one BOPP line of 5,400 tonnes to five lines with combined capacity of 121,800 tonnes, and runs two cast polypropylene (CPP) lines of over 17,000 tonnes. Its head office is in Karachi, with regional offices in Karachi, Lahore and Hattar.",
+  "headOffice": "4th Floor, The Forum, Suite 416-422, G-20, Block 9, Clifton, Khayaban-e-Jami, Karachi",
+  "phone": null,
+  "website": "https://www.tripack.com.pk",
+  "ceo": "Numan Noor",
+  "sourceNote": "Company website (tripack.com.pk: company profile, our products) and the PSX company profile (dps.psx.com.pk/company/TRIPF: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "BOPP film",
+      "summary": "Biaxially oriented polypropylene film from five lines with combined capacity of 121,800 tonnes, including metallised and high-barrier grades.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "CPP film",
+      "summary": "Cast polypropylene film from two lines with capacity of over 17,000 tonnes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

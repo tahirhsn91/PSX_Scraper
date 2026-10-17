@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for LOADS. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "LOADS",
+  "description": "Loads Limited manufactures radiators, exhaust systems, sheet-metal components and other parts for the automotive industry, and counts Toyota, Honda, Suzuki, Hino, Nissan, Isuzu, Massey-Ferguson, Mitsubishi and Yamaha among its customers. Established in 1979 and listed in 2016, it has four wholly owned subsidiaries — Specialized Autoparts Industries, Multiple Autoparts Industries, Specialized Motorcycles and Hi-tech Alloy Wheels.",
+  "headOffice": "Plot No. DSU-19, Sector II, Downstream Industrial Estate, Pakistan Steel, Zulfiqarabad, Karachi, Pakistan",
+  "phone": null,
+  "website": "https://www.loads-group.pk",
+  "ceo": "Muhammad Mohtashim Aftab",
+  "sourceNote": "Company website (loads-group.pk: company profile — subsidiaries and clientele) and the PSX company profile record, read 2026-10-17. No telephone number was found on the company site.",
+  "products": [
+    {
+      "name": "Exhaust systems",
+      "summary": "Exhaust systems for cars, commercial vehicles and motorcycles, the business the company was founded on.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Radiators",
+      "summary": "Radiators and cooling components manufactured in technical collaboration with Japanese partners.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sheet-metal components",
+      "summary": "Pressed and welded sheet-metal parts for vehicle assemblers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Alloy wheels",
+      "summary": "Wheels through Hi-tech Alloy Wheels Limited, a wholly owned subsidiary.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

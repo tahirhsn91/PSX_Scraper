@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for AKGL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AKGL",
+  "description": "Al-Khair Gadoon Limited was incorporated as a private limited company on 27 August 1990 and converted into a public limited company on 31 August 1995. It is principally engaged in the manufacturing and sale of foam and allied products, and describes itself as an ISO 9001:2015 certified producer of high-quality polyurethane foam developed through industrial partnerships with Shell (Singapore) and BASF (Korea).",
+  "headOffice": "Alkhair House, 43-T, Gurumangat Road, Block T, Gulberg 2, Lahore 54660, Pakistan",
+  "phone": "+92 42 111 111 605",
+  "website": "https://alkhairfoam.com",
+  "ceo": null,
+  "sourceNote": "Written from: https://dps.psx.com.pk/company/AKGL (incorporation and conversion dates, principal activity), https://alkhairfoam.com/pages/company-profile (ISO 9001:2015, polyurethane foam, Shell and BASF partnerships), https://alkhairfoam.com/pages/contact (Alkhair House address and telephone) and the product menu on https://alkhairfoam.com (mattress and foam range) (accessed 2026-10-17). No chief executive is named on the pages read, so ceo is null.",
+  "products": [
+    {
+      "name": "Foam mattresses",
+      "summary": "Polyurethane foam mattresses, the company's core product line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Spring and orthopaedic mattresses",
+      "summary": "Spring mattresses and orthopaedic mattresses in the Alkhair range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Foam for industrial use",
+      "summary": "Peeled foam, rebounded PU foam and sofa seats supplied as foam products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

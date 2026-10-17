@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SKRS. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SKRS",
+  "description": "Sakrand Sugar Mills Limited was incorporated in Pakistan as a public limited company on 2 March 1989 and its shares are quoted on the Pakistan Stock Exchange. Its principal business is the manufacture and sale of sugar, at a plant in Deh Tharo Unar, Taluka Sakrand, District Shaheed Benazir Abad in Sindh, with a cane crushing capacity of 7,000 metric tons a day.",
+  "headOffice": "41-K, Block 6, P.E.C.H.S., Karachi 75400, Pakistan",
+  "phone": "+92 21 3530 3291",
+  "website": "https://www.sakrandsugar.com",
+  "ceo": "Mansoor Afzal Subzwari",
+  "sourceNote": "Company website sakrandsugar.com — company profile page (incorporation 2 March 1989, registered office and telephone, factory address, 7,000 metric ton/day crushing capacity, chief executive officer named as Mansoor Afzal Subzwari), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "The manufacture and sale of sugar, from a plant with a crushing capacity of 7,000 metric tons of cane a day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

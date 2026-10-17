@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for FTSM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FTSM",
+  "description": "First Tri-Star Modaraba was formed under the Modaraba Companies and Modaraba (Floatation and Control) Ordinance, 1980, and is managed by A.R.T. Modaraba Management (Private) Limited. It is a perpetual Modaraba listed on the Pakistan Stock Exchange and is primarily engaged in leasing and Ijarah of plant, machinery, motor vehicles — commercial and private — and computer equipment.",
+  "headOffice": "6th Floor, Image Tower, A/33, Central Commercial Area, Block 7/8, Karachi Co-operative Housing Societies Union, Karachi, Pakistan",
+  "phone": "+92 21 3257 2246",
+  "website": "https://firsttristar.com",
+  "ceo": "Asad Ahmad",
+  "sourceNote": "Written from: https://firsttristar.com/about-us/ (formation, management company, business of leasing and Ijarah), https://firsttristar.com/contact/ (registered office and telephone) and https://firsttristar.com/board-of-directors/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ijarah and leasing",
+      "summary": "Leasing and Ijarah of plant, machinery, motor vehicles — both commercial and private — and computer equipment, as described by the Modaraba.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

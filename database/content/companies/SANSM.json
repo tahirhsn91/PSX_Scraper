@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SANSM. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SANSM",
+  "description": "Sanghar Sugar Mills Limited is a public limited company incorporated on 5 May 1986, which went into commercial production in January 1988. It manufactures and sells sugar at a mill on the Sanghar–Sindhari road in Deh Kehore, District Sanghar, Sindh, where capacity has grown from an initial 2,000 tons of cane a day to 8,500 tons a day.",
+  "headOffice": "Office #204, 2nd Floor, Clifton Centre, Block 5, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 3537 1441",
+  "website": "https://sangharsugarmills.com",
+  "ceo": null,
+  "sourceNote": "Company website sangharsugarmills.com — company information page (registered/head office and telephone, manufacturing facility address) and the company profile page (incorporation 5 May 1986, commercial production January 1988, capacity growth from 2,000 to 8,500 TCD, principal business of manufacture and sale of sugar), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "The company's principal business is the manufacture and sale of sugar, with a crushing capacity of 8,500 tons of cane a day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

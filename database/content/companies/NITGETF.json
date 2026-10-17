@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "NITGETF",
+  "description": "NIT Pakistan Gateway Exchange Traded Fund (NITGETF) was Pakistan's first exchange-traded fund listed on the Pakistan Stock Exchange and is managed by National Investment Trust Limited. It tracks the NIT Pakistan Gateway Index, which holds the largest KSE-100 companies by market capitalisation such that their combined weight is at least 50% of the KSE-100's total free-float market capitalisation.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://nit.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website (nit.com.pk: NIT-PGETF fund profile and features), read 2026-10-17.",
+  "products": []
+}

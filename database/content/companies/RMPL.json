@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "RMPL",
+  "description": "Rafhan Maize Products Company Limited is a Pakistani maize processor that supplies sweeteners to the country's confectionery, bakery, dairy and ice-cream, and beverage industries. The company states that introducing spring maize production technology was a milestone that set the stage for Pakistan to become self-sufficient in maize, and that it works with the SAI Platform on sustainable and regenerative agriculture standards.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://rafhanmaize.com",
+  "ceo": null,
+  "sourceNote": "Company website (rafhanmaize.com: home, products), read 2026-10-17. No registered office or telephone number is published on the pages read.",
+  "products": [
+    {
+      "name": "Sweeteners",
+      "summary": "A range of sweeteners supplied to confectionery, bakery, dairy and ice-cream, and beverage manufacturers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

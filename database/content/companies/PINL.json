@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for PINL. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Head office address and telephone are null: the company's site publishes neither on the pages read.",
+  "symbol": "PINL",
+  "description": "Premier Insurance Limited is a Pakistani general insurer conceived in 1952, when Zahid Hussain — the first Governor of the State Bank of Pakistan — brought together leading industrialists to found a domestically owned insurer for the newly independent country. It is listed on the Pakistan Stock Exchange, licensed by the Securities and Exchange Commission of Pakistan, and a member of the Insurance Association of Pakistan. It writes all classes of general insurance and distributes motor, travel, home, health and business cover, including motor takaful, with a stated emphasis on prompt claims settlement.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://pil.com.pk",
+  "ceo": "Sharik Bashir",
+  "sourceNote": "Company website (pil.com.pk/about-the-company: the 1952 founding by Zahid Hussain and leading industrialists, PSX listing, SECP licence and Insurance Association of Pakistan membership, all classes of general insurance, claims-settlement focus; the products section for the motor takaful, travel, home, health and business lines; pil.com.pk/management-profile for Mr Sharik Bashir as chief executive), read 2026-10-17. No address or telephone is published, so both are null.",
+  "products": [
+    {
+      "name": "Motor insurance and motor takaful",
+      "summary": "Vehicle cover, offered in both conventional and takaful form.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Travel insurance",
+      "summary": "Travel cover for individuals and groups.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home insurance",
+      "summary": "Property cover for households.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Health insurance",
+      "summary": "Medical and hospitalisation cover.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Business insurance",
+      "summary": "Commercial risks, including the risk-management service the company provides to corporate clients and reinsurers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
