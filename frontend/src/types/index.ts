@@ -458,3 +458,35 @@ export interface MarketStatus {
     dividends: DatasetFreshness;
   };
 }
+
+export type MoverType = 'gainers' | 'losers' | 'active' | 'unusual';
+export type MoverPeriod = '1d' | '1w' | '1m';
+
+export interface Mover {
+  symbol: string;
+  companyName: string | null;
+  sector: string | null;
+  price: number | null;
+  change: number | null;
+  changePercent: number | null;
+  /** Return over the selected period. 1d uses the exchange's published change%. */
+  periodReturnPercent: number | null;
+  volume: number | null;
+  avgVolume20: number | null;
+  relativeVolume: number | null;
+  reason: string;
+}
+
+export interface MoversPayload {
+  type: MoverType;
+  period: MoverPeriod;
+  sessionDate: string | null;
+  rows: Mover[];
+  meta: {
+    ranked: number;
+    excludedIlliquid: number;
+    liquidityFloorShares: number;
+    relativeVolumeFormula: string;
+    tradedValueNote: string;
+  };
+}
