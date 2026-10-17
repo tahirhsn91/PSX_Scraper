@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for TATM. Every fact is attributable — see sourceNote. No image is attached: the company's product photographs on its site carry no licence we can record. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TATM",
+  "description": "Tata Textile Mills Limited was incorporated in Pakistan on 15 April 1987 and started production at a 19,200-spindle spinning unit in 1991. It manufactures and sells cotton and blended yarn at manufacturing facilities in Karachi, Kotri and Muzaffargarh, and its registered office is on the sixth floor of Textile Plaza, M.A. Jinnah Road, Karachi. From 1 July 2021 it absorbed the group's Island Textile Mills Limited, Salfi Textile Mills Limited and Tata Energy Limited through a merger approved by the Sindh High Court.",
+  "headOffice": "6th Floor, Textile Plaza, M.A. Jinnah Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 3242 6761",
+  "website": "https://tatapakistan.com",
+  "ceo": "Shahid Anwar",
+  "sourceNote": "Written from: https://tatapakistan.com/tata-textile-mills-ltd/ (incorporation, plants, merger, product range), https://tatapakistan.com/contact-us/ (registered office, telephone) and the PSX company profile for TATM at https://dps.psx.com.pk/company/TATM (principal activity, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "100% cotton carded knitting and weaving yarns",
+      "summary": "6/1 to 12/1 compact yarns and 6/1 to 20/1 plain yarns.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "100% cotton combed knitting and weaving yarns",
+      "summary": "10/1 to 20/1 plain yarns and 16/1 to 30/1 compact yarns.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Siro yarns",
+      "summary": "100% cotton carded weaving siro yarns from 8/1 to 12/1 and combed weaving siro compact yarns from 16/1 to 20/1.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cotton core spun yarns",
+      "summary": "40D and 70D spandex/Lycra core spun yarns, Ne 10/1 to Ne 30/1, carded and combed, for weaving.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cotton polyester CVC, PC and TC blended yarns",
+      "summary": "Blended yarns from Ne 8/1 to 30/1, carded and combed, including intimate blends.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Zero twist PVA and plied yarns",
+      "summary": "PVA zero twist yarn in 12/1, 14/1, 16/1, 20/1 and 30/1, and two- and three-ply carded and combed yarns.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

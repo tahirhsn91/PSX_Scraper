@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for ASIC. Every fact is attributable - see sourceNote. No image attached: no licence-cleared photograph of the company's own premises is available.",
+  "symbol": "ASIC",
+  "description": "Asia Insurance Company Limited is a general insurer that has been publicly listed since 1979, writing property and casualty cover together with Takaful through a window operation. It offers motor, travel, home, agriculture, solar panel and business insurance - the last including fire and allied perils, product liability and weather index cover - and reports serving more than 273,000 group and individual customers. The company states that it is backed by German development bank KfW through its InsuResilience Investment Fund, managed by BlueOrchard Finance, following a Rs. 350 million investment that raised its equity above Rs. 1 billion.",
+  "headOffice": "19-C & D, Block-L, Gulberg-III, Lahore, Pakistan",
+  "phone": "+92 42 3586 5575-78",
+  "website": "https://asiainsurance.com.pk",
+  "ceo": "Ihtsham ul Haq Qureshi",
+  "sourceNote": "Written from: Asia Insurance Company Limited website (asiainsurance.com.pk: home, about us, business insurance, management, contact) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Motor insurance",
+      "summary": "Motor insurance offered to individuals through the company's retail channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Travel insurance",
+      "summary": "Travel insurance, sold through the company's own travel portal.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home insurance",
+      "summary": "Household cover described by the company as protection for the home against loss.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Business insurance",
+      "summary": "Commercial cover including fire and allied perils, product liability, miscellaneous and weather index insurance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Agriculture and solar panel insurance",
+      "summary": "Crop cover and insurance for solar panels, listed among the company's product lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Takaful",
+      "summary": "Window Takaful operations, run under a dedicated Head of Window Takaful Operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for CENI. Facts are from the company's own website — see sourceNote. No image is attached.",
+  "symbol": "CENI",
+  "description": "Century Insurance Company Limited is a general insurer incorporated in Pakistan in 1985, part of the Lakson Group, quoted on the Pakistan Stock Exchange and rated \"AA\" with a stable outlook by VIS. It underwrites fire, motor, marine, engineering and miscellaneous general insurance along with travel, home, accident and health covers, and also runs window takaful operations.",
+  "headOffice": "Lakson Square, Building No. 3, 11th Floor, Sarwar Shaheed Road, Karachi-74200, Pakistan",
+  "phone": "+92 21 111 111 717",
+  "website": "https://cicl.com.pk",
+  "ceo": "Mohammad Hussain Hirji",
+  "sourceNote": "Written from: https://cicl.com.pk/ (incorporation, Lakson Group, VIS AA rating, product list, window takaful), https://cicl.com.pk/corporate-information (chief executive) and https://cicl.com.pk/company-registered-information (head office, telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fire insurance",
+      "summary": "Property and fire cover for commercial and industrial risks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Motor insurance",
+      "summary": "Cover against theft, accidents, riots and malicious damage, with third-party liability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Marine insurance",
+      "summary": "Marine cargo and hull cover, including open marine declarations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engineering insurance",
+      "summary": "Engineering lines covering machinery and project risks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Travel insurance",
+      "summary": "Travel cover sold directly to individuals and groups.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Accident and health",
+      "summary": "Personal accident and health plans, including the Family Shield PA plan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

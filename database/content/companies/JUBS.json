@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for JUBS. No website is given: the domain the company has been associated with, jubilespin.com, now resolves to an unrelated online-gambling site and is not the mill's website. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "JUBS",
+  "description": "Jubilee Spinning & Weaving Mills Limited was incorporated in Pakistan on 12 December 1973 and obtained its certificate of commencement of business in January 1974. Its principal objective is the manufacture and sale of yarn and dealing in yarn and raw cotton, and it also operates electric power generation facilities that supply electricity within its production site. The mill is at B-28, Manghopir Road, S.I.T.E., Karachi, and the registered office is at 503-E, Johar Town, Lahore.",
+  "headOffice": "503-E, Johar Town, Lahore, Pakistan",
+  "phone": "+92 42 35173434",
+  "website": null,
+  "ceo": "Shams Rafi",
+  "sourceNote": "Written from: the PSX company profile for JUBS at https://dps.psx.com.pk/company/JUBS (incorporation, business description, CEO) and Jubilee Spinning & Weaving Mills' Annual Report 2025 at https://dps.psx.com.pk/download/document/261861.pdf (registered office, mills, telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Manufacture and sale of yarn at the company's Manghopir Road mill in Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Yarn and raw cotton trading",
+      "summary": "Buying, selling and otherwise dealing in yarn and raw cotton.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

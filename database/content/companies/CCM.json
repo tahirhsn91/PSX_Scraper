@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for CCM. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "CCM",
+  "description": "Crescent Cotton Mills Limited is a Faisalabad-based textile company incorporated in Pakistan in March 1959 and listed on the Pakistan Stock Exchange since 30 November 1965. Its business, in its own annual report's words, is the manufacturing and sale of yarn, home textile and hosiery items, along with buying, selling and otherwise dealing in cloth and made-ups. The group also includes its subsidiary Crescot Mills Limited, a public limited company in which it holds 66.15%.",
+  "headOffice": "New Lahore Road, Nishatabad, Faisalabad, Pakistan",
+  "phone": "+92 41 8750363-64",
+  "website": "https://www.crescentcotton.com",
+  "ceo": "Abid Mehmood",
+  "sourceNote": "Written from: PSX company profile for CCM (business description, key people, registered address, website) at https://dps.psx.com.pk/company/CCM, and the company's Annual Report 2026 (general information, works address and telephones, subsidiary Crescot Mills Limited) at https://dps.psx.com.pk/download/document/285008.pdf (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Cotton yarn manufactured at the company's spinning units on New Lahore Road, Nishatabad, Faisalabad.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textiles",
+      "summary": "Home textile items produced and sold by the company, one of the three product lines named in its business description.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hosiery",
+      "summary": "Hosiery items produced and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cloth and made-ups",
+      "summary": "Buying, selling and otherwise dealing in cloth and made-ups, a trading activity the company carries on alongside manufacturing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

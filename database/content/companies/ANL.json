@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ANL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "ANL",
+  "description": "Azgard Nine Limited is a vertically integrated denim company based in Lahore, incorporated in Pakistan on 20 January 1993 as Indigo Denim Mills Limited, renamed Legler-Nafees Denim Mills Limited in 1994 and taking its present name in April 2004. It describes itself as a composite spinning, weaving, dyeing and stitching unit engaged in the manufacturing and sale of yarn, denim and denim garments. Its own framing of the business is 'engineering the future of denim', carrying a garment from yarn through fabric to retail-ready product.",
+  "headOffice": "Ismail Aiwan-e-Science, Off Shahrah-e-Roomi, Lahore 54600, Pakistan",
+  "phone": "+92 42 35761794-5",
+  "website": "https://azgard9.com",
+  "ceo": "Ahmed Humayun Shaikh",
+  "sourceNote": "Written from: https://azgard9.com/company (company profile, incorporation and name changes, principal business, registered office and telephone, board profile naming the CEO) and https://azgard9.com/product (garments, denim fabric and yarn) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Denim fabric",
+      "summary": "High-performance denim and jeans fabrics in rigid, comfort, stretch and bi-stretch weaves, with indigo and dope-dye finishes and recycled and responsible cotton blends.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Denim garments",
+      "summary": "Ready-to-wear denim and jeans apparel made from the company's own fabrics, from CMT to full package: pattern, sampling, washing, finishing, trims and packing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Yarn",
+      "summary": "Open-end and ring yarn spun in-house for denim performance, with up to 80% recycled content in select lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

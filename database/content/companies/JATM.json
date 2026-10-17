@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for JATM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own mill exists, and a generic spinning-mill photograph would imply it is theirs.",
+  "symbol": "JATM",
+  "description": "J.A. Textile Mills Limited was incorporated in Pakistan on 25 May 1987 and began commercial production in April 1992 at its mill in Tehsil Jaranwala, District Faisalabad. It runs a spinning plant producing 100% cotton yarn and polyester/cotton yarn, and also offers knitted fabrics. The company's registered office is at JK House in Madina Town, Faisalabad, and its shares are listed on the Pakistan Stock Exchange.",
+  "headOffice": "J.K House, 32-W Main Boulevard, Madina Town, Faisalabad, Pakistan",
+  "phone": "+92 41 8721953-6",
+  "website": "https://www.jatml.com",
+  "ceo": "Kurratulain Zahid",
+  "sourceNote": "Written from: https://www.jatml.com/en/ (incorporation, mill location, products, head office, telephone), https://www.jatml.com/en/products/ (yarn counts, PC yarn, knitted fabrics), https://www.jatml.com/en/governance/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "100% cotton ring-spun and combed yarn",
+      "summary": "Ring-spun and combed cotton yarn in counts from Ne 10/1 to Ne 40/1, sold under the company's JAT brand for weaving and knitting.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Polyester/cotton (PC) yarn",
+      "summary": "PC yarn in counts from Ne 20/1 to Ne 52/1, for knitting or weaving.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Knitted fabrics",
+      "summary": "Basic knitted fabrics in 20, 24 and 28 gauge and 26\" or 30\" diameter, including single jersey, pique, interlock, rib structures, fleece, single jersey jacquards and feeder stripes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

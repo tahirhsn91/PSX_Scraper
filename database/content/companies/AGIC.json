@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for AGIC. Every fact is attributable — see sourceNote. AGIC is an operating general insurer, not a fund. No image is attached.",
+  "symbol": "AGIC",
+  "description": "Askari General Insurance Company Limited was incorporated in 1995 and is a public limited company listed on the Pakistan Stock Exchange, supervised by the Securities and Exchange Commission of Pakistan. It underwrites general insurance across health, motor, fire, marine, travel, engineering, bond, aviation and miscellaneous lines, offers vehicle tracker services, and runs a window takaful operation. PACRA and VIS both assign it an insurer financial strength rating of AA+ (IFS).",
+  "headOffice": "3rd Floor, AWT Plaza, The Mall, Rawalpindi, Pakistan",
+  "phone": "+92 51 111 444 687",
+  "website": "https://agico.com.pk",
+  "ceo": "Abdul Waheed",
+  "sourceNote": "Written from: https://agico.com.pk (incorporation, listing, supervision), https://agico.com.pk/companyinfo-rating.php (address, telephone, PACRA and VIS AA+ IFS ratings), https://agico.com.pk/ce-profile.php (President and CE), https://agico.com.pk/motor.php, /health.php, /fire.php, /marine.php, /travel.php and /engineering.php (product lines) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Motor insurance",
+      "summary": "Cover for private cars, commercial vehicles and motorcycles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Health insurance",
+      "summary": "Health insurance plans covering the cost of a health crisis, critical illness and accidental death, with flexible coverage options.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fire insurance",
+      "summary": "Property cover for fire and allied perils — including earthquake, explosion, aircraft and impact damage, riot and strike, malicious damage and burglary — on buildings, machinery, stock and furniture, plus third-party liability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Marine insurance",
+      "summary": "Marine cargo, marine hull and marine liability covers for ocean-going and inland transit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Travel insurance",
+      "summary": "Single-trip, multi-trip and annual travel plans with medical benefits and baggage cover.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engineering insurance",
+      "summary": "Cover for construction, erection and installation work and the risks attaching to contract liability and site location.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

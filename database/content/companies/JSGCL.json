@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for JSGCL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "JSGCL",
+  "description": "JS Global Capital Limited was incorporated as a private limited company on 28 June 2000 and is a Trading Right Entitlement Certificate holder of the Pakistan Stock Exchange and a member of the Pakistan Mercantile Exchange. Its principal activities, in its own listing, are share brokerage, money market brokerage, forex brokerage, commodity brokerage, advisory, underwriting, book running and consultancy services, alongside investment in listed and unlisted equity and debt securities and reverse repurchase transactions. It describes itself as the largest broking and investment banking firm in Pakistan.",
+  "headOffice": "The Center, 17th & 18th Floor, Plot No. 28, S.B.5, Abdullah Haroon Road, Karachi, Pakistan",
+  "phone": "+92 21 111 574 111",
+  "website": "https://jsgcl.com",
+  "ceo": "Khalilullah Usmani",
+  "sourceNote": "Written from: the PSX company profile for JSGCL at https://dps.psx.com.pk/company/JSGCL (incorporation, principal activities, key people, address) and https://jsgcl.com/ (business lines — equity, fixed income and forex, investment banking, research, commodities brokerage, JS GlobalOnline), with the telephone number from the company's commission-sheet document on its jsglobalonline.com site (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Equity brokerage",
+      "summary": "Sales and trading for local individual and institutional investors as well as foreign investors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fixed income and forex brokerage",
+      "summary": "Fixed income and forex trading, which the company describes as one of the oldest and largest facilities in the brokerage industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Investment banking",
+      "summary": "Advisory, underwriting, book running and consultancy services for domestic and multinational clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Research",
+      "summary": "Pakistan equity research, which the company describes as a pioneer in the brokerage industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commodity brokerage",
+      "summary": "Commodities brokerage for individuals and institutions across Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Online trading",
+      "summary": "JS GlobalOnline, the company's online trading platform.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

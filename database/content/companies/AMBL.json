@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for AMBL. Every fact is attributable — see sourceNote. AMBL is an operating microfinance bank, not a fund. No image is attached.",
+  "symbol": "AMBL",
+  "description": "Apna Microfinance Bank Limited is a private commercial microfinance bank licensed by the State Bank of Pakistan under the Microfinance Institutions Ordinance 2001 to operate nationwide. It describes its focus as serving low-income and marginal borrowers, including the economic empowerment of women and micro-entrepreneurs in agriculture and micro-enterprises in rural Pakistan, and says it operates 91 branches and one service centre with more than 1,500 employees. Its head office is at Upper Mall Scheme, Lahore, and its registered office at Gizri, Karachi.",
+  "headOffice": "141, Upper Mall Scheme, Mian Mir, Lahore, Pakistan",
+  "phone": "+92 42 111 771 772",
+  "website": "https://apnabank.com.pk",
+  "ceo": "Nazish Ali",
+  "sourceNote": "Written from: https://apnabank.com.pk/about-us (licence, mandate, branches, employees), https://apnabank.com.pk/loans (loan products, loan sizes), https://apnabank.com.pk/deposit (term deposit products, Pink Term Deposit), https://apnabank.com.pk/corporate-information (acting president/CEO, head and registered office, telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Micro-enterprise and business loans",
+      "summary": "Finance for micro-entrepreneurs including women, with loan amounts from Rs 10,000 to Rs 150,000 and up to Rs 500,000 for enterprise products, repayable monthly over one month to five years, with embedded life and asset insurance cover.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Agriculture and livestock loans",
+      "summary": "APNA Agriculture Loan, APNA Live Stock Loan and APNA Tractor Loan, financing agriculture and rural enterprise.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "APNA Gold",
+      "summary": "A loan secured against gold, listed among the bank's finance facilities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pension and salary loans",
+      "summary": "APNA Pension Loan and APNA Salary Loan for individuals in receipt of a pension or salary.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Deposits, including APNA Pink Term Deposit",
+      "summary": "Term and saving deposits; the APNA Pink Term Deposit is offered to individual female customers only, and the APNA Mustaqil Sarmaya term deposit to widows, pensioners and citizens above 55.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

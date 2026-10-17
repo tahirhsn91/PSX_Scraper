@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for LSEFSL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available. This is an investment/finance company, not an industrial operating company, and it is mid-restructuring.",
+  "symbol": "LSEFSL",
+  "description": "LSE Financial Services Limited is the successor entity created when the erstwhile Lahore Stock Exchange merged with two other exchanges to form the Pakistan Stock Exchange, and it was listed on PSX in June 2024. After shareholders approved surrendering its non-banking finance company licence, the company says it is transitioning to a principal line of business of investing in real assets and financial instruments including shares, bonds, stocks and mutual fund units, deploying capital through equity, preference shares and other private financing instruments. It demerged into three separate companies in 2023 and states strategic objectives of expanding into digital finance and deposit taking, and of acquiring an electronic money institution licence from the State Bank of Pakistan.",
+  "headOffice": "LSE Plaza, 19-Khayaban-e-Aiwan-e-Iqbal, Lahore, Pakistan",
+  "phone": "+92 42 36368000-4",
+  "website": "https://lse.com.pk",
+  "ceo": "Aftab Ahmad Ch.",
+  "sourceNote": "Written from: lse.com.pk/LSEFSL-introduction (successor status, licence surrender, new principal business, demerger, objectives), lse.com.pk/about-us (principal business, history), lse.com.pk/contact-us (address, telephone); PSX company profile page dps.psx.com.pk/company/LSEFSL (key people) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Investment in real assets and financial instruments",
+      "summary": "The company's stated new principal business: shares, bonds, stocks and mutual fund units held as investments.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Equity and private financing",
+      "summary": "Capital deployed through equity, preference shares and other private financing instruments in cash flow generating emerging companies.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Margin financing",
+      "summary": "Finance facility against an approved list of listed securities, which the company markets to brokers and investors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

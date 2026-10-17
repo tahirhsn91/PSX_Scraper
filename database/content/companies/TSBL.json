@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for TSBL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "TSBL",
+  "description": "Trust Securities & Brokerage Limited was incorporated in Pakistan on 19 October 1993 and is a brokerage house listed on the Pakistan Stock Exchange, holding a Trading Right Entitlement Certificate and membership of the Pakistan Mercantile Exchange. It is principally engaged in the brokerage of share, stock, equity and debt securities, commodities and other financial instruments, and corporate financial services, and also trades equity and debt securities on its own account. The current sponsors took over the company in 2017.",
+  "headOffice": "Business & Finance Center, 4th Floor, Suite No. 401, I.I. Chundrigarh Road, Karachi, Pakistan",
+  "phone": "111-000-875 (UAN)",
+  "website": "https://www.tsbl.com.pk",
+  "ceo": "Abdul Basit",
+  "sourceNote": "Written from: tsbl.com.pk — About Us page (profile, permissible business activities and head office), and the company's PSX-filed company information naming the chief executive (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Equities and debt brokerage",
+      "summary": "Brokerage of share, stock, equity and debt securities for clients on the Pakistan Stock Exchange.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commodities",
+      "summary": "Commodity brokerage through TSBL Commodities, authorised by the Pakistan Mercantile Exchange.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate financial services",
+      "summary": "Corporate financial services offered alongside brokerage.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Own-account trading",
+      "summary": "Trading in equity and debt securities on its own account through the ready, spot and forward counters.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

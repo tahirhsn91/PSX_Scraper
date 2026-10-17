@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for SERT. Every fact is attributable - see sourceNote. No image attached: the company publishes no licence-cleared photograph of its own Gujrat mill.",
+  "symbol": "SERT",
+  "description": "Service Industries Textiles Limited was incorporated in Pakistan in 1962 as a private limited company, converted to public limited status in 1970, and is listed on the Pakistan Stock Exchange. Its principal activity is the manufacture and sale of yarn made from raw cotton and synthetic fibre, carried out at its mills on Rehman Shaheed Road in Gujrat, with its registered office at 38 Empress Road, Lahore. The company has been reporting losses in its spinning business, which its directors attribute to energy costs and conditions in the Punjab spinning sector.",
+  "headOffice": "38 Empress Road, Lahore, Pakistan",
+  "phone": "+92 42 3630 4561-3",
+  "website": "https://sitl.com.pk",
+  "ceo": "Mohammad Hameed",
+  "sourceNote": "Written from: Service Industries Textiles Limited website (sitl.com.pk: about us, company profile, contact us) and the company's Annual Report 2026 - company information and directors' report (sitl.com.pk/wp-content/uploads/accounts/2025-2026/Annual2026.pdf) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton yarn",
+      "summary": "Yarn spun from raw cotton at the company's mills on Rehman Shaheed Road, Gujrat.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Synthetic and blended yarn",
+      "summary": "Yarn manufactured from synthetic fibre alongside its cotton spinning, which the company states as its principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

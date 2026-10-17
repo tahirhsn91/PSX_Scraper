@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for GATM. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GATM",
+  "description": "Gul Ahmed Textile Mills Limited began manufacturing in 1953 and has been listed on the Karachi Stock Exchange since 1970; it describes itself as a composite unit making everything from cotton yarn to finished products. It runs more than 51,840 spindles, 300 weaving machines and yarn dyeing, processing and stitching units, with a captive power plant of gas engines, gas and steam turbines and backup diesel engines, and a wastewater treatment plant. The company also operates the Ideas by Gul Ahmed retail chain of more than 40 stores, and lists Ideas (Private) Limited and Gul Ahmed International Limited (FZC), UAE as wholly owned subsidiaries.",
+  "headOffice": "Plot No. H-7, Landhi Industrial Area, Landhi, Karachi, Pakistan",
+  "phone": "+92 21 111 485 485",
+  "website": "https://gulahmed.com",
+  "ceo": "Mohammed Zaki Bashir",
+  "sourceNote": "Written from: gulahmed.com/about-us/company-overview (history, capacity, captive power, retail, subsidiary companies, registered office), gulahmed.com/textile/products/made-ups (home textiles and made-ups) and gulahmed.com/contact-us (telephone); PSX company profile page dps.psx.com.pk/company/GATM (business description, chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton yarn",
+      "summary": "Spinning capacity of more than 51,840 spindles within the composite mill.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric",
+      "summary": "Produced on 300 state-of-the-art weaving machines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textiles and made-ups",
+      "summary": "Bed linen and home accessories, including the made-ups range the company sells in export and retail markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fashion apparel and retail",
+      "summary": "Stitched garments, sold through the Ideas by Gul Ahmed chain of more than 40 stores in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

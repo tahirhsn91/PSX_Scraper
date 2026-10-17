@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for CLCPS, which is the preference-share line of Chenab Limited rather than a separate business. The profile therefore describes Chenab Limited. No CEO is given: no Chenab filing or page naming the current chief executive was found, and the preference-share record on the PSX carries no key-people field. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "CLCPS",
+  "description": "Chenab Limited is a textile company based at Nishatabad, Faisalabad, with spinning, weaving, processing, embroidery, quilting and stitching operations on one site. Its divisions produce home textiles, filled products, towels, apparel and fabric. CLCPS is the symbol under which Chenab Limited's preference shares are quoted on the Pakistan Stock Exchange.",
+  "headOffice": "Nishatabad, Faisalabad, Punjab 38000, Pakistan",
+  "phone": "+92 41 8754472",
+  "website": "https://www.chenabgroup.com",
+  "ceo": null,
+  "sourceNote": "Written from: https://www.chenabgroup.com/ (divisions and processes), https://www.chenabgroup.com/about-us/ (address, telephone, chairman and founder) and the PSX record for CLCPS at https://dps.psx.com.pk/company/CLCPS, which lists the security as Chenab Limited (Pref) with no company profile (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Home textiles",
+      "summary": "The company's home textile division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Filled products",
+      "summary": "Quilted and filled products; the company runs computer-controlled quilting and wadding equipment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Towels",
+      "summary": "A towel division within the company's textile operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Apparel",
+      "summary": "A garments and fashion division, stitched on the company's stitching lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fabric",
+      "summary": "Woven fabric from 160 air-jet looms, 48 of them 16-frame dobby looms with four yarn insertions, weaving widths up to 128 inches.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

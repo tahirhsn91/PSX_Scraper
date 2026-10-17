@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for LSEVL. Every fact here is attributable — see sourceNote. LSEVL is an investment company created out of the former Lahore Stock Exchange, not an operating industrial business. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "LSEVL",
+  "description": "LSE Ventures Limited is one of the companies created out of the successor of the erstwhile Lahore Stock Exchange, and is an investment company focused on equity-oriented investments in emerging and growth-stage companies, deploying capital through equity, preference shares and other private financing instruments. It also manages the legacy equity investments made by the LSE, giving it an interest in capital-market infrastructure companies including Pakistan Credit Rating Agency Limited (PACRA), National Clearing Company of Pakistan Limited (NCCPL), Central Depository Company Limited (CDC) and Pakistan Mercantile Exchange Limited (PMEX). It is additionally a licensed Corporate Restructuring Company, a business it describes as acquiring non-performing loans from financial institutions and providing debt rescheduling, operational reorganisation and turnaround services.",
+  "headOffice": "The Exchange Hub, LSE Plaza, 19-Kashmir Egerton Road, Lahore, Pakistan",
+  "phone": "+92 42 3636 8000-4",
+  "website": "https://ventures.lse.com.pk",
+  "ceo": "Aftab Ahmad Ch.",
+  "sourceNote": "Written from: ventures.lse.com.pk — About LSE Ventures, Principal Business, Board of Directors and Registered Office pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Growth-stage equity investments",
+      "summary": "Equity, preference share and other private financing into emerging and growth-stage companies with a record of positive cash flow generation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Legacy capital-market holdings",
+      "summary": "Interests in PACRA, NCCPL, CDC and PMEX inherited from the erstwhile Lahore Stock Exchange.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate restructuring",
+      "summary": "Acquisition of non-performing loans from financial institutions, with debt rescheduling, operational reorganisation and turnaround services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

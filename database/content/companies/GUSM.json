@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for GUSM. The company has no corporate website of its own; its group page and PSX's company record are the only sources, so most fields are null. No image is attached.",
+  "symbol": "GUSM",
+  "description": "Gulistan Spinning Mills Limited is a textile spinning company listed on the Pakistan Stock Exchange, with its registered office at Finlay House in Karachi and a spinning unit at Jamber Khurd, Tehsil Chunian, District Kasur. Its company page sits on the Gulistan group's website, which describes the group's nine spinning mills producing cotton and blended yarns. PSX carries the company's status as winding-up, following SECP's authorisation of a winding-up petition against it in 2021, and it continues to file annual and quarterly accounts.",
+  "headOffice": "2nd Floor, Finlay House, I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": null,
+  "website": null,
+  "ceo": null,
+  "sourceNote": "Written from: https://gulshan.com.pk/GTSM/Gulistan/gulistan.html (registered office, unit location), https://gulshan.com.pk/corporate/corporate.html (group's cotton and blended yarn output), the PSX company record at dps.psx.com.pk/company/GUSM (winding-up status, sector) and SECP's price-sensitive information register, entry of 3 September 2021 authorising the registrar to present a winding-up petition (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton yarn",
+      "summary": "Cotton yarn spun within the Gulistan group of spinning mills, which the group says produce cotton and blended yarns in counts from 4/1 to 120/1.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Blended yarn",
+      "summary": "Blended yarns from the same spinning operations, including plied yarns of up to 10 ply.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

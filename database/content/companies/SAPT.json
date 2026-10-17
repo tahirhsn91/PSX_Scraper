@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for SAPT. Every fact is attributable — see sourceNote. No image is attached: the company's own mill photographs carry no licence we can record. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SAPT",
+  "description": "Sapphire Textile Mills Limited was incorporated in Pakistan on 11 March 1969 and is the flagship company of the Sapphire Group. It is a vertically integrated composite textile unit manufacturing cotton yarn, fabric and home textile products, with 139,433 spindles, 3,120 rotors, 360 looms and 215 stitching machines across units in Sindh and Punjab. Its processed fabric unit is a joint venture with Carrington Textiles.",
+  "headOffice": "20th Floor, Ocean Tower, Plot G-3, Khayaban-e-Iqbal, Block 9, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 111 000 100",
+  "website": "https://www.sapphiretextiles.com.pk",
+  "ceo": "Nadeem Abdullah",
+  "sourceNote": "Written from: http://sapphire.com.pk/stml/ (composite unit, capacity), http://www.sapphire.com.pk/stml/offices.htm (head office, telephone), https://sapphiretextiles.com.pk/at-a-glance (product range, processed fabric joint venture with Carrington Textiles) and the PSX company profile for SAPT at https://dps.psx.com.pk/company/SAPT (incorporation, principal activities, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Cotton yarn spun across the company's spinning units; its site quotes 4,500 tons of yarn a month.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric",
+      "summary": "Greige fabric from the company's weaving plants, quoted at 7,000,000 metres woven a month.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Processed fabric",
+      "summary": "Dyed, printed and finished fabric, quoted at 7,000,000 metres processed a month; the processed fabric unit is a joint venture with Carrington Textiles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textiles",
+      "summary": "Home textile products, described by the company alongside performance fabrics and workwear as its main lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Performance fabrics and workwear",
+      "summary": "Technical and workwear fabrics sold to customers in Asia, Europe, Australia and North America.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

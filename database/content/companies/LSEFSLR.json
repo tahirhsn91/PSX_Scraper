@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for LSEFSLR. Every fact here is attributable — see sourceNote. This is not an operating company: it is the tradable rights entitlement issued by LSE Financial Services Limited, so ceo is null (the chief executive is an officer of the issuing company, not of the right) and the products array is empty. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "LSEFSLR",
+  "description": "LSE Financial Services Limited Right is the tradable rights entitlement issued by LSE Financial Services Limited, an investment company listed on the Pakistan Stock Exchange — a security in its own right rather than an operating company, whose letter of right trades on PSX with its risks and rewards belonging to the holder. The issue offers 159,000,000 ordinary shares at PKR 1 per share, at 58.89 rights shares for every 100 held, raising PKR 159 million. The proceeds are earmarked for investment in SPACs and in pre-IPO, IPO and SPO offerings and associates.",
+  "headOffice": "The Exchange Hub, LSE Plaza, Kashmir Egerton Road, Lahore 54000, Pakistan",
+  "phone": "+92 42 3636 8000-4",
+  "website": "https://lse.com.pk",
+  "ceo": null,
+  "sourceNote": "Written from: the LSE Financial Services Limited rights issue offer document published by PSX (dps.psx.com.pk/download/document/282653.pdf and psx.com.pk attachments) — issue size of 159,000,000 shares at PKR 1, the 58.89-for-100 ratio, PKR 159 million raised, use of proceeds for SPACs, pre-IPO, IPO and SPO investments and associates, the tradability of the right entitlement, and the company's Lahore address and telephone; the PSX company page for LSEFSLR confirms the security is a right rather than a company (accessed 2026-10-17). No chief executive is given, because the listing is not an operating business.",
+  "products": []
+}

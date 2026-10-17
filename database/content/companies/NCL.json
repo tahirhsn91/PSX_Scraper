@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for NCL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "NCL",
+  "description": "Nishat Chunian Limited is a vertically integrated textile company that began in 1990 with a single spinning mill of 14,400 spindles and is now, by its own account, the fifth largest textile company in Pakistan in terms of sales. It spins 85,000 tons of yarn a year across eight mills, weaves greige fabric on 379 air-jet looms, and dyes, prints and stitches finished fabric, with a captive power plant supplying all its units. Its major markets include Hong Kong, mainland China, the Middle East, Bangladesh and Europe.",
+  "headOffice": "31-Q, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 35761730-9",
+  "website": "https://nishat.net",
+  "ceo": "Zain Shahzad",
+  "sourceNote": "Written from: nishat.net — home, businesses, spinning, weaving, home textiles, corporate governance and contact us pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spun yarn",
+      "summary": "85,000 tons a year of greige ring-spun yarn from 225,000 spindles in eight mills, supplied to denim weavers, knitters, towelers, sheeting, shirting, workwear, apparel and upholstery manufacturers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Greige and technical fabric",
+      "summary": "72 million metres a year from 379 air-jet looms in percale, twill, drill, matt, oxford, sateen, herringbone and dobby or jacquard constructions, plus fire-retardant and high-strength industrial fabrics.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textiles — bed linen",
+      "summary": "Dyed, printed and finished sheeting up to 340 cm wide and 1,200 thread count, with integrated stitching of flat and fitted sheets, pillowcases, duvet covers, curtains and table linen.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for PASL. Every fact is attributable - see sourceNote. No image attached: no licence-cleared photograph of the company's own premises exists. pasl.com.pk is the live site; the annual report still cites the older pervezahmed.net, which no longer resolves.",
+  "symbol": "PASL",
+  "description": "Pervez Ahmed Consultancy Services Limited is a listed investment company and brokerage firm that began operations in November 2005, was listed on the Karachi Stock Exchange on 25 April 2007, and is a TREC holder of the Pakistan Stock Exchange. It describes its core activities as equity investments, securities brokerage, underwriting, corporate finance and research, with paid-up capital of Rs. 600 million. The company sits within the D.S. Group, and its registered office is at 20-K, Gulberg II, Lahore.",
+  "headOffice": "20-K, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 3575 9464",
+  "website": "https://pasl.com.pk",
+  "ceo": "Ali Pervez Ahmad",
+  "sourceNote": "Written from: Pervez Ahmed Consultancy Services Ltd. website (pasl.com.pk: about, profile, services, contacts) and the company's Annual Report for the year ended 30 June 2025 - company information and vision/mission (pasl.com.pk/wp-content/uploads/2025/10/PASL-Annual-Report-2024-25.pdf) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Equity investments",
+      "summary": "Building and managing investment portfolios in equities for sustainable growth.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Securities brokerage",
+      "summary": "Brokerage as a TREC holder of the Pakistan Stock Exchange, with a trading platform for clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Underwriting",
+      "summary": "Acting as underwriter for public offerings and capital-raising transactions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate finance",
+      "summary": "Advisory on capital structuring, mergers, acquisitions and restructuring.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Research",
+      "summary": "Market, sector and stock research and analysis for clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for ANTM. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "ANTM",
+  "description": "AN Textile Mills Limited is a spinning company established in 1982, operating a spinning unit at 35 km on the Sheikhupura Road, Tehsil Jaranwala, in Faisalabad district. It produces polyester-cotton and cotton yarn in the blends required by national and international markets, and has added spindles to lift output from about 450 to 650 bags of yarn a day.",
+  "headOffice": "35 km, Sheikhupura Road, Tehsil Jaranwala, District Faisalabad, Pakistan",
+  "phone": "+92 41 4713183-85",
+  "website": "https://antextile.com.pk",
+  "ceo": "Aized Amer",
+  "sourceNote": "Written from: antextile.com.pk — home page, company profile, contact us and board of directors pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Polyester-cotton and cotton yarn",
+      "summary": "Premium-quality yarn spun from PC and cotton blends on the company's spinning unit, for national and international markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Specialised yarn counts",
+      "summary": "Yarn produced on the company's recently expanded spindle capacity, which it states will raise daily output from 450 to 650 bags.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

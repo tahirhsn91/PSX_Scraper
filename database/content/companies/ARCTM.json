@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for ARCTM. Every fact is attributable — see sourceNote. No image is attached: none of the company's own product photographs carry a licence we can record, and an unrelated mill photograph would imply it is Arctic's. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ARCTM",
+  "description": "Arctic Textile Mills Limited, previously Khurshid Spinning Mills, is a public limited company incorporated in Pakistan in 1986 and listed on the Pakistan Stock Exchange since October 1989. It manufactures and deals in all types of yarn, spinning at a mill on the 35th kilometre of Sheikhupura Road in Tehsil Jaranwala, Faisalabad, with its head office on Jail Road in Faisalabad. The company also deals in trading of fabric and made-ups.",
+  "headOffice": "P-102, Jail Road, Faisalabad, Pakistan",
+  "phone": "+92 41 2605076",
+  "website": "https://arctictextile.com",
+  "ceo": "Muhammad Iqbal",
+  "sourceNote": "Written from: https://arctictextile.com (head office, mills, telephone), https://arctictextile.com/about-the-company.html (former name, business) and the PSX company profile for ARCTM at https://dps.psx.com.pk/company/ARCTM (incorporation and listing dates, business description, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "All types of yarn, spun at the company's mill on Sheikhupura Road, Jaranwala, Faisalabad.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fabric and made-ups trading",
+      "summary": "The company also deals in trading of fabric and made-ups, alongside its own yarn production.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

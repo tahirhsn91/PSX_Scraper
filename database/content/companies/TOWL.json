@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for TOWL. Facts are from the company's own website — see sourceNote. No image is attached.",
+  "symbol": "TOWL",
+  "description": "Towellers Limited is a Karachi-based textile exporter founded in 1973 by Shaikh Muhammad Obaid, listed on the Pakistan Stock Exchange and built originally on towel manufacturing. It produces towels, apparel, bedding and baby products, and works to Oekotex, GOTS, GRS, RCS and BCI standards across its processes.",
+  "headOffice": "Towellers House, WSA 30/31, Block 1, F.B. Area, Karachi 75950, Pakistan",
+  "phone": "+92 213 632 6500",
+  "website": "https://towellers.com",
+  "ceo": "Mehreen Obaid Agha",
+  "sourceNote": "Written from: https://towellers.com/ (founding year and founder, product categories, certifications, address, telephone), https://towellers.com/towels (terry and healthcare towel range) and https://towellers.com/leadership-overview/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Towels",
+      "summary": "Terry towels and lightweight healthcare textiles — the business the company was founded on in 1973.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Apparel",
+      "summary": "Knitted apparel produced in the company's garment operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bedding",
+      "summary": "Bedding and knit bedding, including woven blankets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Baby products",
+      "summary": "Baby products in the company's product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

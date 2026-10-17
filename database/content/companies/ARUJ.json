@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ARUJ. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ARUJ",
+  "description": "Aruj Industries Limited was established in 1992 as a public limited company and describes itself as the pioneer of woven fusible interlining manufacturing in Pakistan and the only interlining producer in the country to hold ISO 9000 certification. It runs three divisions: interlining, a continuous dyeing and processing unit installed in 2011, and an apparel division producing fashion garments that it says is SEDEX approved and BSCI compliant with capacity for 200,000 units per month. Its mills and registered office are on Raiwind-Manga Road, Lahore.",
+  "headOffice": "2-KM Off Raiwind-Manga Road, Raiwind, Lahore, Pakistan",
+  "phone": "+92 42 38102800",
+  "website": "https://aruj.com",
+  "ceo": "Faisal Khan",
+  "sourceNote": "Written from: aruj.com (home), aruj.com/about (company introduction, history), aruj.com/division (interlining, dyeing and apparel divisions), aruj.com contact details; PSX company profile page dps.psx.com.pk/company/ARUJ (business description, key people) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Woven fusible interlining",
+      "summary": "The company's founding product and the field in which it describes itself as Pakistan's pioneer, with ISO 9000 certification.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dyed, bleached and finished fabric",
+      "summary": "A continuous dyeing and processing set-up installed in 2011, specialising in narrow width fabric processing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Apparel and fashion garments",
+      "summary": "Non-denim and denim garments from a SEDEX approved, BSCI compliant facility producing 200,000 units per month for customers in the UK, Europe and the USA.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for HAFL. Every fact is attributable — see sourceNote. The company's site publishes no product catalogue, so the product list is limited to its stated principal activity. No image is attached.",
+  "symbol": "HAFL",
+  "description": "Hafiz Limited, formerly Hafiz Textile Mills Limited, was incorporated in 1951 and describes itself as a composite textile unit and an exporter of textiles, tracing the business to a mill established in Mumbai in 1936 and re-established in Karachi after 1947. It states that its principal activity is the spinning of textile fibres, and it names Textile Trading Company Limited as its associated partner company. Its shares are listed on the Pakistan Stock Exchange.",
+  "headOffice": "97, Alliance Building, 2nd Floor, Moolji Street, Mereweather Tower, Karachi 74000, Pakistan",
+  "phone": "+92 21 3244 0371",
+  "website": "https://www.hafiztm.com",
+  "ceo": "Fakhruddin Usmani",
+  "sourceNote": "Written from: https://www.hafiztm.com/about-us-2/ (history, incorporation, composite unit), https://www.hafiztm.com/business-activities/ (principal activity, associated company), https://www.hafiztm.com/company-information/ (chief executive officer), https://www.hafiztm.com/contact-us/ (head office, telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spun textile yarn",
+      "summary": "Spinning of textile fibres, which the company states as its principal activity, at its mills at D-9, S.I.T.E., Manghopir Road, Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
