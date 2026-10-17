@@ -1,7 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Box, Button, Grid, MenuItem, Stack, TablePagination, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  MenuItem,
+  Stack,
+  TablePagination,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useScreenerPresets, useSectors, useStocks } from '../api/hooks';
+import { screenUrl, useSavedScreens } from '../lib/savedScreens';
 import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column, type SortState } from '../components/ui/DataTable';
@@ -64,22 +80,94 @@ function buildFilters(
  * The stock screener. Filters are sent to the server (the list is paginated and the ratio columns
  * come from a join), so sorting and filtering both happen server-side — never in the browser.
  */
+/**
+ * The screen *is* the query string.
+ *
+ * Every filter, the preset, the sort and the page live in the URL, which buys three things at once:
+ * Back returns to the previous question, a link reproduces the screen for someone else, and a saved
+ * screen is just the query string stored under a name — no parallel model to keep in step.
+ */
+function parseScreen(params: URLSearchParams): {
+  filters: StockFilters;
+  criteria: Record<string, string>;
+  sector: string;
+  period: NonNullable<StockFilters['returnPeriod']> | '';
+  sort: SortState | null;
+  page: number;
+  presetKey: string;
+} {
+  const criteria: Record<string, string> = {};
+  const filters: StockFilters = {};
+  for (const field of FIELDS) {
+    const raw = params.get(field.key as string);
+    const n = toNumber(raw ?? undefined);
+    if (n != null) {
+      criteria[field.key as string] = String(n);
+      (filters as Record<string, unknown>)[field.key as string] = n;
+    }
+  }
+  const sector = params.get('sector') ?? '';
+  if (sector) filters.sector = sector;
+  const periodRaw = params.get('returnPeriod');
+  const period = (periodRaw === '1w' || periodRaw === '1m' || periodRaw === '3m' || periodRaw === '6m' || periodRaw === '1y'
+    ? periodRaw
+    : '') as NonNullable<StockFilters['returnPeriod']> | '';
+  if (period) filters.returnPeriod = period;
+  const sortKey = params.get('sort');
+  const sort = sortKey ? ({ key: sortKey, direction: params.get('order') === 'desc' ? 'desc' : 'asc' } as SortState) : null;
+  const page = Math.max(1, Number(params.get('page') ?? '1') || 1);
+  return { filters, criteria, sector, period, sort, page, presetKey: params.get('preset') ?? '' };
+}
+
+/** Serialise a screen back to the query string, dropping anything at its default. */
+function screenParams(
+  filters: StockFilters,
+  presetKey: string,
+  sort: SortState | null,
+  page: number,
+): URLSearchParams {
+  const next = new URLSearchParams();
+  for (const field of FIELDS) {
+    const v = filters[field.key];
+    if (v != null) next.set(field.key as string, String(v));
+  }
+  if (filters.sector) next.set('sector', filters.sector);
+  if (filters.returnPeriod) next.set('returnPeriod', filters.returnPeriod);
+  if (presetKey) next.set('preset', presetKey);
+  if (sort?.key) {
+    next.set('sort', String(sort.key));
+    next.set('order', sort.direction ?? 'asc');
+  }
+  if (page > 1) next.set('page', String(page));
+  return next;
+}
+
 export function Screener() {
   const [params, setParams] = useSearchParams();
-  const sectorParam = params.get('sector') ?? '';
-  // The preset lives in the URL, so a screen is linkable: "the low-P/E list" is a place, not a
-  // transient piece of component state that dies on refresh.
-  const presetKey = params.get('preset') ?? '';
+  const view = useMemo(() => parseScreen(params), [params]);
+  const { filters: applied, sort, page, presetKey } = view;
 
-  const [criteria, setCriteria] = useState<Record<string, string>>({});
-  const [sector, setSector] = useState(sectorParam);
-  const [period, setPeriod] = useState<NonNullable<StockFilters['returnPeriod']> | ''>('');
-  const [applied, setApplied] = useState<StockFilters>(sectorParam ? { sector: sectorParam } : {});
-  const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<SortState | null>(null);
+  // The form is a draft of the screen: it only reaches the URL when Apply is pressed.
+  const [criteria, setCriteria] = useState<Record<string, string>>(view.criteria);
+  const [sector, setSector] = useState(view.sector);
+  const [period, setPeriod] = useState(view.period);
+
+  // Follow Back / Forward: the form should show what the results show.
+  useEffect(() => {
+    setCriteria(view.criteria);
+    setSector(view.sector);
+    setPeriod(view.period);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- keyed on the query string on purpose
+  }, [params.toString()]);
 
   const { data: sectors } = useSectors();
   const { data: presetList } = useScreenerPresets();
+  const { screens, save, remove, blocked } = useSavedScreens();
+  const [saveOpen, setSaveOpen] = useState(false);
+  const [saveName, setSaveName] = useState('');
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const currentQuery = params.toString();
   const hasFilters = Object.keys(applied).length > 0;
 
   const { data, isLoading, error, refetch } = useStocks(
@@ -95,40 +183,63 @@ export function Screener() {
     presetKey || undefined,
   );
   const activePreset = data?.preset;
-  const activePeriod = applied.returnPeriod;
-  const activePeriodMeta = PERIODS.find((x) => x.key === activePeriod);
+  const activePeriodMeta = PERIODS.find((x) => x.key === applied.returnPeriod);
 
   const setField = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setCriteria((c) => ({ ...c, [key]: e.target.value }));
 
   const apply = () => {
-    setApplied(buildFilters(criteria, sector, period || undefined));
-    setPage(1);
+    setParams(screenParams(buildFilters(criteria, sector, period || undefined), presetKey, null, 1));
   };
   const reset = () => {
+    setParams(new URLSearchParams());
     setCriteria({});
     setSector('');
     setPeriod('');
-    setApplied({});
-    setPage(1);
-    setSort(null);
-    if (presetKey) {
-      const next = new URLSearchParams(params);
-      next.delete('preset');
-      setParams(next, { replace: true });
-    }
   };
 
   /** Choose a named screen: its criteria, ordering and reason all come from the server. */
   const choosePreset = (key: string) => {
-    const next = new URLSearchParams(params);
-    if (key) next.set('preset', key);
-    else next.delete('preset');
-    setParams(next, { replace: true });
-    setPage(1);
-    setSort(null);
-    setApplied({});
+    setParams(screenParams({}, key, null, 1));
     setCriteria({});
+    setSector('');
+    setPeriod('');
+  };
+
+  const openSave = () => {
+    setSaveName('');
+    setSaveError(null);
+    setSaveOpen(true);
+  };
+  const commitSave = () => {
+    const res = save(saveName, currentQuery);
+    if (!res.ok) {
+      setSaveError(res.error ?? 'Could not save this screen.');
+      return;
+    }
+    setSaveOpen(false);
+  };
+  /** Applying a saved screen is a navigation to the query it holds — nothing to re-derive. */
+  const applySaved = (query: string) => {
+    setParams(new URLSearchParams(query));
+  };
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(screenUrl(currentQuery));
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard blocked (insecure context or permission): the URL is in the address bar anyway.
+      setCopied(false);
+    }
+  };
+
+  /** Sorting is a change to the question, so it goes in the URL and returns to page one. */
+  const changeSort = (next: SortState | null) => {
+    setParams(screenParams(applied, presetKey, next, 1));
+  };
+  const changePage = (p: number) => {
+    setParams(screenParams(applied, presetKey, sort, p));
   };
 
   const columns: Column<StockListItem>[] = [
@@ -290,6 +401,98 @@ export function Screener() {
           </Box>
         ) : null}
       </SectionCard>
+      <SectionCard
+        title="Saved screens"
+        subtitle="Kept in this browser only — no account, nothing sent to a server"
+        action={
+          <Stack direction="row" spacing={1}>
+            <Button size="small" onClick={copyLink}>
+              {copied ? 'Link copied' : 'Copy link'}
+            </Button>
+            <Button size="small" variant="contained" onClick={openSave} disabled={blocked}>
+              Save this screen
+            </Button>
+          </Stack>
+        }
+        sx={{ mb: 3 }}
+      >
+        {blocked ? (
+          <Alert severity="info" sx={{ mb: screens.length ? 2 : 0 }}>
+            This browser is blocking local storage (private mode, or a policy), so screens cannot be
+            saved on this device. The Copy link button still produces a working shareable URL.
+          </Alert>
+        ) : null}
+        {screens.length === 0 ? (
+          <Typography variant="body2" color="text.secondary">
+            No saved screens yet. Set the filters you want, then use Save this screen.
+          </Typography>
+        ) : (
+          <Stack spacing={1}>
+            {screens.map((sc) => (
+              <Stack
+                key={sc.id}
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{ borderBottom: '1px solid', borderColor: 'divider', pb: 1 }}
+              >
+                <Box sx={{ minWidth: 0 }}>
+                  <Button
+                    size="small"
+                    sx={{ textTransform: 'none', px: 0 }}
+                    onClick={() => applySaved(sc.query)}
+                  >
+                    {sc.name}
+                  </Button>
+                  <Typography variant="caption" color="text.secondary" display="block" noWrap>
+                    {sc.query || 'No filters — the whole universe'}
+                  </Typography>
+                </Box>
+                <Button
+                  size="small"
+                  color="inherit"
+                  onClick={() => {
+                    if (window.confirm(`Delete the saved screen "${sc.name}"?`)) remove(sc.id);
+                  }}
+                >
+                  Delete
+                </Button>
+              </Stack>
+            ))}
+          </Stack>
+        )}
+      </SectionCard>
+      <Dialog open={saveOpen} onClose={() => setSaveOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>Save this screen</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 2 }}>
+            The filters, preset, period and sort currently applied are stored with the name. Nothing
+            leaves this device.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            size="small"
+            label="Name"
+            value={saveName}
+            onChange={(e) => {
+              setSaveName(e.target.value);
+              setSaveError(null);
+            }}
+            error={Boolean(saveError)}
+            helperText={saveError ?? undefined}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') commitSave();
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSaveOpen(false)}>Cancel</Button>
+          <Button variant="contained" onClick={commitSave}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
       <SectionCard title="Filters" sx={{ mb: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={4}>
@@ -377,7 +580,7 @@ export function Screener() {
           error={error ? 'Could not run the screener.' : undefined}
           onRetry={refetch}
           sort={sort}
-          onSortChange={setSort}
+          onSortChange={changeSort}
           // The same 160ms body entrance the dashboard uses: applying a filter, turning a page or
           // re-sorting is a new question, and the rows should arrive as one rather than swap.
           transitionKey={`${presetKey}-${JSON.stringify(applied)}-${page}-${sort?.key ?? 'default'}-${sort?.direction ?? ''}`}
@@ -388,7 +591,7 @@ export function Screener() {
               component="div"
               count={data?.total ?? 0}
               page={(data?.page ?? 1) - 1}
-              onPageChange={(_, p) => setPage(p + 1)}
+              onPageChange={(_, p) => changePage(p + 1)}
               rowsPerPage={PAGE_SIZE}
               rowsPerPageOptions={[PAGE_SIZE]}
             />
