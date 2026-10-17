@@ -116,18 +116,27 @@ export function MiniIndexChart({
   const candles = useMemo(() => toCandles(data?.items ?? [], sessions), [data, sessions]);
 
   /**
-   * Draw the line once, when it first has something to draw. The timer starts on the first
-   * drawable series, not on mount: the history request usually resolves well after the card
-   * mounts, and a timer started at mount would already have expired by the time the path exists.
-   * A sparkline that redraws on every 30-second poll is a blinking strip; the shape change on a
-   * new session is carried by the fade on the SVG instead.
+   * Draw the line once, per mount, but only once the page has painted. The history request
+   * resolves while the board and its table are still doing their first render, so a reveal
+   * started at that moment loses its opening frames — the animation stalls and then snaps to
+   * the end. Two frames is one paint: the reveal then runs on a quiet main thread and reads as
+   * a continuous draw. The fallback covers a background tab, where rAF does not fire and the
+   * line would otherwise stay held at the start of the reveal for ever.
    */
-  const [drawn, setDrawn] = useState(false);
+  const [drawing, setDrawing] = useState(false);
   useEffect(() => {
-    if (drawn || candles.length < 2) return;
-    const timer = setTimeout(() => setDrawn(true), 650);
-    return () => clearTimeout(timer);
-  }, [candles.length, drawn]);
+    if (drawing || candles.length < 2) return;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setDrawing(true));
+    });
+    const fallback = setTimeout(() => setDrawing(true), 1200);
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+      clearTimeout(fallback);
+    };
+  }, [candles.length, drawing]);
 
   /**
    * Resolve a palette token to the colour to paint with. SVG children take paint as an attribute
@@ -217,12 +226,12 @@ export function MiniIndexChart({
             from: { opacity: 0.7 },
             to: { opacity: 1 },
           },
-          // The line draws itself once (`pathLength={1}` normalises the dash maths). After the
-          // first 650ms the rule is dropped and the line is a plain stroke, so later remounts do
-          // not replay it.
-          ...(drawn
-            ? {}
-            : {
+          // The line draws itself once per mount and stays drawn: `pathLength={1}` normalises the
+          // dash maths and `forwards` holds the finished state. Until `drawing` is armed the path
+          // is held at the very start of the dash — present and laid out, so arming it is one
+          // style change and the reveal begins on the first frame after the page has painted.
+          ...(drawing
+            ? {
                 '& .spark-line': {
                   strokeDasharray: 1,
                   strokeDashoffset: 1,
@@ -237,6 +246,12 @@ export function MiniIndexChart({
                 '@keyframes spark-draw': {
                   from: { strokeDashoffset: 1 },
                   to: { strokeDashoffset: 0 },
+                },
+              }
+            : {
+                '& .spark-line': {
+                  strokeDasharray: 1,
+                  strokeDashoffset: 1,
                 },
               }),
         }}
