@@ -233,6 +233,7 @@ export function Portfolio() {
 
       {totals.priced > 1 && (
         <SectionCard
+          reveal
           title="Composition"
           subtitle="Where the priced book is concentrated — hover a slice or a symbol to read its share"
           sx={{ mb: 3 }}
@@ -241,7 +242,7 @@ export function Portfolio() {
         </SectionCard>
       )}
 
-      <SectionCard flush>
+      <SectionCard flush reveal>
         {totals.holdings === 0 ? (
           <StatePanel
             kind="empty"
