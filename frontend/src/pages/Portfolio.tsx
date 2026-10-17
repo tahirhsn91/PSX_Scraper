@@ -7,6 +7,7 @@ import { buildRows, summarise, type HoldingRow, type Quote } from '../lib/portfo
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { HoldingButton } from '../components/HoldingDialog';
+import { PortfolioComposition } from '../components/PortfolioComposition';
 import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { StatTile, type StatTone } from '../components/ui/StatTile';
@@ -228,6 +229,16 @@ export function Portfolio() {
             />
           </Grid>
         </Grid>
+      )}
+
+      {totals.priced > 1 && (
+        <SectionCard
+          title="Composition"
+          subtitle="Where the priced book is concentrated — hover a slice or a symbol to read its share"
+          sx={{ mb: 3 }}
+        >
+          <PortfolioComposition rows={rows} total={totals.value} />
+        </SectionCard>
       )}
 
       <SectionCard flush>
