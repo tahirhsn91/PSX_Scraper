@@ -144,10 +144,9 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
               ref={descRef}
               variant="body1"
               sx={{
-                // The skill's reading-measure rule: 65–75 characters a line. At 80ch the font's
-                // wide "0" put ~120 characters on a line; 65ch brings it to the low 90s, which is
-                // as far as this card can narrow without leaving half the row empty.
-                maxWidth: '65ch',
+                // Full card width: the text now aligns with the tile grid above and the product
+                // row below. A 65ch column read well but left a third of the card empty, which is
+                // what the row above and below made look like a mistake rather than a measure.
                 lineHeight: 1.6,
                 // Three lines is the gist; the median write-up is ~470 characters, so most open
                 // past the fold.
