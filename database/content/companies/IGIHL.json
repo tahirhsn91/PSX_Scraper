@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for IGIHL. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "IGIHL",
+  "description": "IGI Holdings Limited is the listed holding company of the IGI insurance group and a Packages Group company, incorporated in 1953 as IGI Insurance Limited. Following schemes of amalgamation and arrangement sanctioned by the Sindh High Court in December 2017, IGI Investment Bank Limited amalgamated into it and its insurance business was transferred to a wholly-owned subsidiary, IGI General Insurance Limited, leaving IGI Holdings as an investment holding company. It is registered and headquartered in Karachi and has a branch in Lahore.",
+  "headOffice": "7th Floor, The Forum, Suite 701-713, G-20, Block 9, Khayaban-e-Jami, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 111 308 308",
+  "website": "https://igiholdings.com.pk",
+  "ceo": "Syed Hyder Ali",
+  "sourceNote": "Company website (igiholdings.com.pk/our-company: incorporation date, 1953; the 2017 amalgamation and transfer of the insurance business to IGI General Insurance Limited; registered and head office address, phone and fax), and the chief executive from the board listing in IGI Holdings' own quarterly and half-yearly reports hosted on igiholdings.com.pk, read 2026-10-17.",
+  "products": [
+    {
+      "name": "IGI General Insurance Limited",
+      "summary": "The group's general insurance business, carried on by a wholly-owned subsidiary of IGI Holdings following the 2017 reorganisation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Investment holding",
+      "summary": "The company's own activity as a listed holding company: holding investments, including those transferred to it under the 2017 scheme of arrangement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

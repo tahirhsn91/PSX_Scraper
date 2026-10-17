@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for BRRG. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "BRRG",
+  "description": "B.R.R Guardian Limited (BRRG) is a real estate development and marketing company incorporated in Pakistan on 16 December 2021 and listed on the Pakistan Stock Exchange on 4 August 2023. Its business is the development and marketing of real estate — land, housing and commercial projects, multi-storey buildings, shopping centres and related facilities — and it brings property for rental purposes. It also operates BRR Security Vault, a locker and custodial facility opened in July 1989. The company acquired a modaraba business in the prior year; its Ijarah and Diminishing Musharakah businesses were discontinued after the amalgamation.",
+  "headOffice": "20th Floor, BRR Tower, Hassan Ali Street, off I.I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 3260 2401-6",
+  "website": "https://firstdawood.com/brrgl",
+  "ceo": "Ayaz Dawood",
+  "sourceNote": "Company website (firstdawood.com/brrgl) and the PSX Data Portal company record for BRRG, read 2026-10-17.",
+  "products": [
+    {
+      "name": "BRR Tower",
+      "summary": "The company's flagship project: an office tower on Hassan Ali Street, off I.I. Chundrigar Road, Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "BRR Security Vault",
+      "summary": "A purpose-built locker and custodial facility on Shahrah-e-Quaideen, Karachi, opened in July 1989, with four floors of lockers and custodial services for corporate clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Real estate development",
+      "summary": "Development and marketing of residential, commercial and mixed-use property, including property developed for rental.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

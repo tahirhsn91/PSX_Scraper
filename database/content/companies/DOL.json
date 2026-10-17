@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for DOL. Every fact here is attributable — see sourceNote. The head office given is the Descon group headquarters published on descon.com: Descon Oxychem's own pages publish no separate address, and this is stated in the sourceNote rather than presented as the company's registered office. No chief executive is published on the pages read, so ceo is null. No image is attached.",
+  "symbol": "DOL",
+  "description": "Descon Oxychem Limited manufactures hydrogen peroxide and states that it has become the market leader in that chemical in both domestic and international markets. It supplies hydrogen peroxide-based solutions to the textile industry, to food and beverage safety applications and to other industrial and consumer sectors, and states that it is exploring growth in pulp and paper and cosmetics. The company is the chemicals arm of Descon, the Lahore-based engineering group founded in 1977.",
+  "headOffice": "Descon Headquarters, 18 km Ferozepur Road, Lahore, Pakistan",
+  "phone": "+92 42 3599 0034",
+  "website": "https://www.descon.com/dol/",
+  "ceo": null,
+  "sourceNote": "Descon Oxychem's pages on the group website descon.com — about page (hydrogen peroxide market position, applications, growth areas) — and the group contact-us page (Descon Headquarters, 18 km Ferozepur Road, Lahore, with telephone), read 2026-10-17. The address is the Descon group headquarters; DOL publishes no separate office address.",
+  "products": [
+    {
+      "name": "Hydrogen peroxide",
+      "summary": "Hydrogen peroxide and hydrogen peroxide-based solutions for textiles, food and beverage safety, and other industrial and consumer uses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

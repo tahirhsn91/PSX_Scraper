@@ -1,0 +1,26 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BNL",
+  "description": "Bunny's Limited is a Pakistani bakery business making bread and bun products. It was established in Lahore in 1984 by Mr. Younus Shafique Ch. and has grown from a small start into a supplier of bakery products to cities across Pakistan and internationally. The company also co-manufactures and packages products for PepsiCo.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://bunnys.com.pk",
+  "ceo": "Omar Shafiq Choudhry",
+  "sourceNote": "Company website (bunnys.com.pk: about-us, contact-us), read 2026-10-17. The site names Lahore as the factory location but does not publish a full street address or telephone number.",
+  "products": [
+    {
+      "name": "Burger buns",
+      "summary": "Long, jumbo and round burger buns.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sweet buns",
+      "summary": "Fruit buns and school buns.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

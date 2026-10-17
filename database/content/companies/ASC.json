@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ASC",
+  "description": "Al Shaheer Corporation Limited describes itself as one of Pakistan's leading meat exporters and retailers, and as a trusted supplier of high-quality meat to importers in a number of countries.",
+  "headOffice": "Mansoor Tower, Clifton Block 9, Karachi, Pakistan",
+  "phone": null,
+  "website": "https://www.ascfoods.com",
+  "ceo": null,
+  "sourceNote": "Company website (ascfoods.com: company profile, company information, contact), read 2026-10-17. The contact page publishes the building but not the floor or telephone number.",
+  "products": [
+    {
+      "name": "Meat exports",
+      "summary": "Fresh and frozen meat supplied to importers across a number of export markets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

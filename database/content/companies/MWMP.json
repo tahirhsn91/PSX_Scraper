@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for MWMP. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "MWMP",
+  "description": "Mandviwalla Mauser Plastic Industries Limited is a Karachi-based plastics manufacturer incorporated in 1988, renamed after signing a technical know-how agreement with Mauser Werke GmbH of Germany. Its Port Qasim project has two units: a computerised injection-moulding plant making automotive, textile, household and poultry-industry items, and a blow-moulding unit making plastic drums. The company describes itself as the only manufacturer of plastic barrels of up to 210 litres capacity.",
+  "headOffice": "Mandviwalla Building, Old Queens Road, Karachi-74000",
+  "phone": "+92 21 3244 1116-9",
+  "website": "https://mandviwallamauser.com",
+  "ceo": "Azeem H. Mandviwalla",
+  "sourceNote": "Company website (mandviwallamauser.com: company profile, contact details) and the PSX company profile (dps.psx.com.pk/company/MWMP: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Plastic drums",
+      "summary": "Blow-moulded plastic drums of up to 210 litres, made under a technical know-how agreement with Mauser Werke GmbH of Germany.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Injection-moulded products",
+      "summary": "Automotive battery containers and components, textile bobbins and crates, 'Sohni' monoblock plastic chairs, poultry drinkers and household items.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

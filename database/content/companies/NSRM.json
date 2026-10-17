@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for NSRM. Every fact here is attributable — see sourceNote. No image is attached: the company's own fabric photography is not licence-cleared.",
+  "symbol": "NSRM",
+  "description": "The National Silk & Rayon Mills Limited was established in 1951 and is based in Faisalabad, where its factory at Dhuddiwala on Jaranwala Road dyes, bleaches, finishes, prints and embroiders woven fabrics. It describes itself as an industrial contractor producing premium woven fabric for men's and ladies' fashion, supplying domestic and international brands in ethnic and western wear.",
+  "headOffice": "House No. 8/3, Aziz Avenue, Canal Road, Gulberg V, Lahore, Pakistan",
+  "phone": "+92 41 8530235-6",
+  "website": "https://nationalsilk.com",
+  "ceo": "Faisal Taueed Puri",
+  "sourceNote": "Company website (nationalsilk.com: home page, about and footer company information), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Fabric dyeing",
+      "summary": "Dyeing of woven fabric to customer colour and shade requirements, in-house.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Special finishes",
+      "summary": "Finishing processes applied to fabric to change its appearance, performance and handle.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Digital printing",
+      "summary": "Fabric printing on digital Atexco machines, for short runs and detailed designs.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Schiffli embroidery",
+      "summary": "Schiffli embroidery on state-of-the-art machines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Multi-head embroidery",
+      "summary": "Multi-head embroidery for embellished woven fabric.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

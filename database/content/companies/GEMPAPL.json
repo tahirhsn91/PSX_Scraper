@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for GEMPAPL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GEMPAPL",
+  "description": "Pak Agro Packaging Limited manufactures net bags and green shade nets for greenhouses and provides services for their manufacture, and describes itself as the first company to supply agricultural textiles to the local market when operations began in May 2001. Incorporated in February 1989 as Kohsar Tyres (Private) Limited, it was renamed Mian & Khan Industries in 1999 and Pak Agro Packaging in 2000, and became a public limited company in 2022; it is listed on the GEM board of the Pakistan Stock Exchange.",
+  "headOffice": "Office No. 302, 3rd Floor, Green Trust Tower, Jinnah Avenue, Blue Area, Islamabad, Pakistan",
+  "phone": "+92 51 8311645",
+  "website": "https://pakagro.com",
+  "ceo": "Dr. Safdar Ali Butt",
+  "sourceNote": "Company website (pakagro.com: company-profile, contact) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Net bags",
+      "summary": "Agricultural net bags manufactured at the Hattar Industrial Estate factory.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Green shade nets",
+      "summary": "Shade nets for greenhouses, the second half of the company's stated main object.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

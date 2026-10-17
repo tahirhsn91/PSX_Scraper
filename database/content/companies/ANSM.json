@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for ANSM. Every fact here is attributable — see sourceNote. No image is attached: the company's own site photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Telephone is null because the number does not render fully on the company's contact page.",
+  "symbol": "ANSM",
+  "description": "Ansari Sugar Mills Limited is a Pakistani sugar producer incorporated on 9 July 1989 as a public limited company, with shares quoted on the Pakistan Stock Exchange. Its business is manufacturing white refined sugar from cane — buying, cultivating and crushing cane and disposing of the sugar to dealers, distributors and exporters — and its board appointed Khawaja Anver Majid in 2008 to run the mills and manage the company's affairs.",
+  "headOffice": "CL 5/4, Club Street, Main Abdullah Haroon Road, Karachi 75350, Pakistan",
+  "phone": null,
+  "website": "https://ansarisugar.com.pk",
+  "ceo": "Khawaja Anver Majid",
+  "sourceNote": "Company website (ansarisugar.com.pk/en: incorporation on 9 July 1989 and PSX quotation; /en/page/company-profile/business for the sugar manufacturing activity and cane procurement; /en/page/company-profile/profile for the 2008 board resolution appointing Mr Anver Majid to run the mills; /en/page/governance/board-of-directors for Khawaja Anver Majid as CEO and executive director; /en/page/contact for the head office address), read 2026-10-17. The telephone number on the contact page renders incompletely, so it is null.",
+  "products": [
+    {
+      "name": "White refined sugar",
+      "summary": "Manufactured from cane on the company's own account; the stated business is to buy, grow and crush cane and sell the refined sugar.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

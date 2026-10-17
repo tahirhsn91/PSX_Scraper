@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for DYNO. Every fact here is attributable — see sourceNote. No current chief executive is published on the pages read, so ceo is null. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "DYNO",
+  "description": "Dynea Pakistan Limited was incorporated in Pakistan on 20 June 1982 and is listed on the Pakistan Stock Exchange. It manufactures and sells formaldehyde, urea and melamine formaldehyde resins, and moulding compounds, with a dedicated division for formaldehyde and wood-based resins and a factory at Gadoon. The company began as Dyno Pakistan and adopted the Dynea name in 2001; it states that its emphasis is on moulding compounds.",
+  "headOffice": "9th Floor, Artistic Tower, Plot No. 39/A-2, Block 6, P.E.C.H.S., Main Shahrah-e-Faisal, Karachi 75400, Pakistan",
+  "phone": "+92 21 3452 0132",
+  "website": "https://dynea.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website dynea.com.pk — about-us and principle-business pages (incorporation 20 June 1982, listing, formaldehyde and urea/melamine formaldehyde and moulding compound, Gadoon unit, 1982 Dyno origin and 2001 renaming, registered office) and contact page (address and telephone), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Formaldehyde",
+      "summary": "Formaldehyde, produced by a dedicated division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Urea and melamine formaldehyde resins",
+      "summary": "Urea and melamine formaldehyde resins for wood-based applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Moulding compounds",
+      "summary": "Urea and melamine moulding compounds, which the company describes as its emphasis.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

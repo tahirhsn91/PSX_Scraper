@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for JSML. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "JSML",
+  "description": "Jauharabad Sugar Mills Limited is a public limited company operating one of Pakistan's oldest sugar mills. It was originally set up at Jauharabad, District Khushab, Punjab by the Thal Development Authority, and the site has been in operation for about sixty-five years. The current management acquired the company in March 2013, took over its assets and liabilities and renamed it from Kohinoor Sugar Mills Limited, since when it has carried out a balancing, modernisation and replacement programme.",
+  "headOffice": "125-B, Quaid-e-Azam Industrial Estate, Kot Lakhpat, Lahore, Pakistan",
+  "phone": "+92 42 3521 3491",
+  "website": "https://www.jsml.com.pk",
+  "ceo": "Syed Anwar Hussain Shahid",
+  "sourceNote": "Company website jsml.com.pk — home page (history, Thal Development Authority origin, 2013 takeover and renaming), contact-us page (registered and head office, telephone, factory at Jauharabad, District Khushab) and corporate-information page (board of directors naming the chief executive), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Refined sugar",
+      "summary": "Cane sugar manufactured at the company's mill at Jauharabad, District Khushab, Punjab.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

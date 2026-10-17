@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for CHAS. Every fact here is attributable — see sourceNote. No image is attached: the company's own plant photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "CHAS",
+  "description": "Chashma Sugar Mills Limited is a Pakistani sugar producer of the Premier Group, set up by its sponsors in 1991 in Dera Ismail Khan, Khyber Pakhtunkhwa. It operates two units there — a 12,000 tons-of-cane-per-day mill the company describes as the largest in Pakistan, and a second 6,000 TCD mill at Ramak — for a combined rated crushing capacity of 18,000 tons per day, and it has worked with growers to bring thousands of acres under cane. Beyond sugar it produces ethanol, bagasse and molasses.",
+  "headOffice": "Premier Group, 20-A, King's Arcade, Markaz F-7, Islamabad, Pakistan",
+  "phone": "+92 51 265 0805",
+  "website": "https://chashmasugarmills.com",
+  "ceo": "Begum Laila Sarfaraz",
+  "sourceNote": "Company website (chashmasugarmills.com: establishment by the sponsors in 1991 at Dera Ismail Khan, Unit-I rated at 12,000 TCD described as the largest in Pakistan, Unit-II at Ramak rated at 6,000 TCD, expansion to 18,000 TCD, and the products table listing white crystalline sugar, ethanol, bagasse and molasses; Governance.html for Begum Laila Sarfaraz as chief executive and the Premier Group office address and telephone), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White crystalline sugar",
+      "summary": "Produced at the company's two mills in Dera Ismail Khan, with a combined rated crushing capacity of 18,000 tons of cane per day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ethanol",
+      "summary": "Ethanol produced alongside the sugar operations, listed by the company as one of its products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bagasse and molasses",
+      "summary": "Sugar-milling by-products sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

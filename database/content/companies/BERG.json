@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for BERG. Every fact here is attributable — see sourceNote. No current chief executive is published on the pages read, so ceo is null. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BERG",
+  "description": "Berger Paints Pakistan Limited has manufactured paints and coatings in Pakistan since 1950, when it began supplying a market newly independent of imported paint. It established its first local manufacturing facility in Karachi in 1955 and in 2006 opened a manufacturing plant and head office in Lahore, supported by regional sales offices in Karachi, Islamabad and Multan. The company describes its range as covering both home and large-scale commercial painting, and emphasises durability, coverage and environmental responsibility in its products.",
+  "headOffice": "28 km, Multan Road, Lahore, Pakistan",
+  "phone": null,
+  "website": "https://www.berger.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website berger.com.pk — about-us page (1950 origins, Karachi plant 1955, Lahore plant and head office 2006, regional offices, product range) and contact-us page (head office and Lahore factory address, plus Islamabad and Karachi office addresses; the page's only central number is a UAN printed under the Islamabad office, so no company telephone is given here), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Paints and coatings",
+      "summary": "Paints and coatings for home, office and commercial use, made at the company's Lahore plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

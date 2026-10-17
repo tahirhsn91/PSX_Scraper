@@ -1,0 +1,40 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ISIL",
+  "description": "Ismail Industries Limited is one of Pakistan's larger food manufacturers, producing confectionery, biscuits, chips and flour among other products. Its SnackCity division began operations in June 2006 at a purpose-built facility in Hub with the launch of Kurleez potato chips, and its Ghiza Flour Mills wheat-milling business operates at Port Qasim.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://ismailindustries.com",
+  "ceo": null,
+  "sourceNote": "Company website (ismailindustries.com home page), read 2026-10-17. The site does not publish a registered office address or telephone number on the pages read.",
+  "products": [
+    {
+      "name": "Confectionery",
+      "summary": "Confectionery manufacture, one of the company's stated food categories.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Biscuits",
+      "summary": "Biscuit manufacture, one of the company's stated food categories.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Potato chips — Kurleez",
+      "summary": "Produced at the SnackCity facility in Hub since June 2006.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Flour — Ghiza Flour Mills",
+      "summary": "Wheat milling at Port Qasim, a division of the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

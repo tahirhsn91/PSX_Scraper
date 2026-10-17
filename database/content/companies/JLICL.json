@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for JLICL. Every fact here is attributable — see sourceNote. No image is attached: the company's own photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Head office address and telephone are null because no page read publishes them.",
+  "symbol": "JLICL",
+  "description": "Jubilee Life Insurance Company Limited is a Pakistani life insurer, incorporated on 29 June 1995 and listed on the Pakistan Stock Exchange. It was acquired by the Aga Khan Fund for Economic Development (AKFED) in 2002 and describes itself as the largest private-sector life insurer in the country. It writes individual and group life, savings and investment-linked business, and operates a network of branches and bancassurance partnerships.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://www.jubileelife.com",
+  "ceo": "Javed Ahmed",
+  "sourceNote": "Company website (jubileelife.com/about-us/management: incorporation on 29 June 1995 and PSX listing; jubileelife.com/about-us/leadership/javed-ahmed: Javed Ahmed as managing director and chief executive, AKFED's 2002 acquisition, and the company's position as largest private-sector life insurer, plus group life, savings and investment-linked lines), read 2026-10-17. The site publishes no head office address or telephone, so both are null.",
+  "products": []
+}

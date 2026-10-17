@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for UCAPM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "UCAPM",
+  "description": "UNICAP Modaraba is a perpetual, multi-purpose, multi-dimensional Modaraba floated in Pakistan in 1991 under the Modaraba Companies and Modaraba (Floatation and Control) Ordinance, 1980, with its registered office in Lahore, and is listed on the Pakistan Stock Exchange. It was managed by Al-Zamin Modaraba Management (Private) Limited until 2014, when Map Out Management Company (Private) Limited took it over and recapitalised it by issuing right certificates under SECP approval.",
+  "headOffice": null,
+  "phone": "+92 42 3569 4009",
+  "website": "https://www.unicapmodaraba.com",
+  "ceo": "Junaid Iqbal",
+  "sourceNote": "Written from: https://www.unicapmodaraba.com/introduction.php (flotation year, ordinance, registered office city, listing, management history and recapitalisation) and https://www.unicapmodaraba.com/contact_us.php (telephone), read 2026-10-17. The site is marked as under construction and publishes only 'Lahore, Pakistan' as its head office, so headOffice is null and products is empty; the chief executive is taken from the exchange's company record at https://dps.psx.com.pk/company/UCAPM, which names Junaid Iqbal.",
+  "products": []
+}

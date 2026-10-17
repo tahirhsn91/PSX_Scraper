@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for BIFO. Every fact here is attributable — see sourceNote. No current chief executive is published on the pages read, so ceo is null. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BIFO",
+  "description": "Biafo Industries Limited manufactures Tovex water gel explosives at a plant in Hattar Industrial Estate, Haripur, under licence to technology and formulations developed by DuPont and later held by Explosive Technology International and Dyno Nobel. The company, whose registered office is in Islamabad, states that it supplies major cement plants for limestone quarrying, the Saindak copper and gold project and lead-zinc mining projects in Balochistan, and it holds ISO 9001:2015 and ISO 45001:2018 certification. It has been among the exchange's Top 25 Companies five times.",
+  "headOffice": "1st Floor, Biafo House, Plot No. 23, Street No. 38-40, I&T Centre, G-10/4, Islamabad, Pakistan",
+  "phone": "+92 51 2353 450",
+  "website": "https://biafo.com",
+  "ceo": null,
+  "sourceNote": "Company website biafo.com — company-profile page (Tovex water gel, DuPont lineage and licence, Hattar plant, customers, ISO certifications, Top 25 awards, registered office) and contact page (head office address and telephone numbers), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Tovex water gel explosives",
+      "summary": "Cap-sensitive water gel explosives containing no nitroglycerin, for construction, mining, quarrying, seismic and tunnelling work.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

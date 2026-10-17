@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for HPL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "HPL",
+  "description": "Hoechst Pakistan Limited was incorporated in 1967, began manufacturing pharmaceuticals and speciality chemicals in 1972 and went public in 1977. Formerly Sanofi aventis Pakistan, it took its present name in 2023 after Sanofi Foreign Participant BV sold its entire shareholding to a consortium including IGI Investments and affiliates of the Arshad Ali Gohar Group. It manufactures, sells and trades pharmaceutical and related products.",
+  "headOffice": "Plot No. 23, Sector 22, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 35060221",
+  "website": "https://hoechst.com.pk",
+  "ceo": "Sajjad Iftikhar",
+  "sourceNote": "Company website (hoechst.com.pk: company-profile, offices) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Pharmaceuticals",
+      "summary": "Prescription medicines manufactured at the Korangi Industrial Area plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Speciality chemicals",
+      "summary": "Speciality chemical manufacture, part of the company's operations since 1972.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

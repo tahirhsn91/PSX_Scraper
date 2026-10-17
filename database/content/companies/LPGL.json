@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "LPGL",
+  "description": "Leiner Pak Gelatine Limited is a Pakistani gelatine manufacturer with roots dating to 1983, when it began as a collaboration with P. Leiner & Sons of Great Britain. It describes itself as the pioneer producer of halal gelatine in the Muslim world, making gelatine from a 100% halal bovine source with full traceability, at an annual capacity of 2,000 tonnes. It supplies customers in more than ten countries across Europe, Africa, Asia and the ASEAN region.",
+  "headOffice": "17/G, Gulberg-2, Gulberg, Lahore, Pakistan",
+  "phone": "+92 42 35756953",
+  "website": "https://leinergel.com",
+  "ceo": "Khwaja Imtiaz Ahmed",
+  "sourceNote": "Company website (leinergel.com: about-our-company, our-plant, management, contact-us), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Halal gelatine",
+      "summary": "Gelatine manufactured from a 100% halal bovine source, with traceability through the supply chain; annual capacity 2,000 tonnes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

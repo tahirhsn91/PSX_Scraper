@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for DWAE. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "DWAE",
+  "description": "Dewan Automotive Engineering Limited assembles and progressively manufactures tractors, light commercial vehicles and motorcycles, and trades in and manufactures the parts and implements that go with them. The company was incorporated in 1982, began operations in 1983, and is part of the Yousuf Dewan Companies.",
+  "headOffice": "Dewan Centre, 3-A, Lalazar, Beach Luxury Hotel Road, Karachi 75350, Pakistan",
+  "phone": "+92 21 3520 5244",
+  "website": "http://yousufdewan.com",
+  "ceo": "Ishtiaq Ahmad",
+  "sourceNote": "Company website (yousufdewan.com/DAEL: mission, registered office and factory) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Tractors",
+      "summary": "Assembly and progressive manufacture of tractors, with related implements.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Light commercial vehicles",
+      "summary": "Assembly and progressive manufacture of light commercial vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Motorcycles",
+      "summary": "Motorcycle assembly within the company's vehicle range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Automotive parts",
+      "summary": "Manufacture and trading of parts and implements for the vehicles it builds.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

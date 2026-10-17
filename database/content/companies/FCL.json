@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for FCL. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "FCL",
+  "description": "Fast Cables Limited is a Pakistani manufacturer of electrical cables and conductors that has expanded from cable manufacture into metals, PVC and lighting businesses. It operates a manufacturing unit at Raiwind, Lahore, and describes itself as the leading manufacturer of electric cables and conductors in the country.",
+  "headOffice": "192-Y, Commercial Area, DHA Phase III, Lahore, Pakistan",
+  "phone": "+92 42 3574 2396",
+  "website": "https://fast-cables.com",
+  "ceo": "Kamal Mahmood Amjad Mian",
+  "sourceNote": "Company website (fast-cables.com: about us, contact, cables) and the company's own corporate briefing document naming the chief executive, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Building wires",
+      "summary": "House wiring cables for domestic and commercial installations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Low voltage power cables",
+      "summary": "LV power, control and instrumentation cables.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Medium voltage cables",
+      "summary": "MV cables produced on the company's CCV line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Overhead conductors",
+      "summary": "Overhead conductors for transmission and distribution.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Solar and specialty cables",
+      "summary": "Solar cables, aerial bundled cables and LSZH / fire-resistant cables.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

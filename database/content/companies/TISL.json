@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for TISL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "TISL",
+  "description": "Tasdeeq Information Services Limited is a credit information bureau — the first to be licensed by the State Bank of Pakistan — which collects borrower data from member financial institutions and supplies credit reports and credit scores. Formerly Aequitas Information Services Limited, it was incorporated in 2016 and its shares trade on the Pakistan Stock Exchange. Its data repository, drawn from more than 110 member institutions, covers individuals, micro, small and medium enterprises, and corporates.",
+  "headOffice": "3rd Floor, FB1 Awami Complex, Usman Block, New Garden Town, Lahore",
+  "phone": "+92 42 111 900 900",
+  "website": "https://tasdeeq.com",
+  "ceo": "Mumtaz Hussain",
+  "sourceNote": "Company website (tasdeeq.com: about-us, leadership, contact) and the PSX company profile (dps.psx.com.pk/company/TISL: business description, key people), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Credit reports",
+      "summary": "Credit information reports on individuals, SMEs and corporates, compiled from data supplied by more than 110 member financial institutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Credit scores",
+      "summary": "Credit scores for lenders and consumers, including through the TASDEEQ mobile app.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

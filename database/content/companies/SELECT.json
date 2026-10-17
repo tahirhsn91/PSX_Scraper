@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for SELECT. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SELECT",
+  "description": "Select Technologies Limited is a Pakistani technology-manufacturing company formed in 2021 as a wholly owned subsidiary of Air Link Communication Limited. It assembles consumer electronics and smart devices locally at its plant in Kot Lakhpat, Lahore — smartphones, televisions and home appliances — and is listed on the Pakistan Stock Exchange.",
+  "headOffice": "152/1-M, Quaid-e-Azam Industrial Estate, Kot Lakhpat, Lahore, Pakistan",
+  "phone": "+92 42 3515 1345",
+  "website": "https://selecttechnologies.pk",
+  "ceo": null,
+  "sourceNote": "Company website (selecttechnologies.pk: company-profile, contact-us), read 2026-10-17. No chief executive is named on the pages read, so ceo is left empty.",
+  "products": [
+    {
+      "name": "Smartphones",
+      "summary": "Local assembly of smartphones.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Smart televisions",
+      "summary": "Local assembly of smart TVs.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home appliances",
+      "summary": "Local assembly of consumer home appliances.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

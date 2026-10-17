@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for BELA. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BELA",
+  "description": "Bela Automotives Limited manufactures automotive parts, precision cold-forged components and bicycle parts, including high-tensile bolts, nuts, studs, screws and gear shafts, at its registered office and factory at Mouza Pathra, Hub Chowki in Balochistan. The company was incorporated as a private limited company in November 1983 and converted to a public limited company in August 1985.",
+  "headOffice": "Plot No. 1 & 3, Mouza Pathra, Hub Chowki, Balochistan, Pakistan",
+  "phone": null,
+  "website": "https://belaautomotiveslimited.com",
+  "ceo": null,
+  "sourceNote": "The PSX company profile record (business description) and the company's own PSX-filed annual financial report for the year ended 30 June 2025 (registered office and factory), read 2026-10-17. The company website was returning a server error when checked.",
+  "products": [
+    {
+      "name": "Precision cold-forged parts",
+      "summary": "Cold and hot forged automotive components made at the Hub Chowki plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fasteners",
+      "summary": "High-tensile bolts, nuts, studs and screws for automotive use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bicycle and gear parts",
+      "summary": "Bicycle parts and gear shafts within the company's manufacturing range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

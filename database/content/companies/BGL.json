@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for BGL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "BGL",
+  "description": "Baluchistan Glass Limited is a glass-container manufacturer incorporated in Pakistan in 1980 and listed on the Pakistan Stock Exchange. It is a company of the Gharibwal Group and supplies glass packaging to the food, beverage and pharmaceutical industries, alongside glass tableware and plastic shells. Manufacturing is at H.I.T.E. in Hub, Balochistan; the head office is on Sheikhupura Road near Lahore. Its quality management system is certified to ISO 9001.",
+  "headOffice": "12-KM Sheikhupura Road, Kot Abdul Malik, District Lahore, Pakistan",
+  "phone": "+92 42 3716 4424-25",
+  "website": "https://balochistanglass.com",
+  "ceo": "Mohammad Baig",
+  "sourceNote": "Company website (balochistanglass.com: corporate structure, contact information) and the PSX Data Portal company record for BGL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Glass containers",
+      "summary": "Glass jars and bottles for the food and beverage industries.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pharmaceutical glass bottles",
+      "summary": "Container glass for pharmaceutical packaging.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Glass tableware",
+      "summary": "Tableware produced and sold under the company's Marimax brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Plastic shells",
+      "summary": "Plastic shells manufactured alongside the glass lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

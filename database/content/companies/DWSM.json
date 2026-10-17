@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for DWSM. Every fact here is attributable — see sourceNote. No image is attached: the group's site carries no licence-cleared photography of this company's own plant. Add imagePath/imageSource/imageLicence together when a real one is available. Chief executive is null: no page read names one for this company.",
+  "symbol": "DWSM",
+  "description": "Dewan Sugar Mills Limited is a Pakistani sugar producer in the Yousuf Dewan group, with its registered office at Dewan Centre in Karachi and its factory at Jillaniabad, Budho Talpur, in district Thatta, Sindh. The company states its vision as becoming a leading player in the sugar sector, with a mission framed around responsible, straightforward conduct of the business and commitments to customers, employees, shareholders and the wider society. The group also runs a separate ethanol distillery business at Sujawal.",
+  "headOffice": "Dewan Centre, 3-A, Lalazar Beach Luxury Hotel Road, Karachi 75350, Pakistan",
+  "phone": "+92 21 3520 5244",
+  "website": "https://yousufdewan.com/DSML/index.html",
+  "ceo": null,
+  "sourceNote": "Company website (yousufdewan.com/DSML/index.html: vision and mission statements, registered office at Dewan Centre, Karachi with telephone, UAN and fax, and the factory at Jillaniabad, Budho Talpur, district Thatta; the site footer identifies it as a Yousuf Dewan company; dewanethanol.com describes the group's separate Dewan Distillery at Sujawal), read 2026-10-17. No chief executive is named, so the field is null.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "Cane sugar produced at the company's factory at Jillaniabad, Budho Talpur, district Thatta, Sindh.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

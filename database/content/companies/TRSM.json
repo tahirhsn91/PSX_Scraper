@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for TRSM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TRSM",
+  "description": "Trust Modaraba commenced operations in 1991 as a perpetual, multi-purpose Modaraba engaged in Murabahah, Musharakah and Ijarah financing, equity investments and trading. It is managed by Al-Zamin Modaraba Management (Private) Limited and is listed on the Pakistan Stock Exchange.",
+  "headOffice": "104-106 Kassam Court, BC-9, Block 5, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 3587 3369-73",
+  "website": "https://trustmodaraba.com",
+  "ceo": "Muhammad Yasin",
+  "sourceNote": "Written from: https://trustmodaraba.com/wp/about-us (start of operations, business lines, manager, listing) and https://trustmodaraba.com/wp/contact-us (head office address and Karachi telephone) and https://trustmodaraba.com/wp/management/ (CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ijarah",
+      "summary": "Medium- and long-term Ijarah financing of assets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Murabahah",
+      "summary": "Murabaha cost-plus sale financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Musharakah",
+      "summary": "Musharaka financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Equity investments and trading",
+      "summary": "Equity market operations, portfolio management and trading activities, as listed by the Modaraba.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

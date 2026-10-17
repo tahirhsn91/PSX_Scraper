@@ -1,0 +1,75 @@
+{
+  "_comment": "Editorial content for FPRM. Every fact here is attributable — see sourceNote. No image is attached. FPRM is a modaraba with operating business units, so those units and its financing products are listed.",
+  "symbol": "FPRM",
+  "description": "First Paramount Modaraba is a non-banking Islamic financial institution — a listed modaraba — managed by Paramount Investments Limited. It takes deposits through certificates of musharakah and provides Shariah-compliant financing through musharakah, diminishing musharakah and murabaha, and runs business units covering consulting, solutions, petroleum services, geodynamics and anti-money-laundering services. It is listed on the Pakistan Stock Exchange.",
+  "headOffice": "Suit # 107, 108, 1st Floor, P.E.C.H.S. Community Office Complex, Block 2, P.E.C.H.S., Shahrah-e-Quaideen, Karachi, Pakistan",
+  "phone": "+92 21 3438 1037",
+  "website": "http://www.fpm.com.pk",
+  "ceo": "Syed Wajih Hasan",
+  "sourceNote": "The modaraba's own quarterly accounts filed with PSX for the period ended 30 September 2025 (corporate information page) and its website fpm.com.pk (products, business units), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Musharakah",
+      "summary": "Shariah-compliant musharakah financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Diminishing Musharakah",
+      "summary": "Diminishing musharakah financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Murabaha",
+      "summary": "Murabaha financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Certificate of Musharakah",
+      "summary": "Investment certificates offered for different tenures.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FPM Consulting",
+      "summary": "Consulting business unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FPM Solutions",
+      "summary": "Solutions business unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FPM Petro Services",
+      "summary": "Petroleum services business unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Geo Dynamics",
+      "summary": "Geodynamics business unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FPM AML CFT Services",
+      "summary": "Anti-money-laundering and counter-terrorist-financing services business unit.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

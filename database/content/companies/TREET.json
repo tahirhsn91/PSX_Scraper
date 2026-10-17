@@ -1,0 +1,26 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TREET",
+  "description": "Treet Corporation Limited is a Pakistani manufacturing company whose blade and razor manufacturing facilities have been ISO 9001:2015 certified since 1997. The company describes itself as more than a manufacturer, presenting its products as a symbol of innovation, quality and trust in the market it serves.",
+  "headOffice": null,
+  "phone": "+92 42 111 187 338",
+  "website": "https://treetcorp.com",
+  "ceo": null,
+  "sourceNote": "Company website (treetcorp.com: who-we-are, home contact block), read 2026-10-17. The site publishes no registered office address; the number given is the company secretariat line.",
+  "products": [
+    {
+      "name": "Blades",
+      "summary": "Shaving blades manufactured at ISO 9001:2015 certified facilities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Razors",
+      "summary": "Razor manufacture alongside the blade line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

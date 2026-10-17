@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for AGIL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AGIL",
+  "description": "Agriauto Industries Limited manufactures components for cars, motorcycles and agricultural tractors, and sells into both original-equipment and aftermarket channels. Incorporated in 1981 and part of the House of Habib group, it makes shock absorbers and struts under technical assistance agreements with KYB Corporation of Japan and Gabriel Ride Control of the USA, along with pressed sheet-metal parts and tractor steering components.",
+  "headOffice": "5th Floor, House of Habib, 3 JCHS, Block 7/8, Shahrah-e-Faisal, Karachi, Pakistan",
+  "phone": "+92 21 34541540",
+  "website": "https://agriauto.com.pk",
+  "ceo": "Fahim Kapadia",
+  "sourceNote": "Company website (agriauto.com.pk: about-us for head office, factory and telephone; product pages for the range) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Shock absorbers and struts",
+      "summary": "Passenger-car shock absorbers and struts built under technical assistance from KYB Corporation and Gabriel Ride Control.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Motorcycle shock absorbers",
+      "summary": "Complete shock absorber assemblies and components for motorcycles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sheet-metal press parts",
+      "summary": "In-house press shop with presses from 15 to 400 tons producing stamped components.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tractor parts",
+      "summary": "Tractor steering boxes machined on CNC equipment and related components.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

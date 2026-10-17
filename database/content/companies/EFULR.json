@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for EFULR. Every fact here is attributable — see sourceNote. No image is attached, and none should be: this line is a corporate-action entitlement, not a company with a brand or premises. Add imagePath/imageSource/imageLicence together only if a genuinely relevant licensed image ever exists.",
+  "symbol": "EFULR",
+  "description": "EFULR is not an operating company. The Pakistan Stock Exchange lists it as 'EFU Life Assurance Limited Right' — a rights entitlement issued by EFU Life Assurance Limited, the listed life insurer (PSX: EFUL), in connection with a rights issue of new ordinary shares. It is a corporate-action security traded under its own symbol for the duration of the offer: it carries a right to subscribe for new shares at the issue price rather than an equity stake in the company, and it has no business, employees, products, premises or management of its own. Anything a reader wants to know about the underlying business belongs to EFU Life Assurance Limited (EFUL), which was incorporated in Pakistan in 1992 and began operations as the country's first private-sector life insurer, and which describes itself as the leading life and health insurer and family takaful operator in the private sector.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://www.efulife.com",
+  "ceo": null,
+  "sourceNote": "Security type and the exchange's own name for the line from the PSX listing data (symbol EFULR, company name 'EFU Life Assurance Limited Right'); the underlying issuer's description from efulife.com/about-us (operations from 1992 as the first private-sector life insurer; leading life and health insurer and family takaful operator in the private sector), read 2026-10-17. The head office, telephone and chief executive fields are null on purpose: they are the issuer's, and are recorded on EFU Life's own profile rather than against this entitlement.",
+  "products": []
+}

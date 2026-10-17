@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for HABSM. Every fact here is attributable — see sourceNote. No image is attached: the company's own plant photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "HABSM",
+  "description": "Habib Sugar Mills Limited is a Pakistani sugar producer incorporated as a public limited company in 1962, with its head office in Karachi and its plant at Nawabshah in Sindh — the second sugar mill established in the province. Production began in January 1964, and the company has since added a distillery and a carbon dioxide plant at the same site, organised today into five divisions. It is one of the oldest companies of the Habib group and has been recognised with the Karachi Stock Exchange Trophy and Certificate of Merit and the International Gold Mercury Award.",
+  "headOffice": "3rd Floor, Imperial Court, Dr. Ziauddin Ahmed Road, Karachi, Pakistan",
+  "phone": "+92 21 3568 0036",
+  "website": "https://habibsugar.com",
+  "ceo": "Khursheed A. Jamal",
+  "sourceNote": "Company website (habibsugar.com: incorporation in 1962, head office in Karachi, plant at Nawabshah, second sugar mill in Sindh, production from January 1964, the sugar, distillery and CO2 operations, five divisions and the awards listed; habibsugar.com/investor-relations for the registered office address and telephone; the corporate briefing presentation published on habibsugar.com for Khursheed A. Jamal as chief executive), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "Cane sugar produced at the company's Nawabshah plant, which has been running since January 1964.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Distillery",
+      "summary": "A distillery operated alongside the sugar plant at Nawabshah, P.O. Box 25, district Shaheed Benazirabad.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Carbon dioxide plant",
+      "summary": "A CO2 recovery plant at the same Nawabshah site, one of the company's five divisions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

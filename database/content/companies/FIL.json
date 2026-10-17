@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for FIL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "FIL",
+  "description": "Fateh Industries Limited is a Hyderabad-based footwear manufacturer incorporated on 18 May 1986 as a public company limited by shares. It makes leather shoes — boots, formal shoes and moccasins — and describes itself as a family-owned business built over generations of shoemaking. Its registered address is on Mirpurkhas Road, Hyderabad, Sindh.",
+  "headOffice": "442, Mirpurkhas Road, Hyderabad, Pakistan",
+  "phone": null,
+  "website": "https://fateh1.com",
+  "ceo": "Saeed Alam",
+  "sourceNote": "Company website (fateh1.com: about us) and the PSX Data Portal company record for FIL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Leather boots",
+      "summary": "Boots manufactured at the company's Hyderabad facility.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Formal leather shoes",
+      "summary": "Formal leather footwear.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Moccasins",
+      "summary": "Moccasin-style leather shoes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

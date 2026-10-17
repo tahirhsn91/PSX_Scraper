@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for FLYNG. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists, and a generic cement-industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FLYNG",
+  "description": "Flying Cement Company Limited, formerly Zaman Cement Company Limited, was incorporated in December 1992 as a public limited company. Its factory at Mangowal in District Khushab, in the heart of Punjab, stands on more than 121 acres and comprises a single kiln with an installed capacity of 2,000 tonnes per day, or 600,000 tonnes of cement a year, using dry-process technology. The plant was supplied by IHI of Japan, which the company says redesigned and re-engineered it, and IHI acts as its supplier and technical advisor.",
+  "headOffice": "169-A, Allauddin Road, Lahore Cantt., Pakistan",
+  "phone": "+92 42 3667 4301-5",
+  "website": "https://flyingcement.com",
+  "ceo": null,
+  "sourceNote": "Written from: https://flyingcement.com/page/profile-of-the-company.html (former name, incorporation, plant location and land, single kiln capacity, IHI supply and re-engineering) and https://flyingcement.com/page/profile-of-the-company/contact.html (registered and head office address, telephone) (accessed 2026-10-17). No chief executive is named on the pages read, so ceo is null.",
+  "products": [
+    {
+      "name": "Cement — Mangowal plant",
+      "summary": "Cement from a single dry-process kiln at Mangowal, District Khushab, with an installed capacity of 2,000 tonnes per day (600,000 tonnes a year).",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

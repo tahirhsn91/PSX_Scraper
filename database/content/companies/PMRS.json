@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for PMRS. Every fact here is attributable — see sourceNote. No telephone number and no street address for the Mardan complex are given: the company publishes only the city, so headOffice carries the Islamabad head office address from its own filing and no finer address is invented. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PMRS",
+  "description": "The Premier Sugar Mills & Distillery Company Limited is a sugar and ethanol producer whose mill at Mardan in Khyber Pakhtunkhwa was commissioned in 1950 and described by the company as the largest sugar factory in Asia at the time. A sugar beet plant was added later to supplement cane. The company runs a crushing capacity of 4,000 metric tons of cane a day, states that it recently commissioned a fully automated jaggery plant with a capacity of 1,000 tons a day, and manufactures white sugar and spirit; its head office is in Islamabad.",
+  "headOffice": "King's Arcade, 20-A, Markaz F-7, Islamabad, Pakistan",
+  "phone": null,
+  "website": "https://premiersugarmills.com",
+  "ceo": "Abbas Sarfaraz Khan",
+  "sourceNote": "Company website premiersugarmills.com — about-us section on the home page (1950 commissioning, sugar beet plant, 4,000 TCD crushing capacity, 1,000 ton/day jaggery plant) and products pages (sugar, ethanol, molasses, bagasse); and the company's own condensed interim financial information for the nine months ended 30 June 2025, hosted at premiersugarmills.com/pdf-files/psm/quarterly/june/psmjune2025.pdf (Abbas Sarfaraz Khan named chief executive, head office at King's Arcade, 20-A, Markaz F-7, Islamabad, mills and registered office at Mardan), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "White crystalline sugar, with a stated production capacity of 3,810 metric tons per day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ethanol",
+      "summary": "Extra neutral alcohol for industrial use, 52 metric tons (65,000 litres) a day, from cane molasses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Molasses",
+      "summary": "The viscous dark liquid left from sugar manufacture.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bagasse",
+      "summary": "The fibrous material remaining after cane is crushed.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SARC",
+  "description": "Sardar Chemical Industries Limited is a Pakistani manufacturer of azo-free dyestuffs. It was established in 1989 as a private company, went into production on 1 January 1993 and was listed on the country's stock exchanges in October 1994. It makes acid dyes, direct dyes, reactive dyes and optical brighteners for the textile industry, and its dyes are also used by tanneries.",
+  "headOffice": "Justice Sardar Iqbal Road, Aziz Avenue, Gulberg-V, Lahore, Pakistan",
+  "phone": "+92 42 35711154",
+  "website": "https://sardarchemicals.com",
+  "ceo": "Mrs. Reema Ayaz",
+  "sourceNote": "Company website (sardarchemicals.com: about, contact), read 2026-10-17; chief executive as listed on the company's own registration details on the site.",
+  "products": [
+    {
+      "name": "Acid dyes",
+      "summary": "Dyestuffs for textile and leather applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Direct dyes",
+      "summary": "Dyestuffs for textile applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Reactive dyes",
+      "summary": "Dyestuffs for textile applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Optical brighteners",
+      "summary": "Brightening agents supplied alongside the dye range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

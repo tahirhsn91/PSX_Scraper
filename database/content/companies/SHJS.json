@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for SHJS. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SHJS",
+  "description": "Shahtaj Sugar Mills Limited was incorporated in Pakistan on 27 March 1965 as a public limited company and has been listed since 1972. Its mill at Mandi Bahauddin in Punjab went into commercial production in November 1968 with plant imported from Italy, and crushing capacity has since been raised to between 8,000 and 10,000 metric tons of cane a day. The company manufactures sugar from cane and states that molasses is its only significant by-product.",
+  "headOffice": "72-C-1, MM Alam Road, Gulberg III, Lahore 54660, Pakistan",
+  "phone": "+92 42 3571 0482",
+  "website": "https://shahtajsugar.com",
+  "ceo": null,
+  "sourceNote": "Company website shahtajsugar.com — company profile page (head office, mills and registered office addresses with telephones) and about-us page (incorporation 27 March 1965, listing since 1972, Mandi Bahauddin mill, Italian plant, capacity expansion to 8,000–10,000 TCD, molasses as the only significant by-product), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White crystalline sugar",
+      "summary": "Sugar manufactured from sugarcane at the company's Mandi Bahauddin mill.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Molasses",
+      "summary": "The company's only significant by-product.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

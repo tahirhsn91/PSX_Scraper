@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for STYLERS. Every fact here is attributable — see sourceNote. ceo is null: the website's executive management page lists sales, operations, supply chain and finance heads but no chief executive. No image is attached.",
+  "symbol": "STYLERS",
+  "description": "Stylers International Limited was incorporated in Pakistan on 27 November 1991 and converted into a public limited company with effect from 21 May 2021; its shares were listed on the Pakistan Stock Exchange on 22 January 2024. The company manufactures, markets and exports ready-made garments and provides processing services, from its plant on Ferozepur Road in Lahore.",
+  "headOffice": "20-km, Ferozepur Road, Glaxo Town, Lahore, Pakistan",
+  "phone": "+92 42 111 005 050",
+  "website": "https://stylersintl.com",
+  "ceo": null,
+  "sourceNote": "Company website (stylersintl.com: company profile, general information, executive management), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Ready-made garments",
+      "summary": "Manufacture and export of ready-made garments.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Garment processing services",
+      "summary": "Processing services provided alongside garment manufacturing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

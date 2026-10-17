@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for BAFS. Every fact here is attributable — see sourceNote. No image is attached: the company's site carries no licence-cleared photography of its own plant. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BAFS",
+  "description": "Baba Farid Sugar Mills Limited is a Pakistani sugar manufacturer incorporated as a public limited company in 1978, whose shares were quoted on the Karachi, Lahore and Islamabad stock exchanges. It produces white sugar from cane at its mill on the Faisalabad Road near Okara, and states its objectives as superior-quality sugar at the lowest cost, safe and environmentally sound operations, and efficient use of human, financial and technical resources.",
+  "headOffice": "2-D-1, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3577 1066",
+  "website": "https://bfsml.com",
+  "ceo": "Adnan Ahmed Khan",
+  "sourceNote": "Company website (bfsml.com/company-profile: incorporation in 1978 as a public limited company, listing on the three exchanges, head office at 2 D-I Gulberg III Lahore and mill on the Faisalabad Road, Okara, and the quality and operating objectives; /contact-us for the registered office address and telephone numbers; /board-of-directors for Mr Adnan Ahmed Khan as chief executive), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White sugar",
+      "summary": "White sugar produced from cane at the company's mill near Okara, with the stated aim of superior quality at the lowest cost.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

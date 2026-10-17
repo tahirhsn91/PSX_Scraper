@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for TCORPCPS, which is the preference-share line of Tariq Corporation Limited rather than a separate business. The profile therefore describes Tariq Corporation Limited, and the security itself is flagged in the description. products is empty because a preference share issues no products. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TCORPCPS",
+  "description": "TCORPCPS is the symbol under which Tariq Corporation Limited's preference shares are quoted on the Pakistan Stock Exchange — the exchange's own record lists the security as \"Tariq Corporation Limited(Pref)\". It is a share class of Tariq Corporation Limited, not a separate business: a sugar company incorporated in Karachi on 14 February 1966 whose plant at Jaranwala, Punjab began commercial production in February 1968 and uses a defecation remelt sulphitation process.",
+  "headOffice": "30-A E/1, Old FCC, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3576 2089",
+  "website": "https://tariqcorp.com",
+  "ceo": "Mustafa Ali Tariq",
+  "sourceNote": "Security identity from the PSX data portal record for TCORPCPS at https://dps.psx.com.pk/company/TCORPCPS, which lists it as \"Tariq Corporation Limited(Pref)\" with no separate company profile (accessed 2026-10-17); the issuer description is from the company's website tariqcorp.com (company-profile, company-information and contact-details pages).",
+  "products": []
+}

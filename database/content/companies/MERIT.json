@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for MERIT. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "MERIT",
+  "description": "Merit Packaging Limited is a printing and packaging company in the Lakson Group, incorporated in 1980 and quoted on the Pakistan Stock Exchange. It produces offset and flexible packaging — folding cartons, wrappers and labels, and point-of-sale material — for consumer goods, food and beverage, surgical instrument and textile customers, from a factory in Korangi, Karachi, with an additional facility in Lahore.",
+  "headOffice": "Lakson Square, Building No. 2, Sarwar Shaheed Road, Karachi 74200, Pakistan",
+  "phone": "+92 21 3840 0000",
+  "website": "https://meritpack.com",
+  "ceo": "Sabir Imtiaz",
+  "sourceNote": "Company website (meritpack.com: about us, company information, contact us), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Folding cartons",
+      "summary": "Offset-printed folding cartons for national and multinational consumer brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Wrappers and labels",
+      "summary": "Printed wrappers and labels for tea, soap, spice and detergent brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Point-of-sale material",
+      "summary": "Printed point-of-sale and promotional display material.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Flexible packaging",
+      "summary": "Flexible packaging produced alongside the offset operation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

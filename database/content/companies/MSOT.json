@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for MSOT. Every fact here is attributable — see sourceNote. ceo is null: the website describes Mr Shahid Nazir Ahmed as a former chief executive and names no current one. No image is attached.",
+  "symbol": "MSOT",
+  "description": "Masood Textile Mills Limited is a vertically integrated knitwear manufacturer based in Faisalabad, with in-house yarn, knitting, fabric dyeing and processing, apparel manufacturing and laundry facilities. It produces knitted apparel from basic to highly fashioned garments for international customers, and organises its mills into five strategic business units.",
+  "headOffice": "17/1, New Civil Lines, Bilal Road, Faisalabad, Pakistan",
+  "phone": "+92 41 2600176",
+  "website": "https://masoodtextile.com",
+  "ceo": null,
+  "sourceNote": "Company website (masoodtextile.com: home, about, contact-us, key-management), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Knitted garments",
+      "summary": "Basic to highly fashioned knitted apparel for international brands, from the company's garment manufacturing and laundry divisions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Knitted fabric",
+      "summary": "In-house knitting and fabric dyeing, processing and finishing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Yarn",
+      "summary": "In-house yarn spinning, including melange and Auto Coro yarn.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

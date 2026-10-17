@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for AABS. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plants exists. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AABS",
+  "description": "Al-Abbas Sugar Mills Limited is a Pakistani agro-industrial company incorporated in May 1991 and listed on the Karachi Stock Exchange from April 1992. Beyond sugar, it runs a molasses-based distillery, an alloys plant, captive power generation and a bulk liquid terminal — an unusual degree of diversification for a listed sugar mill. Sugar production began in 1994, industrial alcohol in 2000, alloys in 2005 and power generation in 2010.",
+  "headOffice": "Pardesi House, Survey No. 2/1, R.Y. 16, Old Queens Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 111 111 224",
+  "website": "https://aasml.com",
+  "ceo": "Asim Ghani",
+  "sourceNote": "Company website (aasml.com/company-profile: incorporation in May 1991, listing in April 1992, the Mirwah Gorchani sugar and distillery unit, the Dhabeji Thatta alloys and captive-power unit, the Kemari tank terminal and the start dates of each activity; /contact-us for the head office address and telephone and for Mr Asim Ghani as chief executive), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "A cane crushing unit at Mirwah Gorchani with an installed capacity of 8,500 tons per day, producing since 1994.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Industrial alcohol",
+      "summary": "A distillery processing molasses into industrial alcohol at 170,000 litres per day, in production since 2000.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Alloys",
+      "summary": "An alloys plant at Dhabeji, Thatta with capacity for 27,220 metric tons a year, in production since 2005.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Captive power",
+      "summary": "A 6 MW plant at the Mirwah Gorchani site serving the sugar and distillery units, and a 15 MW coal-fired captive plant at Dhabeji, generating since 2010.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bulk liquid terminal",
+      "summary": "A tank terminal at Kemari, Karachi with 34,900 metric tons of liquid storage capacity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

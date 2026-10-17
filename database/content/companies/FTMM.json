@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for FTMM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FTMM",
+  "description": "First Treet Manufacturing Modaraba is a multipurpose, perpetual Modaraba formed under the Modaraba Companies and Modaraba (Floatation and Control) Ordinance, 1980 on 27 July 2005 and managed by Treet Holdings Limited. Its registered office is at 72-B, Industrial Area, Kot Lakhpat, Lahore, and it is listed on the Pakistan Stock Exchange. The Modaraba manufactures and sells corrugated boxes and soaps, and its site also lists a battery project at Faisalabad Industrial City and a Treet Bikes unit at its Lahore premises.",
+  "headOffice": "72-B, Industrial Area, Kot Lakhpat, Lahore, Pakistan",
+  "phone": "+92 42 3583 0881",
+  "website": "https://ftmm.com.pk",
+  "ceo": "Syed Sheharyar Ali",
+  "sourceNote": "Written from: https://ftmm.com.pk/ (formation date, manager, registered office, business of corrugated boxes and soaps), https://ftmm.com.pk/contact-us/ (registered office address and telephones, packaging, soap plant, battery project and Treet Bikes locations) and https://ftmm.com.pk/board-of-directors/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Corrugated packaging",
+      "summary": "Corrugated box manufacturing at the Modaraba's Packaging Solutions unit at Kacha Tiba Rohi Nala, 22-km Ferozpur Road, Lahore.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Soaps",
+      "summary": "Soap manufacturing at a plant at Ghakkar, 80 km on the G.T. Road, Ghakkar Mandi, Gujranwala.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

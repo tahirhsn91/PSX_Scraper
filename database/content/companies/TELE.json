@@ -1,0 +1,75 @@
+{
+  "_comment": "Editorial content for TELE. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TELE",
+  "description": "Telecard Limited is a Pakistani telecommunications company providing enterprise voice and data services. It runs long-distance and international carrier connectivity, UAN and toll-free access services, contact-centre and IP-PBX platforms, CRM and automated-call products, and infrastructure and colocation hosting. Through its subsidiaries — Hallmark Company Limited, Supernet, Supersecure and Supernet Infrastructure Solutions — it also covers IT hardware, systems integration, managed security and ICT infrastructure. The company has operated for more than 25 years and is listed on the Pakistan Stock Exchange.",
+  "headOffice": "7th Floor, Tower A, World Trade Center, 10 Khayaban-e-Roomi, Block 5, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 3833 0000",
+  "website": "https://www.telecard.com.pk",
+  "ceo": "Syed Aamir Hussain",
+  "sourceNote": "Company website (telecard.com.pk: home, contact-us, our-leadership, our-subsidiaries), read 2026-10-17. The Karachi address given is the corporate office the company publishes.",
+  "products": [
+    {
+      "name": "CLARUS",
+      "summary": "Enterprise telephony: IP and TDM voice connectivity for nationwide and international calling.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "TRUVOICE",
+      "summary": "Long-distance and international carrier connectivity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "ACCESS",
+      "summary": "UAN, toll-free and short-code access services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "DATA POINT",
+      "summary": "Committed-information-rate broadband for enterprise point-to-point and multipoint access.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "CONTACT+",
+      "summary": "Contact-centre solutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "I-GATE",
+      "summary": "IP-based scalable next-generation IP-PBX.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "ACCORD",
+      "summary": "Integrated CRM.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SYMPHONY",
+      "summary": "Integrated connectivity-to-solutions suite.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Infrastructure & Colocation Hosting",
+      "summary": "Hosting and infrastructure services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

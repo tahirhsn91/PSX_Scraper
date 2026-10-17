@@ -1,0 +1,33 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "MFL",
+  "description": "Matco Foods Limited was established in 1964 and produces packed consumer foods and supplies ingredients to the pharmaceutical and confectionery industries. It processes basmati rice — with a plant at Sadhoke — and has added rice glucose and rice protein manufacturing in Karachi, alongside a plant at a Special Economic Zone in Faisalabad.",
+  "headOffice": "B-1/A, S.I.T.E. Phase 1, Super Highway Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 36411661",
+  "website": "https://matcofoods.com",
+  "ceo": null,
+  "sourceNote": "Company website (matcofoods.com: about-us, products), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Basmati rice",
+      "summary": "Rice processing under the Falak brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Rice glucose and rice protein",
+      "summary": "Manufactured at the company's Karachi facility, with a second phase of expansion completed.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consumer foods and ingredients",
+      "summary": "Packed consumer foods and ingredient supply to pharmaceutical and confectionery customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

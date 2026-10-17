@@ -1,0 +1,26 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TOMCL",
+  "description": "The Organic Meat Company Limited is a Pakistani meat processor and exporter. Its processing plant in Karachi supplies fresh meat to customers abroad, and the business is built on animal by-products that it processes for export.",
+  "headOffice": "Plot No. 257, Sector 24, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 35059969",
+  "website": "https://www.tomcl.net",
+  "ceo": "Faisal Hussain",
+  "sourceNote": "Company website (tomcl.net: home, CEO interview, contact), read 2026-10-17. The registered address the company lists is Survey No. 310, Deh Shah Mureed, Gadap, Karachi; the address given here is its published corporate office.",
+  "products": [
+    {
+      "name": "Fresh and frozen meat",
+      "summary": "Tender, fresh meat processed at the company's Karachi plant for export customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Animal by-products",
+      "summary": "By-products processed for export, which the company's chief executive describes as the basis of its foreign-exchange earning.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

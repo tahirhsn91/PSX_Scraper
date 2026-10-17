@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SHSML. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available. Press mud fertilizer is marked as an R&D-stage product, as the company itself does.",
+  "symbol": "SHSML",
+  "description": "Shahmurad Sugar Mills Limited was founded in 1979 and is listed on the Pakistan Stock Exchange. It produces refined sugar, ethanol, bagasse and an organic press mud fertilizer, and states that it is committed to reducing waste and emissions through efficient use of resources and by supporting a healthy environment. The company describes itself as a leading producer of sugar and allied products in Pakistan.",
+  "headOffice": "96-A, Sindhi Muslim Housing Society, Karachi, Pakistan",
+  "phone": "+92 21 3455 6675",
+  "website": "https://www.shahmuradsugar.co",
+  "ceo": null,
+  "sourceNote": "Company website shahmuradsugar.co — about-us section on the home page (founded 1979, refined sugar, ethanol, organic press mud fertilizer and bagasse) and contact page (head office at Sindhi Muslim Housing Society, Karachi, with telephone numbers), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "Refined sugar, the company's principal product.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ethanol",
+      "summary": "Ethanol produced by the company's distillery division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bagasse",
+      "summary": "A by-product of cane crushing, sold as a product.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Press mud fertilizer (R&D phase)",
+      "summary": "An organic fertilizer made from press mud, which the company lists as being in research and development.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

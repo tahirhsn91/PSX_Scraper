@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for GEMBCEM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GEMBCEM",
+  "description": "Burj Clean Energy Modaraba (BCEM) describes itself as Pakistan's first Shariah-compliant green energy fund and holds the country's first Green Energy Fund licence, structured as a multi-purpose, perpetual fund with paid-up capital of PKR 1 billion. It is managed by Burj Investment Management Limited, a subsidiary of Burj Energy International Management Limited, and is listed on the Pakistan Stock Exchange's GEM board. It develops and owns clean energy projects under long-term contracts, with 57 MW operational across the PCL Solar and Jhimpir Wind projects at the time of writing.",
+  "headOffice": "Office # 202, 1st Floor, 11-C, Al-Murtaza Commercial Lane 2, DHA Phase VIII, Karachi, Pakistan",
+  "phone": "+92 21 3524 6400",
+  "website": "https://burjmodaraba.com",
+  "ceo": "Nadeem Lodhi",
+  "sourceNote": "Written from: https://burjmodaraba.com/about/ (green energy fund licence, paid-up capital, management company and sponsor, operational capacity, GEM board symbol), https://burjmodaraba.com/contact/ (address and telephone) and https://burjmodaraba.com/about/management-team (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Wind generation — Jhimpir",
+      "summary": "A 50 MW wind project at Jhimpir in the Modaraba's operational portfolio.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Solar generation — PCL Solar",
+      "summary": "A 7 MW solar project in its operational portfolio.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

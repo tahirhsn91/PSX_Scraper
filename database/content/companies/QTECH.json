@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for QTECH. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "QTECH",
+  "description": "Quantum Data Technologies Limited, formerly Chakwal Spinning Mills Limited, is a technology company listed on the Pakistan Stock Exchange that has moved into IT and allied services. It describes itself as a data- and AI-driven technology company, and its website covers a digital payment platform and super app alongside data-centre services. In October 2026 it disclosed a framework agreement with China's Guangzhou Great Power to introduce and progressively undertake local assembly of lithium-based battery energy storage systems in Pakistan.",
+  "headOffice": "Main Boulevard, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3575 7108",
+  "website": "https://qdtech.io",
+  "ceo": "Mansoor Bin Saeed",
+  "sourceNote": "The company's own PSX disclosure of 14 October 2026 (dps.psx.com.pk) for the registered office, telephone and website, and its website qdtech.io for the leadership and service description, read 2026-10-17. The website's marketing statistics are not repeated here.",
+  "products": [
+    {
+      "name": "Digital payment platform and super app",
+      "summary": "Payment processing, wallet and multi-service super-app offering.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Data centre services",
+      "summary": "Data-centre services listed among the company's offerings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Battery energy storage assembly",
+      "summary": "Announced in October 2026: intended local assembly of lithium-based residential, commercial and utility-scale battery energy storage systems under an agreement with Guangzhou Great Power. Announced, not yet operating.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

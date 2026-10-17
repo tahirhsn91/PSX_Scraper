@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for MIRKS. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available. UNICOL is described as a joint venture, as the company itself words it.",
+  "symbol": "MIRKS",
+  "description": "Mirpurkhas Sugar Mills Limited is a sugar company of the Ghulam Faruque Group. It primarily manufactures food-grade refined white sugar, and states that it derives and uses molasses, bagasse and an organic mud from the process so that none of its by-products are wasted; the plant runs bagasse-fired boilers. The company added a Paper and Board Division in 2022, producing container board from recycled waste paper, virgin wood pulp and non-wood pulp at its Mirpurkhas site, and it is one of three partners in the UNICOL ethanol joint venture.",
+  "headOffice": "Modern Motors House, Beaumont Road, Karachi 75530, Pakistan",
+  "phone": "+92 21 3568 3566",
+  "website": "https://gfg.com.pk/msm/",
+  "ceo": null,
+  "sourceNote": "Company website gfg.com.pk/msm — home page (refined white sugar and by-products, bagasse boilers, UNICOL joint venture description, Paper & Board Division) and contact-us page (head office at Modern Motors House, Karachi, with UAN and telephone numbers), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Refined white sugar",
+      "summary": "Food-grade refined white sugar, the company's primary product.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Molasses and bagasse",
+      "summary": "By-products of sugar production; molasses is sold for ethanol production and bagasse is burned for power.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Paper and board",
+      "summary": "Container board from recycled waste paper, virgin wood pulp and non-wood pulp, made by the Paper & Board Division set up in 2022 at Mirpurkhas, with a designed capacity of 250 metric tons of paper a day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "UNICOL Limited — ethanol",
+      "summary": "A joint venture between Mirpurkhas Sugar Mills, Faran Sugar Mills and Mehran Sugar Mills; an ethanol plant at Mirpurkhas with a designed capacity of 200,000 litres a day, using molasses as feedstock.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

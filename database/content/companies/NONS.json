@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for NONS. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "NONS",
+  "description": "Noon Sugar Mills Limited is a public company incorporated in 1964, which set up a plant in Punjab to manufacture white sugar; the plant began production in 1966 with a daily crushing capacity of 1,500 tons of cane. The company now operates a sugar mill and a distillery at Bhalwal, District Sargodha, and states that its sugar division holds ISO 9001:2015, FSSC 22000 and halal certification.",
+  "headOffice": "66-67-A, Garden Block, New Garden Town, Lahore, Pakistan",
+  "phone": "+92 42 3583 1463",
+  "website": "https://noonsugar.net",
+  "ceo": "Lt Col Abdul Khaliq Khan (Retd)",
+  "sourceNote": "Company website noonsugar.net — company profile on the home page (incorporation 1964, 1966 start of production at 1,500 TCD, ISO and halal certifications), board-of-directors page (Abdul Khaliq Khan named chief executive/director) and contact page (head office in Lahore, mills and distillery at Bhalwal, District Sargodha), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White sugar",
+      "summary": "White sugar manufactured at the company's mill at Bhalwal, District Sargodha.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ethanol",
+      "summary": "Ethanol produced at the company's distillery at Bhalwal, District Sargodha.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

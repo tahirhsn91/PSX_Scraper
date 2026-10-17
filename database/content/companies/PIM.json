@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for PIM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PIM",
+  "description": "Popular Islamic Modaraba is a multipurpose, perpetual Modaraba established in 1994 under the Modaraba Ordinance of 1980, managed by Popular Islamic Modaraba Management Company (Private) Limited. It was acquired in 2013 by the Popular Group of Industries. It is listed on the Pakistan Stock Exchange, is a member of the NBFI and Modaraba Association of Pakistan, and provides Shariah-compliant financing facilities.",
+  "headOffice": "406-410, 4th Floor, Chapal Plaza, Hasrat Mohani Road, I. I. Chundrigar Road, Karachi, Pakistan",
+  "phone": "+92 21 3247 1892-3",
+  "website": "https://popularislamicmodaraba.com",
+  "ceo": "Kamran Husain Mughal",
+  "sourceNote": "Written from: https://popularislamicmodaraba.com (establishment year, ordinance, management company, 2013 acquisition, listing and association membership), https://popularislamicmodaraba.com/contact-us/ (address and telephones), https://popularislamicmodaraba.com/board-of-directors/ (Director & Chief Executive) and the Products menu on the site (financing modes) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ijarah",
+      "summary": "Ijarah lease financing of assets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Murabaha",
+      "summary": "Cost-plus sale financing, with the Modaraba purchasing the asset and selling it to the client.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Musharaka",
+      "summary": "Musharaka participation financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Salam and Istisna",
+      "summary": "Salam forward-purchase and Istisna manufacturing finance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Diminishing Musharika",
+      "summary": "Diminishing Musharaka financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

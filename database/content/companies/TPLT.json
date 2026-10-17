@@ -1,0 +1,61 @@
+{
+  "_comment": "Editorial content for TPLT. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TPLT",
+  "description": "TPL Trakker Limited is a Pakistani telematics and IoT service provider, part of the TPL Group. It holds the vehicle-tracking licence first granted in 1999 and has been operating for more than two decades, selling vehicle, personal and asset tracking, fleet management, and IoT systems for fuel, video surveillance, cold chain, water level, smart farming and waste management. It also operates in the UAE, and is listed on the Pakistan Stock Exchange.",
+  "headOffice": "Plot # 1-A, Sector # 24, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 111 000 300",
+  "website": "https://tpltrakker.com",
+  "ceo": "Nader Nawaz",
+  "sourceNote": "Company website (tpltrakker.com: about-us, our-team, site footer), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Vehicle Trakking",
+      "summary": "Vehicle-tracking service.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fleet Management",
+      "summary": "Fleet-management solution.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fuel Management",
+      "summary": "Fuel monitoring for vehicles and generators.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "AI-Based Vehicle Video Surveillance",
+      "summary": "In-vehicle video surveillance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cold Chain Monitoring",
+      "summary": "Temperature monitoring for cold-chain assets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Smart Farm Management",
+      "summary": "IoT system for farm management.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Water Level Monitoring",
+      "summary": "Water-level monitoring system.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

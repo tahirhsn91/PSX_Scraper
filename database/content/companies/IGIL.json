@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for IGIL. Every fact here is attributable — see sourceNote. No image is attached: the company's own photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "IGIL",
+  "description": "IGI Life Insurance Limited is a Pakistani life insurer and family takaful operator, writing life insurance, accident and health cover, retirement planning and Shariah-compliant family takaful. It distributes through individual life, bancassurance, micro insurance and corporate channels, and runs the IGI Life Vitality wellness programme alongside its protection and savings products.",
+  "headOffice": "7th Floor, The Forum, Suite 701-713, G-20, Khayaban-e-Jami, Block 9, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 3536 0040",
+  "website": "https://igilife.com.pk",
+  "ceo": "Ali Nadim",
+  "sourceNote": "Company website (igilife.com.pk: site description of the business as life insurance, accident and health, retirement planning, family takaful and vitality solutions; /contact-us for the head office address and telephone), and the chief executive's name from IGI Life's own Annual Report 2025 hosted at server.igilife.com.pk, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Individual life",
+      "summary": "Protection and savings plans sold to individuals, including the Mahaana retirement account described on the company's site.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bancassurance",
+      "summary": "Life and savings products distributed through partner banks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Micro insurance",
+      "summary": "Low-premium life and health cover aimed at customers outside the traditional agency channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate insurance",
+      "summary": "Group life, health and benefits cover for employers and institutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Family takaful",
+      "summary": "Shariah-compliant family takaful products offered alongside the conventional life business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "IGI Life Vitality",
+      "summary": "A wellness-linked insurance programme that rewards policyholders for healthy activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for KPUS. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "KPUS",
+  "description": "Khairpur Sugar Mills Limited is a public limited sugar company incorporated on 23 August 1989, which began business the following month. It operates a cane sugar mill at Naroo Dhoro, Taluka Kot Diji, District Khairpur in Sindh, and the company states that over 800 employees work under its umbrella and that it contributes roughly PKR 750 million a year to the government in sales tax, excise duty, income tax and other levies.",
+  "headOffice": "51/II/IV, Khayaban-e-Janbaz, Phase V Extension, D.H.A., Karachi, Pakistan",
+  "phone": "+92 21 3525 0131",
+  "website": "https://khairpursugar.com.pk",
+  "ceo": "Faraz Mubeen Jumani",
+  "sourceNote": "Company website khairpursugar.com.pk — company-profile page (incorporation and commencement dates, board listing Faraz Mubeen Jumani as chief executive officer, registered office and telephone, mill location at Naroo Dhoro, employee and tax contribution figures), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "The company operates a cane sugar mill at Naroo Dhoro, Taluka Kot Diji, District Khairpur, Sindh.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

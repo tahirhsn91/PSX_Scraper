@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for FRSM. Every fact here is attributable — see sourceNote. No image is attached: the company's own plant photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FRSM",
+  "description": "Faran Sugar Mills Limited is a Pakistani agro-based, publicly listed company engaged in the manufacture and sale of white refined sugar, incorporated on 3 November 1981 and a member of the Amin Bawany Group — a diversified group with interests in sugar, ethanol, insurance, modaraba, trading, power and construction. Its plant at Shaikh Bhirkio in district Tando M. Khan began commercial production in 1983, and successive modernisation has lifted installed cane crushing capacity from an initial 2,000 tons per day to an average of more than 12,000.",
+  "headOffice": "43-1-E(B), Block 6, P.E.C.H.S., off Razi Road, Shahrah-e-Faisal, Karachi, Pakistan",
+  "phone": "+92 21 3432 2851",
+  "website": "https://faran.com.pk",
+  "ceo": "Ahmed Ali Bawany",
+  "sourceNote": "Company website (faran.com.pk/companyprofile: incorporation on 3 November 1981, PSX listing, Amin Bawany Group membership, plant at Shaikh Bhirkio district Tando M. Khan, commercial production in 1983 and capacity growth from 2,000 to over 12,000 tons of cane per day; the registered office address and telephone; Ahmed Ali Bawany as chief executive and the associated companies Unicol and Unienergy), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White refined sugar",
+      "summary": "Manufactured and sold from the company's plant at Shaikh Bhirkio, district Tando M. Khan, Sindh, which crushes an average of over 12,000 tons of cane a day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

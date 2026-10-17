@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for ADAMS. Every fact here is attributable — see sourceNote. No image is attached: the company's site carries no licence-cleared photography of its own plant. Add imagePath/imageSource/imageLicence together when a real one is available. Head office address and telephone are null: this site publishes neither.",
+  "symbol": "ADAMS",
+  "description": "Adam Sugar Mills Limited is a Pakistani sugar manufacturer and the listed company of the Adam Group, whose trading business dates to 1897 and which also includes Adam Pakistan Limited and Adam Lubricant. It is a family-controlled business: Ghulam Ahmed Adam has been its chief executive for more than 45 years, and Junaid G. Adam chairs the board. Its stated aim is to be a leader in the sugar industry through quality improvement and competitive pricing.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://adam.com.pk",
+  "ceo": "Ghulam Ahmed Adam",
+  "sourceNote": "Company website (adam.com.pk/Adammain.htm for the Adam Group of Companies; /adamsugar.html for the vision and mission statements; /directors.html for Ghulam Ahmed Adam as chief executive for over 45 years, Junaid G. Adam as chairman, and the Haji Adam trading business founded in 1897), read 2026-10-17. No head office address or telephone is published on the site, so both are null.",
+  "products": [
+    {
+      "name": "Sugar",
+      "summary": "White sugar produced from cane; the company's site describes its aim of supplying high-quality sugar at competitive prices.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

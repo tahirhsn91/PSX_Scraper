@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BCL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "BCL",
+  "description": "Bolan Castings Limited is a foundry producing grey and ductile iron castings for tractors and commercial vehicles. Incorporated in 1982 by Pakistan Automobile Corporation, it was privatised in 1993 to a group led by Millat Tractors Limited and the company's own employees, and is now a subsidiary of Millat Tractors. Its plant near Hub Chowki, Balochistan produces more than 16,000 tonnes a year of castings, with over 200 casting types developed.",
+  "headOffice": "Main RCD Highway, Hub Chowki, District Lasbela, Balochistan",
+  "phone": "+92 853 364033",
+  "website": "https://bolancastings.com",
+  "ceo": "Mujtaba Ahmad",
+  "sourceNote": "Company website (bolancastings.com: company profile, foundry, contact) and the PSX company profile (dps.psx.com.pk/company/BCL: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Tractor castings",
+      "summary": "Grey and ductile iron cylinder blocks, cylinder heads, centre housings and transmission cases for tractors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commercial vehicle castings",
+      "summary": "Brake drums and hubs for trucks and buses, plus a wide range of other automotive castings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

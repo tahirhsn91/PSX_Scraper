@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ATBA. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ATBA",
+  "description": "Atlas Battery Limited manufactures and sells automotive, motorcycle and energy-storage batteries and allied products under the AGS brand, a name drawn from Atlas and Genzo Shimadzu, founder of Japan Storage Battery. Incorporated in 1966 and part of the Atlas Group, it has held a technical collaboration with Japan Storage Battery — now GS Yuasa Corporation — since 1969, and its range runs from conventional batteries to low-maintenance hybrid, maintenance-free and deep-cycle types for vehicles, gensets, UPS equipment and solar systems.",
+  "headOffice": "D-181, Central Avenue, S.I.T.E., Karachi, Pakistan",
+  "phone": "111-247-225",
+  "website": "https://abl.atlas.pk",
+  "ceo": "Mansoor Jamil Khan",
+  "sourceNote": "Company website (abl.atlas.pk: about, contact — head office and UAN) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Automotive batteries",
+      "summary": "AGS-branded car and commercial-vehicle batteries, including maintenance-free and low-maintenance types.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Motorcycle batteries",
+      "summary": "Batteries for motorcycles, part of the company's AGS range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Deep-cycle and energy-storage batteries",
+      "summary": "Deep-cycle batteries for UPS equipment, solar systems, gensets and construction equipment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for PECO. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "PECO",
+  "description": "Pakistan Engineering Company Limited is a state enterprise controlled by the Ministry of Industries & Production, taken over by the Government in 1972 under the economic reforms. It manufactures electricity transmission and telecommunication towers, electric motors, pumps and rolled steel products at its works in Badami Bagh, Lahore, and is qualified to manufacture transmission towers up to 500 kV.",
+  "headOffice": "6/7, Sir Ganga Ram Trust Building, Shahrah-e-Quaid-e-Azam, Lahore",
+  "phone": "+92 42 3636 2061-66",
+  "website": "https://www.peco.com.pk",
+  "ceo": "Abdul Shabbir Khan",
+  "sourceNote": "Company website (peco.com.pk: introduction, corporate) and the PSX company profile (dps.psx.com.pk/company/PECO: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Transmission and telecommunication towers",
+      "summary": "Electricity transmission towers up to 500 kV, and communication towers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Electric motors",
+      "summary": "Electric motors manufactured at the company's Lahore works.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pumps",
+      "summary": "Pumps for industrial and agricultural applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Rolled steel products",
+      "summary": "Rolled steel products including angles, bars and billets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for TICL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TICL",
+  "description": "The Thal Industries Corporation Limited was incorporated on 7 September 1953 and was privatised in 1998. It produces several grades of sugar at two units — Layyah Sugar Mills in Layyah, with a crushing capacity of 13,000 tons of cane a day, and Safina Sugar Mills at Lalian, District Chiniot, with 8,000 tons a day — and co-generates power, exporting surplus electricity to the national grid. A condensing system installed in 2006 and successive expansions took the company from an original 1,200 tons a day to its present capacity.",
+  "headOffice": "2D/1, Gulberg III, Lahore 54000, Pakistan",
+  "phone": "+92 42 3577 1066",
+  "website": "https://thalindustries.com",
+  "ceo": null,
+  "sourceNote": "Company website thalindustries.com — about-us page (incorporation 7 September 1953, privatisation 1998, capacity history, Layyah and Safina units, power export, co-generation) and contact page (head office address and telephone in Lahore), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White refined sugar",
+      "summary": "Several grades of quality sugar made at the Layyah and Safina mills, including for multinational clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Molasses",
+      "summary": "A by-product of the company's sugar manufacturing, listed among its products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bio fertilizer",
+      "summary": "A fertilizer product listed among the company's products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Surplus electricity",
+      "summary": "Co-generated power exported to the national grid since 2006.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SML. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SML",
+  "description": "Shakarganj Limited is a diversified industrial company incorporated in 1967 and listed on the Pakistan Stock Exchange, built around sugar and its by-products. It produces high-grade refined sugar for food and pharmaceutical customers, including multinational beverage brands, and sells white crystalline sugar and crystal and soft brown sugar in retail packs. Through its biofuels division it runs an anhydrous ethanol distillery producing fuel-grade bio-ethanol and exports renewable power.",
+  "headOffice": "Executive Floor, IT Tower, 73-E/1, Hali Road, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 111 111 765",
+  "website": "https://sml.com.pk",
+  "ceo": "Muhammad Pervez Akhtar",
+  "sourceNote": "Company website sml.com.pk — home page (sugar and allied products, biofuels and power divisions, products and pack sizes), contact-us page (head office address and telephone) and board-of-directors page (Muhammad Pervez Akhtar named chief executive officer), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White crystalline sugar",
+      "summary": "Refined crystalline white sugar sold in 1 kg, 2 kg, 5 kg and sachet packs.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Crystal and soft brown sugar",
+      "summary": "Brown sugar sold alongside the company's white sugar.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Anhydrous ethanol",
+      "summary": "Fuel-grade bio-ethanol from the company's anhydrous ethanol distillery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Renewable export power",
+      "summary": "Surplus power generated from bagasse and exported to the grid.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

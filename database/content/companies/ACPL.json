@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for ACPL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists, and a generic cement-industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ACPL",
+  "description": "Attock Cement Pakistan Limited (ACPL) was established in 1981 with an initial capital outlay of Rs 1.5 billion and began commercial production in 1988 with a plant capacity of 2,000 tons per day of clinker. Through successive expansions, including a line added in FY24, it now runs four manufacturing plants at its factory in Hub, Balochistan, and sells under the Falcon brand. In April 2026, Fauji Cement Company Limited and Kot Addu Power Company Limited completed the acquisition of a majority stake in the company.",
+  "headOffice": "D-70, Block-4, Kehkashan-5, Clifton, Karachi-75600, Pakistan",
+  "phone": "+92 21 111 17 17 17",
+  "website": "https://attockcement.com",
+  "ceo": "Omer Ashraf",
+  "sourceNote": "Written from: https://attockcement.com/acpl-falcon-cement (establishment, initial capital, first production and capacity, expansions and four plants, Falcon brand, 2026 majority-stake acquisition), https://attockcement.com/contact-us-attock-cement/ (head office address and UAN) and https://attockcement.com/products/ (product descriptions and standards), read 2026-10-17; the chief executive is taken from the exchange's company record at https://dps.psx.com.pk/company/ACPL, which names Omer Ashraf as CEO.",
+  "products": [
+    {
+      "name": "Ordinary Portland Cement — Falcon OPC",
+      "summary": "General-construction cement made from clinker and gypsum, conforming to EN 197-1:2011 CEM I Class 42.5N according to the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sulphate Resistant Cement",
+      "summary": "Sulphate-resisting cement for concrete exposed to sulphate attack, listed among the company's products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Falcon Block Cement",
+      "summary": "A masonry/block cement product sold under the Falcon brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Falcon Rock Cement",
+      "summary": "A product in the Falcon brand range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

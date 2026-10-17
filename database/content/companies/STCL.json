@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for STCL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "STCL",
+  "description": "Shabbir Tiles & Ceramics Limited (STCL) is a tile manufacturer incorporated in Pakistan on 7 November 1978 and listed on the Pakistan Stock Exchange. Founded in 1978 by the House of Habib, it describes itself as the country's first private-sector ceramic enterprise and sells under the brand STILE. It manufactures porcelain, vitrified and ceramic wall and floor tiles at three plants in Karachi and also trades allied building materials.",
+  "headOffice": "15th Milestone, National Highway, Landhi, Karachi, Pakistan",
+  "phone": "+92 311 1178 453",
+  "website": "https://www.stile.com.pk",
+  "ceo": "Abul Fazal Rizvi",
+  "sourceNote": "Company website (stile.com.pk: corporate profile, contact us) and the PSX Data Portal company record for STCL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Porcelain tiles",
+      "summary": "Fully vitrified porcelain tiles, the company's core range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Vitrified tiles",
+      "summary": "Vitrified floor and wall tiles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ceramic wall and floor tiles",
+      "summary": "Glazed ceramic tiles in a wide range of designs, finishes, colours and sizes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Allied building materials",
+      "summary": "Building products traded alongside the tile range through STILE Emporium outlets and a nationwide dealer network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

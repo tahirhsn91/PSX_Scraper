@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for EMCO. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "EMCO",
+  "description": "EMCO Industries Limited, known as EMCO, manufactures high- and low-voltage electrical porcelain insulators and substation products. Its parent, The Imperial Electric Company (Pvt.) Ltd., was established in 1931; insulator manufacture in Lahore began in 1951 and a full insulator plant followed in 1954 using Japanese and French machinery and know-how.",
+  "headOffice": "4th Floor, National Tower, 28-Egerton Road, Lahore, Pakistan",
+  "phone": "+92 42 3630 6545",
+  "website": "https://emco.com.pk",
+  "ceo": "Salem Rehman",
+  "sourceNote": "Company website (emco.com.pk: about, product categories, contacts) and the company's own FY2025 annual accounts on that site (registered office, chief executive), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Disc-type insulators",
+      "summary": "Normal, fog and aerofoil disc insulators rated up to 160 kN.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Switch / bus isolators",
+      "summary": "Isolators rated up to 245 kV.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Surge arresters",
+      "summary": "Surge arresters from 11 kV to 245 kV.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Station post insulators",
+      "summary": "Porcelain station post insulators for substations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

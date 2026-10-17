@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SASML. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SASML",
+  "description": "Sindh Abadgar's Sugar Mills Limited was incorporated in Pakistan on 28 January 1984 as a public limited company and is principally engaged in the manufacturing and sale of sugar. Its plant at Deh Deenpur, Taluka Bulri Shah Karim, District Tando Muhammad Khan in Sindh crushes 8,000 tons of cane a day and produces white refined crystal sugar of all grades and colours, including pharmaceutical grade, using Talofloc refining technology licensed from Tate & Lyle. The company states that it was the first in the sugar industry to obtain ISO 9001 certification, in 1997.",
+  "headOffice": "Office #209, Progressive Plaza, Beaumont Road, Karachi, Pakistan",
+  "phone": "+92 21 3563 8212",
+  "website": "https://sasmltd.com",
+  "ceo": null,
+  "sourceNote": "Company website sasmltd.com — home page (incorporation 28 January 1984, mill location, registered office at Progressive Plaza, Beaumont Road, Karachi, principal business), profile page (Talofloc refining technology, 8,000 TCD capacity, about 800 employees, ISO 9001 certification) and contact page (head office address and telephone), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White refined crystal sugar",
+      "summary": "White refined crystal sugar of all grades and colours, including pharmaceutical grade, produced with Talofloc refining process technology.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

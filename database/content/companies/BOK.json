@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BOK. Every fact is attributable — see sourceNote. No image is attached: the institution's own imagery is not licence-cleared and a stock photograph of a branch or office would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BOK",
+  "description": "The Bank of Khyber was established in 1991 through an Act passed by the Provincial Legislative Assembly of Khyber Pakhtunkhwa and was awarded scheduled-bank status in September 1994. It is an A+ rated commercial bank operating across Pakistan through a network of more than 286 branches and sub-branches, with the provincial government as its major stakeholder, and it offers both conventional and Islamic banking.",
+  "headOffice": "24 - The Mall, Peshawar Cantt, 25000, Khyber Pakhtunkhwa, Pakistan",
+  "phone": "+92 91 111 95 95 95",
+  "website": "https://bok.com.pk",
+  "ceo": "Hassan Raza",
+  "sourceNote": "Written from: https://bok.com.pk/bok-introduction (establishment by provincial Act, scheduled status, A+ rating, branch count, provincial government stake, conventional and Islamic banking), https://bok.com.pk/contact-us (head office address and UAN) and https://bok.com.pk/management (Managing Director/CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Conventional and Islamic banking",
+      "summary": "Branch banking on both conventional and Islamic lines, including Raast Islamic Bankari, plus funded and non-funded facilities for business customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SME and agriculture schemes",
+      "summary": "Participation in government refinance and subsidised schemes, including facilities for women entrepreneurs and farm mechanisation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

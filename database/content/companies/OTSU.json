@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for OTSU. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "OTSU",
+  "description": "Otsuka Pakistan Limited was incorporated in February 1988 and began commercial production of intravenous solutions in September 1989 at its factory in Hub, Balochistan. It manufactures, markets and distributes IV infusions — electrolyte solutions, carbohydrate solutions and clinical nutrition products — and trades in pharmaceutical products, nutritional foods and medical equipment. The company is an indirect subsidiary of Otsuka Pharmaceutical Company Limited of Japan.",
+  "headOffice": "30-B, Sindhi Muslim Co-operative Housing Society, Karachi, Pakistan",
+  "phone": null,
+  "website": "https://otsuka.pk",
+  "ceo": "Moin Ur Rehman",
+  "sourceNote": "Company website (otsuka.pk: about) and the PSX company profile record, read 2026-10-17. No telephone number was found on the company site.",
+  "products": [
+    {
+      "name": "Intravenous infusions",
+      "summary": "Electrolyte and carbohydrate IV solutions manufactured at the Hub, Balochistan factory.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Clinical nutrition",
+      "summary": "Clinical nutrition products within the company's infusion range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Traded products",
+      "summary": "Pharmaceutical products, nutritional foods and medical equipment traded alongside its own manufacture.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

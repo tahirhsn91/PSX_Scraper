@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for UDPL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "UDPL",
+  "description": "United Distributors Pakistan Limited was set up in 1981 to distribute agricultural inputs, and worked as distribution partner and later joint-venture partner for Dow AgroSciences, FMC and Pioneer in Pakistan. It now develops and sells its own portfolio of crop protection chemicals, fertilisers and micronutrients, with a formulation plant in Karachi, warehouses in all four provinces, and suppliers in China, Thailand, Turkey and Germany.",
+  "headOffice": "92-C, Jami Commercial Street 11, Phase VII, Defence Housing Authority, Karachi",
+  "phone": "+92 21 3511 6823",
+  "website": "https://udpl.com.pk",
+  "ceo": "Asad Abdulla",
+  "sourceNote": "Company website (udpl.com.pk: about us, contact) and the PSX company profile (dps.psx.com.pk/company/UDPL: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Crop protection chemicals",
+      "summary": "Formulated pesticides and crop protection products, made at the company's formulation plant in Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fertilisers and micronutrients",
+      "summary": "Fertiliser and micronutrient products sold to farmers through the company's distribution network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

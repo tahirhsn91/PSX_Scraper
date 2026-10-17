@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for ITTEFAQ. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "ITTEFAQ",
+  "description": "Ittefaq Iron Industries Limited, part of the Al-Shafi group, was incorporated in 2007 and listed on the Pakistan Stock Exchange in July 2017. It operates a steel rolling mill manufacturing iron bars, girders and related products, with its head office at Gulberg III, Lahore.",
+  "headOffice": "40-B-II, Gulberg III, Lahore",
+  "phone": "+92 42 3578 5468",
+  "website": "https://ittefaqsteel.com",
+  "ceo": "Shahzad Javed",
+  "sourceNote": "Company website (ittefaqsteel.com: profile, contact) and the PSX company profile (dps.psx.com.pk/company/ITTEFAQ: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Iron bars",
+      "summary": "Rolled iron bars produced at the company's Lahore rolling mill.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Girders",
+      "summary": "Steel girders and related rolled products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
