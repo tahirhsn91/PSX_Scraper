@@ -41,3 +41,23 @@ export function isPsxSessionOpen(now: Date = new Date()): boolean {
   const minutes = Number(value('hour')) * 60 + Number(value('minute'));
   return Number.isFinite(minutes) && minutes >= SESSION_OPENS_AT && minutes <= SESSION_CLOSES_AT;
 }
+
+/**
+ * How to name the session a number belongs to.
+ *
+ * "This session" is a lie on a Saturday: the breadth, the movers and the volume are Friday's, and a
+ * reader who sees the present tense will assume they are watching the market. The backend already
+ * knows which session the newest data covers, so the wording follows it rather than the locally
+ * guessed clock — one source of truth, and it knows about holidays as well as weekends.
+ */
+export function sessionPhrase(status: { session: 'open' | 'closed'; lastSessionDate: string | null } | undefined): string {
+  if (!status || status.session === 'open') return 'in this session';
+  if (!status.lastSessionDate) return 'in the last session';
+  const label = new Intl.DateTimeFormat('en-GB', {
+    timeZone: PSX_TIME_ZONE,
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  }).format(new Date(`${status.lastSessionDate}T12:00:00Z`));
+  return `in the last session · ${label}`;
+}
