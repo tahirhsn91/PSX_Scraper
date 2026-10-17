@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { Box } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import { AppHeader } from './shell/AppHeader';
 import { MarketTicker } from './shell/MarketTicker';
 import { BottomNav } from './shell/BottomNav';
@@ -17,6 +18,9 @@ import { layout } from '../theme/tokens';
 export function Layout({ children }: { children: ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const openSearch = () => setSearchOpen(true);
+  // Only the path, not the query: the screener's filters live in the query string and moving a
+  // filter must not remount the page (and replay the entrance) under the reader.
+  const { pathname } = useLocation();
 
   return (
     <Box sx={{ minHeight: '100dvh', bgcolor: 'background.default' }}>
@@ -62,7 +66,22 @@ export function Layout({ children }: { children: ReactNode }) {
           pb: { xs: 9, md: 4 },
         }}
       >
-        {children}
+        {/* Keyed by path so a route change starts from a 6px lift and a fade (180ms) instead of
+            replacing the page between two frames. The keyframes are the shell's own, not the
+            page's: every route inherits the same entrance, and reduced motion zeroes it at the
+            theme level. */}
+        <Box
+          key={pathname}
+          sx={{
+            animation: (theme) => `route-in 180ms ${theme.app.motion.easing}`,
+            '@keyframes route-in': {
+              from: { opacity: 0, transform: 'translateY(6px)' },
+              to: { opacity: 1, transform: 'none' },
+            },
+          }}
+        >
+          {children}
+        </Box>
       </Box>
 
       <BottomNav onOpenSearch={openSearch} />
