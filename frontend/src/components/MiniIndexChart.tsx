@@ -197,9 +197,9 @@ export function MiniIndexChart({
       <Box sx={{ position: 'relative', width: cssWidth, height: box.h, flexShrink: 0 }}>
       <Box
         component="svg"
-        // A new session (or a live close moving) remounts the drawing, which replays the short
-        // fade: enough to notice the chart was refreshed, not enough to look like a load.
-        key={`${last.date ?? ''}:${last.close}:${candles.length}`}
+        // Keyed by the session date alone. A live close ticking inside an open session updates the
+        // path in place, so the fade plays once per session instead of flashing on every poll.
+        key={last.date ?? ''}
         viewBox={`0 0 ${box.w} ${box.h}`}
         preserveAspectRatio="none"
         role="img"
@@ -212,8 +212,9 @@ export function MiniIndexChart({
           height: '100%',
           overflow: 'visible',
           animation: `spark-fade 200ms ${theme.app.motion.easing}`,
+          '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
           '@keyframes spark-fade': {
-            from: { opacity: 0.55 },
+            from: { opacity: 0.7 },
             to: { opacity: 1 },
           },
           // The line draws itself once (`pathLength={1}` normalises the dash maths). After the
@@ -225,7 +226,13 @@ export function MiniIndexChart({
                 '& .spark-line': {
                   strokeDasharray: 1,
                   strokeDashoffset: 1,
-                  animation: `spark-draw 600ms ${theme.app.motion.easing} forwards`,
+                  animation: `spark-draw 450ms ${theme.app.motion.easing} forwards`,
+                  // The draw is decoration; with motion reduced the line is simply drawn.
+                  '@media (prefers-reduced-motion: reduce)': {
+                    animation: 'none',
+                    strokeDasharray: 'none',
+                    strokeDashoffset: 0,
+                  },
                 },
                 '@keyframes spark-draw': {
                   from: { strokeDashoffset: 1 },
