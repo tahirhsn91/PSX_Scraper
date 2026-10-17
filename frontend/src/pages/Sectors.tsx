@@ -3,6 +3,7 @@ import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { ChangePill } from '../components/ui/ChangePill';
+import { SectorHeatmap } from '../components/SectorHeatmap';
 import { formatCount, formatMarketCap, DASH } from '../lib/format';
 import type { SectorSummary } from '../types';
 
@@ -65,6 +66,15 @@ export function Sectors() {
         title="Sectors"
         subtitle="Every sector on the exchange, with its average move and market size"
       />
+      {rows.length > 0 && (
+        <SectionCard
+          title="Sector heat"
+          subtitle="Colour is each sector's average move this session — green up, red down. Tiles are ordered by market size."
+          sx={{ mb: 3 }}
+        >
+          <SectorHeatmap sectors={rows} />
+        </SectionCard>
+      )}
       <SectionCard flush>
         <DataTable
           columns={columns}
