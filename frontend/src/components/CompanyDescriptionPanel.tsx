@@ -98,16 +98,7 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
   }, [profile.description]);
 
   return (
-    <SectionCard
-      title="Company Description"
-      subtitle={
-        // The content files already open with "Written from:" — strip it before adding the label, or
-        // every one of the 511 profiles renders the prefix twice.
-        profile.sourceNote
-          ? `Written from: ${profile.sourceNote.replace(/^written from:\s*/i, '')}`
-          : 'Editorial company information, published on this site'
-      }
-    >
+    <SectionCard title="Company Description">
       <Stack spacing={2.5}>
         <Grid container spacing={1.5}>
           <Grid item xs={12} sm={6} md={4}>
