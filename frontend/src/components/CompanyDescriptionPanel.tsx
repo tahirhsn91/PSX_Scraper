@@ -99,7 +99,7 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
 
   return (
     <SectionCard title="Company Description">
-      <Stack spacing={2.5}>
+      <Stack spacing={3}>
         <Grid container spacing={1.5}>
           <Grid item xs={12} sm={6} md={4}>
             <StatTile label="Sector" value={usableSector(sector) ?? DASH} />
@@ -144,7 +144,11 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
               ref={descRef}
               variant="body1"
               sx={{
-                maxWidth: '80ch',
+                // The skill's reading-measure rule: 65–75 characters a line. At 80ch the font's
+                // wide "0" put ~120 characters on a line; 65ch brings it to the low 90s, which is
+                // as far as this card can narrow without leaving half the row empty.
+                maxWidth: '65ch',
+                lineHeight: 1.6,
                 // Three lines is the gist; the median write-up is ~470 characters, so most open
                 // past the fold.
                 ...(clamped && !showFullDescription
@@ -164,7 +168,7 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
                 size="small"
                 onClick={() => setShowFullDescription((v) => !v)}
                 aria-expanded={showFullDescription}
-                sx={{ mt: 0.5, minHeight: 32 }}
+                sx={{ mt: 0.5, minHeight: { xs: 44, sm: 32 } }}
               >
                 {showFullDescription ? 'Show less' : 'Read more'}
               </Button>
@@ -174,7 +178,7 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
 
         {profile.products.length > 0 && (
           <Box>
-            <Typography variant="subtitle1" component="h3" sx={{ mb: 1 }}>
+            <Typography variant="overline" component="h3" sx={{ display: 'block', mb: 1 }}>
               Products
             </Typography>
             <Grid container spacing={1.5}>
@@ -189,7 +193,7 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
                 size="small"
                 onClick={() => setShowAllProducts((v) => !v)}
                 aria-expanded={showAllProducts}
-                sx={{ mt: 1 }}
+                sx={{ mt: 1, minHeight: { xs: 44, sm: 32 } }}
               >
                 {showAllProducts
                   ? 'Show fewer products'
