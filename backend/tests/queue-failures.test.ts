@@ -27,6 +27,7 @@ jest.mock('../src/jobs/queues', () => {
     'index-sync': make('index-sync', ['index-KSE100']),
     'quote-sync': make('quote-sync', []),
     'universe-sync': make('universe-sync', []),
+    'company-profile-sync': make('company-profile-sync', []),
   };
 
   const monitoredQueues = Object.fromEntries(
@@ -40,6 +41,7 @@ jest.mock('../src/jobs/queues', () => {
     indexQueue: fakes['index-sync'].queue,
     quoteQueue: fakes['quote-sync'].queue,
     universeQueue: fakes['universe-sync'].queue,
+    companyProfileQueue: fakes['company-profile-sync'].queue,
     monitoredQueues,
     enqueueSync: jest.fn(),
     enqueueSyncAll: jest.fn(),

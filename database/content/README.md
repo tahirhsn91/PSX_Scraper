@@ -1,11 +1,18 @@
 # Company profiles
 
 Editorial content for the stock page's **Company Description** section. One JSON file per company,
-named after the symbol (`HUBC.json`), loaded into `company_profiles` / `company_products` by
+named after the symbol (`HUBC.json`), loaded into `company_profiles` / `company_products` by the
+`company-profile-sync` job. It runs on its own weekly weekend schedule (default Saturday 02:00 UTC,
+07:00 PKT), so a deploy that ships content reaches the database without anyone remembering to run
+anything. The same loader is available by hand for a fresh database or a correction you do not want
+to wait a week for:
 
 ```bash
 docker exec -w /app/backend psx_scraper_ayyan-backend-1 npx tsx src/scripts/seedCompanyProfiles.ts
 ```
+
+Both paths call the same service (`backend/src/services/companyProfileSync.service.ts`) and are
+idempotent: re-running over the same files leaves the same rows.
 
 ## Why these files exist at all
 
@@ -59,6 +66,6 @@ than one padded out with guesses.
 
 ## Coverage
 
-511 symbols are tracked and two are written up. That gap is the honest state of this feature: the
-schema, the API and the UI are built for the whole board, and the content grows in batches. A stock
-with no file renders no section at all — no empty box, no placeholder.
+511 symbols are tracked and all 511 have a write-up (batches 1–3, #180). A stock with no file
+renders no section at all — no empty box, no placeholder — so a new listing simply waits for its
+file.
