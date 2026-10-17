@@ -31,6 +31,12 @@ function toStockFilters(q: StocksQuery): StockFilters | undefined {
   if (q.minDividendYield != null) f.minDividendYield = q.minDividendYield;
   if (q.minRoe != null) f.minRoe = q.minRoe;
   if (q.maxDebtToEquity != null) f.maxDebtToEquity = q.maxDebtToEquity;
+  if (q.minReturn != null) f.minReturn = q.minReturn;
+  if (q.maxReturn != null) f.maxReturn = q.maxReturn;
+  // A return bound or a sort by return needs a window. Default it here, once, so the repository can
+  // assume a period whenever it has to join the return lateral.
+  if (q.returnPeriod) f.returnPeriod = q.returnPeriod;
+  else if (q.minReturn != null || q.maxReturn != null || q.sort === 'return') f.returnPeriod = '1m';
   if (q.symbols?.length) f.symbols = q.symbols;
   return Object.keys(f).length > 0 ? f : undefined;
 }

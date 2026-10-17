@@ -22,6 +22,17 @@ const FIELDS: { key: keyof StockFilters; label: string; percent?: boolean }[] = 
   { key: 'maxPb', label: 'Max P/B' },
   { key: 'minRoe', label: 'Min ROE', percent: true },
   { key: 'maxDebtToEquity', label: 'Max debt/equity' },
+  { key: 'minReturn', label: 'Min return', percent: true },
+  { key: 'maxReturn', label: 'Max return', percent: true },
+];
+
+/** The periods the return column and filter can use, with the sessions each one means. */
+const PERIODS: { key: NonNullable<StockFilters['returnPeriod']>; label: string; sessions: number }[] = [
+  { key: '1w', label: '1W', sessions: 6 },
+  { key: '1m', label: '1M', sessions: 22 },
+  { key: '3m', label: '3M', sessions: 64 },
+  { key: '6m', label: '6M', sessions: 127 },
+  { key: '1y', label: '1Y', sessions: 253 },
 ];
 
 const PAGE_SIZE = 50;
@@ -33,13 +44,19 @@ function toNumber(raw: string | undefined): number | undefined {
 }
 
 /** Build the filter object from the raw form strings, dropping every empty field. */
-function buildFilters(criteria: Record<string, string>, sector: string): StockFilters {
+function buildFilters(
+  criteria: Record<string, string>,
+  sector: string,
+  period: StockFilters['returnPeriod'],
+): StockFilters {
   const f: StockFilters = {};
   for (const field of FIELDS) {
     const n = toNumber(criteria[field.key as string]);
     if (n != null) (f as Record<string, unknown>)[field.key as string] = n;
   }
   if (sector) f.sector = sector;
+  // The period travels with the return bounds: without it "min return 20%" would have no window.
+  if (period) f.returnPeriod = period;
   return f;
 }
 
@@ -56,6 +73,7 @@ export function Screener() {
 
   const [criteria, setCriteria] = useState<Record<string, string>>({});
   const [sector, setSector] = useState(sectorParam);
+  const [period, setPeriod] = useState<NonNullable<StockFilters['returnPeriod']> | ''>('');
   const [applied, setApplied] = useState<StockFilters>(sectorParam ? { sector: sectorParam } : {});
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<SortState | null>(null);
@@ -77,17 +95,20 @@ export function Screener() {
     presetKey || undefined,
   );
   const activePreset = data?.preset;
+  const activePeriod = applied.returnPeriod;
+  const activePeriodMeta = PERIODS.find((x) => x.key === activePeriod);
 
   const setField = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setCriteria((c) => ({ ...c, [key]: e.target.value }));
 
   const apply = () => {
-    setApplied(buildFilters(criteria, sector));
+    setApplied(buildFilters(criteria, sector, period || undefined));
     setPage(1);
   };
   const reset = () => {
     setCriteria({});
     setSector('');
+    setPeriod('');
     setApplied({});
     setPage(1);
     setSort(null);
@@ -180,6 +201,29 @@ export function Screener() {
       sortKey: 'dividendYield',
       hideBelow: 'sm',
     },
+    ...(activePeriodMeta
+      ? [
+          {
+            key: 'periodReturn',
+            header: `${activePeriodMeta.label} return`,
+            align: 'right' as const,
+            // Null is not zero: the stock does not have the sessions the period needs, and the cell
+            // says so rather than printing a dash that could be read as a flat month.
+            render: (r: StockListItem) =>
+              r.periodReturn != null ? (
+                `${r.periodReturn > 0 ? '+' : ''}${formatNumber(r.periodReturn)}%`
+              ) : r.returnSessions != null && r.returnSessions < activePeriodMeta.sessions ? (
+                <span title={`Only ${r.returnSessions} sessions of history; ${activePeriodMeta.label} needs ${activePeriodMeta.sessions}`}>
+                  n/a
+                </span>
+              ) : (
+                DASH
+              ),
+            sortKey: 'return' as StockSortField,
+            hideBelow: 'sm' as const,
+          },
+        ]
+      : []),
     {
       key: 'roe',
       header: 'ROE',
@@ -188,7 +232,7 @@ export function Screener() {
       sortKey: 'roe',
       hideBelow: 'md',
     },
-    ...(presetKey
+    ...(presetKey || activePeriodMeta
       ? []
       : [
           {
@@ -216,7 +260,7 @@ export function Screener() {
     <>
       <PageHeader
         title="Stock screener"
-        subtitle="Filter the whole universe by price, size and fundamentals, then sort any column"
+        subtitle="Filter the whole universe by price, size, fundamentals and period return, then sort any column"
       />
       <SectionCard title="Named screens" sx={{ mb: 3 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -261,6 +305,23 @@ export function Screener() {
               {(sectors?.items ?? []).map((s) => (
                 <MenuItem key={s.sector} value={s.sector}>
                   {s.sector}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              select
+              fullWidth
+              size="small"
+              label="Return period"
+              value={period}
+              onChange={(e) => setPeriod(e.target.value as typeof period)}
+            >
+              <MenuItem value="">None</MenuItem>
+              {PERIODS.map((x) => (
+                <MenuItem key={x.key} value={x.key}>
+                  {x.label} ({x.sessions - 1} sessions)
                 </MenuItem>
               ))}
             </TextField>
