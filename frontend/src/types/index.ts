@@ -3,7 +3,7 @@
  * enum: the server sorts (the table is paginated, so sorting in the browser would only reorder
  * the fifty rows on screen).
  */
-export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume' | 'marketCap' | 'points' | 'weight' | 'dividendYield' | 'peRatio' | 'pbRatio' | 'roe' | 'beta';
+export type StockSortField = 'symbol' | 'price' | 'week52Low' | 'week52High' | 'change' | 'changePercent' | 'volume' | 'marketCap' | 'points' | 'weight' | 'dividendYield' | 'peRatio' | 'pbRatio' | 'roe' | 'beta' | 'return';
 
 /**
  * One daily candle. `open`/`high`/`low` are null when the source did not report them — the
@@ -74,6 +74,10 @@ export interface CandleSeries {
 export type SortOrder = 'asc' | 'desc';
 
 export interface StockListItem {
+  /** Price return over the requested period, dividends excluded. Null = not enough history. */
+  periodReturn?: number | null;
+  /** Sessions of history behind that return, capped at the period's session count + 1. */
+  returnSessions?: number | null;
   /** Present only when the row came from a named screen: why this row is on the list. */
   reason?: string;
   id: string;
@@ -384,6 +388,11 @@ export interface StockFilters {
   minDividendYield?: number;
   minRoe?: number;
   maxDebtToEquity?: number;
+  /** Window for the period-return filter and column (sessions, not calendar days). */
+  returnPeriod?: '1w' | '1m' | '3m' | '6m' | '1y';
+  /** Minimum / maximum price return over that window, in percent. */
+  minReturn?: number;
+  maxReturn?: number;
   /** A watchlist: "give me these specific symbols". Sent as a comma-joined string. */
   symbols?: string[];
 }

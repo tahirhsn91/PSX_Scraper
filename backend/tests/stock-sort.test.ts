@@ -57,7 +57,7 @@ describe('buildOrderBy', () => {
     expect(clause.split(/\s+/).filter((t) => t.includes('.'))).toEqual(['p.volume', 's.symbol']);
     expect(STOCK_SORT_FIELDS).toEqual([
       'symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points', 'weight',
-      'dividendYield', 'peRatio', 'pbRatio', 'roe', 'beta',
+      'dividendYield', 'peRatio', 'pbRatio', 'roe', 'beta', 'return',
     ]);
   });
 });
