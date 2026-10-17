@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for NAGC. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "NAGC",
+  "description": "Nagina Cotton Mills Limited was established on 16 May 1967 and describes itself as the mother company of Nagina Group. It operates 51,708 spindles with related process machinery, spinning carded, combed, core spun and fancy yarns for use on high speed looms and knitting machines, sold under the Sweet Pea and Angothi brands. The company's own profile notes that Forbes included it in its \"Best under a Billion\" list of 200 companies.",
+  "headOffice": "2nd Floor, Shaikh Sultan Trust Building No. 2, 26 Civil Lines, Beaumont Road, Karachi 75530, Pakistan",
+  "phone": null,
+  "website": "https://nagina.com",
+  "ceo": "Amin Ellahi Shaikh",
+  "sourceNote": "Written from: nagina.com/nagina-cotton-mills-limited-profile (history, capacity, machinery, products), nagina.com/address-ncml (registered office), nagina.com/board-of-directors-ncml; PSX company profile page dps.psx.com.pk/company/NAGC (principal business, chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Carded cotton yarn — Sweet Pea",
+      "summary": "6/1 to 32/1 carded 100% cotton yarns sold under the Sweet Pea brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Combed cotton yarn — Sweet Pea",
+      "summary": "10/1 to 50/1 combed 100% cotton yarns sold under the Sweet Pea brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Core spun yarn",
+      "summary": "Core yarns with Lycra and spandex in counts from 7/1 to 40/1, carded and combed, in a variety of deniers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Doubled yarn — Angothi",
+      "summary": "20/2, 24/2, 30/2 and 40/2 carded and combed yarns sold under the Angothi brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Specialty and fancy yarns",
+      "summary": "Ring plain, compact, siro, slub, siro slub and multicount yarns, with more than 300 patterns available.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

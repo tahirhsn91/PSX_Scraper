@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for JSIL. Facts are from the company's own website — see sourceNote. No image is attached.",
+  "symbol": "JSIL",
+  "description": "JS Investments Limited is Pakistan's oldest private-sector asset management company, established in 1995 with INVESCO PLC and the International Finance Corporation among its founding partners, and is a subsidiary of JS Bank. Licensed by SECP for asset management, investment advisory, REIT management and private equity and venture capital fund management, it manages conventional and Shariah-compliant mutual funds, voluntary pension schemes and separately managed accounts, and acts as pension fund manager under the VPS Rules. The company is itself listed on the Pakistan Stock Exchange.",
+  "headOffice": "19th Floor, The Centre, Plot No. 28, SB-5, Abdullah Haroon Road, Saddar, Karachi, Pakistan",
+  "phone": "+92 21 111 222 626",
+  "website": "https://jsil.com",
+  "ceo": "Iffat Zehra Mankani",
+  "sourceNote": "Written from: https://jsil.com/about-us/ (establishment, founding partners, parent, licences, product range, listing), https://jsil.com/ (fund list), https://jsil.com/investor-relation/ (office address, UAN) and https://jsil.com/board-of-directors-management-team-investment-team/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Conventional mutual funds",
+      "summary": "Money market, income, government securities, growth, large-cap, fund-of-funds and fixed-term funds, including Unit Trust of Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Shariah-compliant funds",
+      "summary": "Islamic fund, Islamic income, Islamic money market, Islamic fixed-term and Islamic savings funds.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Voluntary Pension Schemes",
+      "summary": "Conventional and Shariah-compliant voluntary pension funds, including provincial pension funds.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Separately Managed Accounts",
+      "summary": "Discretionary portfolios managed for individual and institutional clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "JS Momentum Factor ETF",
+      "summary": "An exchange-traded fund tracking a momentum factor strategy.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

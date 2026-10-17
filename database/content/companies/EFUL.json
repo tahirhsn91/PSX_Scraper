@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for EFUL. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand and campaign photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "EFUL",
+  "description": "EFU Life Assurance Limited was incorporated in Pakistan on 9 August 1992 and began operations on 18 November 1992 as the first private-sector life insurer in the country; it is a subsidiary of EFU General Insurance Limited. It describes itself as the leading life and health insurer and family takaful operator in the private sector, and says it became the first insurer authorised to offer Shariah-compliant takaful products alongside conventional insurance. It reaches customers through its own sales force, bancassurance arrangements with a long list of banks, corporate benefit schemes, and inclusive and digital insurance partnerships.",
+  "headOffice": "EFU Life House, Plot No. 112, 8th East Street, Phase 1, DHA, Karachi, Pakistan",
+  "phone": "+92 21 111 338 111",
+  "website": "https://www.efulife.com",
+  "ceo": "Mohammed Ali Ahmed",
+  "sourceNote": "Written from: efulife.com/about-us (start of operations, leading life and health insurer and family takaful operator, first Shariah-compliant authorisation), efulife.com product and distribution sections (individual plans, bancassurance, corporate benefits, inclusive and digital insurance) and efulife.com/contact-us (head office address and call-centre number); the PSX company page for EFUL gives the incorporation date, subsidiary relationship with EFU General Insurance Ltd and the chief executive (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Individual life and savings plans",
+      "summary": "Protection and savings plans sold through the company's sales force, covering family protection, everyday savings, child education and marriage, retirement and wealth-building plans.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bancassurance",
+      "summary": "Life and savings plans distributed through partner banks — the company's site lists Allied Bank, Askari Bank, JS Bank, MCB Bank, National Bank of Pakistan, Standard Chartered, UBL, Habib Metropolitan Bank, Bank Alfalah and First Women Bank among them.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate benefits",
+      "summary": "Group schemes for employers and institutions: group life assurance, group savings, group provident-fund insurance, credit life, salary continuation, hospital cash and fee continuation plans.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Family takaful",
+      "summary": "Shariah-compliant family takaful products, which the company says it was the first insurer authorised to offer alongside conventional insurance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Inclusive and digital insurance",
+      "summary": "Low-premium cover distributed through telecom and branchless-banking partners and digital platforms, aimed at customers outside the traditional agency channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

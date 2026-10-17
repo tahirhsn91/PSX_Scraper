@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for AKDSL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real, licence-cleared photograph is available.",
+  "symbol": "AKDSL",
+  "description": "AKD Securities Limited describes itself as Pakistan's largest brokerage firm and a leading non-bank advisory institution, offering equities, money market, forex, commodities and corporate finance and advisory services. It introduced Pakistan's first online trading platform, and its investment banking and advisory business reports a 30% share of all fresh capital raised over the past decade. Its holding company is AKD Group Holdings (Pvt) Limited with 95%.",
+  "headOffice": "Suite 602, 6th Floor, Continental Trade Centre, Block 8, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 111 253 111",
+  "website": "https://www.akdsl.com",
+  "ceo": "Muhammad Farid Alam",
+  "sourceNote": "Written from: akdsl.com — Company Profile, Associated Companies and Locate Us pages, and the company's PSX-filed quarterly report for September 2025 (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Equities brokerage",
+      "summary": "Domestic and foreign institutional and retail equity brokerage, covering nearly 300 institutions alongside high-net-worth clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate finance and advisory",
+      "summary": "ECM/DCM and investment banking advisory, including transactions for the Government of Pakistan under privatisation programmes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Money market",
+      "summary": "Money market services offered as part of its full-service brokerage offering.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Forex",
+      "summary": "Foreign exchange services offered as part of its full-service brokerage offering.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commodities",
+      "summary": "Commodities services offered as part of its full-service brokerage offering.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "AKDSL Research",
+      "summary": "An independent research unit supporting its institutional brokerage business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

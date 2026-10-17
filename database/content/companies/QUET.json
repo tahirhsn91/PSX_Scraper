@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for QUET. Every fact here is attributable — see sourceNote. No image is attached: the company's own plant photography is not licence-cleared. The company's site serves over plain http only — https://quettagroup.com does not respond — so the URL given is the working one. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "QUET",
+  "description": "Quetta Textile Mills Limited was incorporated in Pakistan on 29 January 1970 and is principally engaged in the manufacture and sale of yarn and fabric. It runs a vertically integrated spinning and weaving operation with 73,488 spindles, 1,104 rotors and 250 Tsudakoma air-jet looms backed by a Benninger back process, producing ring-spun and open-end yarns and woven fabric for the garment and home-textile industries. Fabric is woven up to 76 inches wide, with six-colour dobby looms for yarn-dyed qualities, and the company puts annual fabric production at 70 million metres.",
+  "headOffice": "Nadir House, Ground Floor, I. I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 3241 4334",
+  "website": "http://quettagroup.com",
+  "ceo": "Asim Khalid",
+  "sourceNote": "Written from: quettagroup.com (spinning and weaving description, machinery counts, fabric production, product range, contact details) and the PSX company page for QUET (incorporation date, principal business, chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ring-spun yarn",
+      "summary": "Ring-spun yarn produced on the company's 73,488 spindles and sold to fabric and garment makers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Open-end yarn",
+      "summary": "Rotor-spun (open-end) yarn from 1,104 rotors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Speciality yarns",
+      "summary": "Organic cotton, Tencel, bamboo, regenerated-cotton, slub and compact yarns, which the company lists among its products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric",
+      "summary": "Fabric from 250 Tsudakoma air-jet looms up to 76 inches wide — stretch twills and satins, custom designs, double-face fabrics and moleskins — for the apparel market, plus yarn-dyed fabrics from six-colour dobby looms.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ANLNV, which is the exchange line for Azgard Nine Limited's non-voting ordinary shares — this describes the issuer, not a separate business. Facts are from the company's own website — see sourceNote. No image is attached.",
+  "symbol": "ANLNV",
+  "description": "Azgard Nine Limited is a composite denim producer listed on the Pakistan Stock Exchange, incorporated in 1993 as Indigo Denim Mills Limited and renamed Azgard Nine Limited in 2004. From spinning through weaving, dyeing, laundry and stitching it makes yarn, denim fabric and denim garments — the company describes the chain as a complete denim and jeans ecosystem — with its registered and head office at Ismail Aiwan-e-Science in Lahore and manufacturing units in Kasur and Lahore. ANLNV is the exchange line for the company's non-voting ordinary shares, a separate class from its voting ordinary shares.",
+  "headOffice": "Ismail Aiwan-e-Science, Off: Shahrah-e-Roomi, Lahore-54600, Pakistan",
+  "phone": "+92 42 35761794-5",
+  "website": "https://azgard9.com",
+  "ceo": "Ahmed Humayun Shaikh",
+  "sourceNote": "Written from: https://azgard9.com/company (incorporation and renaming, registered and head office, units, principal business, chief executive), https://azgard9.com/product (yarn, denim fabric and garment lines) and the PSX company record for ANLNV, which names the security 'Azgard Nine Non-Voting Ordinary Shares' (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Open-end and ring-spun yarn from the company's spinning operation, with up to 80% recycled content in select lines and conditioned packing for weaving.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Denim fabric",
+      "summary": "Rigid, comfort, stretch and bi-stretch denims in authentic and fashion casts, with eco dyeing and low-liquor finishing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Denim garments",
+      "summary": "Ready-to-wear denim apparel from CMT to full package — pattern, sampling, washing and finishing, trims and packing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

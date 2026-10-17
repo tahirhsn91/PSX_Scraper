@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for NCML. Every fact here is attributable — see sourceNote. No image is attached. Note the 2026 restructuring disclosed in the company's own annual report: the description reflects it rather than the long-standing 'cotton mills' name.",
+  "symbol": "NCML",
+  "description": "Nazir Cotton Mills Limited operated as a textile spinning unit until 2006, when it moved into the dairy business; its products page describes cattle, sheep and poultry rearing, breeding, and trade in milk, meat, eggs and livestock. In 2026 its shareholders approved a restructuring that shifts the company's primary focus to income-generating investments, renames the enterprise Nazir Ventures Limited, and authorises the sale of its land, with the proceeds to be deployed into revenue-earning investments.",
+  "headOffice": "Tricon Corporate Centre, Office No. 702, 7th Floor, 73-E, Main Jail Road, Gulberg-II, Lahore, Pakistan",
+  "phone": "+92 42 35775501-02",
+  "website": "https://nazircotton.com",
+  "ceo": "Muhammad Tayyab",
+  "sourceNote": "Written from: nazircotton.com — Annual Report 2026 (Chairman's Review) and the Products and Company Profile pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Dairy farming",
+      "summary": "Milk production and dairy farming, the business the company moved into after leaving textile spinning.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Livestock and poultry rearing",
+      "summary": "Cattle, sheep and poultry rearing and breeding, and trade in milk, meat, eggs and livestock, as set out on the company's products page.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

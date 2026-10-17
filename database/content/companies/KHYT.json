@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for KHYT. Every fact is attributable — see sourceNote. This is a shell of a textile company: its own site says textile production stopped and the revised principal business is agriculture. No image is attached and no chief executive is recorded, because the site names none.",
+  "symbol": "KHYT",
+  "description": "Khyber Textile Mills Limited was incorporated on 26 August 1961 as a public limited company. Its activities were the manufacture and sale of cotton and polyester yarn and cloth, but the company states that production was halted due to external factors, and that since 2017 it has operated an agricultural livestock business on its vacant land as its revised principal line of business, approved by the Registrar of Companies in 2019. It has also rented out excess buildings for warehousing and rental purposes since 2016.",
+  "headOffice": "Shahra-e-Resham, Baldher, District Haripur, Khyber Pakhtunkhwa, Pakistan",
+  "phone": "+92 995 655048",
+  "website": "https://khybertextile.com",
+  "ceo": null,
+  "sourceNote": "Written from: https://khybertextile.com/profile-of-company/ (incorporation date, halted textile production, agricultural livestock business since 2017 and Registrar approval in 2019, building rentals since 2016, vision and mission), https://khybertextile.com/profile-of-company/company-registration-ntn/ (mills and head office address, telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Agricultural livestock",
+      "summary": "The company's revised principal line of business since 2017, carried on on its vacant land.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Warehousing and rentals",
+      "summary": "Rental of excess buildings for warehousing and rental purposes, carried on since 2016.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

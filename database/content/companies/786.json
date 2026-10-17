@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for 786. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available. This is an asset management company (non-banking finance company), not an industrial operating company.",
+  "symbol": "786",
+  "description": "786 Investments Limited was incorporated on 18 September 1990 and is registered as a non-banking finance company licensed by the Securities and Exchange Commission of Pakistan to carry out asset management and investment advisory services. It manages the 786 Smart Fund and the 786 Islamic Money Market Fund, describes its business areas as mutual funds, saving funds and wealth management, and carries a company rating of AM-3. The company is listed on the Pakistan Stock Exchange under the symbol 786.",
+  "headOffice": "G3, Ground Floor, BRR Tower, Hassan Ali Street, Off I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": "+92 21 3260 3751-54",
+  "website": "https://786investments.com",
+  "ceo": "Tara Uzra Dawood",
+  "sourceNote": "Written from: 786investments.com/company-profile (incorporation, NBFC licensing, business areas, rating, registered office), 786investments.com/contact-us (address, telephone), 786investments.com (fund list, home) and the company's Fund Manager Report for 786 Smart Fund published on its own site (chief executive); PSX company profile page dps.psx.com.pk/company/786 (key people) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "786 Smart Fund",
+      "summary": "An open-end fund whose offer and redemption prices the company publishes daily on its site.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "786 Islamic Money Market Fund",
+      "summary": "A Shariah-compliant money market fund, listed among the company's open-end funds.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Investment advisory and wealth management",
+      "summary": "Advisory services and wealth management offered under the company's non-banking finance company licences.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

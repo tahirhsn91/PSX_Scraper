@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for NATM. Every fact here is attributable — see sourceNote. No image is attached: the company's own mill photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "NATM",
+  "description": "Nadeem Textile Mills Limited was incorporated in 1986 and is known as a producer of ring-spun yarn, which it describes as its core business; it presents itself as one of Pakistan's largest and most dynamic textile companies. It runs two mills — Unit 1 at S.I.T.E. Nooriabad and Unit 2 at S.I.T.E. Kotri, both in Sindh — with a workforce of over 1,500 and an in-house power generation plant supplying the mill. It sells yarn locally and regularly supplies Far East Asia, Europe, Turkey, South East Asia and South Asia.",
+  "headOffice": "801-804, Lakson Square Building No. 3-A, Sarwar Shaheed Road, Karachi, Pakistan",
+  "phone": "+92 21 3522 0481-88",
+  "website": "https://www.nadeem.com.pk",
+  "ceo": "Zahid Mazhar",
+  "sourceNote": "Written from: nadeem.com.pk/company-profile (incorporation, scale, spindles, captive power, export markets), nadeem.com.pk/product-porfolio (yarn product range and count ranges), nadeem.com.pk/board-of-directors (chief executive), nadeem.com.pk/contact-us and nadeem.com.pk/address-of-registered-office-head-office-all-other-branch-offices-phone-numbers (head office, telephone, mill addresses) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Knitwear yarn",
+      "summary": "100% cotton carded yarn for knitwear: single counts NE 8/1 to 32/1 and double counts NE 20/2 to 32/2, with twist per the customer's requirement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric yarn",
+      "summary": "100% cotton carded yarn for woven fabric: single counts NE 12/1 to 40/1 and double counts NE 32/2 to 60/2.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PC and CVC blended yarn",
+      "summary": "Poly-cotton 52:48 yarn from 10/1 to 40/1 and chief-value-cotton 60:40 yarn from 16/1 to 30/1, plus PC 80:20 free-ratio qualities at 20/1, 30/1 and 40/1.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Terry towel yarn",
+      "summary": "100% cotton carded yarn for terry towelling: single counts NE 10/1 to 24/1 and double counts NE 20/2 to 40/2.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Denim yarn",
+      "summary": "100% cotton carded, slub and Siro yarn for denim: single counts NE 6/1 to 12/1 and double counts NE 12/2 to 30/2.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Heather grey yarn",
+      "summary": "Poly-cotton melange (heather grey) knitting yarn in counts 16/1 to 30/1; the company also lists 100% pure polyester yarn from 16/1 to 40/1.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

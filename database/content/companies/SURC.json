@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for SURC. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "SURC",
+  "description": "Suraj Cotton Mills Limited is a Lahore-based textile manufacturer that has produced yarn and woven fabric since 1984. It operates three spinning units — at Nooriabad in Sindh and Shahkot and Raiwind in Punjab — with 125,000 ring spindles, and an air-jet weaving unit of 358 looms producing about 3.6 million metres of greige fabric a month. It describes itself as specialising in fine-count yarns and greige fabrics of up to 700 thread count for sheeting, apparel, suiting and home furnishings.",
+  "headOffice": "Tricon Corporate Centre, Office No. 802, 73-E, Main Jail Road, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 35760381",
+  "website": "https://www.suraj.com",
+  "ceo": "Nadeem Maqbool",
+  "sourceNote": "Written from: https://www.suraj.com/ (spinning and weaving capacity, product counts, head office address and telephone), https://www.suraj.com/about/ (company description) and https://www.suraj.com/governance/ (CEO), with the PSX company profile at https://dps.psx.com.pk/company/SURC for the registered address (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fine-count yarn",
+      "summary": "Ring-spun yarn in fine counts from Pima (Supima), US, Egyptian Giza, CIS, Australian, Brazilian and Pakistani cottons, on 125,000 spindles across three units.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Greige fabric",
+      "summary": "Grey fabric woven on 358 air-jet looms — about 3.6 million metres a month — for sheeting, apparel, suiting and home furnishings, up to 700 thread count.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

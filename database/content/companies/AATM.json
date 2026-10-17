@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for AATM. Every fact here is attributable — see sourceNote. No image is attached: the company publishes no licence-cleared photograph of its own facilities. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AATM",
+  "description": "Ali Asghar Textile Mills Limited was established in 1969 as a textile spinning unit, and in 2011 the management exited spinning and had the memorandum changed to make logistics and warehousing the principal line of business. It now provides warehousing and logistics services to e-commerce businesses — naming Daraz Pakistan, Airlift Technologies and Al-Karam Studios as key clients — and operates a 1,250 kW solar power project, 1 MW of which is supplied to a pharmaceutical company. Its subsidiary Fazal Solar Energy (Pvt.) Limited runs a 1 MW solar generation facility, and the company also holds more than PKR 1 billion of listed equities at the Pakistan Stock Exchange.",
+  "headOffice": "Ellahi Tower, Plot No. 6, Sector No. 25, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "0323 2920244",
+  "website": "http://aatml.com.pk",
+  "ceo": "Nadeem Ellahi Shaikh",
+  "sourceNote": "Written from: aatml.com.pk — Company Profile and Contact pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "E-commerce warehousing and logistics",
+      "summary": "Warehouse construction, rental and allied logistics services provided to e-commerce firms; the company names Daraz Pakistan, Airlift Technologies and Al-Karam Studios among its key clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Solar power generation",
+      "summary": "A 1,250 kW solar installation, 1 MW of which is supplied to a leading pharmaceutical company under a long-term arrangement; Fazal Solar Energy (Pvt.) Limited, a subsidiary of the company, operates a further 1 MW solar facility.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Listed equity investments",
+      "summary": "A portfolio of listed equities on the Pakistan Stock Exchange that the company describes as exceeding PKR 1 billion.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

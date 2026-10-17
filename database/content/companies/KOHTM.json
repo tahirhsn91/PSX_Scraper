@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for KOHTM. Every fact is attributable - see sourceNote. No image attached: no licence-cleared photograph of the company's own Saifabad mill is available.",
+  "symbol": "KOHTM",
+  "description": "Kohat Textile Mills Limited is a Saif Group company, incorporated in Pakistan in 1967 and in production from the first quarter of 1970. From its mill at Saifabad in Kohat it manufactures and sells cotton and man-made fibre yarn - carded, combed and synthetic - on 44,508 spindles, with an annual production capacity of about 10 million kilograms, and it sells into the domestic market. The mill runs on a 4.2 MW WAPDA connection together with a 5.0 MW gas-fired captive power plant and 2.1 MW of solar capacity.",
+  "headOffice": "4th Floor, Kashmir Commercial Complex, Fazal-e-Haq Road, Blue Area, Islamabad, Pakistan",
+  "phone": "+92 51 260 4730-35",
+  "website": "https://kohattextile.com",
+  "ceo": "Assad Saifullah Khan",
+  "sourceNote": "Written from: Kohat Textile Mills Limited website (kohattextile.com: about-us, governance - chairman and CEO profiles, contact-us) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Carded cotton yarn",
+      "summary": "Cotton yarn spun on the company's 44,508 spindles at Saifabad, Kohat, sold in the domestic market.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Combed cotton yarn",
+      "summary": "Combed cotton yarn from the same spinning operation, produced under ISO-9001:2015, ISO-14001:2015, ISO-45001:2015 and OEKO-TEX certified procedures.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Man-made fibre and synthetic yarn",
+      "summary": "Yarn spun from man-made fibres alongside cotton, which the company describes as part of its cotton and man-made fibre yarn range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Captive power generation",
+      "summary": "A 5.0 MW gas-fired captive power plant and 2.1 MW of installed solar capacity serving the mill, with a further 3 MW of solar under way.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

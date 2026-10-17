@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for FZCM. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "FZCM",
+  "description": "Fazal Cloth Mills Limited was incorporated in Pakistan on 14 May 1966 and manufactures and sells yarn and fabric. Its eight spinning units — 274,524 spindles, 3,660 open-end rotors, 1,752 MVS spindles and 224 air-jet Picanol looms — sit at Fazal Nagar, Jhang Road, Muzaffargarh and at the Qadirpur Rawan Bypass on the Khanewal Road, Multan, with 54.06 MW of captive gas-fired generation. The company spins counts from Ne 4/1 to Ne 80/1 in cotton, rayon, polyester-cotton, modal-cotton and bamboo-cotton, and produces about 100,859 tons of yarn and 45.37 million metres of fabric a year.",
+  "headOffice": "59/3, Abdali Road, Multan, Pakistan",
+  "phone": "+92 61 4579001-7",
+  "website": "https://www.fazalcloth.com",
+  "ceo": "Rehman Naseem",
+  "sourceNote": "Written from: fazalcloth.com — company profile and board of directors pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Carded, combed, compact, core-spun, multi-twist, multi-count, slub, double and zero-twist yarns in counts from Ne 4/1 to Ne 80/1, in cotton, rayon, polyester-cotton, modal-cotton and bamboo-cotton, including certified Supima, organic, Giza and BCI cottons and Lycra blends.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fabric",
+      "summary": "Fabric woven on 224 air-jet Picanol looms, with annual output of about 45.37 million metres.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

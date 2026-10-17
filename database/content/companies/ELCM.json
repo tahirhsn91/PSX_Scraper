@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for ELCM. Every fact is attributable — see sourceNote. The company's site is a small legacy WordPress site carrying an About page and a contact page and nothing further, so most fields are null rather than guessed. No image is attached.",
+  "symbol": "ELCM",
+  "description": "Elahi Cotton Mills Limited was incorporated as a public limited company on 22 June 1970, with its registered office at Plot No. 270, Sector I-9/3, Industrial Area, Islamabad. The company states that its principal business is the manufacturing and sale of yarn. Its website publishes nothing further about its plant, products or management.",
+  "headOffice": "Plot No. 270, Sector I-9/3, Industrial Area, Islamabad, Pakistan",
+  "phone": null,
+  "website": "http://elahicotton.com",
+  "ceo": null,
+  "sourceNote": "Written from: http://elahicotton.com (About Us: incorporation date, registered office, principal business), http://www.elahicotton.com/contact-us/ (contact page — names only a company secretary, so no CEO or phone is recorded) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "The company describes its principal business as the manufacturing and sale of yarn; it publishes no further breakdown of counts, blends or end uses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

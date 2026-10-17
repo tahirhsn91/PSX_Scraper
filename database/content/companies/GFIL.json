@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for GFIL. Every fact here is attributable — see sourceNote. No image is attached: the company's own plant and product photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GFIL",
+  "description": "Ghazi Fabrics International Limited was incorporated in Pakistan on 30 April 1989 as a private limited company and converted to a public limited company on 7 January 1990; the chairman's message dates its coming into existence to 1990, when it was set up in 18 months as a vertically composite unit of two spinning mills and one weaving mill. It produces poly-cotton and CVC yarn — carded and combed, for weaving and hosiery — under its own \"PANTHER\" brand, core-spun Lycra yarn for its own weaving mill, and woven fabric for apparel and work-wear. It sells yarn into the Far East and European markets and exports fabric to Europe, the USA and the Far East.",
+  "headOffice": "8-C, Main Boulevard Gulberg, Block E-3, Gulberg III, Lahore 54660, Pakistan",
+  "phone": "+92 42 3576 4026-8",
+  "website": "https://ghazifabrics.com",
+  "ceo": "Mohammad Arshad Chaudhry",
+  "sourceNote": "Written from: ghazifabrics.com and ghazifabrics.com/company-profile (composite unit, PANTHER brand, yarn qualities and counts, weaving range and export markets, chairman's message), ghazifabrics.com/service/weaving-unit (looms and fabric qualities), ghazifabrics.com/contactus (head office address and telephone) and the PSX company page for GFIL (incorporation and conversion dates, principal activities, chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "PANTHER yarn",
+      "summary": "A-grade poly-cotton and CVC yarn in different blend ratios, carded and combed, for weaving and hosiery, in counts from Ne 6 to Ne 60.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Core-spun Lycra yarn",
+      "summary": "Core-spun yarn using Lycra, produced for the company's own weaving mill.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric",
+      "summary": "Fabric from dobby-equipped Toyota air-jet looms — twills, drills, poplins, satins and sateens up to high thread-count fine qualities, from bull denim to T-600 — for apparel and work-wear.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

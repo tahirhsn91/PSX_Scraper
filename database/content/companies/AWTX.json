@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for AWTX. Every fact is attributable - see sourceNote. No image is attached: the company publishes no licence-cleared photograph of its own plant. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AWTX",
+  "description": "Allawasaya Textile and Finishing Mills Limited is a public limited company whose two spinning units stand in the Mumtazabad Industrial Area of Multan, running 46,488 spindles. It spins polyester-cotton blended and CVC yarn in counts Ne 10 to 40 under the brand name 'Gumbad', and runs its own gas-fired captive power plant so that both units have an uninterrupted supply. The company was incorporated in 1958 as M. Allah Wasaya & Co Ltd, took its present name in 1960 and was listed on the Karachi Stock Exchange in 1965; the cloth-processing business it started with was discontinued in 1978 and spinning has been its activity since.",
+  "headOffice": "Allawasaya Square, Mumtazabad Industrial Area, Vehari Road, Multan, Pakistan",
+  "phone": "+92 61 423 3624-26",
+  "website": "https://allawasaya.com",
+  "ceo": "Mohammad Alamgir Jamil Khan",
+  "sourceNote": "Written from: Allawasaya Textile and Finishing Mills Limited website (allawasaya.com: about-us, company information, company profile) and the company's 69th Annual Report for the year ended 30 June 2026, company profile section (allawasaya.com/pdf/ANNUALREPORT2026.pdf) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Gumbad polyester-cotton blended yarn",
+      "summary": "Blended polyester-cotton yarn (52:48) and CVC, in counts Ne 10 to 40, sold under the company's 'Gumbad' brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Captive power generation",
+      "summary": "A 4.24 MW captive plant of three Jenbacher JGS 420 gas generators, installed in 2007-08 to supply both spinning units.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Carded and combed cotton yarn",
+      "summary": "The company's earlier product line - cotton carded and combed yarn - which it spun from its first spinning unit in 1964 onward and continues to describe as high quality yarn.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

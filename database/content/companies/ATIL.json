@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for ATIL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "ATIL",
+  "description": "Atlas Insurance Limited is a general insurance company incorporated on 6 September 1934 and one of the oldest insurers in Pakistan; it was founded by Dr. Sir Muhammad Iqbal and has been part of the Atlas Group since 1980. It is a subsidiary of Shirazi Investments (Private) Limited and writes conventional general insurance across fire, marine, motor, health, engineering and crop risks, adding Shariah-compliant cover through Window Takaful Operations licensed by the SECP in March 2016. PACRA rates its insurer financial strength AA+ with a stable outlook.",
+  "headOffice": "63/A, Block XX, Phase III (Commercial), Defence Housing Authority, Lahore, Pakistan",
+  "phone": "+92 42 111 245 000",
+  "website": "https://www.ail.atlas.pk",
+  "ceo": "Babar Mahmood Mirza",
+  "sourceNote": "Written from: https://ail.atlas.pk/takaful/about/ (company history, Atlas Group ownership, Window Takaful Operations, PACRA AA+ rating, product list, address and telephone) and the PSX company profile for ATIL at https://dps.psx.com.pk/company/ATIL (incorporation date, subsidiary status, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fire and allied perils",
+      "summary": "Fire insurance and allied perils cover, the first line in the company's own product list.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Marine and hull",
+      "summary": "Marine and hull insurance for cargo and vessels.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Motor",
+      "summary": "Motor insurance for private and commercial vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Health and personal accident",
+      "summary": "Health insurance and personal accident cover.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engineering",
+      "summary": "Contractors all risk, erection all risk, machinery breakdown, boiler and pressure vessel, and electronic equipment cover.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Crop and livestock",
+      "summary": "Crop insurance and livestock cover.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

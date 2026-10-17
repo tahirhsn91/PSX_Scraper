@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for PIAHCLB. This symbol is a share-class line of PIA Holding Company Limited, not an operating business of its own — the description is of the issuer. Facts are from the company's own website — see sourceNote. No image is attached.",
+  "symbol": "PIAHCLB",
+  "description": "PIA Holding Company Limited is a public limited company incorporated under the laws of Pakistan and regulated by SECP, formed under a Scheme of Arrangement to hold the assets, liabilities and shareholding of Pakistan International Airlines Corporation Limited (PIACL). Its subsidiaries include PIA Investments Limited, Skyrooms (Private) Limited and Sabre Travel Network Pakistan (Private) Limited, and following the first completion of PIACL's privatisation the company holds a 33.33% shareholding in PIACL. PIAHCLB is the exchange line for the company's ordinary 'B' class shares of Rs 5 each, a separate class from its ordinary 'A' class shares of Rs 10 each.",
+  "headOffice": "PIA Building, 49-A, KM Fazal-e-Haq Road, Blue Area, Islamabad, Pakistan",
+  "phone": null,
+  "website": "https://www.piahcl.com.pk",
+  "ceo": "Asad Rasool",
+  "sourceNote": "Written from: https://www.piahcl.com.pk/ (company status, Scheme of Arrangement, subsidiaries and their nature of business, registered office), https://www.piahcl.com.pk/management (chief executive) and https://www.piahcl.com.pk/investor-information (A and B class share symbols and free float) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Holding company for the PIA group",
+      "summary": "Holds the shares, assets and liabilities transferred under the Scheme of Arrangement, including a 33.33% shareholding in PIACL after the first completion of its privatisation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commercial air transport (through PIACL)",
+      "summary": "PIACL provides passenger, cargo and postal carriage, together with engineering and allied services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Airport hotel (through Skyrooms)",
+      "summary": "Skyrooms (Private) Limited owns and manages the Airport Hotel, Karachi, and provides manpower services, principally to PIACL.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Travel technology distribution (through Sabre Travel Network Pakistan)",
+      "summary": "Markets and distributes a computer reservation system to subscribers in Pakistan under a sub-distribution agreement with Sabre Asia Pacific.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hotel and property investment (through PIA Investments)",
+      "summary": "Promotes and invests in projects for the construction, development and operation of hotels, motels and restaurants worldwide.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

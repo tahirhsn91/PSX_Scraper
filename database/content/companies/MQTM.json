@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for MQTM. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "MQTM",
+  "description": "Maqbool Textile Mills Limited is a public limited spinning company in the Maqbool Group, which began operations in 1958 with the incorporation of the yarn spinning unit Allawasaya Textile and Finishing Mills Limited. It runs spinning units at M.M. Road, Chowk Sarwar Shaheed in Muzaffargarh district and at Rajana Road, Pirmahal in Toba Tek Singh district, alongside a ginning unit, and produces cotton and blended yarns largely from cotton ginned within the group.",
+  "headOffice": "2, Industrial Estate, Multan 60000, Pakistan",
+  "phone": "+92 61 6537155",
+  "website": "https://maqboolgroup.com",
+  "ceo": "Mian Atta Shafi Tanvir Sheikh",
+  "sourceNote": "Written from: maqboolgroup.com — company profile, company information, Maqbool Textile Mills Limited, and CEO pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton and blended yarn",
+      "summary": "Yarn spun at the company's spinning units in Muzaffargarh and Toba Tek Singh districts, largely from cotton ginned within the group.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ginned cotton",
+      "summary": "The company's ginning unit processes cotton from southern Punjab; the group gins more than 75,000 bales a year across its ginning factories.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

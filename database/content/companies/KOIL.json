@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for KOIL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available. The company no longer manufactures: its textile operations were closed in 2008 and its business is now the leasing of its land and buildings, so the product list describes that activity rather than goods.",
+  "symbol": "KOIL",
+  "description": "Kohinoor Industries Limited was incorporated in Pakistan on 31 August 1948 and was initially engaged in the manufacture and sale of yarn, with its facilities at Kohinoor Nagar, Faisalabad. On 30 April 2008 its board decided to close the textile business, which had become uneconomical as raw material and input prices rose, and the company subsequently amended its memorandum of association to allow the leasing out of its land and buildings under operating lease arrangements. It is a public interest company listed on the Pakistan Stock Exchange.",
+  "headOffice": "10-G, Mushtaq Ahmed Gurmani Road, Gulberg-II, Lahore, Pakistan",
+  "phone": null,
+  "website": "https://kil.com.pk",
+  "ceo": "M. Zeid Yousuf Saigol",
+  "sourceNote": "Written from: the PSX company profile for KOIL at https://dps.psx.com.pk/company/KOIL (incorporation date, closure of the textile business in 2008, amendment of objects to leasing, key people and registered address) and https://kil.com.pk/profile_of_company.php (company profile and status) (accessed 2026-10-17). No telephone number is published on the company's own site — its contact page lists only its share registrar — so phone is null.",
+  "products": [
+    {
+      "name": "Leasing of land and buildings",
+      "summary": "Operating-lease letting of the company's own land and buildings at Kohinoor Nagar, Faisalabad, the object added to its memorandum after the textile unit closed in 2008.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

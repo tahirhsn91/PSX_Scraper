@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for SFL. Every fact is attributable — see sourceNote. No image is attached: the company's site photography carries no reuse licence.",
+  "symbol": "SFL",
+  "description": "Sapphire Fibres Limited was incorporated as a public limited company in 1979 and describes itself as the flagship company of the Sapphire Group and a vertically integrated composite textile unit manufacturing cotton yarn, fabric and garments. From that base it has grown into a diversified industrial organisation with capabilities across textiles, energy, electronics and farm services, and its manufacturing units sit in Punjab at Raiwind Road Lahore and at Feroze Wattoan and Kharianwala in Sheikhupura district. The textile side now spans spinning, knits and dyeing, denim fabric under the Neela name, and garments.",
+  "headOffice": "1st Floor, Tricon Corporate Centre, 73-E Main Jail Road, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 111 000 100",
+  "website": "https://sapphirefibres.com",
+  "ceo": "Shahid Abdullah",
+  "sourceNote": "Written from: http://sapphire.com.pk/sfl/ (SFL at a glance: incorporation, flagship of Sapphire Group, vertical integration, manufacturing locations), https://sapphirefibres.com/ (diversification into energy, electronics and farm services; business verticals and legacy timeline), https://sapphirefibres.com/board-of-directors (chief executive), https://sapphirefibres.com/contact-us (head office), http://sapphire.com.pk/sfl/contactus.htm (telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spinning — yarn",
+      "summary": "Cotton yarn spun across the company's spinning divisions, the base of its textile chain.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Knits and dyeing",
+      "summary": "Knitted fabric and yarn and fabric dyeing, operated as a separate division since 1997.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Neela denim fabric",
+      "summary": "Denim fabric under the Neela by Sapphire Fibres name, in production since 2016.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Garments",
+      "summary": "Sapphire Garments, launched in 2025 as the company's full-family clothing vertical.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Energy",
+      "summary": "A 234 MW power unit commissioned in 2010, operated as the company's energy vertical.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Farm services",
+      "summary": "Sapphire Farm Services, launched in 2020 to support modern agriculture.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

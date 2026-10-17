@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for FASM. Every fact is attributable - see sourceNote. No image attached: no licence-cleared photograph of the company's own units is available. faisalspinning.com does not respond; the URL the company publishes in its own annual report is the Umer Group site, which is what website points to.",
+  "symbol": "FASM",
+  "description": "Faisal Spinning Mills Limited is a Umer Group company whose operations run across four units: a spinning unit at Nooriabad in Sindh, a weaving unit at Ferozewattwan in Sheikhupura, and finishing and home textile divisions on Warburton Road, Ferozewattwan. The company states that it is principally engaged in manufacturing and selling yarn, greige fabric, dyed fabric and home textile products, and reports those as its three reporting segments: spinning, weaving, and finishing and home textile. Its registered office is at Umer House in the Korangi Industrial Area, Karachi.",
+  "headOffice": "Umer House, 23/1, Sector 23, S. M. Farooq Road, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 3511 5177-80",
+  "website": "https://umergroup.com",
+  "ceo": "Bilal Sharif",
+  "sourceNote": "Written from: Faisal Spinning Mills Limited Annual Report 2025 - corporate information, notice of annual general meeting and notes to the financial statements, segments and principal activity (umergroup.com/pdfs/financial-reports/faisal/Annual%20Report%202025%20-%20FSM.pdf) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Spun yarn from the company's spinning unit at Nooriabad, District Dadu, Sindh - the spinning segment of its business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Greige fabric",
+      "summary": "Greige (unfinished) fabric woven at the weaving unit at Ferozewattwan, Sheikhupura.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dyed and finished fabric",
+      "summary": "Dyed fabric from the finishing unit on Warburton Road, Ferozewattwan, whose capacity the company expanded during the year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textile products",
+      "summary": "Home textile products from the company's Home Division, the fourth unit at Ferozewattwan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

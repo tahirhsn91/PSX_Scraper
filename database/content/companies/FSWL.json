@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for FSWL. Facts are from the company's own website — see sourceNote. No image is attached.",
+  "symbol": "FSWL",
+  "description": "Fateh Sports Wear Limited is a garment exporter listed on the Pakistan Stock Exchange, with its plant and head office at Plot 442, Mirpurkhas Road, Hyderabad. The company manufactures knitted apparel and readymade garments for export, and its stated vision is to remain a leading exporter of readymade garments and a globally competitive centre of production.",
+  "headOffice": "Plot # 442, Mirpurkhas Road, Hyderabad, Pakistan",
+  "phone": "+92 22 3886263-7",
+  "website": "https://fatehsports.com",
+  "ceo": "Rauf Alam",
+  "sourceNote": "Written from: https://fatehsports.com/company-profile (company status, plant and head office, telephone, vision), https://fatehsports.com/governance (chief executive) and https://fatehsports.com (knitted apparel manufacturing) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Knitted apparel",
+      "summary": "Knitted apparel manufactured at the company's Hyderabad plant, from basic to higher-value lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Readymade garments",
+      "summary": "Readymade garments produced for export markets, the business the company's stated vision is built around.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

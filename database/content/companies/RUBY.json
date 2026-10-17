@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for RUBY. Every fact is attributable — see sourceNote. Note that the PSX company pages for RUBY and DWTM carry each other's profile fields (address, website, CEO, business description); the fields here are taken from Ruby's own filing and website, not from the exchange's RUBY page. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "RUBY",
+  "description": "Ruby Textile Mills Limited was incorporated in Pakistan on 18 October 1980 as a private limited company and was subsequently converted into a public limited company. Its principal activity is the manufacture and sale of yarn, spun at a mill on the Raiwind–Manga Road at Raiwind, District Kasur. The head office is in Gulberg III, Lahore, and the registered office is in Shahrah-e-Faisal, Karachi.",
+  "headOffice": "35-Industrial Area, Gulberg-III, Lahore 54660, Pakistan",
+  "phone": "+92 42 3571 4601",
+  "website": "https://rubytextile.com.pk",
+  "ceo": "Noor Elahi",
+  "sourceNote": "Written from: https://rubytextile.com.pk/contactus.html (head office, registered office, mills, telephone), Ruby Textile Mills' unaudited condensed interim financial statements for the quarter ended 31 March 2026 filed with the PSX at https://dps.psx.com.pk/download/document/275693.pdf (board, chief executive, head office, mills) and the PSX company records for DWTM and RUBY, whose profile fields are transposed on the exchange site (incorporation date, principal activity) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "The company's principal activity is the manufacture and sale of yarn at its Raiwind mill.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

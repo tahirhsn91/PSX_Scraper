@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for DFSM. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "DFSM",
+  "description": "Dewan Farooque Spinning Mills Limited was incorporated in Pakistan on 22 December 2003, and its principal activity is the manufacture and sale of fine quality yarn, including yarn produced on contract for other customers. Its mill is at 54 Km on Multan Road, Phool Nagar Bypass, District Kasur, and its stated mission is to be recognised as a premium quality yarn manufacturing unit producing fine count compact yarn. Its registered office is at Dewan Centre in Karachi, and the company is listed among the companies of Yousuf Dewan Companies on the group's website.",
+  "headOffice": "Dewan Centre, 3-A, Lalazar Beach Hotel Road, Karachi, Pakistan",
+  "phone": null,
+  "website": "https://www.yousufdewan.com",
+  "ceo": "Syed Maqbool Ali",
+  "sourceNote": "Written from: DFSM condensed interim financial statements for the quarter ended 31 March 2026 (company information: registered office, factory office, website, chief executive) filed with PSX; yousufdewan.com/DFSML (vision and mission statements) and yousufdewan.com companies list; PSX company profile page dps.psx.com.pk/company/DFSM (business description, key people) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fine count compact yarn",
+      "summary": "The company's stated mission is to produce premium quality fine count compact yarn at its Phool Nagar mill.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Contract spinning",
+      "summary": "Yarn manufactured on contract basis for other customers, in addition to the company's own sales.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

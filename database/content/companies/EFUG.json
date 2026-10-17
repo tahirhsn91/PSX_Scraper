@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for EFUG. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "EFUG",
+  "description": "EFU General Insurance Limited was incorporated on 2 September 1932 as the Eastern Federal Union Insurance Company and, after life assurance was nationalised in 1972, has operated solely as a general insurer. It describes itself as the largest non-life insurance company in the country and the mother company of the other insurance organisations of EFU Group, writing property, marine and aviation, motor and miscellaneous lines including travel, liability, crop and livestock, personal accident and credit and suretyship, as well as bancassurance. Its head office is EFU House on M.A. Jinnah Road, Karachi.",
+  "headOffice": "EFU House, M.A. Jinnah Road, P.O. Box 5005, Karachi 74000, Pakistan",
+  "phone": "+92 21 111 338 000",
+  "website": "https://efuinsurance.com",
+  "ceo": "Kamran Arshad Inam",
+  "sourceNote": "Written from: efuinsurance.com conventional site — about-efu (history, largest non-life insurer, group role), products-services (product lines), contact-us (head office address, UAN), governance-leadership (managing director and chief executive); PSX company profile page dps.psx.com.pk/company/EFUG (incorporation date, business description) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Property, engineering and fire insurance",
+      "summary": "Covers commercial property risks through to large industrial and energy risks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Motor insurance",
+      "summary": "Motor cover for private and commercial vehicles and motorcycles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Marine and aviation insurance",
+      "summary": "Cargo in transit worldwide by sea, air and land, plus hull and aviation cover.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Miscellaneous insurance",
+      "summary": "Travel, financial lines, liability, money, crop and livestock, personal accident, plate glass, and credit and suretyship.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bancassurance",
+      "summary": "Insurance distributed through bank partners.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

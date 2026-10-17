@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SLYT. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "SLYT",
+  "description": "Sally Textile Mills Limited is a yarn spinning company whose mill at Jauharabad, on the Muzaffargarh Road in Khushab district, Punjab, manufactures cotton, blended and synthetic yarn in a range of counts. Its yarn is consumed locally by weaving and knitwear manufacturers. The company's own site describes it as being among the leaders in creating, developing and manufacturing high quality yarn products.",
+  "headOffice": "4-F, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 3575 4371-73",
+  "website": "https://www.sallytextile.com",
+  "ceo": null,
+  "sourceNote": "Written from: sallytextile.com — home page (nature of business) and contact us page (head office, phone, site address) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton, blended and synthetic yarn",
+      "summary": "Various counts of yarn manufactured at the mill on Muzaffargarh Road, Jauharabad, District Khushab, for local weaving and knitwear manufacturers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

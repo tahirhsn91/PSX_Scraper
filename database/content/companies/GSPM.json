@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for GSPM. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available. The company is flagged non-compliant on its PSX profile and its website is a bare company-information page; nothing beyond identity, registered office, mill locations and the stated principal business could be sourced.",
+  "symbol": "GSPM",
+  "description": "Gulshan Spinning Mills Limited was incorporated in Pakistan on 13 June 1979 as a public limited company. Its stated principal business is to manufacture and sell yarn. It runs three spinning units — at Tibba Sultan Pur in Vehari district, Jamber Khurd in Kasur district, and Warburton in Nankana Sahib district — and keeps its registered office in Karachi.",
+  "headOffice": "2nd Floor, Finlay House, I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": null,
+  "website": "http://gulshan.com.pk",
+  "ceo": null,
+  "sourceNote": "Written from: the company's own website at http://gulshan.com.pk/Gulshan/gulshan.html (registered office, unit locations) and the PSX company profile for GSPM at https://dps.psx.com.pk/company/GSPM (incorporation date, principal business) (accessed 2026-10-17). No telephone number or chief executive is published on either source, so both are null.",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Yarn manufactured and sold by the company, which states its principal business as the manufacture and sale of yarn.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

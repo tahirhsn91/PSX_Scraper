@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for JDMT. Every fact is attributable — see sourceNote. No image is attached: the company publishes no licence-cleared photograph of its plant. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "JDMT",
+  "description": "Janana De Malucho Textile Mills Limited was incorporated in Pakistan on 6 October 1960 and began commercial production at Kohat in 1963 as a composite unit with spinning, weaving and processing; its weaving and processing units closed in 1983 and the company now spins yarn. It produces super-fine 80s and 100s combed and carded yarns from extra-long staple cotton of USA Pima and CIS origin, and 40/s and 60/s combed yarn for air-jet looms. Capacity is 64,704 spindles and 600 rotors, and the mill is at Habibabad, Kohat, about 53 km south of Peshawar.",
+  "headOffice": "Habibabad, Kohat, Khyber Pakhtunkhwa, Pakistan",
+  "phone": "+92 922 862161",
+  "website": "https://www.jdm.com.pk",
+  "ceo": "Lt. Gen. (Retd.) Ali Kuli Khan Khattak",
+  "sourceNote": "Written from: https://jdm.com.pk/about.php (history, capacity, yarn counts, address, telephone) and the PSX company profile for JDMT at https://dps.psx.com.pk/company/JDMT (principal activity, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Super-fine combed and carded yarns (80s and 100s)",
+      "summary": "Spun from extra-long staple cotton of USA Pima and CIS origin.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "40/s and 60/s combed yarn",
+      "summary": "Combed yarn for air-jet looms, which the company says is sold at a premium.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

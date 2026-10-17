@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for CRTM. Every fact is attributable — see sourceNote. No image is attached. The head office street address is null because the site publishes only a telephone number and no postal address.",
+  "symbol": "CRTM",
+  "description": "The Crescent Textile Mills Limited — Crestex — was registered on 1 May 1950 and describes itself as a vertically integrated composite textile unit in Faisalabad. It spins diverse raw materials into yarn for weaving and knitting across five spinning mills holding 99,984 spindles, weaves on 194 air-jet looms, and processes and stitches the fabric into home textile and institutional garments. Its product range is yarn, greige and processed fabrics, home textile and institutional garments.",
+  "headOffice": null,
+  "phone": "+92 41 111 105 105",
+  "website": "https://www.crescenttextile.com",
+  "ceo": "Ahmad Shafi",
+  "sourceNote": "Written from: https://www.crescenttextile.com/pages/about-crestex/ (registration date, vertically integrated composite unit, product range), https://www.crescenttextile.com/spinning/ (five spinning mills, 99,984 spindles, combed and carded yarn from cotton, PC, CVC and PV), https://www.crescenttextile.com/weaving/ (194 air-jet looms, fabric output), https://www.crescenttextile.com/pages/board_of_directors/ (chief executive), https://www.crescenttextile.com/ (telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Combed and carded yarn",
+      "summary": "Yarn spun from cotton, PC, CVC and PV on five spinning mills with 99,984 spindles, for weaving and knitting.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Greige and processed fabrics",
+      "summary": "Woven fabric from 194 air-jet looms, supplied greige or processed.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textile",
+      "summary": "Home-textile made-ups, the company's stated end of the made-ups division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Institutional garments",
+      "summary": "Institutional garments produced through the company's stitching operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

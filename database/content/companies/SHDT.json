@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for SHDT. Facts are from the company's own website — see sourceNote. No image is attached.",
+  "symbol": "SHDT",
+  "description": "Shadab Textile Mills Limited is a PSX-listed spinner incorporated in 1979, manufacturing blended yarn at its Shahkot plant in District Sheikhupura, Punjab, with a second unit at Habibabad, District Kasur. It produces polyester/cotton (PC) and chief value cotton (CVC) yarns across a range of counts for knitting and weaving customers, and its shares have been quoted on the exchange since 1985. Capacity has grown from 14,400 to 33,600 spindles.",
+  "headOffice": "A-601, City Towers, 6-K, Main Boulevard Gulberg II, Lahore, Pakistan",
+  "phone": "042-35788714-16",
+  "website": "https://shadabtextile.com",
+  "ceo": "Aamir Naseem",
+  "sourceNote": "Written from: https://shadabtextile.com/ (incorporation year, listing year, plants, capacity, business), https://shadabtextile.com/companyprofile.html (registered office, telephone), https://shadabtextile.com/countwisepcyarn.html and https://shadabtextile.com/countwisecvcyarn.html (product counts) and https://shadabtextile.com/goverance.html (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Polyester/cotton (PC) yarn",
+      "summary": "PC yarn in counts from 10/S to 60/S, listed by count on the company's product pages.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Chief value cotton (CVC) yarn",
+      "summary": "CVC yarn in counts from 10/S to 38/S.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

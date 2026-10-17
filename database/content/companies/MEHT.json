@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for MEHT. Note the spelling difference: PSX lists the company as Mehmood Textile Mills Limited while its own website writes Mahmood Textile Mills Limited — the Multan address is the same company. Facts from its own website — see sourceNote. No image is attached.",
+  "symbol": "MEHT",
+  "description": "Mehmood Textile Mills Limited, which writes its name Mahmood Textile Mills Limited, is a composite textile company incorporated in 1970 and quoted on the Pakistan Stock Exchange, with its registered office at Mehr Manzil outside Lohari Gate in Multan and mills in District Muzaffargarh, the Industrial Estate at Multan and the Dera Ghazi Khan division. It manufactures and sells yarn and grey cloth and generates electricity.",
+  "headOffice": "Mehr Manzil, O/S Lohari Gate, P.O. Box 28, Multan, Pakistan",
+  "phone": "+92 61 111 181 181",
+  "website": "https://www.mahmoodtextile.com",
+  "ceo": "Muhammad Anees",
+  "sourceNote": "Written from: https://www.mahmoodtextile.com/ (incorporation year, listing, principal business, registered office and mill locations), https://www.mahmoodtextile.com/contact.html (address, UAN) and https://www.mahmoodtextile.com/boardofdirectors.html (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Yarn manufactured and sold by the company at its Multan-area mills.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Grey cloth",
+      "summary": "Grey (unfinished) cloth woven at the company's mills.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Electricity",
+      "summary": "In-house electricity generation for the company's own operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

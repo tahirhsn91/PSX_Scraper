@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for ZAHID. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "ZAHID",
+  "description": "Zahidjee Textile Mills Limited is a composite textile unit engaged in spinning, weaving, processing and home textiles, and in exporting those products; the company describes itself as having entered its 35th year. It spins 100% cotton, polyester-cotton, CVC and polyester yarns in 6 to 40 counts, weaves pocketing, sheeting, herringbone and stripe satin fabrics, and finishes and stitches bed linen and institutional textiles for healthcare, hospitality, cruise-line, laundry and tourism customers.",
+  "headOffice": "131-A, Street P, Upper Mall Scheme, Lahore, Pakistan",
+  "phone": "+92 42 35777290-93",
+  "website": "https://zahidjee.com.pk",
+  "ceo": "Muhammad Zahid",
+  "sourceNote": "Written from: zahidjee.com.pk — about, yarn products, fabric products, finished products, board of directors and contact pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "100% cotton, 52/48 and 65/35 PC, 60/40 CVC and 100% polyester yarns in 6 to 40 counts, carded and combed, including slub, doubled, spandex and laiqra specialities for weaving and knitting.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fabric",
+      "summary": "Woven fabric in 100% cotton, PC, CVC and polyester at T-100 to T-200 constructions — pocketing, sheeting, herringbone and stripe satin — bleached, dyed or printed.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textile and institutional linen",
+      "summary": "Sheets, draw sheets, pillowcases, knitted sheets, patient gowns and table cloth, finished bleached, dyed or printed and packed for healthcare, hospitality, institutional, cruise-line, laundry and tourism customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

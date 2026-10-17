@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for ADMM. Every fact is attributable — see sourceNote. No image is attached: the company's own fabric photography carries no reuse licence.",
+  "symbol": "ADMM",
+  "description": "Artistic Denim Mills (ADM) is a vertically integrated, family-owned denim fabric manufacturer established in Karachi in 1993. Its process runs from cotton recycling through spinning, weaving, indigo and fibre dyeing, finishing and garment production, and it produces premium denim fabrics — fibre dyed, indigo rope dyed, TENCEL, stretch, recycled cotton and performance denim — for fashion brands in Europe, the United States and other markets. The company holds GOTS, OEKO-TEX Standard 100, Cradle to Cradle, GRS, RCS, BCI, WRAP, BSCI and Higg certifications.",
+  "headOffice": "Plot No. 5-9, 23-26, Sector 16, Korangi Industrial Area, Karachi 74900, Pakistan",
+  "phone": "+92 21 111-236-236",
+  "website": "https://admdenim.com",
+  "ceo": "Muhammad Faisal Ahmed",
+  "sourceNote": "Written from: https://admdenim.com/about-us (establishment, vertical integration, fabric range, certifications, markets), https://admdenim.com/divisions (spinning, recycling, weaving and finishing, dyeing, garment divisions), https://admdenim.com/governance (board of directors and chief executive), https://admdenim.com/contact (address, telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Indigo rope dyed denim",
+      "summary": "Indigo rope dyed denim, one of the constructions the company lists in its premium denim range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fibre dyed and colour denim",
+      "summary": "Fibre dyed denim and colour denim, produced through the company's in-house fibre dyeing division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "TENCEL denim",
+      "summary": "Denim made with TENCEL lyocell fibre.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Stretch denim",
+      "summary": "Stretch denim constructions for apparel use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Recycled cotton denim",
+      "summary": "Denim using recycled cotton, produced through the company's cotton recycling division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Performance denim",
+      "summary": "Performance denim fabrics developed for functional end uses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
