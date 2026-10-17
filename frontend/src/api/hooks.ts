@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
-  ScreenerPreset, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
+  ScreenerPreset, SectorDetail, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
   StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod,
@@ -339,6 +339,15 @@ export const useSectors = () =>
   useQuery({
     queryKey: keys.sectors,
     queryFn: async () => (await api.get<{ items: SectorSummary[] }>('/market/sectors')).data,
+  });
+
+/** One sector's drill-down by name (the name is a query parameter — several contain a slash). */
+export const useSectorDetail = (sector: string) =>
+  useQuery({
+    queryKey: ['market', 'sector', sector],
+    queryFn: async () =>
+      (await api.get<SectorDetail>('/market/sector', { params: { sector } })).data,
+    enabled: Boolean(sector),
   });
 
 /** Upcoming dividend events plus the highest current yields. */

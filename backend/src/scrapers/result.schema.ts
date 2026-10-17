@@ -6,6 +6,11 @@ export const scrapeResultSchema = z.object({
   symbol: z.string().min(1),
   companyName: z.string().nullable(),
   sector: z.string().nullable(),
+  /**
+   * Which provider supplied `sector` — travels with the value so the app can print where the
+   * classification came from instead of assuming. Absent on legacy results.
+   */
+  sectorSource: z.string().nullable().optional(),
   price: z
     .object({
       currentPrice: num, change: num, changePercent: num, volume: num,

@@ -82,7 +82,7 @@ export function Sectors() {
           columns={columns}
           rows={rows}
           rowKey={(r) => r.sector}
-          rowHref={(r) => `/screener?sector=${encodeURIComponent(r.sector)}`}
+          rowHref={(r) => `/sectors/detail?sector=${encodeURIComponent(r.sector)}`}
           ariaLabel="Sectors"
           loading={isLoading}
           error={error ? 'Could not load sectors.' : undefined}

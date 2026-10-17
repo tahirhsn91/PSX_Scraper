@@ -62,7 +62,7 @@ export function SectorHeatmap({ sectors }: { sectors: SectorSummary[] }) {
           <Box
             key={sector.sector}
             component={RouterLink}
-            to={`/screener?sector=${encodeURIComponent(sector.sector)}`}
+            to={`/sectors/detail?sector=${encodeURIComponent(sector.sector)}`}
             aria-label={`${sector.sector}: ${
               percent == null
                 ? 'no reading'
