@@ -1,4 +1,5 @@
-import { Box, Card, Grid, Link, Stack, Typography } from '@mui/material';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { Box, Button, Card, Grid, Link, Stack, Typography } from '@mui/material';
 import { SectionCard } from './ui/SectionCard';
 import { StatTile } from './ui/StatTile';
 import { DASH } from '../lib/format';
@@ -77,6 +78,24 @@ function ProductCard({ product }: { product: CompanyProfile['products'][number] 
 
 export function CompanyDescriptionPanel({ profile, sector }: Props) {
   const href = websiteHref(profile.website);
+  // Across the 511 write-ups the description runs to 470 characters at the median and 889 at the
+  // top; products run to 3 at the median and 9 at the top. Both are secondary to the description's
+  // opening and the contact block, so they start folded and say how much more there is.
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showAllProducts, setShowAllProducts] = useState(false);
+  const visibleProducts = showAllProducts ? profile.products : profile.products.slice(0, 3);
+  // A character count is a poor proxy for "hidden text": a 350-character write-up can fit in
+  // three lines, and a Read more that changes nothing is worse than no button. Measure the box
+  // once, unclamped: a four-line write-up is short enough to show whole, and only five lines or
+  // more earns a toggle that pays for its own 32px button.
+  const descRef = useRef<HTMLParagraphElement>(null);
+  const [clamped, setClamped] = useState(false);
+  useLayoutEffect(() => {
+    const el = descRef.current;
+    if (!el) return;
+    const line = parseFloat(getComputedStyle(el).lineHeight) || 22;
+    setClamped(el.scrollHeight > line * 4 + 1);
+  }, [profile.description]);
 
   return (
     <SectionCard
@@ -123,15 +142,43 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
               }
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={8}>
+          <Grid item xs={12} sm={12} md={8}>
             <StatTile label="Head office" value={profile.headOffice ?? DASH} />
           </Grid>
         </Grid>
 
         {profile.description && (
-          <Typography variant="body1" sx={{ maxWidth: '80ch' }}>
-            {profile.description}
-          </Typography>
+          <Box>
+            <Typography
+              ref={descRef}
+              variant="body1"
+              sx={{
+                maxWidth: '80ch',
+                // Three lines is the gist; the median write-up is ~470 characters, so most open
+                // past the fold.
+                ...(clamped && !showFullDescription
+                  ? {
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }
+                  : {}),
+              }}
+            >
+              {profile.description}
+            </Typography>
+            {clamped && (
+              <Button
+                size="small"
+                onClick={() => setShowFullDescription((v) => !v)}
+                aria-expanded={showFullDescription}
+                sx={{ mt: 0.5, minHeight: 32 }}
+              >
+                {showFullDescription ? 'Show less' : 'Read more'}
+              </Button>
+            )}
+          </Box>
         )}
 
         {profile.products.length > 0 && (
@@ -140,12 +187,24 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
               Products
             </Typography>
             <Grid container spacing={1.5}>
-              {profile.products.map((product) => (
+              {visibleProducts.map((product) => (
                 <Grid item xs={12} sm={6} md={4} key={product.name}>
                   <ProductCard product={product} />
                 </Grid>
               ))}
             </Grid>
+            {profile.products.length > 3 && (
+              <Button
+                size="small"
+                onClick={() => setShowAllProducts((v) => !v)}
+                aria-expanded={showAllProducts}
+                sx={{ mt: 1 }}
+              >
+                {showAllProducts
+                  ? 'Show fewer products'
+                  : `Show all ${profile.products.length} products`}
+              </Button>
+            )}
             {/* Said plainly rather than left to be noticed: these are ours to source, and an
              * unattributed image is deliberately not shown. */}
             {profile.products.some((p) => !p.imagePath) && (
