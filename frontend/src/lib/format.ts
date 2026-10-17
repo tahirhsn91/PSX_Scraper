@@ -79,6 +79,24 @@ export function formatSigned(value: number | null | undefined, digits = 2): stri
   return `${sign}${formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })}`;
 }
 
+/**
+ * A point move with its direction glyph, e.g. `▲ 412.35` (#181).
+ *
+ * Points answer "how far", the percentage answers "how much" — an index is quoted in both, and the
+ * percentage alone hides the size of the move: +0.4% on KSE-100 is a very different number of
+ * points than +0.4% on a narrow sector index. The glyph carries the direction as well as the colour
+ * does, so the reading survives greyscale and colour blindness.
+ */
+export function formatPoints(value: number | null | undefined, digits = 2): string {
+  if (value === null || value === undefined || Number.isNaN(value)) return DASH;
+  const glyph = GLYPH[trendOf(value) ?? 'flat'];
+  const size = Math.abs(value).toLocaleString('en-US', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+  return `${glyph} ${size}`;
+}
+
 /** Absolute date + time, one format for the whole app: `28 Sep 2026, 09:17`. Null-safe. */
 export function formatDateTime(value: string | number | Date | null | undefined): string {
   if (value == null) return DASH;
