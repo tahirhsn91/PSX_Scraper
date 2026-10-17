@@ -247,6 +247,9 @@ export function Screener() {
           onRetry={refetch}
           sort={sort}
           onSortChange={setSort}
+          // The same 160ms body entrance the dashboard uses: applying a filter, turning a page or
+          // re-sorting is a new question, and the rows should arrive as one rather than swap.
+          transitionKey={`${JSON.stringify(applied)}-${page}-${sort?.key ?? 'default'}-${sort?.direction ?? ''}`}
           emptyTitle="No matches"
           emptyDescription="Loosen the criteria — the current filters match no tracked stock."
           pagination={
