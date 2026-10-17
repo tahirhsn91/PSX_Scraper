@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for CTM. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "CTM",
+  "description": "Colony Textile Mills Limited is a Pakistani textile manufacturer whose principal activity is the manufacturing and sale of yarns, fabrics and garments, along with trading in real estate. The business traces its origins to 1946, when the principal Colony Textile Mills company was established; the present entity was incorporated on 12 January 2011 and acquired Colony Mills Limited and Colony Industries (Private) Limited in 2014. It runs a spinning division at Ismailabad, Multan and a weaving division on the Manga–Raiwind Road near Lahore, where Toyota and Picanol air-jet looms give it an installed weaving capacity of 122 million square metres a year.",
+  "headOffice": "Lower Ground Floor, Ismail Aiwan-e-Science Building, 205 Ferozepur Road, Lahore 54600, Pakistan",
+  "phone": "+92 42 3575 9231",
+  "website": "https://colonytextiles.com",
+  "ceo": "Fareed Mughis Sheikh",
+  "sourceNote": "Written from: colonytextiles.com — home, about, company profile, business divisions and governance pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Yarn produced at the company's spinning division at Ismailabad, Multan, one of the two manufacturing divisions the company describes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric",
+      "summary": "Fabric woven on Toyota and Picanol air-jet looms of 190 cm to 380 cm width at the Manga–Raiwind Road weaving division, with an installed capacity of 122 million square metres a year and 9 MW of in-house power generation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Garments",
+      "summary": "Garment manufacturing and sale, which the company lists alongside yarn and fabric as part of its principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

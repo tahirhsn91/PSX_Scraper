@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for CSIL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "CSIL",
+  "description": "Crescent Star Insurance Limited is a general insurer established in 1957 and rated A by PACRA, writing fire and property, marine, motor, engineering, health, travel, livestock and crop, and miscellaneous insurance for individuals and businesses through a branch network across Pakistan. The company describes a lean underwriting model concentrated on safely reinsured classes such as travel and guarantees, with full facultative reinsurance support for its guarantee business, and has more recently taken an investment-driven approach to deploying its capital.",
+  "headOffice": "2nd Floor, Nadir House, I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": "+92 21 32415471-3",
+  "website": "https://cstarinsurance.com",
+  "ceo": "Naim Anwar",
+  "sourceNote": "Written from: cstarinsurance.com — about us, CEO message, contact us, and the fire, marine, motor, engineering and livestock & crop insurance product pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fire and property insurance",
+      "summary": "Cover for buildings, stock, machinery and contents against fire and lightning, with optional extensions such as riot and strikes, malicious damage, earthquake and atmospheric disturbance, alongside property all risks, machinery and business-interruption covers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Marine insurance",
+      "summary": "Marine cargo cover on import, export and inland transit on a warehouse-to-warehouse basis, and marine hull cover for vessels.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Motor insurance",
+      "summary": "Comprehensive motor cover sold in tiers from Classic to Platinum Plus, with value-added services such as towing, ambulance, cab and rent-a-car.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Engineering insurance",
+      "summary": "Erection all risks, contractor's all risks and contractor's plant and machinery cover for erection and civil engineering projects.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Livestock and crop insurance",
+      "summary": "Cover for livestock and poultry against broad causes of loss, and crop and agriculture cover for farmers against adverse weather and other risks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Travel and health insurance",
+      "summary": "Travel and health policies for individuals and groups, sold through the company's branch network and partners.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

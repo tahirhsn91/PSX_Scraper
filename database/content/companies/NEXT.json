@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for NEXT. Every fact is attributable — see sourceNote. No image is attached: the company's site images are its own brand assets with no licence we can record. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "NEXT",
+  "description": "Next Capital Limited was incorporated in Pakistan on 14 December 2009 and has been listed on the Pakistan Stock Exchange since 2012. It is engaged in the brokerage of shares, stocks, equity and debt securities, commodities, forex and other financial instruments, and in corporate finance and investment banking advisory, and it also trades equity and debt securities on its own account. It is a TRE certificate holder and a member of the Pakistan Mercantile Exchange.",
+  "headOffice": "2nd Floor, Imperial Court Building, Dr. Ziauddin Ahmed Road, Karachi 75530, Pakistan",
+  "phone": "+92 21 111 639 825",
+  "website": "https://www.nextcapital.com.pk",
+  "ceo": "Humaira Asad",
+  "sourceNote": "Written from: https://www.nextcapital.com.pk/about (company status, brokerage and advisory scope, management team) and https://www.nextcapital.com.pk/contact (Karachi head office, telephone) and the PSX company profile for NEXT at https://dps.psx.com.pk/company/NEXT (incorporation, principal activities, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Investment banking",
+      "summary": "Capital markets and mergers and acquisitions advisory.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Institutional brokerage",
+      "summary": "Execution and placement for domestic and international institutional clients across asset classes.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Retail investing (PSX and PMEX)",
+      "summary": "Mobile and desktop trading for individual investors in Pakistan Stock Exchange equities and Pakistan Mercantile Exchange commodities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Equity research",
+      "summary": "Research on market performance against domestic and global economic, social and political events.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

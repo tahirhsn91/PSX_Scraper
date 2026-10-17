@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for DSIL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own mill exists, and a generic spinning-mill photograph would imply it is theirs.",
+  "symbol": "DSIL",
+  "description": "D.S. Industries Limited is a textile spinning mill in the D.S. Group whose principal activity is the manufacturing and sale of yarn, with a production capacity of 40,320 spindles. Incorporated in 1980 as a private limited company, it remained inactive until 2003, began commercial production in July 2004 and converted to a public limited company in 2005. The company's shares are listed on the Pakistan Stock Exchange, and the group describes itself as holding interests in textile spinning, woven fabric and securities brokerage.",
+  "headOffice": "20-K, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 35714810",
+  "website": "https://dsil.com.pk",
+  "ceo": "Pervez Ahmad",
+  "sourceNote": "Written from: https://dsil.com.pk/dsil/company-profile (incorporation, listing, capacity, principal activity, registered office, phone), https://dsil.com.pk/dsil/d-s-group (group interests), https://dsil.com.pk/dsil/elections-and-profile-of-board-of-directors/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spun yarn",
+      "summary": "Ring-spun yarn produced at the company's 40,320-spindle mill at 11 KM, Sheikhupura–Faisalabad Road, Sheikhupura; the company states yarn manufacture and sale as its principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

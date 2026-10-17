@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for MCBIM. Every fact is attributable — see sourceNote. MCBIM is an asset manager — a fund-management company, not an operating industrial business, and it is distinct from the funds it manages. No image is attached.",
+  "symbol": "MCBIM",
+  "description": "MCB Investment Management Limited, which trades as MCB Funds, was established in 2000 and manages open-end mutual funds, voluntary pension schemes and separately managed accounts. The company reports more than 242,000 customers and net assets of over PKR 553 billion across its open-end schemes, pension funds and managed accounts as of 31 December 2025, and holds a PACRA AM1 asset manager rating. It also runs iSAVE, an online savings and investment platform with a minimum investment of Rs 500.",
+  "headOffice": "2nd Floor, Adamjee House, I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": "+92 21 111 47283",
+  "website": "https://mcbfunds.com",
+  "ceo": "Khawaja Khalil Shah",
+  "sourceNote": "Written from: https://mcbfunds.com/ (Our Story: establishment, CEO, PACRA AM1 rating, customers, AUM as of 31 December 2025; iSAVE; contact address and helpline) plus the fund list published on the same site (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Open-end mutual funds",
+      "summary": "Money market, income, sovereign, asset allocation, equity and Shariah-compliant funds, including the MCB Pakistan Stock Market Fund, Pakistan Income Fund, Pakistan Sovereign Fund and the Alhamra Islamic fund range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Voluntary pension schemes",
+      "summary": "Pakistan Pension Fund and Alhamra Islamic Pension Fund, each with money market, debt and equity sub-funds.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Separately managed accounts",
+      "summary": "Discretionary mandates managed for institutional and individual clients, counted by the company within its total net assets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "iSAVE online investing",
+      "summary": "The company's online savings and investment platform, allowing investments from as little as Rs 500.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

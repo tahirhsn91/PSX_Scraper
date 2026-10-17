@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for IDRT. Every fact here is attributable — see sourceNote. No image is attached: the company's own product photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "IDRT",
+  "description": "Idrees Textile Mills Limited was incorporated in Pakistan on 5 June 1990 and listed in April 1992; its principal activity is the manufacture and sale of yarn and fabric. It runs two divisions presented on its site — spinning, producing a range of cotton, polyester-cotton, viscose, modal, Tencel, slub and Siro yarns, and home textiles. The mill is at Kot Shah Mohammad, Tehsil and District Nankana in Punjab, and the registered office is in Bahadurabad, Karachi.",
+  "headOffice": "6-C, Ismail Centre, 1st Floor, Central Commercial Area, Bahadurabad, Karachi, Pakistan",
+  "phone": "+92 21 3494 0026",
+  "website": "https://idreestextile.com",
+  "ceo": "S. M. Mansoor Allawala",
+  "sourceNote": "Written from: idreestextile.com (company introduction and mission), idreestextile.com/yarn-spinning (yarn product range), idreestextile.com/home-textile (the home-textile division), the company's own profile PDF at idreestextile.com/wp-content/uploads/2024/05/company_profile.pdf (mills address at Kot Shah Mohammad, Nankana), the site footer (registered office and telephone) and the PSX company page for IDRT (incorporation, listing and chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Cotton yarn",
+      "summary": "Cotton yarn listed in the company's yarn-spinning product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Polyester-cotton yarn",
+      "summary": "Poly-cotton yarn listed in the company's yarn-spinning product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Viscose, modal and Tencel yarn",
+      "summary": "Regenerated-cellulose yarns — viscose, modal and Tencel — listed in the company's yarn-spinning product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Slub and Siro yarn",
+      "summary": "Slub and Siro yarns listed in the company's yarn-spinning product range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home textiles",
+      "summary": "The company's second division alongside spinning; its home-textile pages present it as a towel manufacturer and exporter.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

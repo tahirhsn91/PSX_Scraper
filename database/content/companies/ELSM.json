@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for ELSM. Every fact is attributable - see sourceNote. No image attached: no licence-cleared photograph of the company's own mill exists on the open licence sources.",
+  "symbol": "ELSM",
+  "description": "Ellcot Spinning Mills Limited is a spinning unit of the Nagina Group, established in 1991 and listed on the Pakistan Stock Exchange, which manufactures and sells yarn. Its machinery comprises 61,968 spindles with the related process machines, spinning 100 per cent cotton, synthetic and polyester-cotton blend yarns in carded and combed form for weaving and knitting. The yarns go into apparel fabrics, sheeting, towelling, canvas and knitted products, and carry the company's own brand names Grape, Pasha and Apricot.",
+  "headOffice": "Nagina House, 91-B-1, M.M. Alam Road, Gulberg-III, Lahore 54660, Pakistan",
+  "phone": null,
+  "website": "https://nagina.com",
+  "ceo": "Haroon Shahzada Ellahi Shaikh",
+  "sourceNote": "Written from: Ellcot Spinning Mills Limited third quarter report for the period ended 31 March 2026 - company information and directors' review (published at nagina.com/wp-content/uploads/2026/05/ELSM-Q3-2026.pdf), which gives www.nagina.com as the company's web reference, and the company's corporate profile on that site (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Grape - polyester/cotton blend yarns",
+      "summary": "10/1 to 60/1 polyester-cotton blend yarns, carded and combed, sold under the brand 'Grape'.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pasha - cotton siro and slub yarns",
+      "summary": "10/1 to 12/1 100 per cent cotton siro, siro slub, plain and plain slub yarns, sold under the brand 'Pasha'.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Apricot - fine-count combed cotton yarns",
+      "summary": "30 NE to 120 NE 100 per cent combed cotton yarns spun from Pima and Giza 86 cotton, sold under the brand 'Apricot'.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lycra core-spun yarns",
+      "summary": "Core yarns made with Lycra, in counts 10/1 to 20/1, carded and combed, in a variety of deniers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

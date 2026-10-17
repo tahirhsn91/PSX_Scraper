@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for HAEL. Every fact here is attributable — see sourceNote. headOffice and phone are null: the only address and telephone numbers published on the company's own website belong to its share registrar, Corplink (Pvt) Limited, and no licence-cleared photograph of Hala's own mill exists — do not fill these from directory listings. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "HAEL",
+  "description": "Hala Enterprises Limited is a terry towel manufacturer established in 1972, which began exporting to Europe and Japan in the late 1970s and by the 1980s had buyers and brands in the German and Italian markets. It makes private-label terry towels and related products, and works with clients to develop customised towels, across retail, institutional, hospitality, beach and kitchen lines.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://halaenterprises.com",
+  "ceo": "Jillani Jahangir",
+  "sourceNote": "Written from: halaenterprises.com — home page (company history and product lines), and the company's PSX-filed quarterly report naming the chief executive (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Private-label terry towels",
+      "summary": "Terry towels and related products manufactured for retail customers' own brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Customised terry towels",
+      "summary": "Towels developed with clients to meet their specific requirements.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Institutional and hospitality lines",
+      "summary": "Terry products for institutional and hospitality customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Retail and catalogue lines",
+      "summary": "Products for the retail and catalogue sector.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Beach, pool and yachting lines",
+      "summary": "Products for pool, beach and yachting use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Kitchen and tableware linens",
+      "summary": "Linens for the kitchen and table.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

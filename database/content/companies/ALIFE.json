@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for ALIFE. Every fact is attributable — see sourceNote. No image is attached. ALIFE is a life insurer and operates a Window Takaful operation; it is not a fund or a Modaraba.",
+  "symbol": "ALIFE",
+  "description": "Adamjee Life Assurance Company Limited is a life insurer backed by the Nishat Group, which the company describes as one of the leading and most diversified business groups in South East Asia. It writes individual life business — savings plans for education and wedding goals and term protection such as its salary protection plan — alongside bancassurance and corporate group life, credit life, provident fund and pay continuation covers. It also runs a Window Takaful operation for Shariah-compliant business.",
+  "headOffice": "Adamjee House, I.I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 111 115 433",
+  "website": "https://www.adamjeelife.com",
+  "ceo": "Manzar Mushtaq",
+  "sourceNote": "Written from: https://www.adamjeelife.com/en/about-us (Nishat Group backing, address and telephone), https://www.adamjeelife.com/en/about-us/management-and-bods (chief executive, board), https://www.adamjeelife.com/en/individual-life (individual life plans, Roshan Aaj Aur Kal, salary protection plan), https://www.adamjeelife.com/en/corporate (group life, group credit life, group provident fund, group pay continuation) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Individual life savings plans",
+      "summary": "Savings plans for education and wedding goals, such as Roshan Aaj Aur Kal, with a choice of investment funds matched to risk appetite and religious beliefs.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Salary protection plan",
+      "summary": "A term life product paying a selected percentage of monthly salary to beneficiaries on death or permanent total disability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Group life assurance",
+      "summary": "A single master policy for employees, renewable annually, with cover uniform or graded by designation, length of service or salary.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Group credit life assurance",
+      "summary": "Credit life protection for borrowers on personal loans, credit cards and mortgages, repaying the outstanding balance on death or disability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Group provident fund life assurance",
+      "summary": "A group benefit that works alongside an employer's provident fund.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Window Takaful operations",
+      "summary": "Shariah-compliant Takaful business written through the company's Window Takaful operation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

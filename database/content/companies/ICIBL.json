@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for ICIBL. Every fact is attributable — see sourceNote. ICIBL is an operating investment bank, not a fund. No image is attached.",
+  "symbol": "ICIBL",
+  "description": "Invest Capital Investment Bank Limited is a Pakistani investment bank that dates its presence in the financial services sector to 1994 and serves institutions, corporates, high-net-worth individuals, intermediaries and government organisations. Its services span corporate finance and advisory — equity and debt placements, mergers and acquisitions, structured finance and private equity — as well as equity and commodities brokerage, portfolio management, and business and consumer lending. The company's head office is in Lahore and its registered office in Karachi.",
+  "headOffice": "131-A, P-Street, Upper Mall Scheme, Lahore, Pakistan",
+  "phone": "+92 42 3577 7285-86",
+  "website": "https://icibl.com",
+  "ceo": "Muhammad Asif",
+  "sourceNote": "Written from: https://icibl.com/who-we-are (since 1994, client base, capabilities), https://icibl.com/services (service lines), https://icibl.com/company-information (board and chief executive, head office, registered office, telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Corporate finance and advisory",
+      "summary": "Placement of corporate equity and debt instruments, mergers and acquisitions, structured finance and private equity advisory.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Equity brokerage",
+      "summary": "Equity brokerage, which the company says it has operated since December 1997.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Portfolio management",
+      "summary": "Discretionary management of client investment portfolios.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commodities brokerage",
+      "summary": "Commodities brokerage offered as part of the company's service range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Business and consumer lending",
+      "summary": "Term loan, business loan, personal loan, car financing and motorbike loan facilities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

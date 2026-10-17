@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for JSCL. Every fact is attributable - see sourceNote. No image attached: a stock photograph would imply it is the company's own, and none of its own is licensed.",
+  "symbol": "JSCL",
+  "description": "Jahangir Siddiqui & Co. Ltd. was incorporated in Pakistan in 1991 as successor to the equity, fixed income and corporate finance business established by Mr. Jahangir Siddiqui, and was the first securities company in Pakistan with a Wall Street pedigree through its former joint venture partner Bear Stearns. It is primarily an investment company in financial services, with holdings across commercial and Islamic banking, asset management, investment banking, securities brokerage and insurance, alongside long-term investments in technology, transport, media and industrial companies. Its other activities are trading of securities, consultancy services and underwriting.",
+  "headOffice": "20th Floor, The Center, Plot No. 28, SB-5, Abdullah Haroon Road, Sadar, Karachi, Pakistan",
+  "phone": "+92 21 111 574 111",
+  "website": "https://js.com",
+  "ceo": "Asad Nasir",
+  "sourceNote": "Written from: Jahangir Siddiqui & Co. Ltd. website (js.com: about, JSCL profile - permissible business activities and registered/head office, company information, board of directors) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Investment in financial services",
+      "summary": "Long-term holdings across commercial banking, Islamic banking, asset management, investment banking, securities brokerage and insurance.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Securities trading",
+      "summary": "Trading of securities, which the company lists among its own activities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Underwriting",
+      "summary": "Underwriting, listed by the company as one of its activities alongside securities trading and consultancy.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consultancy services",
+      "summary": "Consultancy services provided by the company as part of its investment company business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for FML. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "FML",
+  "description": "Feroze1888 Mills Limited was incorporated in Pakistan as a public limited company in October 1972 and is principally engaged in the production and export of towels. It describes itself as a vertically integrated manufacturer and exporter of specialised yarn and textile products for the home, hospitality and healthcare markets, and as partnered with 1888 Mills of the United States. Its product range is presented in three sections — bath, beach and kitchen.",
+  "headOffice": "160 Banglore Town, Shahrah-e-Faisal, Karachi, Pakistan",
+  "phone": "+92 21 38403758-59",
+  "website": "https://feroze1888.com",
+  "ceo": "Rehan Rahman",
+  "sourceNote": "Written from: https://feroze1888.com/who-we-are/ (about us, vision and mission), https://feroze1888.com/product/ (bath, beach and kitchen sections), https://feroze1888.com/investor/company-profile/ (corporate office address and telephone, registered office) and https://feroze1888.com/investor/governance/board-of-directors/ (CEO), with the PSX company profile at https://dps.psx.com.pk/company/FML for the incorporation date and principal business (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Towels",
+      "summary": "Towels produced and exported by the company, its principal business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bath textiles",
+      "summary": "Bath products with seasonal designs, presented in the company's Bath section.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Beach textiles",
+      "summary": "Beach products in dynamic colours and prints, presented in the company's Beach section.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Kitchen textiles",
+      "summary": "Kitchen products for cooking and dining, presented in the company's Kitchen section.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

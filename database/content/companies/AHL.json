@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for AHL. Every fact here is attributable — see sourceNote. No image is attached: the firm's own brand and office photography is not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "AHL",
+  "description": "Arif Habib Limited is a public listed company incorporated in Pakistan as an unquoted public limited company wholly owned by Arif Habib Corporation Limited; its principal activities are investments, share brokerage, inter-bank brokerage, IPO underwriting, and advisory and consultancy services. It describes itself as Pakistan's largest securities brokerage, investment banking and research firm and says it is the only brokerage firm included in the Pakistan Stock Exchange's Top 25 Companies. Its clients range from the Government of Pakistan, corporations, financial institutions and multilateral organisations to individual investors, served through institutional, international and retail desks and branches in Karachi, Lahore, Islamabad, Peshawar, Faisalabad, Multan and Bahawalpur.",
+  "headOffice": "Arif Habib Centre, 23, M. T. Khan Road, Karachi, Pakistan",
+  "phone": "+92 21 3828 0282",
+  "website": "https://www.arifhabibltd.com",
+  "ceo": "Muhammad Shahid Ali Habib",
+  "sourceNote": "Written from: arifhabibltd.com (about us, client base, Arif Habib Corporation relationship, locations), arifhabibltd.com/services/brokerage, /services/investment-banking, /services/money-markets and /services/research (what the firm does), arifhabibltd.com/about-us (head office address and telephone) and the PSX company page for AHL (incorporation, principal activities, chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Equity brokerage",
+      "summary": "Institutional, international and retail equity sales and trading on the Pakistan Stock Exchange, with Classic and Premium retail accounts giving access to a desktop trading terminal, a mobile app, an AHL Islamic account and Roshan Digital Account onboarding for Pakistani expatriates.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Investment banking",
+      "summary": "Mergers and acquisitions, equity capital market transactions (IPOs, secondary public offerings, right shares, convertible issues and private placements), debt capital market work (loans, term finance certificates, sukuk, commercial paper and medium-term notes) and project financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Interbank and money-market brokerage",
+      "summary": "A money-market desk handling repo, reverse repo, call and clean transactions and outright trades in bonds, T-bills, sukuk and TFCs, and a foreign exchange desk facilitating spot, forward and swap transactions for banks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Research",
+      "summary": "Sell-side research the firm describes as covering more than 50 companies across 11 sectors with a team of eight analysts — over 70% of the KSE-100 free-float market capitalisation — including economic and strategy work.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for PRET. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own units exists, and a generic textile photograph would imply it is theirs.",
+  "symbol": "PRET",
+  "description": "Premium Textile Mills Limited was founded in 1986 by industrialist Kadir Adam and describes itself as having grown from a textile company into a business spanning garment manufacturing, trading and auto parts. It spins yarn — including fancy and mélange yarns — and manufactures socks and hosiery for sports, active recreation and specialty markets, from a unit it describes as Industry 4.0 and USGBC LEED certified. The company lists Pinnacle Fiber (Private) Limited and Prudential Enterprises among its associated companies.",
+  "headOffice": "1st Floor, Haji Adam Chambers, Altaf Hussain Road, New Challi, Karachi, Pakistan",
+  "phone": "+92 21 3240 0405-8",
+  "website": "https://www.premiumtextile.com",
+  "ceo": "Abdul Kadir Adam",
+  "sourceNote": "Written from: https://www.premiumtextile.com/about/ (founding, businesses, Pinnacle Fiber), https://www.premiumtextile.com/spinning/ (yarn types and effects), https://www.premiumtextile.com/socks/ (sock ranges), https://www.premiumtextile.com/governance/ (board, chief executive), https://www.premiumtextile.com/company-information/ (head office, phone, associated companies) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Fancy and mélange yarn",
+      "summary": "Mélange yarns blending raw cotton with dyed fibres in PC/CVC from Ne 10/1 to Ne 40/1, heather greys, and fancy yarns including injection, snow-effect, marled/grindle and speckled/neppy varieties.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Socks and hosiery",
+      "summary": "Performance socks (walking, running, ski and snow, hiking, sports), lifestyle socks (casual, everyday, dress, formal) and specialty socks (diabetic, work thermal, comfort, medicated, over-the-knee), made on machines the company describes as Industry 4.0 with seamless toe linking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

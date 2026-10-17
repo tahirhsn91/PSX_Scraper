@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for HIRAT. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "HIRAT",
+  "description": "Hira Textile Mills Limited is a composite textile manufacturing unit incorporated in Pakistan on 31 January 1991 and listed on the Pakistan Stock Exchange in February 2007. It spins, dyes, bleaches and doubles yarn, mainly for export, running 41,424 spindles across three spinning units together with a yarn-dyeing plant of 150 tons a month and 18.65 MW of in-house power generation. Its range runs from coarse to fine counts — carded, combed and compact yarns, slub and siro yarns, and zero-twist or multi-ply doubled yarns — sold under the Green Olive brand. The company's website also lists Hira Terry Mills Limited, a terry-towel manufacturer in Lahore, as an associated company.",
+  "headOffice": "44 E-1, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3571 4191-4",
+  "website": "https://www.hiramills.com.pk",
+  "ceo": "Mohammad Tariq",
+  "sourceNote": "Written from: hiramills.com.pk — company profile, business & product, and board of directors sections of the company's site (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spun yarn — Green Olive brand",
+      "summary": "Ring-spun, combed and compact yarns in counts from 4/1 to 80/1, including slub, siro and multi-count/multi-twist varieties, spun from Pakistani, American, Australian, Indian, Brazilian, Egyptian and organic cotton.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Doubled and zero-twist yarn",
+      "summary": "Two-, three- and four-ply twisted yarns, including zero-twist and S-twist, produced on 15 doubling and twisting machines with spliced, knot-free joins.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dyed and bleached yarn",
+      "summary": "Reactive, disperse and vat dyeing on Swiss and Italian machinery with a processing capacity of 150 tons a month, matched to Pantone TC and TP shades and customer specifications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

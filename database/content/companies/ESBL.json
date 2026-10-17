@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for ESBL. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "ESBL",
+  "description": "Escorts Investment Bank Limited is a non-banking finance company licensed by the Securities and Exchange Commission of Pakistan to carry out investment finance services, incorporated on 15 May 1995 and in commercial operation since 16 October 1996. It says it has chosen to remain an investment bank within the NBFC structure, with a business plan focused on profitability and sustainable growth through a broader range of products and services, capacity building and risk management. It lends to households and businesses from a head office in Lahore, and its PACRA ratings are BBB long-term and A2 short-term.",
+  "headOffice": "Ground Floor, 26 Davis Road, Lahore, Pakistan",
+  "phone": "+92 42 111 003 425",
+  "website": "https://escortsbank.net",
+  "ceo": "Basit Rehman Malik",
+  "sourceNote": "Written from: https://escortsbank.net/who-we-are/ (business approach and head office), https://escortsbank.net/ (deposits, housing finance, micro finance, corporate and SME financing, gold finance, PACRA ratings, UAN) and the PSX company profile for ESBL at https://dps.psx.com.pk/company/ESBL (incorporation and commencement dates, licensing, CEO) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Deposits",
+      "summary": "Term investment products with flexible terms of three months to five years, with profit payable at a bank of the customer's choice or at their doorstep.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Housing finance",
+      "summary": "Home finance for members of Bahria Town for building, purchase or renovation, including construction financing up to 100% of construction cost.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Micro finance",
+      "summary": "Micro-finance products serving un-served and underserved markets; the bank describes itself as the first investment bank to offer them.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate and SME financing",
+      "summary": "Business term loans, bill discounting, and trade finance and guarantees.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Gold finance",
+      "summary": "Gold-backed finance with minimal documentation, no guarantee requirement and flexible terms.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

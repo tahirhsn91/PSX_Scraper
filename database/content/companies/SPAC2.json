@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for SPAC2. Every fact here is attributable — see sourceNote. This is a blank-cheque company: it has no operations, no revenue and no products by design, so the products array is empty rather than padded with a business it does not have. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SPAC2",
+  "description": "LSE SPAC-II Limited was incorporated in Pakistan on 3 March 2026 as a special purpose acquisition company, formed for the sole purpose of raising money from the public and then entering into an acquisition or merger transaction. It has no business of its own: under the Public Offering Regulations it must complete its merger or acquisition within three years of listing, and its IPO proceeds sit with a custodian under an escrow arrangement. It is the second SPAC vehicle established in Pakistan, following LSE SPAC-I Limited, whose IPO was completed on 30 April 2026.",
+  "headOffice": "The Exchange Hub, LSE Plaza, 19-Khayaban-e-Aiwan-e-Iqbal, Lahore, Pakistan",
+  "phone": "+92 42 3636 8000-4",
+  "website": "https://lse.com.pk/LSESPAC2/",
+  "ceo": "Iqrar Shabbir",
+  "sourceNote": "Written from: the LSE SPAC-II Limited prospectus for its initial public offering (published 24 June 2026, at lse.com.pk/LSESPAC2/assets/downloads/LSESPAC-II-Prospectus.pdf) — incorporation on 3 March 2026, sole purpose, absence of any business of its own, the three-year deadline for a merger or acquisition, and its position as the second SPAC after LSE SPAC-I; and the PSX company page for SPAC2 (address, chief executive, business description) (accessed 2026-10-17)",
+  "products": []
+}

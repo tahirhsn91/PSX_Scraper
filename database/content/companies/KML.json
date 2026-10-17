@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for KML. Every fact is attributable - see sourceNote. No image attached: no licence-cleared photograph of the company's own Lahore facility is available.",
+  "symbol": "KML",
+  "description": "Kohinoor Mills Limited traces its listed existence to Kohinoor Weaving Mills, incorporated in 1987 and renamed Kohinoor Mills in 2006, and its textile history to 1948. Its 160-acre site in Lahore produces more than 100 million metres a year of grey, white and dyed fabric, supplied to fashion brands and retailers abroad, across weaving, dyeing and finishing divisions. The company also runs Kohinoor Genertek, an independent power plant of about 30 MW and 30 tonnes per hour of steam serving its own divisions, and began Kohinoor Apparel in 2025 to stitch garments in-house.",
+  "headOffice": null,
+  "phone": "+92 42 111 941 941",
+  "website": "https://kohinoormills.com",
+  "ceo": "Aamir Fayyaz Sheikh",
+  "sourceNote": "Written from: Kohinoor Mills Limited website (kohinoormills.com: about, products, profile, board of directors, contact) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Woven fabric",
+      "summary": "Grey, white and dyed fabric from the weaving and dyeing divisions - the company reports producing over 100 million metres a year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Apparel",
+      "summary": "Stitched casual wear and performance garments from Kohinoor Apparel, which began operations in 2025 with capacity above 5 million garments a year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Technical textiles",
+      "summary": "Engineered fabrics with fire resistance, UV protection and water repellency for specialised uses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Upholstery fabrics",
+      "summary": "Fabrics for furniture, textured wall coverings and curtains.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Captive power and steam",
+      "summary": "Kohinoor Genertek, an independent power plant of about 30 MW and 30 tonnes per hour of steam run on gas, furnace oil or biomass for the company's own divisions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

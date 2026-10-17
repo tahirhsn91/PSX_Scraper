@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for OLPL. Every fact is attributable — see sourceNote. No image is attached. OLPL is an operating non-bank finance company (leasing and term finance), not a fund or a Modaraba; ORIX Modaraba is a separate entity managed by a related company.",
+  "symbol": "OLPL",
+  "description": "OLP Financial Services Pakistan Limited, formerly ORIX Leasing Pakistan Limited, was established in July 1986 as a joint venture between ORIX Corporation of Japan and local investors and is listed on the Pakistan Stock Exchange. It describes itself as the largest SME-focused non-banking finance company in Pakistan, offering lease finance, term finance, certificates of deposit and corporate insurance agency through branches nationwide. It has completed forty years of operation and combines what it calls international experience with local expertise.",
+  "headOffice": "OLP Building, Plot No. 16, Sector 24, Korangi Industrial Area, Karachi 74900, Pakistan",
+  "phone": "+92 21 35144028",
+  "website": "https://olpfinance.com",
+  "ceo": "Shaheen Amin",
+  "sourceNote": "Written from: https://olpfinance.com/pride-in-excellence (establishment in July 1986 as an ORIX joint venture, PSX listing, largest SME-focused NBFC, forty years), https://olpfinance.com/company-information (chief executive, head office address, telephone, SECP licence), https://olpfinance.com/ (product list: corporate lease, consumer auto lease, commercial vehicle lease, certificates of deposit, term finance, insurance corporate agency) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Corporate lease",
+      "summary": "Lease finance for corporate and SME customers, the company's core product.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consumer auto lease",
+      "summary": "Vehicle leasing for individual customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Commercial vehicle lease",
+      "summary": "Lease finance for commercial vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Certificates of deposit",
+      "summary": "Certificates of deposit offered to depositors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Term finance",
+      "summary": "Term finance loans alongside leasing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Insurance corporate agency",
+      "summary": "Corporate agency for insurance products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

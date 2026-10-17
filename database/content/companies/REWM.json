@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for REWM. Every fact is attributable — see sourceNote. No chief executive is named on the company's own site, so ceo is null rather than guessed. No image is attached.",
+  "symbol": "REWM",
+  "description": "Reliance Weaving Mills Limited, part of the Fatima Group, describes itself as a producer of premium greige fabric for apparel and home furnishings, operating since 1990. Its mill runs 490 looms with an annual fabric capacity the company puts at 90 million metres, and its principal business is the manufacture and sale of yarn and greige fabric. Fabric ranges include plain weaves, twill, drill, satin and sateen, dobby designs, ripstop and cellular constructions.",
+  "headOffice": "E-110, Khayaban-e-Jinnah, Lahore Cantt, Pakistan",
+  "phone": "+92 61 4509700",
+  "website": "https://www.relianceweavingmills.com",
+  "ceo": null,
+  "sourceNote": "Written from: https://www.relianceweavingmills.com/ (since 1990, looms, capacity, fabric range, principal business), https://www.relianceweavingmills.com/about-us/ , https://www.relianceweavingmills.com/contact-us-2/ (head office, phone), https://www.relianceweavingmills.com/board-of-directors/ (board; no chief executive named on the site) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Greige fabric",
+      "summary": "Greige fabric woven on 490 looms for apparel and home furnishings, in plain weaves, twill, drill, satin, sateen, 16-frame dobby designs, warp and weft stripe satin, BFC, pique, cellular, broken twill, missing dent, ripstop and selvedge-writing constructions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Greige yarn",
+      "summary": "Spun yarn produced at the company's spinning units — at Fazalpur, Khanewal Road, Multan and at Mukhtarabad, Rawat, Rawalpindi — which the company names alongside fabric as its principal business.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

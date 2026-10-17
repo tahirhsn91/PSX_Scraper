@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SZTM. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plants exists, and a generic textile photograph would imply it is theirs.",
+  "symbol": "SZTM",
+  "description": "Shahzad Textile Mills Limited was incorporated in 1978 and describes itself as a vertically integrated yarn and socks manufacturer and exporter based in Lahore. It runs three spinning units with 62,688 spindles producing ring-spun cotton, polyester/cotton and polyester/viscose yarns, and in 2019 added a fully integrated socks and hosiery plant that it says can make 100 million pairs a year. The company markets its yarn under the Britestar, Dynacon and Unicorn brands.",
+  "headOffice": "Office 701, 7th Floor, Tricon Corporate Center, Jail Road, Gulberg II, Lahore, Pakistan",
+  "phone": "+92 42 3575 4024-27",
+  "website": "https://shahzadtex.com",
+  "ceo": "Imran Aslam",
+  "sourceNote": "Written from: https://shahzadtex.com/about-shahzad-textile (incorporation, divisions, capacity, head office, mill, phone), https://shahzadtex.com/yarn-spinning (yarn brands, counts, spindles), https://shahzadtex.com/socks-hosiery (socks capacity and capability), https://shahzadtex.com/board-of-directors (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Britestar — 100% cotton yarn",
+      "summary": "100% cotton ring-spun yarn from 15,840 spindles, counts Ne 7/1 to Ne 40/1, for knitting and weaving.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dynacon — polyester/cotton yarn",
+      "summary": "Ring-spun PC and CVC yarn from 26,688 spindles in blends including PC 52:48, PC 65:35 and CVC 60:40, carded or combed, counts Ne 7/1 to Ne 45/1.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Unicorn — polyester/viscose yarn",
+      "summary": "Ring-spun polyester/viscose yarn from 20,160 spindles, counts Ne 7/1 to Ne 65/1, for knitting and weaving.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Socks and hosiery",
+      "summary": "Socks made at a vertically integrated plant — knitting on Italian Lonati machines, toe closing, dyeing, boarding and packing — with capacity the company puts at 100 million pairs a year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for KSTM. Facts are from the company's own website — see sourceNote. No image is attached.",
+  "symbol": "KSTM",
+  "description": "Khalid Siraj Textile Mills Limited is a spinner listed on the Pakistan Stock Exchange, incorporated in 1988, with its registered office at 135-Upper Mall in Lahore and its mill 48 km along the Lahore-Multan Road at Phool Nagar, Kasur. It runs 17,280 spindles producing 100% cotton yarn, with a range covering carded and combed yarns for knitting and weaving, a large share of which is exported to Europe, the Far East and the Middle East. Alongside Pakistani cotton it spins imported US Pima, Egyptian and Australian cotton.",
+  "headOffice": "135-Upper Mall, Lahore, Pakistan",
+  "phone": "+92 42 35761706",
+  "website": "https://kstml.com.pk",
+  "ceo": "Mian Iqbal Barkat",
+  "sourceNote": "Written from: https://kstml.com.pk/ (incorporation year, spindle count, mill location, product range, export markets, raw materials), https://kstml.com.pk/contact-details/ (registered office, telephone) and https://kstml.com.pk/board-of-directors/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Carded cotton yarn",
+      "summary": "Carded 100% cotton yarn in counts from 10/S to 60/S for knitting and weaving end uses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Combed cotton yarn",
+      "summary": "Combed 100% cotton yarn in counts from 10/S to 60/S, including yarns spun from imported US Pima, Egyptian and Australian cotton.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

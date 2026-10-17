@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for KOSM. Every fact here is attributable — see sourceNote. No image is attached: all three image fields are null because no licence-cleared photograph of this company's own plant, product or facility was available.",
+  "symbol": "KOSM",
+  "description": "Kohinoor Spinning Mills Limited was incorporated in Pakistan on 23 July 1970 and is engaged in the business of textile spinning. It describes itself as a yarn manufacturing company supplying premium quality yarn, with mills at Aminabad and Yousaf Nagar on Bhoun Road near Chakwal and its head office in Gulberg III, Lahore.",
+  "headOffice": "7/1-E-3, Main Boulevard, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 35717510",
+  "website": "https://www.kohinoorspinningmills.com",
+  "ceo": "Muhammad Naveed",
+  "sourceNote": "Written from: the company's own website at https://www.kohinoorspinningmills.com (home page vision/mission and business activities, governance page for the CEO, contact addresses and telephones) and the PSX company profile for KOSM at https://dps.psx.com.pk/company/KOSM (incorporation date) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Premium quality yarn products, the company describing itself as a yarn manufacturing company dedicated to customers who value quality most.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

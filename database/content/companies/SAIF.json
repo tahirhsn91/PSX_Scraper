@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for SAIF. Every fact is attributable — see sourceNote. No image is attached. The chief executive field is null because the company's board page labels a director 'CEO' while that director's own biography says he is chief executive of Kohat Textile Mills, a different Saif Group company — the source contradicts itself, so no name is recorded.",
+  "symbol": "SAIF",
+  "description": "Saif Textile Mills Limited was incorporated in 1989 and began commercial production on 1 January 1992; it is part of Saif Group. It runs three spinning units with 107,000 spindles at Gadoon Industrial Estate in Khyber Pakhtunkhwa, producing more than 25,000 tons of ring-spun yarn a year, and describes itself as principally engaged in the manufacture and sale of compact cotton and synthetic yarns. Its yarns go to knitting and woven apparel, suiting, home textiles and technical fabrics, with over half of production exported to Europe, the Far East and the Middle East.",
+  "headOffice": "Kashmir Commercial Complex, Fazl-e-Haq Road, Blue Area, Islamabad, Pakistan",
+  "phone": "+92 51 2604730",
+  "website": "https://saiftextile.com",
+  "ceo": null,
+  "sourceNote": "Written from: https://saiftextile.com/about-us (incorporation, commercial production date, principal business, export share), https://saiftextile.com/company-profile (three spinning units, 107,000 spindles, 25,000 tons, Gadoon Industrial Estate, end uses), https://saiftextile.com/our-products (ecru, dyed and mélange yarn, surgical fibre), https://saiftextile.com/ (office address and telephone) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Ecru yarn",
+      "summary": "Ring-spun ecru yarn, the base of the company's compact cotton and synthetic yarn range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dyed yarn",
+      "summary": "Dyed yarns in a wide range of colours across different cottons and fibres.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mélange yarn",
+      "summary": "Mélange yarns, alongside intimate blends and synthetics, for knitting and woven apparel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Surgical fibre",
+      "summary": "Surgical fibre, listed by the company as a separate product line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

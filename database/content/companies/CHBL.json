@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for CHBL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists, and a generic textile photograph would imply it is theirs.",
+  "symbol": "CHBL",
+  "description": "Chenab Limited is a composite textile company at Nishatabad, Faisalabad, founded within the Chenab Group that Mian Muhammad Latif established in 1974. It runs spinning, weaving, processing, stitching, embroidery and quilting and wadding operations, and offers home furnishing and apparel among its product lines. Its spinning division spins carded and combed yarns in counts from 10 to 80.",
+  "headOffice": "Chenab Limited, Nishatabad, Faisalabad, Punjab 38000, Pakistan",
+  "phone": "+92 41 8754472-6",
+  "website": "https://www.chenabgroup.com",
+  "ceo": "Mian Muhammad Latif",
+  "sourceNote": "Written from: https://www.chenabgroup.com/company-profile/ and https://www.chenabgroup.com/about-us/ (founding, group, associations, address, phone), https://www.chenabgroup.com/operations/ (spinning, weaving, stitching, embroidery, quilting, processing), https://www.chenabgroup.com/spinning/ (yarn counts, spindles), https://www.chenabgroup.com/about-us/board-of-directors/ (chief executive) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Spun yarn",
+      "summary": "Carded and combed yarns in counts from 10 to 80, spun at a 520,000 square foot spinning facility housing 19,000 spindles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home furnishing",
+      "summary": "The company's home-textile product line, listed on its site alongside apparel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Apparel",
+      "summary": "Garments made through the group's stitching operations, listed as one of the company's two product lines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Embroidery",
+      "summary": "In-house embroidery, listed by the company as one of its manufacturing operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Quilting and wadding",
+      "summary": "Quilting and polyester wadding work carried out as a distinct operation, using polyester fibre sheet and fibre ball.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

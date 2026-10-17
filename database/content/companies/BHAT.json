@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BHAT. Every fact here is attributable — see sourceNote. No image is attached: the group's plant photography is not licence-cleared. Bhanero has no standalone website; its own annual report names www.umergroup.com as the company's corporate website, so that is the URL given here. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BHAT",
+  "description": "Bhanero Textile Mills Limited was incorporated in Pakistan on 30 March 1980 and is principally engaged in the manufacture and sale of yarn and fabric. It operates four spinning units and one weaving unit — Spinning Unit I at Kotri in Sindh, Spinning Unit II and Weaving Unit III at Ferozewatwan near Sheikhupura in Punjab, and Spinning Unit IV on the Faisalabad road at Sheikhupura. The company is part of the Umer Group of companies and presents the group website as its corporate site.",
+  "headOffice": "Umer House, 23/1, Sector 23, S. M. Farooq Road, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 3511 5177-80",
+  "website": "https://www.umergroup.com",
+  "ceo": "Khurrum Salim",
+  "sourceNote": "Written from: Bhanero Textile Mills Limited Annual Report 2025 (the company's own PSX filing, published on umergroup.com) — corporate information (registered office, telephone, website, manufacturing units), governing board (chief executive) and the directors' report; Annexure to the financial statements for the principal activity and the split between yarn and fabric sales; PSX company page for BHAT for the incorporation date (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Yarn",
+      "summary": "Yarn manufactured at the company's spinning units in Sindh and Punjab — Spinning Unit I at Kotri, and Units II and IV at Ferozewatwan and on the Faisalabad road in Sheikhupura district, Punjab.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Woven fabric",
+      "summary": "Fabric from Weaving Unit III at Ferozewatwan, Sheikhupura, produced alongside the company's yarn at the same site.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
