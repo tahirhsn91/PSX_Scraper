@@ -199,11 +199,25 @@ function IndexTile({ index, featured = false }: { index: IndexSummary; featured?
             fontWeight={700}
             sx={{ color: tone.ink, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}
           >
+            {/* Points first, percentage in brackets: an index is quoted in points, and the
+                percentage on its own does not say how far the index actually moved (#181). Both
+                inherit the tile's up/down ink, so the pair reads as one figure. */}
             <LiveNumber
-              value={index.changePercent}
-              format={(n) => `${GLYPH[directionOf(n)]} ${Math.abs(n).toFixed(2)}%`}
+              value={index.change}
+              format={(n) =>
+                `${GLYPH[directionOf(n)]} ${Math.abs(n).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}`
+              }
               flash
             />
+            {index.changePercent !== null && (
+              <Box component="span" sx={{ ml: 0.5, fontWeight: 500, opacity: 0.85 }}>
+                ({index.changePercent > 0 ? '+' : ''}
+                {index.changePercent.toFixed(2)}%)
+              </Box>
+            )}
           </Typography>
         </Stack>
 
