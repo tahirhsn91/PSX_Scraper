@@ -133,3 +133,10 @@ export const clearFailedBody = z.object({ queue: z.enum(MONITORED_QUEUES) });
 export const calendarQuery = z.object({
   limit: z.coerce.number().int().positive().max(200).default(50),
 });
+
+/** The movers page's ranking: which list, over which window, and how many rows. */
+export const moversQuery = z.object({
+  type: z.enum(['gainers', 'losers', 'active', 'unusual']).default('gainers'),
+  period: z.enum(['1d', '1w', '1m']).default('1d'),
+  limit: z.coerce.number().int().positive().max(100).default(25),
+});

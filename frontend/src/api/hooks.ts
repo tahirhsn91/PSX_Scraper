@@ -4,7 +4,7 @@ import type {
   Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
-  StockProfileResponse, MarketStatus,
+  StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod,
 } from '../types';
 
 /** Stable string for a filters object, so the query key changes only when the criteria change. */
@@ -41,6 +41,7 @@ export const keys = {
   indexHistory: (symbol: string, limit: number) => ['index-history', symbol, limit] as const,
   marketOverview: ['market', 'overview'] as const,
   marketStatus: ['market', 'status'] as const,
+  movers: (type: MoverType, period: MoverPeriod) => ['market', 'movers', type, period] as const,
   sectors: ['market', 'sectors'] as const,
   dividends: ['market', 'dividends'] as const,
 };
@@ -315,6 +316,17 @@ export const useMarketStatus = () =>
     queryFn: async () => (await api.get<MarketStatus>('/market/status')).data,
     refetchInterval: 60000,
     staleTime: 30000,
+  });
+
+/**
+ * The movers ranking. Keyed on both the list and the window: gainers over a day and gainers over a
+ * month are different rows, and a shared key would serve one as the other.
+ */
+export const useMovers = (type: MoverType, period: MoverPeriod, limit = 50) =>
+  useQuery({
+    queryKey: keys.movers(type, period),
+    queryFn: async () =>
+      (await api.get<MoversPayload>('/market/movers', { params: { type, period, limit } })).data,
   });
 
 /** One aggregate row per sector, for the sector browser. */
