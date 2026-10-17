@@ -87,6 +87,8 @@ export interface RatioDTO {
 }
 
 export interface ScrapeResult {
+  /** Provider that supplied `sector`, so the classification can name its source. */
+  sectorSource?: string | null;
   symbol: string;
   companyName: string | null;
   sector: string | null;

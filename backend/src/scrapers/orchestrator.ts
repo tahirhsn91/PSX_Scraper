@@ -128,6 +128,15 @@ export async function scrapeSymbol(symbol: string): Promise<OrchestrationResult>
     symbol: symbol.toUpperCase(),
     companyName: pick(psx?.companyName, sarmaaya?.companyName, fundamentals?.companyName),
     sector: pick(psx?.sector, sarmaaya?.sector, fundamentals?.sector),
+    // Same precedence as the value above, recorded beside it: PSX's own classification is the one
+    // the exchange publishes, so it is named first and Sarmaaya is the fallback.
+    sectorSource: psx?.sector
+      ? 'PSX company page'
+      : sarmaaya?.sector
+        ? 'Sarmaaya meta'
+        : fundamentals?.sector
+          ? 'Sarmaaya fundamentals'
+          : null,
     price,
     // Field-by-field, and the JSON leg first: it is the only provider that reads book value per
     // share, and the page's ratio block is the one that has been coming back empty for the board.

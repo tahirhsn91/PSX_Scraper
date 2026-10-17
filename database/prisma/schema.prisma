@@ -21,6 +21,10 @@ model Stock {
   symbol      String       @unique
   companyName String?      @map("company_name")
   sector      String?
+  // Where the classification came from and when it was last read (migration 0023). Null date means
+  // "not recorded yet" — never inferred from `updatedAt`, which moves for prices too.
+  sectorSource    String?   @map("sector_source")
+  sectorUpdatedAt DateTime? @map("sector_updated_at") @db.Timestamptz(6)
   // Company logo (the SYMBOL column's icon), from Sarmaaya's ALLSHR constituents board. Null for
   // symbols it publishes no logo for (ETFs, preference shares, rights) — the frontend shows a
   // letter avatar then, never a broken image.

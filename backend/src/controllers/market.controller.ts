@@ -30,6 +30,24 @@ export const sectors: RequestHandler = async (_req, res) => {
   res.json({ items: await marketService.sectors() });
 };
 
+/**
+ * One sector, by name. A query parameter rather than a path segment: several PSX sector names
+ * contain a slash ("INV. BANKS / INV. COS. / SECURITIES COS."), which would split the path.
+ */
+export const sectorDetail: RequestHandler = async (req, res) => {
+  const sector = String(req.query.sector ?? '').trim();
+  if (!sector) {
+    res.status(422).json({ error: { code: 'INVALID_SECTOR', message: 'sector is required' } });
+    return;
+  }
+  const detail = await marketService.sectorDetail(sector);
+  if (!detail) {
+    res.status(404).json({ error: { code: 'NOT_FOUND', message: `Sector not tracked: ${sector}` } });
+    return;
+  }
+  res.json(detail);
+};
+
 /** Upcoming dividend calendar plus the highest-yield ranking. */
 export const dividends: RequestHandler = async (req, res) => {
   const { limit } = valid<z.infer<typeof calendarQuery>>(req, 'query');

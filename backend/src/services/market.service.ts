@@ -22,6 +22,11 @@ export const marketService = {
     return marketRepository.sectors();
   },
 
+  /** One sector's drill-down; null when the name matches no sector (the controller 404s). */
+  async sectorDetail(sector: string) {
+    return marketRepository.sectorDetail(sector);
+  },
+
   /**
    * Upcoming dividend events plus the highest current yields. The two are different questions —
    * "what is coming" vs "what pays best" — so they answer in one payload rather than two
