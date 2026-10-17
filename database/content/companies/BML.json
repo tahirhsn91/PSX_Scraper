@@ -1,0 +1,46 @@
+{
+  "symbol": "BML",
+  "description": "Bank Makramah Limited, formerly Summit Bank Limited, is a commercial bank in Pakistan. It describes itself as transitioning into a full-fledged Islamic bank following the 2023 acquisition of a 60.45% shareholding by H.E. Nasser Abdulla Hussain Lootah, and reports a network of over 162 branches and 182 ATMs across more than 60 cities, of which 94 branches have been converted into licensed Islamic branches. It offers consumer, corporate, commercial, retail and international banking.",
+  "headOffice": "No. 13, COM-3, Block 6, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 3240 2924",
+  "website": "https://www.bankmakramah.com",
+  "ceo": "Jawad Majid Khan",
+  "sourceNote": "Written from: bankmakramah.com/about-us, bankmakramah.com/company-profile and the bank's product listings on bankmakramah.com (accessed 2026-10-17); CEO from the PSX company profile dps.psx.com.pk/company/BML (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "Classic Current Account",
+      "summary": "A current account the bank offers with additional health insurance and hospitalization coverage.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mahana Amdan Account",
+      "summary": "A term deposit product paying customers a monthly payout.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Hamara Family Savings Account",
+      "summary": "A savings account the bank describes as fostering the bond that exists between the bank and its customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Young Bee Account",
+      "summary": "A deposit account listed in the bank's product menu.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Trade finance and correspondent banking",
+      "summary": "Trade products and correspondent banking services for corporate, commercial and retail clients' import and export needs.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

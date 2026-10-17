@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for NPL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the Jamber Kalan station exists on the open licence sources, and a generic power-plant photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "NPL",
+  "description": "Nishat Power Limited is an independent power producer incorporated in February 2007 under the Power Policy 2002 and a subsidiary of Nishat Mills Limited. It builds, owns, operates and maintains a fuel-fired combined-cycle power station with a gross capacity of 200 MW at Jamber Kalan, Tehsil Pattoki, District Kasur, Punjab. Output is sold to the National Transmission and Dispatch Company Limited under a 25-year agreement.",
+  "headOffice": "Nishat House, 53-A Lawrence Road, Lahore, Pakistan",
+  "phone": "+92 42 111 11 33 33",
+  "website": "https://nishatpower.com",
+  "ceo": "Ghazanfar Husain Mirza",
+  "sourceNote": "Written from: nishatpower.com — About Us, Project Brief, Governance and Contact Us pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Electricity — 200 MW combined-cycle generation",
+      "summary": "Eleven Wärtsilä 18V46 engines of 16.911 MW each plus a 13.979 MW steam turbine, RFO-fired, with net output of 195.305 MW; supplied to NTDC under a 25-year agreement.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

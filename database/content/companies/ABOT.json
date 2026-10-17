@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for ABOT. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facilities is available from an open licence source.",
+  "symbol": "ABOT",
+  "description": "Abbott Laboratories (Pakistan) Limited was incorporated in Pakistan on 2 July 1948 and its shares are quoted on the Pakistan Stock Exchange. The Company is principally engaged in the manufacture, import and marketing of research-based pharmaceutical, nutritional, diagnostic, diabetic care, hospital and consumer products. It has more than 1,400 employees at its home office and manufacturing facilities in Karachi, with sales offices in Lahore, Peshawar and Rawalpindi.",
+  "headOffice": "Opposite Radio Pakistan Transmission Centre, Hyderabad Road, Landhi, P.O. Box 7229, Karachi 75120, Pakistan",
+  "phone": "+92 21 111 222 688",
+  "website": "https://www.pk.abbott",
+  "ceo": "Syed Anis Ahmed",
+  "sourceNote": "Written from: https://www.pk.abbott/about-us/abbott-in-pakistan.html, https://www.pk.abbott/investor/company-profile.html, https://www.pk.abbott/contact.html, https://www.pk.abbott/products.html and the company's own board profile PDF at https://www.pk.abbott/content/dam/corp/abbott/en-pk/documents/pdfs/investor/Boeard-Of-Directos.pdf (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Nutrition",
+      "summary": "Science-based nutrition products for every stage of life, from babies and children to older adults and people with chronic illnesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Diagnostics",
+      "summary": "Laboratory and molecular diagnostic tests and tools used by physicians in Pakistan in the prevention, diagnosis and treatment of health conditions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Branded generic pharmaceuticals",
+      "summary": "High-quality, affordable branded generic medicines, which the company says it continuously improves to be easier to administer and faster to act.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Diabetes care",
+      "summary": "Products that help people with diabetes monitor their glucose accurately and manage their condition more comfortably.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

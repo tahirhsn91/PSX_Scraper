@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for TRG. TRG Pakistan is a holding company: its own site describes a portfolio of investments in business process outsourcing rather than a product line, so the product list has a single entry instead of invented offerings. No image is attached.",
+  "symbol": "TRG",
+  "description": "TRG Pakistan Limited is an investment company that manages a portfolio of investments in the business process outsourcing sector. Established in December 2002, it began operations as a public limited company in April 2003, and states that its aim is to be the global leader in providing business process outsourcing services, growing through acquisitions of other BPO companies as well as organically.",
+  "headOffice": "24th Floor, Sky Tower West Wing, Dolmen, HC-3, Block 4, Marine Drive, Clifton, Karachi 75600, Pakistan",
+  "phone": "+92 21 111 874 874",
+  "website": "https://trg.com.pk",
+  "ceo": "Hasnain Aslam",
+  "sourceNote": "Written from: trg.com.pk — home page (company overview and mission), leadership and contact-us pages (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Business process outsourcing investments",
+      "summary": "The company describes itself as managing a portfolio of investments in the business process outsourcing sector, investing in diverse BPO projects.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

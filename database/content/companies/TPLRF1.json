@@ -1,0 +1,39 @@
+{
+  "symbol": "TPLRF1",
+  "description": "TPL REIT Fund I is a listed Shariah-compliant hybrid real estate investment trust — described by its manager as Pakistan's first such fund — managed by TPL REIT Management Company Limited, a 100% owned subsidiary of TPL Properties Limited. It is not an operating company: its principal activity is investing in real estate projects through special purpose vehicles to generate returns for unitholders through rental income, capital appreciation and sale of development property. The Fund has invested in three projects: Mangrove, One Hoshang and Tech Park.",
+  "headOffice": "TPL REIT Management Company Limited, 20th Floor, Sky Tower, East Wing, Dolmen City, HC-3, Block 4, Abdul Sattar Edhi Avenue, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 37130227",
+  "website": "https://tplfunds.com",
+  "ceo": "Imran Butt",
+  "sourceNote": "Written from: tplfunds.com/tpl-reit-fund-i and tplfunds.com (accessed 2026-10-17); fund structure, portfolio, address, CEO and website from the PSX company profile dps.psx.com.pk/company/TPLRF1 and TPL REIT Fund I's Offer for Sale Document on psx.com.pk (accessed 2026-10-17). NOTE: TPLRF1 is a listed REIT scheme, not an operating company; the named CEO is the chief executive of its REIT management company.",
+  "products": [
+    {
+      "name": "Mangrove",
+      "summary": "A master-planned mixed-development community planned over 40 acres on a waterfront locality, overlooking and preserving 115 hectares of mangrove forest and seafront.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "One Hoshang",
+      "summary": "A premium residential apartment tower described by the manager as Pakistan's first Gold LEED certified residential apartment building, retaining a 130-year-old heritage façade.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Tech Park",
+      "summary": "Described by the manager as the first Technology Free Zone of its kind in Pakistan, with a business boutique hotel and targeting LEED Gold certification.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "REIT units",
+      "summary": "Shariah-compliant units of a hybrid REIT scheme listed on the Pakistan Stock Exchange, through which investors hold the Fund's real estate portfolio.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

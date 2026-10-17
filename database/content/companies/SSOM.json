@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for SSOM. Every fact is attributable — see sourceNote. No image is attached: the group's plant photography is not licence-cleared.",
+  "symbol": "SSOM",
+  "description": "S.S. Oil Mills Limited is a Pakistani edible-oil processor incorporated in August 1990, with a solvent extraction and refining plant at Vehari in Punjab. It processes canola, sunflower and soybean into cooking oils and protein meals, and describes itself as one of the country's largest edible oil processors and the second-largest importer of oilseeds.",
+  "headOffice": "2-Tipu Block, Garden Town, Lahore, Pakistan",
+  "phone": "+92 42 35831991",
+  "website": "https://ssgroup.pk/ss-oil-mills-ltd/",
+  "ceo": null,
+  "sourceNote": "Written from: ssgroup.pk/ss-oil-mills-ltd/ (company profile, products and head office contact) and ssoil.ssgroup.pk/SSOilEng/AboutUs.html (accessed 2026-10-17). No chief executive is named on the company's own site, so ceo is null.",
+  "products": [
+    {
+      "name": "Canola oil",
+      "summary": "Canola oil extracted and refined at the company's plant for cooking, frying and everyday household use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sunflower oil",
+      "summary": "Sunflower oil with a light taste and high smoke point, for deep frying and baking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Soybean oil",
+      "summary": "Versatile cooking oil with a neutral flavour, used in households and the food industry.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Canola meal",
+      "summary": "A high-protein byproduct of canola oil production, used in animal and poultry feed.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sunflower meal",
+      "summary": "Protein-rich feed component used in cattle, poultry and dairy rations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Soybean meal",
+      "summary": "Plant-based protein for poultry, dairy and aquaculture feed.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

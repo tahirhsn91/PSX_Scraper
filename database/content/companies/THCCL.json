@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for THCCL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant is available from an open licence source.",
+  "symbol": "THCCL",
+  "description": "Thatta Cement Company Limited was incorporated in 1980 as a public limited company and was a wholly owned subsidiary of the State Cement Corporation of Pakistan (Pvt.) Limited until the Government of Pakistan divested its shareholding in 2004. Its plant, based on dry-process technology, is located 115 km north-east of Karachi at Ghulamullah Road, Makli, District Thatta, where clinker capacity was expanded by 50% to 1,500 tons per day in 2005. The company obtained listing on the Karachi Stock Exchange, now the Pakistan Stock Exchange, in 2008.",
+  "headOffice": "CL/5-4, State Life Building #10, Abdullah Haroon Road, Karachi, Pakistan",
+  "phone": "+92 21 111 842 882",
+  "website": "https://www.thattacement.com",
+  "ceo": "Kamran Munir Ansari",
+  "sourceNote": "Written from: https://www.thattacement.com/company-profile.html, https://www.thattacement.com/Ceo.html and https://www.thattacement.com/our-product.html (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Sulphate Resistant Cement",
+      "summary": "Thatta Sulphate Resistant Cement, for areas affected by salinity, coastal belts, piling work and dams, with high early strength and low heat of hydration.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Portland Blast Furnace Slag Cement",
+      "summary": "Thatta Slag Cement, for structures in hostile soils with high salinity, as well as dams, bridges and earth-retaining structures.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ground Granulated Blast Furnace Slag",
+      "summary": "GGBF slag ground to a fineness of around 4,000 Blaine, for blending with cement and as a filler in foundations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

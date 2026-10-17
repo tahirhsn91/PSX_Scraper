@@ -1,0 +1,46 @@
+{
+  "symbol": "SEARL",
+  "description": "The Searle Company Limited was incorporated in Pakistan in October 1965 as a private limited company and a subsidiary of G.D. Searle & Co., USA, and was converted into a public limited company in November 1993. It is principally engaged in the manufacture of pharmaceutical and other consumer products, and states that it produces both non-pharmaceutical and pharmaceutical brands for consumers under a quality management system certified to ISO-9001. International Brands (Private) Limited is its parent company, holding 56.32% of its shares.",
+  "headOffice": "One IBL Centre, 2nd Floor, Plot # 1, Block 7 & 8, D.M.C.H.S., Tipu Sultan Road, Off Shahrah-e-Faisal, Karachi, Pakistan",
+  "phone": "+92 21 371 70 200-201",
+  "website": "https://searlecompany.com",
+  "ceo": "Tahir Ahmed",
+  "sourceNote": "Written from: searlecompany.com/facilities, searlecompany.com/products, searlecompany.com/contact-us and searlecompany.com/governance (accessed 2026-10-17); incorporation details and parent shareholding from the PSX company profile dps.psx.com.pk/company/SEARL (accessed 2026-10-17).",
+  "products": [
+    {
+      "name": "Aldactone & Aldactone A",
+      "summary": "A Searle brand listed on the company's products page and among the products whose manufacture in Pakistan began at its 1965 inception.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Calan, Calan SR & Calan I.V",
+      "summary": "A Searle cardiovascular brand listed on the company's products page.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Artelac Advanced and Artelac Nightime Gel",
+      "summary": "Eye-care products listed on the company's products page.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nutraceutical products",
+      "summary": "A nutraceutical manufacturing plant established in January 2018 as a joint venture with Belourthe S.A. of Belgium.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Contract manufacturing",
+      "summary": "Contract manufacturing for international companies; the company states it does contract manufacturing for AstraZeneca, RB and ICI Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

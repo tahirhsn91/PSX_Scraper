@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for TGL. Every fact here is attributable — see sourceNote. No image is attached: the company's own product photography is not licence-cleared for reuse.",
+  "symbol": "TGL",
+  "description": "Tariq Glass Industries Limited manufactures glass tableware and float glass in Pakistan. It produces tableware on single and double gob press machines as well as H-28 press-and-blow and stretch machines at a capacity of almost 300 tons per day, and its Toyo Nasic, Omroc and Nova brands are exported. In 2013 the company launched Tariq Float Glass, a plant with a capacity of 550 tons per day producing clear float glass from 2 mm to 13 mm, tinted and reflective glass through an online CVD coating machine, sandblasted glass and aluminium-coated mirrors.",
+  "headOffice": "128-J, Model Town, Lahore 54700, Pakistan",
+  "phone": "+92 42 111 343434",
+  "website": "https://tariqglass.com",
+  "ceo": "Omer Baig",
+  "sourceNote": "Written from: https://tariqglass.com/page/about-us, https://tariqglass.com/page/our-management, https://tariqglass.com/page/general-information and https://tariqglass.com/category/tableware (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Tableware",
+      "summary": "Glass tableware — water sets, tumblers, ice cream and tea sets, jugs, cake sets, ashtrays, stemware, fruit sets, plates and bowls, and mugs — sold under the Toyo Nasic, Omroc and Nova brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Float glass",
+      "summary": "Clear float glass from 2 mm to 13 mm, plus tinted and reflective glass, produced at the Tariq Float Glass plant with a capacity of 550 tons per day.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bottles and jars",
+      "summary": "Glass bottles and jars, listed as a product category by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Decorated and processed glass",
+      "summary": "Sandblasted glass and aluminium-coated mirrors, and decorated ware finished on the company's Tecno 5 decorating machines.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

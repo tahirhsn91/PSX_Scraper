@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for NESTLE. No image is attached: brand photography is Nestlé's own and not licence-cleared for reuse here.",
+  "symbol": "NESTLE",
+  "description": "Nestlé Pakistan Limited is a food and beverages company that has operated in Pakistan since 1988, initially under a joint venture with Milk Pak Ltd and taking over management in 1992. It describes itself as the country's leading food and beverages company, with a focus on nutrition, health and wellness, and distributes nationally from factories at Sheikhupura, Kabirwala, Islamabad and Port Qasim.",
+  "headOffice": "Packages Mall, Shahrah-e-Roomi, PO Amer Sidhu, Lahore 54760, Pakistan",
+  "phone": "+92 42 111 637 853",
+  "website": "https://www.nestle.pk",
+  "ceo": "Jason Avanceña",
+  "sourceNote": "Written from: nestle.pk — aboutus/nestleinpakistan/nestle-in-pakistan, offices-and-factories, management-committee, and the brand pages nestle-milkpak, nestle_nesvita, nescafe, nestle-pure-life-detail and nestle-cerelac (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "NESTLÉ MILKPAK",
+      "summary": "The company's full cream UHT milk brand, which it describes as drawing on over three and a half decades of dairy expertise in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "NESTLÉ MILKPAK Hi-Calcium Low Fat",
+      "summary": "A high-calcium, low-fat UHT milk, presented on the company's site under the former NESVITA name, with less than 1% fat.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "NESCAFÉ",
+      "summary": "The company's coffee brand, sold in Pakistan including ready-to-drink chilled variants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "NESTLÉ PURE LIFE",
+      "summary": "The company's bottled water brand, which Nestlé Pakistan notes was first launched in Pakistan in 1998.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "NESTLÉ CERELAC",
+      "summary": "An infant cereal in the company's infant nutrition range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for PGLC. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "PGLC",
+  "description": "Pak-Gulf Leasing Company Limited was incorporated in Pakistan on 27 December 1994 as a public limited company and commenced operations on 16 September 1996; the company states that it is principally engaged in the business of leasing/Ijarah and is listed on the Pakistan Stock Exchange. It provides leasing finance for capital assets, a vehicle finance facility and SECP-approved certificates of investment from its registered office in DHA, Karachi and a branch office in Lahore.",
+  "headOffice": "UNIBRO HOUSE, Ground Floor, Plot No. 114, 9th East Street, Phase-1, DHA, Karachi-75500, Pakistan",
+  "phone": "+92 21 35820966",
+  "website": "https://www.pakgulfleasing.com",
+  "ceo": "Mahfuz-ur-Rehman Pasha",
+  "sourceNote": "Written from: https://www.pakgulfleasing.com/V-M.html (Status of the Company), https://www.pakgulfleasing.com/Contact.html, https://www.pakgulfleasing.com/Dir-Sen.html, https://www.pakgulfleasing.com/Leasing.html, https://www.pakgulfleasing.com/VF.html and https://www.pakgulfleasing.com/COI.html (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Leasing / Ijarah finance",
+      "summary": "Leasing finance for capital investment in operating assets, with lease periods and repayment terms structured to the customer's cash flows.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Vehicle Finance Facility",
+      "summary": "Vehicle financing of up to 90% of the value of the vehicle, for new or used, imported or locally manufactured vehicles, with repayment over a maximum of five years.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Certificates of Investment (COI)",
+      "summary": "SECP-approved certificates of investment with a preferred minimum investment of Rs 25,000, offered in 12, 24 and 36 month maturities at profit rates the company announces from time to time.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

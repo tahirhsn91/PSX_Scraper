@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for YOUW. Every fact here is attributable - see sourceNote. No image is attached: no licence-cleared photograph of the company's own mill exists, and a generic textile photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "YOUW",
+  "description": "Yousaf Weaving Mills Limited is engaged in the business of textile weaving and manufacturing quality yarn from raw cotton as well as synthetic fibre, and in the sale of processed fabric. The company was incorporated on 17 January 1988 as a public limited company in Pakistan and is quoted on the Pakistan Stock Exchange, with its registered office at 7/1, E-3, Main Boulevard Gulberg III, Lahore.",
+  "headOffice": "7/1-E-3, Main Boulevard, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 35717510",
+  "website": "https://www.yousafweavingmills.com",
+  "ceo": "Khawaja Mohammad Nadeem",
+  "sourceNote": "Written from: yousafweavingmills.com/Home.php, yousafweavingmills.com/aboutus.php, yousafweavingmills.com/media.php and yousafweavingmills.com/contact.php (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Processed fabric",
+      "summary": "The company states that it is engaged in the business of textile weaving and sale of processed fabric.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Yarn",
+      "summary": "Manufacturing of quality yarn from raw cotton as well as synthetic fibre.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

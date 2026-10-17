@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for THALL. Every fact is attributable — see sourceNote. No image is attached: the company's own plant and product photography is not licence-cleared here, and a generic factory photograph would imply it is Thal's. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "THALL",
+  "description": "Thal Limited started in 1966 as a jute mill and is today a public limited company listed on the Pakistan Stock Exchange, operating under the House of Habib Group. Its engineering segment manufactures automotive parts — car air-conditioners, radiators, wiring systems and engine components — while its packaging and building-material segment manufactures, distributes and exports products of jute, paper, woven polypropylene and laminates. In energy the company says it owns two joint ventures, an indigenous coal mine that extracts and supplies coal to local power plants and a mine-mouth power plant that supplies low-cost base load power to the national grid, and its operating subsidiaries are Habib Metro Pakistan (Private) Limited, Thal Boshoku Pakistan (Private) Limited and Thal Power (Private) Limited.",
+  "headOffice": "4th Floor, House of Habib, 3-Jinnah Co-operative Housing Society, Block 7/8, Shahrah-e-Faisal, Karachi 75350, Pakistan",
+  "phone": "+92 21 3431 2030",
+  "website": "https://thallimited.com",
+  "ceo": "Muhammad Tayyab Tareen",
+  "sourceNote": "Written from: https://thalengg.com/about-thal-limited (1966 origin, segment descriptions, joint ventures, subsidiaries, House of Habib Group), https://thallimited.com/contact-us (registered office and telephone), https://thallimited.com/board-of-directors (Chief Executive Officer), https://thallimited.com/subsidary-and-associates (subsidiaries and associates), https://thallimited.com/packaging and https://thallimited.com/laminates (product ranges) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Thermal systems — Thal Engineering",
+      "summary": "Car air-conditioners and HVAC units, evaporators, heater cores, condensers, radiators and reserve tanks, made under technical assistance agreements with Denso and other suppliers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Electrical and engine components — Thal Engineering",
+      "summary": "Starter and alternator assemblies, automotive and equipment wire harnesses, and battery and jumper cables.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Packaging — jute, paper and woven polypropylene",
+      "summary": "Jute sacking bags, hessian cloth, yarn and twine and retail bags; paper cement sacks, wraps, carrier bags and take-away bags; and woven polypropylene packaging.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Laminates",
+      "summary": "Compact laminates, high pressure laminates, a premium range and laminated board, for bathrooms, kitchens and furniture finishes; the laminates business is presented under the Formite name (formite.com.pk), linked from Thal's laminates page.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

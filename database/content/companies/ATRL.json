@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for ATRL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own refinery is available, and a generic refinery photo would imply it is theirs.",
+  "symbol": "ATRL",
+  "description": "Attock Refinery Limited (ARL) is a petroleum refiner operating a refinery at Morgah, Rawalpindi, with a name plate capacity of 53,400 barrels per day. It traces its operations to 1922 and was incorporated in November 1978 to take over the business of the Attock Oil Company Limited relating to refining of crude oil and supplying of refined petroleum products, before being converted into a public limited company in 1979. The company describes itself as the pioneer and pacesetter in Pakistan's petroleum refining sector, and backs its product slate with an in-house Quality Control Laboratory accredited to ISO/IEC 17025.",
+  "headOffice": "Attock Refinery Limited, The Refinery, Post Office Morgah, Rawalpindi, Pakistan",
+  "phone": "+92 51 5487041",
+  "website": "https://www.arl.com.pk",
+  "ceo": "M. Adil Khattak",
+  "sourceNote": "Written from: https://www.arl.com.pk/ (About Us), https://www.arl.com.pk/arl-info/ (Registered Office Address, Contact Information), https://www.arl.com.pk/management/, https://www.arl.com.pk/specifications/ and https://www.arl.com.pk/services/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Liquefied petroleum gas (LPG)",
+      "summary": "Liquefied petroleum gas produced at the Morgah refinery and listed in the company's product specifications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Premier Motor Gasoline (PMG)",
+      "summary": "The company's motor gasoline grade, listed in its published product specifications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Premier Motor Gasoline 95 RON",
+      "summary": "A higher-octane grade of the company's Premier Motor Gasoline.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Aviation fuel (JP-8)",
+      "summary": "Jet fuel to the JP-8 specification, listed among the refinery's products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bitumen 80/100 and cutback grades",
+      "summary": "Penetration grade 80/100 bitumen, plus cutback grades RC-70, RC-250 and MC-70 which the company says are used for surface treatments, stockpile patching mixes and tack coats.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Laboratory testing services",
+      "summary": "Quality control laboratory services accredited to ISO/IEC 17025 by the Pakistan National Accreditation Council, covering petroleum test methods from distillation and flash point to sulphur content and viscosity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

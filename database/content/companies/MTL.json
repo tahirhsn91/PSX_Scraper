@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for MTL. Every fact here is attributable — see sourceNote. No image is attached: Millat's tractor photography is the company's asset, not licence-cleared.",
+  "symbol": "MTL",
+  "description": "Millat Tractors Limited was incorporated in June 1964 and is engaged in the assembly and manufacturing of agricultural tractors, implements and multi-application products. Its group companies, as described on its own site, include Millat Industrial Products Limited, a subsidiary engaged in manufacturing and selling vehicular, industrial and domestic batteries; Bolan Castings Limited, whose management control the company acquired in 1993 by purchasing 51% of the shares offered under privatisation; and TIPEG Intertrade DMCC in Dubai, the group's trading arm responsible for the export function of the group companies.",
+  "headOffice": "9-km Sheikhupura Road, Shahdara, Lahore 12023, Pakistan",
+  "phone": "+92 42 3791 1021-25 (UAN +92 42 111 200 786)",
+  "website": "https://www.millat.com.pk",
+  "ceo": "Raheel Asghar",
+  "sourceNote": "Written from: millat.com.pk/about/company-profile/ (Status of the Company, Registered Head Office, Group Companies), millat.com.pk/about/management-2/ (Management), millat.com.pk/products/agricultural-tractors/, millat.com.pk/products/industrial-and-commercial/, millat.com.pk/contact-us/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Millat's MF tractors",
+      "summary": "The company's agricultural tractor range, marketed as Millat's MF and listed on its site as MF 235, 240, 260, 260 DX, 360, 375, 375 SE, 385, 385 2WD DX and 385 4WD DX.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Agricultural implements",
+      "summary": "Implements for tractor use, sold alongside the company's tractors.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Millat Prime Movers",
+      "summary": "Stationary prime movers of 50, 60, 75 and 95 hp for irrigation, hydraulic pumps, pumping sets and fire fighting vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Millat generators",
+      "summary": "Generator sets, with brochures covering 12.5 to 50 kVA and 60 to 200 kVA ranges.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Forklift trucks",
+      "summary": "Forklift trucks sold within the company's industrial and commercial product line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Spare parts and precision engineering",
+      "summary": "Tractor and implement spare parts, plus precision engineering work carried out by the company's precision engineering division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

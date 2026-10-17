@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for HINOON. Every fact here is attributable — see sourceNote. No image is attached: Highnoon's brand and pack photography is the company's asset, not licence-cleared.",
+  "symbol": "HINOON",
+  "description": "Highnoon Laboratories Limited was incorporated in March 1984 as a private limited company in Lahore, and became a public limited company by 1995. It develops, produces, markets and distributes medicines, describing a portfolio of more than 50 products in different drug forms. Its therapeutic areas, as listed on its own site, are cardiology, metabolic, gastroenterology, musculoskeletal, anti-infective, obstetrics and gynaecology, paediatrics, allergy, respiratory and urology.",
+  "headOffice": "17.5 KM, Multan Road, Lahore 53700, Pakistan",
+  "phone": "+92 42 3751 0023-27",
+  "website": "https://highnoon-labs.com",
+  "ceo": "Dr. Adeel Abbas",
+  "sourceNote": "Written from: highnoon-labs.com/about/ (company history and board, accessed 2026-10-17), highnoon-labs.com/products/ (product statement and therapeutic areas), highnoon-labs.com/productcat/cardiology/ and /productcat/Urology/ (brand listings)",
+  "products": [
+    {
+      "name": "Misar (telmisartan)",
+      "summary": "Cardiology brand marketed as Misar, with the combination variants Misar AM (telmisartan + amlodipine) and Misar H (telmisartan + hydrochlorothiazide).",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Blokium (atenolol)",
+      "summary": "Cardiology brand, also offered as Blokium DIU (atenolol + chlorthalidone).",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lipirex (atorvastatin)",
+      "summary": "Cardiology brand listed in the company's portfolio.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Herbesser (diltiazem HCl)",
+      "summary": "Cardiology brand listed in the company's portfolio.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Prostam (tamsulosin HCl)",
+      "summary": "The company's urology brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

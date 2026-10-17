@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for FFC. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of an FFC plant exists, and a generic fertilizer-plant photo would imply it is theirs.",
+  "symbol": "FFC",
+  "description": "Fauji Fertilizer Company Limited is a Pakistani fertilizer producer founded in 1978 as a joint venture with Haldor Topsoe. It is the country's largest urea producer, with capacity of more than 3 million tonnes a year from plants at Goth Machhi near Sadiqabad and at Mirpur Mathelo in Sindh, and sells under the Sona brand. The company also owns FFC Energy Limited, a wholly owned 49.5 MW wind-power subsidiary, and holds 100% of Foundation Wind Energy-I and 80% of Foundation Wind Energy-II.",
+  "headOffice": "Sona Tower, 156 The Mall, Rawalpindi, Pakistan",
+  "phone": "+92 51 8450001",
+  "website": "https://www.ffc.com.pk",
+  "ceo": "Jahangir Piracha",
+  "sourceNote": "Written from: ffc.com.pk/about-us/, /products/, /contact-us/, /our-investments/ (read via Wayback Machine snapshots dated 2025-07-24; the live site blocks automated access) and ffc.com.pk/governance/ plus the PSX company record for the Managing Director & CEO (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Sona Urea (Granular)",
+      "summary": "Large-grain urea containing 46% nitrogen, with 2-4 mm granules for top dressing in standing crops.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sona Boron DAP",
+      "summary": "An enhanced-efficiency DAP carrying 18% nitrogen, 46% phosphorus and 0.1% boron — described by FFC as the first of its kind in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sona Urea (Zinc Coated)",
+      "summary": "42% nitrogen with 1% zinc, formulated as an enhanced-efficiency compound fertilizer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sona Urea (Neem Coated)",
+      "summary": "46% nitrogen urea coated with azadirachtin to slow nitrification and prolong nutrient availability.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FFC SOP",
+      "summary": "Potassium sulphate fertilizer with 50% K2O and 18% sulphur.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FFC MOP",
+      "summary": "Muriate of potash, the company's most concentrated potash fertilizer at 60% K2O.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for PSX. Every fact here is attributable — see sourceNote. No image is attached: PSX does not publish licence-cleared photography of its own premises.",
+  "symbol": "PSX",
+  "description": "Pakistan Stock Exchange Limited is the national stock exchange of Pakistan and, in its own words, the frontline regulator of the country's capital market. It was formed on 11 January 2016 when the Karachi, Lahore and Islamabad exchanges integrated their operations under the Stock Exchanges (Corporatization, Demutualization and Integration) Act, 2012. It lists 535 companies plus 5 on the GEM Board, across 37 sectors, with a market capitalisation of Rs 19.83 trillion as of 31 August 2026, and its shareholding is 40% held by a consortium of Chinese investors — Shanghai Stock Exchange, Shenzhen Stock Exchange and China Financial Futures Exchange — and 60% by the general public.",
+  "headOffice": "Stock Exchange Building, Stock Exchange Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 111 001 122",
+  "website": "https://www.psx.com.pk",
+  "ceo": "Farrukh H. Sabzwari",
+  "sourceNote": "Written from: psx.com.pk/psx/exchange/profile/about-us, psx.com.pk/psx/exchange/profile/corporate-information, psx.com.pk/psx/contact-us, psx.com.pk/psx/exchange/profile/psx-management-team, and the product listings under psx.com.pk/psx/product-and-services/ (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Equity market",
+      "summary": "The exchange's core marketplace for buying and selling the shares of listed companies, running on its New Trading & Surveillance System (NTS).",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cash Settled Futures (CSF)",
+      "summary": "A cash-settled futures product offered on the exchange.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Exchange Traded Funds (ETFs)",
+      "summary": "Exchange traded funds listed and traded on PSX.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Margin Trading System (MTS)",
+      "summary": "The exchange's margin trading facility for eligible securities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sahulat Account",
+      "summary": "A simplified account product offered to investors under PSX's product set.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Roshan Equity Investment (REI)",
+      "summary": "The route PSX documents for overseas Pakistanis to invest in listed equity through a Roshan Digital Account.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for FHAM. FHAM is a Modaraba — a listed Islamic non-bank financial institution, not an operating industrial company — and the description is written accordingly. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "FHAM",
+  "description": "First Habib Modaraba (FHM) operates as a non-bank Islamic financial institution — a Modaraba — and describes itself as one of the pioneers of Pakistan's Modaraba sector, with a track record of more than three decades. It is a subsidiary of Habib Metropolitan Bank Limited and was established in 1985. It raises funds through Musharakah-based certificates of investment and deploys them in Shariah-compliant financing, including Diminishing Musharaka, Istisna, car financing and plant and equipment financing.",
+  "headOffice": "6th Floor, HBZ Plaza (Hirani Centre), I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": "+92 21 3263 5949",
+  "website": "https://habibmodaraba.com",
+  "ceo": "Muhammad Shoaib Ibrahim",
+  "sourceNote": "Written from: https://habibmodaraba.com/ (About Us), https://habibmodaraba.com/about-us-2, https://habibmodaraba.com/corporate-information (Board of Directors), https://habibmodaraba.com/contact-us, https://habibmodaraba.com/certificate-of-investment-musharakah-based, https://habibmodaraba.com/diminishing-musharaka and https://habibmodaraba.com/istisna (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Certificate of Investment (Musharakah based)",
+      "summary": "The Modaraba's Musharakah-based investment certificate, offered in tenures from 3 months to 5 years with flexible profit payment plans, to individuals as well as corporate and other concerns.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Diminishing Musharaka",
+      "summary": "Financing structured on Shirkat-ul-Milk, with joint ownership of the asset, the client purchasing FHM's units over time and profit adjusted to FHM's remaining share.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FHM Consumer Car Financing",
+      "summary": "Shariah-compliant car financing offered to individual income groups.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Istisna Financing",
+      "summary": "A sale contract under which FHM undertakes to have the subject matter manufactured or acquired to the customer's specification and sells it at an agreed price and settlement method.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Plant, machinery, generators and equipment financing",
+      "summary": "Financing for business plant, machinery, generators and equipment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Solar power equipment financing",
+      "summary": "Financing for solar power equipment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

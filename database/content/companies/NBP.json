@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for NBP. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the bank's own premises is available from an open licence source.",
+  "symbol": "NBP",
+  "description": "National Bank of Pakistan, which calls itself \"The Nation's Bank\", is a commercial bank operating a branch network across Pakistan. It provides corporate banking, Shariah-compliant Islamic banking through dedicated Islamic Banking branches, home remittance services for overseas Pakistanis, agriculture financing under its Kisan Dost programme, and digital banking through the NBP Digital app.",
+  "headOffice": "NBP Building, I.I. Chundrigar Road, Karachi, Pakistan",
+  "phone": "+92 21 9922 0100",
+  "website": "https://www.nbp.com.pk",
+  "ceo": "Imran Sarwar",
+  "sourceNote": "Written from: https://www.nbp.com.pk/contact/index.aspx (head office, telephone), https://www.nbp.com.pk/Islamic/index.aspx, https://www.nbp.com.pk/CorporateBanking/index.aspx, https://www.nbp.com.pk/hrem/index.aspx, https://www.nbp.com.pk/KisanDost/index.aspx, https://www.nbp.com.pk/digital/index.aspx and the bank's own press release https://nbp.com.pk/PRESS-RELEASE/NBP_warmly_welcomes_Mr_Imran_Sarwar.pdf (9 September 2026) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Corporate banking",
+      "summary": "Banking for corporate clients, delivered through the bank's corporate branches.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Islamic banking — NBP Aitemaad",
+      "summary": "Shariah-compliant deposit schemes and financing facilities available through dedicated Islamic Banking branches, free of Riba.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home remittance",
+      "summary": "Receipt of home remittances for overseas Pakistanis through more than 1,500 branches and the bank's remittance partners worldwide.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Kisan Dost",
+      "summary": "The bank's agriculture farming programme: financing at competitive mark-up, technical guidance to farmers at their doorstep, and facilities against pass book, property, gold ornaments or paper security.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "NBP Digital",
+      "summary": "The bank's mobile banking application, serving customers of both conventional and Aitemaad Islamic banking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

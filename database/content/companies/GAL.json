@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for GAL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own vehicles or plant is available from an open licence source.",
+  "symbol": "GAL",
+  "description": "Ghandhara Automobiles Limited, formerly Ghandhara Nissan Limited, was incorporated in Pakistan on 8 August 1981 as a private limited company and converted into a public limited company on 24 May 1992. It is a subsidiary of Bibojee Services (Private) Limited. The principal business of the Company is assembly and progressive manufacturing of vehicles including JAC Trucks, import and sale of Nissan, Dongfeng and Renault vehicles in Completely Built-up condition, and assembly of other vehicles under contract agreement.",
+  "headOffice": "F-3, Hub Chowki Road, S.I.T.E., Karachi, Pakistan",
+  "phone": "+92 21 3255 6901-10",
+  "website": "https://www.ghandharaautomobiles.com.pk",
+  "ceo": "Ahmad Kuli Khan Khattak",
+  "sourceNote": "Written from: https://www.ghandharaautomobiles.com.pk/page-about-us, https://www.ghandharaautomobiles.com.pk/page-head-office and https://www.ghandharaautomobiles.com.pk/page-management-profile (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "JAC Trucks",
+      "summary": "JAC trucks, assembled and progressively manufactured at the company's plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "JAC T9 Hunter",
+      "summary": "A JAC pickup model listed in the company's own product line-up, which the company announced for launch in Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Dongfeng Trucks",
+      "summary": "Dongfeng trucks imported and sold in Completely Built-up condition.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Renault Trucks",
+      "summary": "Renault trucks imported and sold in Completely Built-up condition.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Nissan vehicles",
+      "summary": "Nissan vehicles imported and sold in Completely Built-up condition.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

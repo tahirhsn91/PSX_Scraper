@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for FATIMA. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the Sadiqabad complex exists on the open licence sources, and a generic fertilizer-plant photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FATIMA",
+  "description": "Fatima Fertilizer Company Limited is a fertilizer manufacturer whose complex at Sadiqabad, Rahim Yar Khan, produces ammonia, nitric acid and LCO2 as intermediate products and urea, calcium ammonium nitrate (CAN) and nitro phosphate (NP) as final products. The complex runs a 56 MW captive power plant and has been allocated 110 MMCFD of gas from the dedicated Mari gas fields. The company describes itself as a joint venture between Fatima Group and Arif Habib Group.",
+  "headOffice": "E-110, Khayaban-e-Jinnah, Cantt, Lahore, Pakistan",
+  "phone": "+92 111 328 462",
+  "website": "https://fatimafertilizer.com",
+  "ceo": "Fawad Ahmed Mukhtar",
+  "sourceNote": "Written from: fatimafertilizer.com — home page (overview, products, contact information) and Board of Directors page (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Sarsabz Urea",
+      "summary": "A highly concentrated nitrogenous fertilizer with 46% ammoniacal nitrogen, designed to promote vegetative growth.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sarsabz CAN",
+      "summary": "A slow-release nitrogenous fertilizer (26% N) chemically balanced for high use efficiency.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sarsabz NP",
+      "summary": "Sarsabz Nitrophos, an acidic (pH 3.5) phosphatic fertilizer with 20% P₂O₅, chemically balanced as a nutrient solution.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sarsabz DAP",
+      "summary": "A compound fertilizer with 46% P₂O₅ and 18% nitrogen, used as a basal application and to promote root development.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
