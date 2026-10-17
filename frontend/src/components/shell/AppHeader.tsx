@@ -66,7 +66,7 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Box
             component={RouterLink}
             to="/"
-            sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'inherit', textDecoration: 'none' }}
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'inherit', textDecoration: 'none', flexShrink: 0 }}
           >
             {/* Decorative — the brand name sits right beside it, so an empty alt stops screen readers
                 announcing the mark as well. 28px rendered from a 64px file so it stays crisp at 2x;
@@ -110,7 +110,22 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
             </Box>
           </Box>
 
-          <Box component="nav" aria-label="Primary" sx={{ display: { xs: 'none', md: 'flex' }, gap: 0.5, ml: 1 }}>
+          <Box
+            component="nav"
+            aria-label="Primary"
+            sx={{
+              // Eight pills plus the brand and the two icons do not fit a 900px bar. Rather than
+              // dropping items at that width, let the strip scroll sideways with the bar hidden —
+              // every destination stays reachable and the page itself never scrolls horizontally.
+              display: { xs: 'none', md: 'flex' },
+              gap: 0.5,
+              ml: 1,
+              minWidth: 0,
+              overflowX: 'auto',
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
+            }}
+          >
             {NAV.map((item) => {
               const active = item.to === '/' ? pathname === '/' : pathname.startsWith(item.to);
               return (
@@ -121,7 +136,10 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                   color="inherit"
                   aria-current={active ? 'page' : undefined}
                   sx={{
-                    px: 1.5,
+                    // Tighter below xl: eight pills at 12px each side overflowed a 1280px
+                    // viewport and pushed the page 10px sideways. 8px keeps every item on one
+                    // line and hands the space back to the search field.
+                    px: { md: 1, xl: 1.5 },
                     minHeight: 34,
                     borderRadius: 999,
                     fontSize: '0.875rem',
@@ -141,7 +159,11 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Box
             sx={{
               flexGrow: 1,
-              display: { xs: 'none', md: 'block' },
+              flexShrink: 1,
+              minWidth: 0,
+              // The inline field needs room the md-sized bar does not have once eight nav pills are
+              // showing, so below lg the magnifier opens the full-screen search sheet instead.
+              display: { xs: 'none', lg: 'block' },
               maxWidth: 420,
               ml: 'auto',
               mr: 1,
@@ -162,12 +184,12 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
             <GlobalSearch />
           </Box>
 
-          <Stack direction="row" spacing={0.5} sx={{ ml: { xs: 'auto', md: 0 }, alignItems: 'center' }}>
+          <Stack direction="row" spacing={0.5} sx={{ ml: { xs: 'auto', md: 0 }, alignItems: 'center', flexShrink: 0 }}>
             <IconButton
               onClick={onOpenSearch}
               aria-label="Search stocks"
               sx={{
-                display: { md: 'none' },
+                display: { lg: 'none' },
                 color: 'nav.textMuted',
                 '&:hover': { color: 'nav.text', bgcolor: 'nav.hover' },
               }}
@@ -183,7 +205,10 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
               disableElevation
               startIcon={<AccountBalanceWalletRoundedIcon />}
               sx={{
-                display: { xs: 'none', sm: 'inline-flex' },
+                // Text at sm means the label fits beside the mark; md is the tight band where the
+                // eight nav pills and the search control already compete for the bar, so the CTA
+                // drops to its icon there and comes back at lg.
+                display: { xs: 'none', sm: 'inline-flex', md: 'none', lg: 'inline-flex' },
                 borderRadius: 999,
                 px: 1.75,
                 minHeight: 36,
@@ -221,7 +246,7 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
               {...portfolioLink()}
               aria-label="Track your portfolio"
               sx={{
-                display: { xs: 'inline-flex', sm: 'none' },
+                display: { xs: 'inline-flex', sm: 'none', md: 'inline-flex', lg: 'none' },
                 bgcolor: 'nav.cta',
                 color: 'nav.ctaText',
               }}

@@ -168,7 +168,9 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
   const hasAnyMetric = currentAssessed + futureAssessed > 0;
 
   return (
-    <Stack spacing={2}>
+    // 24px between the three cards, matching the page's own section rhythm (the page Stack uses
+    // spacing={3}). This block used 16px and read as a different grid.
+    <Stack spacing={3}>
       <SectionCard
         title="Fundamentals"
         subtitle="Grouped by what they measure · blank means the field was not on the page we read"
@@ -178,7 +180,10 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
             {CATEGORIES.map((cat) => (
               <Accordion
                 key={cat.key}
-                defaultExpanded
+                // Progressive disclosure: a reader wants the valuation snapshot first; the other
+                // four groups are one tap away. Previously every group opened, which made the
+                // Fundamentals block 1,521px of a 5,051px page.
+                defaultExpanded={cat.key === 'valuation'}
                 disableGutters
                 elevation={0}
                 square={false}
