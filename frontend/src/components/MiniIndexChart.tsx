@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box, Skeleton, Tooltip, Typography, useTheme } from '@mui/material';
 import { useIndexHistory } from '../api/hooks';
 import { toCandles, toneOf, type MiniCandle } from '../lib/candles';
@@ -116,6 +116,20 @@ export function MiniIndexChart({
   const candles = useMemo(() => toCandles(data?.items ?? [], sessions), [data, sessions]);
 
   /**
+   * Draw the line once, when it first has something to draw. The timer starts on the first
+   * drawable series, not on mount: the history request usually resolves well after the card
+   * mounts, and a timer started at mount would already have expired by the time the path exists.
+   * A sparkline that redraws on every 30-second poll is a blinking strip; the shape change on a
+   * new session is carried by the fade on the SVG instead.
+   */
+  const [drawn, setDrawn] = useState(false);
+  useEffect(() => {
+    if (drawn || candles.length < 2) return;
+    const timer = setTimeout(() => setDrawn(true), 650);
+    return () => clearTimeout(timer);
+  }, [candles.length, drawn]);
+
+  /**
    * Resolve a palette token to the colour to paint with. SVG children take paint as an attribute
    * rather than through `sx`, so the token is looked up here instead of in the markup — the chart
    * still draws from the theme, and so still follows light and dark.
@@ -183,13 +197,42 @@ export function MiniIndexChart({
       <Box sx={{ position: 'relative', width: cssWidth, height: box.h, flexShrink: 0 }}>
       <Box
         component="svg"
+        // A new session (or a live close moving) remounts the drawing, which replays the short
+        // fade: enough to notice the chart was refreshed, not enough to look like a load.
+        key={`${last.date ?? ''}:${last.close}:${candles.length}`}
         viewBox={`0 0 ${box.w} ${box.h}`}
         preserveAspectRatio="none"
         role="img"
         aria-label={`${symbol}: ${candles.length} sessions, latest session ${
           lastTone === 'success.main' ? 'up' : lastTone === 'error.main' ? 'down' : 'unchanged'
         }`}
-        sx={{ display: 'block', width: '100%', height: '100%', overflow: 'visible' }}
+        sx={{
+          display: 'block',
+          width: '100%',
+          height: '100%',
+          overflow: 'visible',
+          animation: `spark-fade 200ms ${theme.app.motion.easing}`,
+          '@keyframes spark-fade': {
+            from: { opacity: 0.55 },
+            to: { opacity: 1 },
+          },
+          // The line draws itself once (`pathLength={1}` normalises the dash maths). After the
+          // first 650ms the rule is dropped and the line is a plain stroke, so later remounts do
+          // not replay it.
+          ...(drawn
+            ? {}
+            : {
+                '& .spark-line': {
+                  strokeDasharray: 1,
+                  strokeDashoffset: 1,
+                  animation: `spark-draw 600ms ${theme.app.motion.easing} forwards`,
+                },
+                '@keyframes spark-draw': {
+                  from: { strokeDashoffset: 1 },
+                  to: { strokeDashoffset: 0 },
+                },
+              }),
+        }}
       >
         {variant === 'line' ? (
           (() => {
@@ -204,6 +247,8 @@ export function MiniIndexChart({
                 {/* The whole path follows the index, so a card cannot show a trend the index did
                     not have — but the stroke takes today's tone, which is what the card answers. */}
                 <path
+                  className="spark-line"
+                  pathLength={1}
                   d={line}
                   fill="none"
                   stroke={colour}

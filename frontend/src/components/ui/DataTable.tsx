@@ -119,6 +119,16 @@ export interface DataTableProps<T> {
    * container — the table scrolls, the page never does. Pair it with `cardsBelow="never"`.
    */
   minTableWidth?: number;
+  /**
+   * Changes whenever the rows on screen represent a different question — a new sort, a new page,
+   * the other index's member list. The body then fades and lifts 4px into place (160ms) instead
+   * of swapping rows under the reader with no transition at all.
+   *
+   * Deliberately a string rather than derived from `rows`: polling replaces the row objects every
+   * few seconds, and an animation keyed on those would replay on every poll. Only the caller knows
+   * which change was a *question*, so only the caller can name it.
+   */
+  transitionKey?: string;
 }
 
 /**
@@ -151,6 +161,7 @@ function DataTableInner<T>({
   cardsBelow = 'md',
   fixed = false,
   minTableWidth,
+  transitionKey,
 }: DataTableProps<T>) {
   const theme = useTheme();
   // `'never'` is not a breakpoint: it means no width renders the card list at all.
@@ -256,7 +267,19 @@ function DataTableInner<T>({
     const stale = loading;
     return isCardView ? (
       <Box
-        sx={stale ? { opacity: 0.55, pointerEvents: 'none', transition: 'opacity 150ms' } : undefined}
+        key={transitionKey ?? 'cards'}
+        sx={{
+          ...(stale ? { opacity: 0.55, pointerEvents: 'none', transition: 'opacity 150ms' } : {}),
+          ...(transitionKey
+            ? {
+                animation: `rows-in 160ms ${theme.app.motion.easing}`,
+                '@keyframes rows-in': {
+                  from: { opacity: 0.55, transform: 'translateY(4px)' },
+                  to: { opacity: 1, transform: 'none' },
+                },
+              }
+            : {}),
+        }}
         aria-busy={stale || undefined}
       >
         <MobileCards columns={columns} rows={rows} rowKey={rowKey} rowHref={rowHref} />
@@ -271,7 +294,21 @@ function DataTableInner<T>({
           sx={tableSx}
         >
           {headRow()}
-          <TableBody sx={stale ? { opacity: 0.55, transition: 'opacity 150ms' } : undefined}>
+          <TableBody
+            key={transitionKey ?? 'rows'}
+            sx={{
+              ...(stale ? { opacity: 0.55, transition: 'opacity 150ms' } : {}),
+              ...(transitionKey
+                ? {
+                    animation: `rows-in 160ms ${theme.app.motion.easing}`,
+                    '@keyframes rows-in': {
+                      from: { opacity: 0.55, transform: 'translateY(4px)' },
+                      to: { opacity: 1, transform: 'none' },
+                    },
+                  }
+                : {}),
+            }}
+          >
             {rows.map((row) => {
               const href = rowHref?.(row);
               return (
