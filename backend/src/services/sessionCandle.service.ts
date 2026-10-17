@@ -3,6 +3,7 @@ import { sessionStamp } from '../scrapers/parse.utils';
 import { fetchTradingViewCandles, type TradingViewCandle } from '../scrapers/tradingViewCandles.scraper';
 import { indexRepository } from '../repositories/index.repository';
 import { listTrackedWithSessionRow, setSessionCandle } from '../repositories/stockPrice.repository';
+import { pktDay, tradingDayState } from './marketCalendar.service';
 
 /**
  * The session's daily candle, written onto the row that session already owns.
@@ -79,7 +80,25 @@ const emptyTally = (): CandleTally => ({ written: 0, unmatched: 0, noRow: 0, ref
  */
 export async function syncSessionCandles(): Promise<SessionCandleSummary> {
   const log = childLogger({ op: 'session-candle' });
-  const stamp = sessionStamp(new Date().toISOString());
+
+  // A closed day has no session to write a candle onto. This job used to run every day and stamp
+  // the row with "today", which is how five Saturdays' worth of carried-forward prices (2,101 rows)
+  // entered the series — and, in turn, how the next sync's change% check came to compare a reading
+  // against its own copy. Skipping is the fix, not an optimisation.
+  const today = new Date();
+  const todayState = await tradingDayState(today);
+  if (todayState === 'weekend' || todayState === 'holiday') {
+    log.info('session-candle.market_closed', { day: pktDay(today), state: todayState });
+    return {
+      session: pktDay(today),
+      requested: 0,
+      indices: emptyTally(),
+      stocks: emptyTally(),
+      refusedSymbols: [],
+    };
+  }
+
+  const stamp = sessionStamp(today.toISOString());
   const tradeDate = new Date(stamp ?? Date.now());
 
   const indices = await indexRepository.findAll();
