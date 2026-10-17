@@ -24,7 +24,6 @@ import { TradingViewChart } from '../components/TradingViewChart';
 import { FundamentalsPanel } from '../components/FundamentalsPanel';
 import { CompanyDescriptionPanel } from '../components/CompanyDescriptionPanel';
 import { IncomeStatementPanel } from '../components/IncomeStatementPanel';
-import { HoldingButton } from '../components/HoldingDialog';
 import { QuickJumpNav, type QuickJumpSection } from '../components/QuickJumpNav';
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
@@ -399,19 +398,16 @@ export function StockDetails() {
           </Stack>
         }
         actions={
-          <>
-            {isDev && (
-              <Button
-                variant="contained"
-                startIcon={<SyncIcon />}
-                disabled={syncing}
-                onClick={() => syncStock.mutate(symbol)}
-              >
-                {syncing ? 'Syncing…' : 'Sync latest data'}
-              </Button>
-            )}
-            <HoldingButton symbol={symbol} />
-          </>
+          isDev && (
+            <Button
+              variant="contained"
+              startIcon={<SyncIcon />}
+              disabled={syncing}
+              onClick={() => syncStock.mutate(symbol)}
+            >
+              {syncing ? 'Syncing…' : 'Sync latest data'}
+            </Button>
+          )
         }
       />
 
