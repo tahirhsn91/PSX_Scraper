@@ -6,6 +6,7 @@ import {
   Chip,
   Grid,
   LinearProgress,
+  Paper,
   Skeleton,
   Stack,
   ToggleButton,
@@ -119,34 +120,48 @@ const rangeLabel = (r: HistoryRange): string =>
 
 type Dividend = StockDetail['dividends'][number];
 
-const dividendColumns: Column<Dividend>[] = [
-  {
-    key: 'announced',
-    header: 'Announced',
-    render: (d) => formatDate(d.announcementDate),
-    mobileRole: 'title',
-  },
-  {
-    key: 'bookClosure',
-    header: 'Book closure',
-    render: (d) => formatDate(d.bookClosure),
-    mobileRole: 'meta',
-  },
-  {
-    key: 'payment',
-    header: 'Payment',
-    hideBelow: 'md',
-    render: (d) => formatDate(d.paymentDate),
-    mobileRole: 'meta',
-  },
-  {
+/**
+ * Dividend columns, built from the rows we actually hold.
+ *
+ * PSX's announcement feed publishes `announcement_date` and the amount; `book_closure` and
+ * `payment_date` arrive null on every row. A two-thirds-empty table is worse than a narrow one, so
+ * a column appears only when at least one row has a value for it.
+ */
+function dividendColumnsFor(rows: Dividend[]): Column<Dividend>[] {
+  const cols: Column<Dividend>[] = [
+    {
+      key: 'announced',
+      header: 'Announced',
+      render: (d) => formatDate(d.announcementDate),
+      mobileRole: 'title',
+    },
+  ];
+  if (rows.some((d) => d.bookClosure != null)) {
+    cols.push({
+      key: 'bookClosure',
+      header: 'Book closure',
+      render: (d) => formatDate(d.bookClosure),
+      mobileRole: 'meta',
+    });
+  }
+  if (rows.some((d) => d.paymentDate != null)) {
+    cols.push({
+      key: 'payment',
+      header: 'Payment',
+      hideBelow: 'md',
+      render: (d) => formatDate(d.paymentDate),
+      mobileRole: 'meta',
+    });
+  }
+  cols.push({
     key: 'dividend',
     header: 'Dividend',
     align: 'right',
     mobileRole: 'value',
     render: (d) => formatNumber(d.dividend),
-  },
-];
+  });
+  return cols;
+}
 
 const RATIO_TILES: { key: keyof NonNullable<StockDetail['ratios']>; label: string; suffix?: string }[] = [
   { key: 'peRatio', label: 'P/E' },
@@ -180,6 +195,10 @@ export function StockDetails() {
     [profileQ.data],
   );
   const [range, setRange] = useState<HistoryRange>('1Y');
+  // Progressive disclosure for the two long lists: the latest few rows are the useful default,
+  // and the full set is one tap away. Both start collapsed on every symbol.
+  const [showAllDividends, setShowAllDividends] = useState(false);
+  const [showAllPeers, setShowAllPeers] = useState(false);
   const { data: history, isFetching: historyLoading } = useHistory(symbol, range);
   // One range control drives both views: the API resolves the preset (1W … MAX) to a lower
   // bound, so the candle chart really does show one week when 1W is picked.
@@ -298,6 +317,8 @@ export function StockDetails() {
   }
 
   const price = data.price;
+  const visibleDividends = showAllDividends ? data.dividends : data.dividends.slice(0, 3);
+  const visiblePeers = showAllPeers ? peers : peers.slice(0, 4);
   const chart = (history?.items ?? [])
     .filter((p) => p.close != null && p.lastTradeDate)
     .slice()
@@ -395,10 +416,15 @@ export function StockDetails() {
 
       {isDev && syncing && <LinearProgress sx={{ mb: 2 }} />}
 
-      <Grid container spacing={1.5} sx={{ mb: 3 }}>
-        <Grid item xs={6} sm={4} md={3}>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ mb: 1.5, '& > .MuiGrid-item': { minHeight: 100 } }}
+      >
+        <Grid item xs={6} md={3}>
           <StatTile
             label="Price"
+            fill
             value={formatNumber(price?.currentPrice)}
             valueTitle={price?.currentPrice != null ? `Rs ${price.currentPrice}` : undefined}
             footer={
@@ -413,23 +439,36 @@ export function StockDetails() {
             }
           />
         </Grid>
-        <Grid item xs={6} sm={4} md={3}>
+        <Grid item xs={6} md={3}>
           <StatTile
             label="Volume"
+            fill
             value={formatVolume(price?.volume) ?? DASH}
             valueTitle={price?.volume != null ? `${formatCount(price.volume)} shares` : undefined}
+            footer={
+              <Typography variant="caption" color="text.secondary">
+                Shares traded today
+              </Typography>
+            }
           />
         </Grid>
-        <Grid item xs={6} sm={4} md={3}>
+        <Grid item xs={6} md={3}>
           <StatTile
             label="Market cap"
+            fill
             value={formatMarketCap(price?.marketCap) ?? DASH}
             valueTitle={price?.marketCap != null ? `Rs ${formatCount(price.marketCap)}` : undefined}
+            footer={
+              <Typography variant="caption" color="text.secondary">
+                At the current price
+              </Typography>
+            }
           />
         </Grid>
-        <Grid item xs={6} sm={4} md={3}>
+        <Grid item xs={6} md={3}>
           <StatTile
             label="52-week range"
+            fill
             value={
               price?.week52Low == null && price?.week52High == null
                 ? DASH
@@ -437,43 +476,64 @@ export function StockDetails() {
             }
             footer={
               rangePct == null ? null : (
-                <Box>
+                // One line, not two: a bar plus a stacked caption made the 52-week tile 30px
+                // taller than its neighbours on a phone, so the two KPI rows stopped matching.
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <LinearProgress
                     variant="determinate"
                     value={rangePct}
-                    sx={{ height: 6, borderRadius: 1 }}
+                    sx={{ height: 6, borderRadius: 1, flex: 1 }}
                   />
-                  <Typography variant="caption" color="text.secondary">
-                    Today at {rangePct.toFixed(0)}% of the range
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ whiteSpace: 'nowrap' }}
+                  >
+                    {rangePct.toFixed(0)}%
                   </Typography>
                 </Box>
               )
             }
           />
         </Grid>
-        <Grid item xs={6} sm={4} md={3}>
-          <StatTile label="Open" value={formatNumber(price?.open)} />
-        </Grid>
-        <Grid item xs={6} sm={4} md={3}>
-          <StatTile label="Day high" value={formatNumber(price?.high)} />
-        </Grid>
-        <Grid item xs={6} sm={4} md={3}>
-          <StatTile label="Day low" value={formatNumber(price?.low)} />
-        </Grid>
-        <Grid item xs={6} sm={4} md={3}>
-          <StatTile
-            label="Last trade"
-            value={formatDate(price?.lastTradeDate)}
-            footer={
-              price?.lastTradeDate ? (
-                <Typography variant="caption" color="text.secondary">
-                  {formatDateTime(price.lastTradeDate)}
-                </Typography>
-              ) : null
-            }
-          />
-        </Grid>
       </Grid>
+
+      {/* Open / high / low / last trade used to be four more tiles with empty bottoms. One
+          compact strip keeps them scannable without spending a second row of cards on them. */}
+      <Paper
+        variant="outlined"
+        sx={{
+          mb: 3,
+          px: 2,
+          py: 1.25,
+          display: 'flex',
+          flexWrap: 'wrap',
+          columnGap: { xs: 2.5, sm: 4 },
+          rowGap: 1,
+        }}
+      >
+        {[
+          { label: 'Open', value: formatNumber(price?.open) },
+          { label: 'Day high', value: formatNumber(price?.high) },
+          { label: 'Day low', value: formatNumber(price?.low) },
+          {
+            label: 'Last trade',
+            value: price?.lastTradeDate ? formatDateTime(price.lastTradeDate) : DASH,
+          },
+        ].map((item) => (
+          <Box key={item.label} sx={{ minWidth: 96 }}>
+            <Typography
+              variant="overline"
+              sx={{ display: 'block', color: 'text.secondary', lineHeight: 1.2 }}
+            >
+              {item.label}
+            </Typography>
+            <Typography variant="body2" sx={{ fontVariantNumeric: 'tabular-nums' }}>
+              {item.value}
+            </Typography>
+          </Box>
+        ))}
+      </Paper>
 
       <QuickJumpNav sections={navSections} onOffsetChange={setScrollOffset} />
 
@@ -749,22 +809,36 @@ export function StockDetails() {
           <SectionCard
             title="Dividends"
             subtitle={`${data.dividends.length} announcement${data.dividends.length === 1 ? '' : 's'} on record`}
+            action={
+              data.dividends.length > 3 ? (
+                <Button
+                  size="small"
+                  onClick={() => setShowAllDividends((v) => !v)}
+                  aria-expanded={showAllDividends}
+                >
+                  {showAllDividends ? 'Show latest 3' : `Show all ${data.dividends.length}`}
+                </Button>
+              ) : undefined
+            }
             flush
           >
             <DataTable
-              columns={dividendColumns}
-              rows={data.dividends}
+              columns={dividendColumnsFor(data.dividends)}
+              rows={visibleDividends}
               ariaLabel="Dividends"
               rowKey={(d) => `${d.announcementDate ?? 'x'}-${d.dividend ?? 'x'}`}
               emptyTitle="No dividends recorded"
               emptyDescription="Nothing announced for this symbol in the periods we have scraped."
             />
           </SectionCard>
+        </Box>
 
-          {/* Onward links between related content (#174): the indices this stock belongs to, and
-              the other names in its sector. Both are internal links an SEO pass would want, and
-              both are ordinary navigation for a reader who is looking sideways from this page. */}
-          <Box component="section" id="section-related" sx={{ scrollMarginTop: scrollOffset }}>
+        {/* Onward links between related content (#174): the indices this stock belongs to, and
+            the other names in its sector. Both are internal links an SEO pass would want, and
+            both are ordinary navigation for a reader who is looking sideways from this page.
+            A sibling of Dividends, not a child of it: nesting it inside the dividends block
+            collapsed the 24px page rhythm to 0px at that seam. */}
+        <Box component="section" id="section-related" sx={{ scrollMarginTop: scrollOffset }}>
             <SectionCard
               title="Related"
               subtitle="Where this stock sits in the market — every link opens that page"
@@ -797,7 +871,7 @@ export function StockDetails() {
                       Other stocks in {sectorName}
                     </Typography>
                     <Stack spacing={0.5} sx={{ mt: 1 }}>
-                      {peers.map((peer) => (
+                      {visiblePeers.map((peer) => (
                         <Box
                           key={peer.symbol}
                           component={RouterLink}
@@ -824,6 +898,18 @@ export function StockDetails() {
                         </Box>
                       ))}
                     </Stack>
+                    {peers.length > 4 && (
+                      <Button
+                        size="small"
+                        onClick={() => setShowAllPeers((v) => !v)}
+                        aria-expanded={showAllPeers}
+                        sx={{ mt: 0.5 }}
+                      >
+                        {showAllPeers
+                          ? 'Show fewer'
+                          : `View all ${peers.length}${sectorName ? ` in ${sectorName}` : ''}`}
+                      </Button>
+                    )}
                   </Box>
                 )}
 
@@ -837,7 +923,6 @@ export function StockDetails() {
                 )}
               </Stack>
             </SectionCard>
-          </Box>
         </Box>
       </Stack>
     </Box>
