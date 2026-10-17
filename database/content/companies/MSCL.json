@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for MSCL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "MSCL",
+  "description": "Metropolitan Steel Corporation Limited was incorporated in 1955 and manufactures steel products, principally mild and high carbon steel wires, at its plant in the Landhi Industrial Area, Karachi. Its shares are quoted on the Pakistan Stock Exchange.",
+  "headOffice": "Plot No. HE-1/2, Landhi Industrial Area, Karachi",
+  "phone": null,
+  "website": null,
+  "ceo": "Muhammad Umar Mehkari",
+  "sourceNote": "PSX company profile (dps.psx.com.pk/company/MSCL: business description, key people, address), read 2026-10-17. The website listed in that record (msclwire.com) did not resolve from this host, so no company-site content is used.",
+  "products": [
+    {
+      "name": "Steel wire",
+      "summary": "Mild and high carbon steel wires produced at the Landhi Industrial Area plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for INKL. Every fact here is attributable — see sourceNote. No image is attached: the factory photography on the company site is not licence-cleared.",
+  "symbol": "INKL",
+  "description": "International Knitwear Limited was incorporated in May 1990 and runs a vertically integrated knitwear operation in Karachi, with in-house processing and knitting facilities. It exports knitwear to store chains and international brands in Europe, the Middle East and the United States.",
+  "headOffice": "F-2A/(L), S.I.T.E., Karachi 75730, Pakistan",
+  "phone": "+92 21 32574302-04",
+  "website": "https://internationalknitwear.com",
+  "ceo": "Naeem Ahmed Shafi",
+  "sourceNote": "Company website (internationalknitwear.com: home, about/profile-of-company, governance), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Knitwear garments",
+      "summary": "Knitwear made from fine yarns at a single vertically integrated Karachi site, sold to store chains and international brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

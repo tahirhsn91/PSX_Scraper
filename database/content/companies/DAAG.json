@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for DAAG. Every fact here is attributable — see sourceNote. No current chief executive is published on the pages read, so ceo is null. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "DAAG",
+  "description": "Data Agro Limited is a public limited company, listed on the Pakistan Stock Exchange, that makes and sells hybrid seed. It began in 1992 selling seed as a small company and now runs its own research and development department, which it states uses patented methods and high-quality seed stock to develop its varieties.",
+  "headOffice": "#104, Hotel One, 40 A/2, Mehmood Ali Kasoori Road, Lahore 54000, Pakistan",
+  "phone": "+92 42 3575 5165",
+  "website": "https://dataagroltd.com",
+  "ceo": null,
+  "sourceNote": "Company website dataagroltd.com — about page (started 1992, public limited and listed, R&D and patented methods) and contact page (Lahore address, office and factory telephone numbers), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Hybrid seed",
+      "summary": "Hybrid seed varieties developed and sold by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

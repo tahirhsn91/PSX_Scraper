@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for MUGHAL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "MUGHAL",
+  "description": "Mughal Iron & Steel Industries Limited, incorporated in 2010, operates in ferrous and non-ferrous segments; the principal activity is manufacturing and sale of mild steel products in the ferrous segment. It produces billets, rolled bars and beams, and in the non-ferrous segment ferro-alloys including ferro silicomanganese, ferro chrome and ferro silicon.",
+  "headOffice": "31-A Shadman-I, Lahore",
+  "phone": "+92 42 3596 0841-3",
+  "website": "https://mughalsteel.com.pk",
+  "ceo": "Khurram Javaid",
+  "sourceNote": "Company website (mughalsteel.com.pk: products, contact us) and the PSX company profile (dps.psx.com.pk/company/MUGHAL: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Billets",
+      "summary": "Mild carbon, spring steel, austenitic and ferrite stainless, and special alloy steel billets.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Long rolled products",
+      "summary": "Bars and beams rolled at the company's Lahore works.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ferro alloys",
+      "summary": "Ferro silicomanganese, ferro chrome and ferro silicon from the non-ferrous smelting segment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

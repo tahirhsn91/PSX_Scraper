@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for LIVEN. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "LIVEN",
+  "description": "Liven Pharma Limited manufactures pharmaceuticals and allied products at its plant on the Multan Road outside Lahore. It was incorporated as a private limited company in 1991 and converted to a public limited company in 1992.",
+  "headOffice": "49-Km, Multan Road, Lahore, Pakistan",
+  "phone": "+92 311 105 4836",
+  "website": "https://liven-pharma.com",
+  "ceo": "Kashif Hussain Siddiquie",
+  "sourceNote": "Company website (liven-pharma.com: plant address and contact line) and the PSX company profile record, read 2026-10-17. The telephone number is published on the site as 111-0-LIVEN.",
+  "products": [
+    {
+      "name": "Pharmaceuticals",
+      "summary": "Manufacture of pharmaceutical and allied products at the 49-km Multan Road plant, Lahore.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

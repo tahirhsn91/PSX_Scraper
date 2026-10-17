@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for PSYL. Every fact here is attributable — see sourceNote. No image is attached: the product photography on the company site is not licence-cleared.",
+  "symbol": "PSYL",
+  "description": "Pakistan Synthetics Limited was incorporated on 18 November 1984 and converted into a public limited company on 30 December 1987; its shares are listed on the Pakistan Stock Exchange. The company's principal activity is the manufacture and sale of plastic and crown caps and polyester staple fibre, and it markets PET resin, PET preforms and closure caps for packaging customers. It runs factory operations at Port Qasim in Karachi and in the Hub industrial trading estate in Balochistan.",
+  "headOffice": "Office No. 1504, 15th Floor, Emerald Tower, Block 5, Clifton, Karachi, Pakistan",
+  "phone": "111-111-PSL (775)",
+  "website": "https://pslpet.com",
+  "ceo": "Yakoob Haji Karim",
+  "sourceNote": "Company website (pslpet.com: home, company-information, board-of-director), read 2026-10-17.",
+  "products": [
+    {
+      "name": "PET resin",
+      "summary": "Polyester resin for packaging customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PET preforms",
+      "summary": "Preforms for bottle and container production.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Crown caps",
+      "summary": "Metal crown caps for beverage bottling, part of the company's stated principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Closure caps",
+      "summary": "Plastic closure caps, the other half of the company's stated principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Polyester staple fibre",
+      "summary": "Polyester staple fibre, which the company states is part of its principal manufacturing activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

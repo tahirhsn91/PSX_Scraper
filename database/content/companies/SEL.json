@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SEL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SEL",
+  "description": "Sitara Energy Limited is a publicly listed company whose stated object is the generation and distribution of electricity. Its project is located at Tehsil Jaranwala, District Faisalabad in Punjab, while its registered office sits in Karachi.",
+  "headOffice": "601-602, Business Centre, Mumtaz Hassan Road, Karachi 74000, Pakistan",
+  "phone": "+92 21 32413944",
+  "website": "http://www.sitara.pk",
+  "ceo": "Javed Iqbal",
+  "sourceNote": "Company website (sitara.pk: home and complaint-handling contact details) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Electricity generation — Jaranwala project",
+      "summary": "Power generation at the company's project site in Tehsil Jaranwala, District Faisalabad, Punjab.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

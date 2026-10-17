@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for TPLI. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TPLI",
+  "description": "TPL Insurance Limited is a Pakistani general insurer that positions itself as an insurtech, writing all lines of general insurance — motor, fire, marine, health, home, travel, mobile, cyber risk, engineering and agriculture — in both conventional and takaful form, backed by a 24/7 contact centre and digital distribution through partner businesses. It was the first insurer in the market to offer buy-now-pay-later auto insurance in instalments, and its reinsurance treaties are placed with international reinsurers including Hannover Re. PACRA assigns it an insurer financial strength rating of AA.",
+  "headOffice": "Plot 19-B, Block B, Sindhi Muslim Co-operative Housing Society (SMCHS) 74900, Karachi, Pakistan",
+  "phone": "+92 21 111 000 301",
+  "website": "https://tplinsurance.com",
+  "ceo": "Muhammad Aminuddin",
+  "sourceNote": "Company website (tplinsurance.com/about-us: the lines of business, conventional and takaful offering, insurtech and contact-centre model, BNPL auto insurance, Hannover Re treaties and the PACRA AA rating; /contact-us for the Karachi head office address, UAN, telephone and fax), and the chief executive from TPL Insurance's own quarterly report for March 2025 hosted on tplinsurance.com, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Auto insurance",
+      "summary": "Motor cover, including the buy-now-pay-later instalment product the company introduced to the market.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Health and travel insurance",
+      "summary": "Medical and travel cover for individuals and groups.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fire, marine and engineering insurance",
+      "summary": "Commercial property, cargo and engineering risks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home, mobile and cyber risk cover",
+      "summary": "Household, gadget and cyber-risk products distributed digitally.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Agriculture insurance",
+      "summary": "Crop and agricultural risks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Takaful solutions",
+      "summary": "Shariah-compliant versions of its general insurance covers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

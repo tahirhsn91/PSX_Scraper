@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for SNBL. Every fact is attributable — see sourceNote. No image is attached: the institution's own imagery is not licence-cleared and a stock photograph of a branch or office would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SNBL",
+  "description": "Soneri Bank Limited was established on 28 September 1991 as a full-service commercial bank. It operates more than 680 branches and ATMs across Pakistan, including over 200 Islamic banking branches, and its stated areas of operation are branch banking, corporate and investment banking, treasury, SME, financial institutions and Islamic banking. Its Islamic division, Soneri Mustaqeem, runs 119 dedicated Islamic banking branches alongside 15 Islamic banking windows.",
+  "headOffice": "10th Floor, PNSC Building, M.T. Khan Road, Karachi, Pakistan",
+  "phone": "+92 21 3244 4401-05",
+  "website": "https://www.soneribank.com",
+  "ceo": "Ahsan Mushahid Siddiqui",
+  "sourceNote": "Written from: https://www.soneribank.com/about-us (establishment date, branch and Islamic branch numbers, areas of operation) and https://www.soneribank.com/corporate-information (head office address and telephone); the chief executive is taken from the exchange's company record at https://dps.psx.com.pk/company/SNBL (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Branch banking",
+      "summary": "Retail branch banking and accounts, described by the bank as a critical area of operation.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate and investment banking",
+      "summary": "Corporate and investment banking, treasury and financial institutions coverage.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Soneri Mustaqeem Islamic banking",
+      "summary": "Islamic banking through 119 dedicated branches and 15 windows, expanding according to the bank.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

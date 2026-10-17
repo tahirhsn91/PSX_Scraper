@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for HWQS. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant was found. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "HWQS",
+  "description": "Haseeb Waqas Sugar Mills Limited is a public limited sugar company incorporated in 1991, part of the Haseeb Waqas Group. Its mill at Nankana Sahib, about 100 km from the group's head office in Lahore, crushes up to 10,000 metric tons of cane a day over a 160-day season and produces white refined sugar. The company states that it introduced split cane carriers and pressure feeders to the Pakistani sugar industry, and that its milling tandem and pressure evaporation system were developed in-house by Haseeb Waqas Engineering.",
+  "headOffice": "06-F, Model Town, Lahore, Pakistan",
+  "phone": "+92 42 3591 7321",
+  "website": "https://www.hwgc.com.pk",
+  "ceo": "Abdullah Ilyas",
+  "sourceNote": "Company website hwgc.com.pk — the Haseeb Waqas Sugar Mill page (incorporation year, location, 10,000 TCD capacity, technology) and the corporate profile page (registered office, telephone, director/chief executive), read 2026-10-17.",
+  "products": [
+    {
+      "name": "White refined sugar",
+      "summary": "White refined sugar from a mill with a cane crushing capacity of 10,000 metric tons per day over a 160-day season.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

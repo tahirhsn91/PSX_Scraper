@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for EPCLPS, which is the preference-share line of Engro Polymer & Chemicals Limited rather than a separate business. The profile therefore describes the issuer, and the security is flagged in the description. products is empty because a preference share issues no products. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "EPCLPS",
+  "description": "EPCLPS is the symbol under which Engro Polymer & Chemicals Limited's preference shares are quoted on the Pakistan Stock Exchange — the exchange's record lists the security as \"Engro Poly(Pref)\". It is a share class of Engro Polymer & Chemicals Limited, not a separate business: that company describes itself as Pakistan's only integrated producer of PVC resin and caustic soda, and also produces sodium hypochlorite, hydrochloric acid and hydrogen peroxide, with EDC and VCM made at its Port Qasim plant in Karachi.",
+  "headOffice": "8th Floor, The Harbour Front Building, Marine Drive, Block 4, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 111 411 411",
+  "website": "https://engropolymer.com",
+  "ceo": "Abdul Qayoom Shaikh",
+  "sourceNote": "Security identity from the PSX data portal record for EPCLPS at https://dps.psx.com.pk/company/EPCLPS, which lists it as \"Engro Poly(Pref)\" with no separate company profile (accessed 2026-10-17); the issuer description is from the company's website engropolymer.com (overview, contact-us and leadership pages).",
+  "products": []
+}

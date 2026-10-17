@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for KSBP. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "KSBP",
+  "description": "KSB Pumps Company Limited is the Pakistani subsidiary of Germany's KSB SE & Co. KGaA, incorporated in 1959 from a joint venture between KSB and BECO and listed as a public company in 1979. It manufactures industrial pumps, valves and castings and provides after-market services, with its head office in Lahore and a production site at Hasanabadal; regional sales offices cover Lahore, Karachi, Multan and Rawalpindi.",
+  "headOffice": "16/2 Sir Aga Khan Road, Lahore",
+  "phone": null,
+  "website": "https://www.ksb.com/en-pk",
+  "ceo": "Fida Hussain",
+  "sourceNote": "Company website (ksb.com/en-pk: about KSB in Pakistan, investor relations) and the PSX company profile (dps.psx.com.pk/company/KSBP: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Industrial pumps",
+      "summary": "Pumps and pump systems for water and waste water, energy technology, chemicals production, mining, oil and gas, and building services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Valves, castings and service",
+      "summary": "Valves and castings manufactured locally, with spare parts and after-market technical services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

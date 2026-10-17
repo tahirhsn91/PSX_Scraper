@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for SGF. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "SGF",
+  "description": "Service Global Footwear Limited (SGFL) is a footwear manufacturer incorporated as a public limited company on 19 July 2019 and listed on the Pakistan Stock Exchange. It manufactures, markets, imports and exports footwear, leather and allied products, and is a wholly owned subsidiary of Service Industries Limited. Its head office is Servis House in Main Gulberg, Lahore.",
+  "headOffice": "Servis House, 2 Main Gulberg, Lahore 54662, Pakistan",
+  "phone": "+92 42 3575 1990-6",
+  "website": "https://serviceglobalfootwear.com",
+  "ceo": "Hassan Javed",
+  "sourceNote": "Company website (serviceglobalfootwear.com: company profile, contact us) and the PSX Data Portal company record for SGF, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Footwear",
+      "summary": "Footwear manufactured for sale in Pakistan and for export.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Leather and allied products",
+      "summary": "Leather and allied products manufactured, marketed and traded alongside footwear.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

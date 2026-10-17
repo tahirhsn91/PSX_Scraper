@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for SLGL. Every fact here is attributable — see sourceNote. ceo is null: the company publishes a leadership list of directors without naming a chief executive. No image is attached — the site's photography is not licence-cleared.",
+  "symbol": "SLGL",
+  "description": "Secure Logistics-Trax Group Limited is the listed group behind SLGTrax, which describes itself as Pakistan's first technology-enabled 4PL logistics platform. The group was formed by the strategic merger of Secure Logistics Group and Trax through a scheme of arrangement in 2025, after listing on the Pakistan Stock Exchange with an IPO in 2024. It says it operates through five legal entities covering logistics, last-mile delivery, warehousing, asset tracking and security services.",
+  "headOffice": "10th Floor, New State Life Tower, Islamabad, Pakistan",
+  "phone": "+92 51 8779224-27",
+  "website": "https://slgtrax.com",
+  "ceo": null,
+  "sourceNote": "Company website (slgtrax.com: about-us, about-us/the-group, about-us/journey, leadership, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "SecurLog — logistics and distribution",
+      "summary": "Long-haul and medium-haul movement of bulk and containerised cargo, plus regional distribution and last-mile delivery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "LogiServe — technology platform",
+      "summary": "The group's technology arm: tech-based logistics management for its own and partner fleets, a B2B marketplace, and NBFC operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SecureTrack — asset tracking",
+      "summary": "Fleet and container tracking, fuel management and cold-chain monitoring.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "FIST Security and Sky Guard",
+      "summary": "Manned guarding and close protection, and electronic and mechanical security equipment; Sky Guards (Pvt.) Limited was acquired in 2023.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Trax Online — e-commerce and warehousing",
+      "summary": "E-commerce logistics, both international and retail, and warehousing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

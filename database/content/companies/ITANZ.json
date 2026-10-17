@@ -1,0 +1,68 @@
+{
+  "_comment": "Editorial content for ITANZ. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ITANZ",
+  "description": "iTANZ Technologies Limited is a Pakistan Stock Exchange-listed software and IT services company, formerly Zahur Cotton Mills Limited. Operating since 2017, it provides digital-transformation consulting, enterprise and asset-management systems, system and data integration, analytics, business-process automation, infrastructure and platform services, and IT security. Its client base is concentrated in Australian local government, utilities, healthcare and financial services.",
+  "headOffice": "Office No. 303, 3rd Floor, Emirates Tower, F-7 Markaz, Islamabad, Pakistan",
+  "phone": null,
+  "website": "https://itanztechnologies.com",
+  "ceo": "Asim Zafar",
+  "sourceNote": "Company website (itanztechnologies.com: home, about-us, legal, contact-us), read 2026-10-17. The contact page publishes only an Australian number for the Melbourne office, so phone is left empty.",
+  "products": [
+    {
+      "name": "Analytics, BI, Data Science & Machine Learning",
+      "summary": "Data and analytics services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "System and Data Integration",
+      "summary": "Integration of enterprise systems and data.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Internet of Things",
+      "summary": "IoT solutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Business Process Automation",
+      "summary": "Process automation services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Infrastructure and Platform Services",
+      "summary": "Cloud and platform infrastructure services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "IT Security",
+      "summary": "Security services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Consultancy Services",
+      "summary": "Technology consulting.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Council Property Management",
+      "summary": "Property-management software for local councils.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

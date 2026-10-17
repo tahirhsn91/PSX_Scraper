@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for PAKL. Every fact is attributable — see sourceNote. Note the FY2025 disposal of plant and machinery: this is a scaled-down operation, and the product list describes what it makes through job-work rather than in-house lines. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "PAKL",
+  "description": "Pak Leather Crafts Limited is a leather company incorporated in Pakistan and listed on the Pakistan Stock Exchange, with its factory and head office at Plot 18, Sector 7A, Korangi Industrial Area, Karachi. Established in 1971, it historically tanned leather and exported finished leather and leather garments. During the year ended 30 June 2025 it disposed of its plant and machinery and significantly scaled down in-house production; it now operates mainly through toll-manufacturing and job-work arrangements and earns rental income from its vacant factory.",
+  "headOffice": "Plot 18, Sector 7A, Korangi Industrial Area, Karachi, Pakistan",
+  "phone": "+92 21 3512 1615",
+  "website": "https://pakleather.com",
+  "ceo": "Muhammad Saleem Ahmed",
+  "sourceNote": "Company website (pakleather.com: about) and the PSX Data Portal company record for PAKL — including the FY2025 note on disposal of plant and machinery — read 2026-10-17.",
+  "products": [
+    {
+      "name": "Finished leather",
+      "summary": "Drum-dyed goat and sheep leather for motorcycle gloves and garments, and soft cow upper leather for footwear, produced through toll-manufacturing and job-work arrangements.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Leather garments",
+      "summary": "Leather garments made for export customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

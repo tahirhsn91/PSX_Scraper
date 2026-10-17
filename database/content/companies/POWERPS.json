@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for POWERPS. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own plant exists, and a generic cement-industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "POWERPS",
+  "description": "POWERPS is the preference share line of Power Cement Limited, a listed security rather than a separate operating company. Power Cement, formerly Al-Abbas Cement Limited, was acquired in 2010 by the Arif Habib Group and operates a plant on Motorway M9 at Nooriabad, Sindh, with a nameplate clinker capacity of 10,700 tonnes per day — 3.21 million tonnes a year — and cement capacity of 3.37 million tonnes a year on a FLSmidth line. It serves the southern region of Pakistan and exports clinker and cement.",
+  "headOffice": "Arif Habib Center, 23, M. T. Khan Road, Karachi-74000, Pakistan",
+  "phone": "+92 21 3246 8231-32",
+  "website": "https://powercement.com.pk",
+  "ceo": null,
+  "sourceNote": "Written from: https://powercement.com.pk/about-us/ (former name, 2010 acquisition by the Arif Habib Group, plant location, clinker and cement capacities, FLSmidth line, exports) and https://powercement.com.pk/contact-us/ (head office address and telephones), read 2026-10-17. Described as a security line, not a company: the PSX listing used here names this symbol 'Power Cement (Pref)' in the cement sector, so ceo and products are intentionally null and the operating company's own site is the source.",
+  "products": []
+}

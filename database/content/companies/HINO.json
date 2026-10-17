@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for HINO. Every fact here is attributable — see sourceNote. No image is attached. CEO left null: the company's FY2025 annual report names a President & CEO while its 2026 quarterly filing shows a different name in the management block without a clear role, so no name is asserted here.",
+  "symbol": "HINO",
+  "description": "Hinopak Motors Limited was formed in 1986 by Hino Motors of Japan and Toyota Tsusho Corporation together with the Al-Futtaim Group of the UAE and PACO Pakistan; Hino Motors and Toyota Tsusho obtained majority shareholding in 1998 after the other two founding sponsors disinvested. It assembles and sells Hino commercial vehicles in Pakistan.",
+  "headOffice": "D-2, S.I.T.E., Manghopir Road, Karachi, Pakistan",
+  "phone": "+92 21 3256 3510",
+  "website": "https://hinopak.com",
+  "ceo": null,
+  "sourceNote": "Company website (hinopak.com: company profile, products, contact us), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Trucks and prime movers",
+      "summary": "Hino commercial trucks, including the 500 Series.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Buses",
+      "summary": "Hino buses for passenger transport.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Specialized vehicles",
+      "summary": "Purpose-built Hino vehicles for specific applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

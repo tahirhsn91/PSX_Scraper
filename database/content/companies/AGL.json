@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for AGL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "AGL",
+  "description": "Agritech Limited is a fertilizer manufacturer incorporated in Pakistan on 15 December 1959 and listed on the Pakistan Stock Exchange. It owns and operates a urea plant at Iskanderabad, District Mianwali, and a single super phosphate plant at Hattar Road, District Haripur — which it describes as the country's largest SSP plant. Its fertilizers are sold under the brand name Tara.",
+  "headOffice": "4th Floor, Askari Corporate Tower, 75-76, Block D-1, Main Boulevard, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3640 1000-3",
+  "website": "https://agritech.com.pk",
+  "ceo": "Muhammad Faisal Muzammil",
+  "sourceNote": "Company website (agritech.com.pk: about us, contact us) and the PSX Data Portal company record for AGL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Urea",
+      "summary": "Granular urea from the Mianwali plant, sold under the Tara brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Granulated single super phosphate (SSP)",
+      "summary": "Phosphatic fertilizer from the Haripur plant, described by the company as the largest SSP facility in the country.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

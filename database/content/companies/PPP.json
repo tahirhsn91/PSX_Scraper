@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for PPP. Every fact here is attributable — see sourceNote. No image is attached. Note: PPP here is Pakistan Paper Products Limited, a paper-converting company — not a power-project security.",
+  "symbol": "PPP",
+  "description": "Pakistan Paper Products Limited is a paper-converting company founded in 1951 by Hashim B. Sayeed, converted into a public limited company in 1964 and quoted on the Karachi Stock Exchange; it describes itself as one of the oldest listed companies on the Pakistan Stock Exchange. From its plant on Estate Avenue in S.I.T.E., Karachi, it produces self-adhesive labels in roll form and exercise books.",
+  "headOffice": "D-58, Estate Avenue, S.I.T.E., Karachi 75700, Pakistan",
+  "phone": "+92 21 3256 0134",
+  "website": "https://pakpaper.com",
+  "ceo": "Abid Sayeed",
+  "sourceNote": "Company website (pakpaper.com: profile, products, contact) and the company's PSX quarterly report for the period ended March 2026 (management committee), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Self-adhesive labels in roll form",
+      "summary": "Roll-form pressure-sensitive labels for branding, packaging, logistics and product identification.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Exercise books",
+      "summary": "Ruled exercise books for schools and institutions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

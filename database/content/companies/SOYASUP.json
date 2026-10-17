@@ -1,0 +1,33 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SOYASUP",
+  "description": "Agro Processors & Atmospheric Gases Ltd. is a Pakistani edible-oil company that has sold cooking oil and banaspati since 1981 under brands including Soya Supreme and Malta. It began as a family concern founded by three brothers who migrated to Pakistan in 1947, and the company describes itself today as one of the country's leading edible-oil businesses.",
+  "headOffice": "F-392, S.I.T.E. Area, Karachi, Sindh, Pakistan",
+  "phone": "+92 21 35882182",
+  "website": "https://apag.com.pk",
+  "ceo": "Mr. Ahmad Aziz Ghulamhussain",
+  "sourceNote": "Company website (apag.com.pk: who-we-are, board-of-directors, company-information, brand pages), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Soya Supreme",
+      "summary": "Cooking oil and banaspati.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Malta",
+      "summary": "Cooking oil and banaspati.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Smart",
+      "summary": "Canola cooking oil, olive cooking oil and sauces.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

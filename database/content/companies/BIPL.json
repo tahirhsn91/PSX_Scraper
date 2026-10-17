@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for BIPL. Every fact is attributable — see sourceNote. No image is attached: the institution's own imagery is not licence-cleared and a stock photograph of a branch or office would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BIPL",
+  "description": "BankIslami Pakistan Limited is a Pakistani commercial bank that operates on Islamic banking principles and is listed on the Pakistan Stock Exchange. It serves individuals, priority clients and businesses with current, savings and term accounts, auto finance structured as Diminishing Musharakah, home finance under its Muskun product on Diminishing Musharakah and Ijarah, gold-based and agriculture financing, fleet financing, and corporate and cash-management services.",
+  "headOffice": "11th Floor, Executive Tower, Dolmen City, Marine Drive, Block-4, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 111 475 264",
+  "website": "https://bankislami.com.pk",
+  "ceo": "Imran H Shaikh",
+  "sourceNote": "Written from: https://bankislami.com.pk/ (product and service range; Auto Finance on Diminishing Musharakah and Muskun home finance on Diminishing Musharakah and Ijarah), https://bankislami.com.pk/contact-us/ (registered/head office address and telephone) and https://bankislami.com.pk/management/ (President & Chief Executive Officer) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Auto finance",
+      "summary": "Vehicle financing structured as Diminishing Musharakah under a Shirkat-ul-Milk arrangement, with the customer buying out the bank's Musharakah units.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Muskun home finance",
+      "summary": "Home financing on the principles of Diminishing Musharakah and Ijarah.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Deposit accounts",
+      "summary": "Current, savings and term deposit accounts, including foreign-currency and freelancer accounts, under Islamic banking.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate and business banking",
+      "summary": "Corporate banking and cash-management services for businesses, alongside employee banking and payroll propositions.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

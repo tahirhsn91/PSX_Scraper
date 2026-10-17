@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for OBOY. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "OBOY",
+  "description": "Oilboy Energy Limited describes itself as an integrated energy company engaged in trade and services: importing and trading coal and petroleum products, and providing vehicle and fleet maintenance services.",
+  "headOffice": "5A/1, Gulberg III, off M.M. Alam Road, Lahore, Pakistan",
+  "phone": "+92 42 3577 1778",
+  "website": "https://obel.com.pk",
+  "ceo": "Farhan Abbas Sheikh",
+  "sourceNote": "Company website (obel.com.pk: overview, company profile PDF listing the business lines and chief executive, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Coal trading",
+      "summary": "Imported coal supplied to industrial users including cement plants, with port handling, storage and logistics.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Petroleum products",
+      "summary": "Trading of naphtha, motor gasoline (PMG), kerosene, high speed diesel, light diesel oil, jute batching oil, and high- and low-sulphur fuel oil.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Vehicle and fleet maintenance",
+      "summary": "Comprehensive vehicle and fleet maintenance services.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

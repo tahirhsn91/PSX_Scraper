@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for SPWL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "SPWL",
+  "description": "Saif Power Limited owns, operates and maintains a 225 MW (ISO) combined-cycle power plant at Qadarabad on the Multan Road in District Sahiwal, Punjab, and sells its electricity to Central Power Purchasing Agency Guarantee Limited. The company was incorporated in 2004 and began operations in April 2010; an amendment to its implementation agreement in 2021 replaced NTDC with CPPA-G as power purchaser.",
+  "headOffice": "2nd Floor, 65-East, Park Pavilion Plaza, A.K. Fazal-ul-Haq Road, Blue Area, Islamabad, Pakistan",
+  "phone": "+92 51 2806451",
+  "website": "https://saifpower.com",
+  "ceo": "Javed Saifullah Khan",
+  "sourceNote": "Company website (saifpower.com: company-profile, contact) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Combined-cycle power generation — 225 MW",
+      "summary": "A 225 MW (ISO) combined-cycle plant at Chak 56/5L, Qadarabad, Multan Road, District Sahiwal, selling to CPPA-G.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

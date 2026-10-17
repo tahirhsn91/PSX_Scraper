@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for FRCL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "FRCL",
+  "description": "Frontier Ceramics Limited is a public limited company incorporated in July 1982 and listed on the Pakistan Stock Exchange, manufacturing ceramic wall and floor tiles marketed under the brand name Forte. It was acquired by the Khalid and Khalid Group in 2005. The company also reports sanitary wares and related ceramic products among its activities.",
+  "headOffice": "Toyota Rawal Motors Building, Swan Camp, Rawalpindi, Pakistan",
+  "phone": "+92 51 4917200",
+  "website": "https://www.forte.com.pk",
+  "ceo": "Nadeem Khalid",
+  "sourceNote": "Company website (forte.com.pk: about, contact) and the PSX Data Portal company record for FRCL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Ceramic wall tiles",
+      "summary": "Glazed ceramic wall tiles sold under the Forte brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ceramic floor tiles",
+      "summary": "Floor tiles in the Forte range, made to international quality standards.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Sanitary wares",
+      "summary": "Sanitary ware and related ceramic products listed among the company's manufacturing activities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

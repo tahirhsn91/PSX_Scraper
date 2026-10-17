@@ -1,0 +1,54 @@
+{
+  "_comment": "Editorial content for HASCOL. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "HASCOL",
+  "description": "Hascol Petroleum Limited is engaged in the purchase, storage and sale of petroleum products — fuel oil, high speed diesel, gasoline, Jet A-1, LPG and lubricants — and operates a retail fuel-station network.",
+  "headOffice": "The Forum, Suite No. 324, 3rd Floor, Khayaban-e-Jami, Block-9, Clifton, Karachi, Pakistan",
+  "phone": "+92 21 111 757 757",
+  "website": "https://www.hascol.com",
+  "ceo": "Javed Ahmedjee",
+  "sourceNote": "Company website (hascol.com: who we are, registered office, board of directors), read 2026-10-17.",
+  "products": [
+    {
+      "name": "High speed diesel",
+      "summary": "Diesel supplied through the company's storage and retail network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Gasoline",
+      "summary": "Motor gasoline (petrol) for retail sale.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fuel oil",
+      "summary": "Furnace/fuel oil for industrial and utility customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Jet A-1",
+      "summary": "Aviation turbine fuel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "LPG",
+      "summary": "Liquefied petroleum gas.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Lubricants",
+      "summary": "Lubricants sold through the company's network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

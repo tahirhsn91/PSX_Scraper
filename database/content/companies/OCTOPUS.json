@@ -1,0 +1,68 @@
+{
+  "_comment": "Editorial content for OCTOPUS. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "OCTOPUS",
+  "description": "Octopus Digital Limited is a Pakistani industrial internet-of-things and data-platform company. Its cloud-native OmniConnect platform ingests data from operational and non-operational sources and converts it into a machine-learning-ready form for analytics, prediction and new data products, sold on a subscription rather than capital-expenditure basis. It serves manufacturing, oil, gas and energy, utilities, infrastructure, textiles and fleet customers, and is part of the Avanceon group.",
+  "headOffice": "19-Km, Main Multan Road, Lahore, Punjab 54660, Pakistan",
+  "phone": "+92 42 111 940 940",
+  "website": "https://octopusdtl.com",
+  "ceo": null,
+  "sourceNote": "Company website (octopusdtl.com: company profile, home), read 2026-10-17. No chief executive is named on the pages read, so ceo is left empty.",
+  "products": [
+    {
+      "name": "OmniConnect Data Cloud",
+      "summary": "The company's cloud-native industrial data platform, connecting OT and non-OT sources.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "OmniOEE",
+      "summary": "Overall equipment effectiveness application.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "OmniChat GenAI",
+      "summary": "Generative-AI assistant application.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Digital Log",
+      "summary": "Digital logbook application for plant operations.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Asset Performance X",
+      "summary": "Asset performance monitoring application.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Fintech Fuel",
+      "summary": "Fuel and fleet-related application.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "ChilloWatt",
+      "summary": "Energy monitoring application.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PathAdvice",
+      "summary": "Advisory application listed among the company's platform products.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

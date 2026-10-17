@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for PAKRI. Every fact here is attributable — see sourceNote. No image is attached: the company's own brand assets are not licence-cleared. Add imagePath/imageSource/imageLicence together when a real one is available. Note that the company's own site is pakre.org.pk — pakre.com.pk does not resolve to the company.",
+  "symbol": "PAKRI",
+  "description": "Pakistan Reinsurance Company Limited (PRCL) is the country's national reinsurer and the only reinsurance company operating in Pakistan. It was established in 1952 as the Pakistan Insurance Corporation under the Pakistan Insurance Corporation Act 1952, to support the local insurance industry, and is a public-sector company under the administrative control of the Ministry of Commerce. It provides treaty and facultative reinsurance to local insurers and manages insurance schemes assigned to it by the federal government, writing aviation, marine cargo, marine hull, engineering, fire and accident business. Its head office is in Karachi and it has a zonal office in Lahore; seven of its directors are nominated by the federal government and the rest are elected by shareholders.",
+  "headOffice": "PRC Towers, 32-A, Lalazar Drive, M.T. Khan Road, Karachi, Pakistan",
+  "phone": "+92 21 9920 2908",
+  "website": "https://pakre.org.pk",
+  "ceo": null,
+  "sourceNote": "Company website (pakre.org.pk/ms/about-prcl/company-profile.html: establishment in 1952 as Pakistan Insurance Corporation, sole reinsurance organisation in Pakistan, public-sector status under the Ministry of Commerce, board composition, classes of business written, Karachi head office and Lahore zonal office), read 2026-10-17. The address and telephone are the registered office details printed in the company's own published accounts. The company is headed by a chairperson and no separate chief executive is identified in the material read, so the field is null.",
+  "products": [
+    {
+      "name": "Treaty reinsurance",
+      "summary": "Reinsurance protection provided to the local insurance industry on a treaty basis, as described by the company.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Facultative reinsurance",
+      "summary": "Case-by-case reinsurance of individual risks for local insurers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Government insurance schemes",
+      "summary": "Insurance schemes assigned to the company by the Federal Government of Pakistan, which it manages as national reinsurer.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Aviation, marine, engineering, fire and accident cover",
+      "summary": "The classes of insurance and reinsurance business the company states it provides solutions for.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

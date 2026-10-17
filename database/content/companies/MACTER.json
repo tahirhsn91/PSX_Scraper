@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for MACTER. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "MACTER",
+  "description": "Macter International Limited manufactures and markets pharmaceutical products and is one of Pakistan's largest contract manufacturers, making oral solids and liquids, parenterals in ampoules and vials, topicals, metered-dose inhalers and ear and eye drops, with dedicated facilities for cephalosporins, penicillins and biologics. It was incorporated in 1992, converted to a public limited company in 2011, and its clients include multinational pharmaceutical companies.",
+  "headOffice": "F-216, S.I.T.E., Karachi, Pakistan",
+  "phone": "+92 21 32591000",
+  "website": "https://macter.com",
+  "ceo": "Asif Misbah",
+  "sourceNote": "Company website (macter.com: company-profile, contact — plant addresses, commercial office and telephone) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Oral solids and liquids",
+      "summary": "Tablets, capsules and liquid dosage forms manufactured at the S.I.T.E. plants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Parenterals",
+      "summary": "Ampoule and vial injectables, including dedicated cephalosporin, penicillin and biologic facilities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Topicals and inhalers",
+      "summary": "Topical preparations, metered-dose inhalers and ear and eye drops.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Contract manufacturing",
+      "summary": "Third-party manufacture for multinational and local pharmaceutical clients.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

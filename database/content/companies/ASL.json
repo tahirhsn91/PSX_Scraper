@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for ASL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "ASL",
+  "description": "Aisha Steel Mills Limited, a group company of Arif Habib, was incorporated in 2005 and began commercial production in 2012. It runs a cold rolling mill complex and a galvanising plant in the downstream industrial estate at Pakistan Steel, Bin Qasim, Karachi, making cold rolled and hot dipped galvanised steel coils for the value-added flat-rolled steel market.",
+  "headOffice": "1/F, Arif Habib Center, 23 M.T. Khan Road, Karachi",
+  "phone": "+92 21 3246 8317",
+  "website": "https://www.aishasteel.com",
+  "ceo": "Dr. Munir Ahmed",
+  "sourceNote": "Company website (aishasteel.com: company overview, products, contact) and the PSX company profile (dps.psx.com.pk/company/ASL: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Cold rolled coils",
+      "summary": "Cold rolled steel coils from the company's cold rolling mill at Bin Qasim, Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Galvanized coils",
+      "summary": "Hot dipped galvanized steel coils from the company's galvanising plant.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

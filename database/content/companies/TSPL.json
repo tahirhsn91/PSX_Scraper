@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for TSPL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TSPL",
+  "description": "Tri-Star Power Limited generates, distributes, rents out power plant and supplies electricity. It was incorporated in 1993 and is listed on the Pakistan Stock Exchange; its generation facility at F/538, S.I.T.E., Karachi is not company property — the premises were obtained from a related party for installing the plant.",
+  "headOffice": "A/33, Central Commercial Area, Block 7/8, KCHSU, Main Shahrah-e-Faisal, Karachi 75350, Pakistan",
+  "phone": null,
+  "website": "http://www.tristar.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website (tristar.com.pk: corporate-information, contact) and the PSX company profile record, read 2026-10-17. No telephone number is published on the site.",
+  "products": [
+    {
+      "name": "Power generation and plant rental",
+      "summary": "Generation, distribution and supply of electricity, together with rental of power plant, from the facility at F/538, S.I.T.E., Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

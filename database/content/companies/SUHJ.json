@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for SUHJ. Every fact here is attributable — see sourceNote. No image is attached: the mill's own photography is not licence-cleared.",
+  "symbol": "SUHJ",
+  "description": "Suhail Jute Mills Limited was incorporated in Pakistan in 1981 as a public limited company and its shares are quoted on the Pakistan Stock Exchange. It manufactures jute products at its factory at Kabul River Railway Station on Mardan Road, Nowshera, Khyber Pakhtunkhwa. (Colony) Sarhad Textile Mills Limited merged into the company in 2012 under a court-sanctioned scheme of arrangement.",
+  "headOffice": "505/19, New Harley Street, Rawalpindi, Pakistan",
+  "phone": "+92 51 5146540",
+  "website": "https://sjmlimited.com",
+  "ceo": "Mohammad Shahmeer Shaikh",
+  "sourceNote": "Company website (sjmlimited.com: company profile), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Hessian cloth",
+      "summary": "Hessian (burlap) cloth woven at the Nowshera mill.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Jute twine",
+      "summary": "Twine manufactured from jute.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Jute bags",
+      "summary": "Jute bags for packing and transport.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

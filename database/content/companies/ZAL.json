@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for ZAL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "ZAL",
+  "description": "Zarea Limited is a Pakistani business-to-business commodities marketplace, listed on the Pakistan Stock Exchange, that digitalises procurement and distribution of commodities — building materials, chemicals, coal, steel, cement, grains and pulses, sugar, solar and agricultural inputs among them. Buyers and suppliers transact through its platform and mobile app, with related credit, logistics and daily-price services. Its head office is in Lahore, with a second site in Haripur and a regional office in Dubai.",
+  "headOffice": "Delta 6, Office No. 6011, NASTP, Abid Majeed Road, Cantt, Lahore, Pakistan",
+  "phone": "+92 42 3217 6455",
+  "website": "https://zarea.com",
+  "ceo": "Ali Alam Qamar",
+  "sourceNote": "Company website (zarea.com: who-we-are, offices, management, company profile), read 2026-10-17.",
+  "products": [
+    {
+      "name": "B2B commodities marketplace",
+      "summary": "Online marketplace for buying and selling commodities, with supplier onboarding and delivery.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Zarea mobile app",
+      "summary": "Buyer app for sourcing and procurement, on iOS and Android.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Zarea credit",
+      "summary": "Working-capital credit offered alongside commodity purchases.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Daily price and analytics",
+      "summary": "Published daily commodity prices and market analytics.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Zarea AI",
+      "summary": "AI feature set for procurement and pricing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

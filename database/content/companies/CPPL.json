@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for CPPL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "CPPL",
+  "description": "Cherat Packaging Limited manufactures paper sacks, polypropylene bags and flexible packaging for the food, beverage, pharmaceutical, home and personal-care, cement, sugar and chemical sectors, and is one of the largest suppliers of polypropylene bags to Pakistan's cement industry. Incorporated in 1989, it runs Polypropylene, SOS/carrier bag and Flexible Packaging divisions — flexible packaging began in 2018 with rotogravure and flexographic printing and extrusion — from a factory at Gadoon Amazai, Swabi.",
+  "headOffice": "Modern Motors House, Beaumont Road, Karachi 75530, Pakistan",
+  "phone": "+92 21 35683566",
+  "website": "https://gfg.com.pk/cpl",
+  "ceo": "Amer Faruque",
+  "sourceNote": "Company website (gfg.com.pk/cpl: our company, contact — head office, factory and telephones) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Polypropylene bags",
+      "summary": "Woven PP bags, including the cement-industry sacks the company is best known for.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Paper sacks",
+      "summary": "Paper sack production within the company's packaging range.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Flexible packaging",
+      "summary": "Rotogravure and flexographic printed flexible packaging, in operation since 2018.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "SOS and carrier bags",
+      "summary": "SOS and carrier bag production from the company's dedicated division.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

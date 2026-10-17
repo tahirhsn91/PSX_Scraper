@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for TCORP. Every fact here is attributable — see sourceNote. The company's own site still refers to Husein Sugar Mills in places, reflecting its former name. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "TCORP",
+  "description": "Tariq Corporation Limited was incorporated in Karachi on 14 February 1966, began commercial production on 15 February 1968 and is one of the pioneers of Pakistan's sugar industry. Its plant at Jaranwala, about 80 km from Lahore and 40 km from Faisalabad, uses a defecation remelt sulphitation process that replaced double carbonation double sulphitation in 1986-87. The company has twice been named among Pakistan's Top 25 Companies and states that it is now run by the third generation of its founding family.",
+  "headOffice": "30-A E/1, Old FCC, Gulberg III, Lahore, Pakistan",
+  "phone": "+92 42 3576 2089",
+  "website": "https://tariqcorp.com",
+  "ceo": "Mustafa Ali Tariq",
+  "sourceNote": "Company website tariqcorp.com — company-profile page (incorporation and commercial production dates, Jaranwala plant, DRP process change, Top 25 awards), company-information page (board of directors naming Mustafa Ali Tariq as chief executive officer) and contact-details page (company secretary's office at 30-A E/1, Old FCC, Gulberg III, Lahore, with telephone), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Refined sugar",
+      "summary": "Refined sugar manufactured at the company's plant at Jaranwala, Punjab.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

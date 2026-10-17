@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "HBLTETF",
+  "description": "HBL Total Treasury ETF is an open-ended exchange-traded fund managed by HBL Asset Management Limited and listed on the Pakistan Stock Exchange. It tracks the HBL Total Treasury Index, composed of Government of Pakistan securities — Treasury bills of up to one year to maturity and Pakistan Investment Bonds of up to ten years — plus cash and near-cash instruments, with a weighted average maturity ceiling of four years and at least 70% held in government securities on a quarterly average.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://hblasset.com",
+  "ceo": null,
+  "sourceNote": "HBL Total Treasury ETF offering document and fund downloads page (hblasset.com), read 2026-10-17.",
+  "products": []
+}

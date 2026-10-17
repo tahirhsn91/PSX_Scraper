@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for HTL. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "HTL",
+  "description": "Hi-Tech Lubricants Limited is a lubricants company in the MAS Group that blends and markets SK ZIC lubricants in Pakistan from its own blending plant, and operates HTL fuel stations.",
+  "headOffice": "1-A, Danepur Road, G.O.R-1, Lahore, Pakistan",
+  "phone": "+92 42 3631 1881",
+  "website": "https://www.hitechlubricants.com",
+  "ceo": "Hassan Tahir",
+  "sourceNote": "Company website (hitechlubricants.com: profile of company, our brands, contact us) and the company's PSX financial statements naming the chief executive, read 2026-10-17.",
+  "products": [
+    {
+      "name": "SK ZIC lubricants",
+      "summary": "Lubricants blended and marketed under the SK ZIC brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HTL fuel stations",
+      "summary": "Retail fuel stations operated under the HTL brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

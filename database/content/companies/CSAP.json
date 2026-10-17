@@ -1,0 +1,40 @@
+{
+  "_comment": "Editorial content for CSAP. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "CSAP",
+  "description": "Crescent Steel and Allied Products Limited began commercial operations in March 1987 with a line pipe plant and now runs businesses in engineering, textiles, capital markets and power across six sites. Its steel business makes large-diameter submerged arc welded helical seam (SAWH) carbon steel pipe and coatings — more than 10,000 km supplied to the national energy transmission network — alongside a billet unit; its cotton unit, Crescent Cotton Products, spins carded cotton and synthetic yarn at Jaranwala.",
+  "headOffice": "9th Floor, SIDCO Avenue Centre, 264 R.A. Lines, Karachi",
+  "phone": "+92 21 3567 4881-5",
+  "website": "https://crescent.com.pk",
+  "ceo": "Ahsan M. Saleem",
+  "sourceNote": "Company website (crescent.com.pk: company profile, our business/steel, contact) and the PSX company profile (dps.psx.com.pk/company/CSAP: business description, key people), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Line pipe",
+      "summary": "Large-diameter submerged arc welded helical seam (SAWH) carbon steel pipe, with more than 10,000 km supplied to Pakistan's national energy transmission network.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Pipe coating",
+      "summary": "Anti-corrosion and flow-efficiency coatings applied at the company's pipe coating facility.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Billets",
+      "summary": "Steel billets from the company's Hadeed (billet) segment.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cotton yarn",
+      "summary": "Carded cotton and synthetic yarn in counts from 10s to 31s, spun at the Crescent Cotton Products unit in Jaranwala.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

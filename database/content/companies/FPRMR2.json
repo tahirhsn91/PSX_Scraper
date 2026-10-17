@@ -1,0 +1,11 @@
+{
+  "_comment": "Editorial content for FPRMR2. Every fact here is attributable — see sourceNote. No image is attached. FPRMR2 is not a company: it is the separate trading line for the right shares issued by First Paramount Modaraba, so it carries no business of its own.",
+  "symbol": "FPRMR2",
+  "description": "FPRMR2 is the Pakistan Stock Exchange trading line for the right shares issued by First Paramount Modaraba (FPRM), not a separate company. It represents the entitlement to subscribe for new FPRM certificates under that rights issue and trades as a security in its own right until the entitlement is exercised or lapses. For the underlying business, see the First Paramount Modaraba record.",
+  "headOffice": null,
+  "phone": null,
+  "website": null,
+  "ceo": null,
+  "sourceNote": "PSX listing data (the symbol is returned by the exchange feed as 'First Paramount Modaraba (Right)') and the modaraba's rights offer document filed with PSX, read 2026-10-17.",
+  "products": []
+}

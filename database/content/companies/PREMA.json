@@ -1,0 +1,26 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "PREMA",
+  "description": "At-Tahur Limited is a Pakistani dairy company whose name derives from the Arabic word for purity. Inception was in 2007 and its premá milk brand launched in 2008; the company describes premá as the only milk in Pakistan free of additives and artificial growth hormones and fully traceable from grass to glass. It produces at a purpose-built dairy facility near Lahore and has since extended the brand into yoghurt.",
+  "headOffice": "182-Abubakar Block, New Garden Town, Lahore, Pakistan",
+  "phone": "+92 42 3584-5901-08",
+  "website": "https://at-tahur.com",
+  "ceo": "Rasikh Elahi",
+  "sourceNote": "Company website (at-tahur.com: about-us, prema-milk, contact), read 2026-10-17.",
+  "products": [
+    {
+      "name": "premá milk",
+      "summary": "Pasteurised fresh milk from Australian and Dutch cow breeds, additive- and hormone-free.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Yoghurt",
+      "summary": "Natural, sweet and flavoured yoghurt, including strawberry, mango and chunky mango.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

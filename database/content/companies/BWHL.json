@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for BWHL. Every fact here is attributable — see sourceNote. No image is attached: none of these fields has a licence-cleared photograph from the company, and a generic plant or product photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "BWHL",
+  "description": "Baluchistan Wheels Limited manufactures automotive wheel rims for trucks, buses, tractors, cars and mini commercial vehicles. Incorporated in 1980, it runs a plant on the Main RCD Highway at Hub Chowki with heavy and light duty rim lines, presses up to 1,500 tons, a press line, assembly and welding, and cathodic electro-deposition painting, and has raised annual capacity from one million to 2.5 million wheels.",
+  "headOffice": "1st Floor, State Life Building No. 3, Dr. Ziauddin Ahmed Road, Karachi, Pakistan",
+  "phone": "+92 21 35689259",
+  "website": "https://bwheels.com",
+  "ceo": "Razak H. M. Bengali",
+  "sourceNote": "Company website (bwheels.com: company profile, addresses) and the PSX company profile record, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Commercial vehicle wheel rims",
+      "summary": "Tubeless and tube-type rims for trucks and buses, including an 8.25 x 22.5 tubeless size developed for trucks.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Passenger car and tractor wheels",
+      "summary": "Steel wheel rims for cars, tractors and mini commercial vehicles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

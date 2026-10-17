@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for STPL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "STPL",
+  "description": "Siddiqsons Tin Plate Limited, incorporated in 1996 within the Siddiqsons group, describes itself as Pakistan's first and only tin plate producer. Its plant at Windhur in Balochistan, established in 1999 with Sollac of France and Mitsubishi Corporation of Japan, has capacity for 120,000 tonnes a year of tin plate produced by the Ferrostan electrolytic process, for cans and containers used in cooking oil, food, beverage and lubricant packaging. A canning plant at Malir, Karachi makes the finished containers.",
+  "headOffice": "Ocean Tower, 27th Floor, Plot G-3, Block 9, Near II Talwar, Clifton, Karachi",
+  "phone": "+92 21 3516 6571-5",
+  "website": "https://www.siddiqsonstinplate.com",
+  "ceo": "Muhammad Naeem ul Hasnain Mirza",
+  "sourceNote": "Company website (siddiqsonstinplate.com: company profile, contact) and the PSX company profile (dps.psx.com.pk/company/STPL: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Tin plate",
+      "summary": "Electrolytic tin plate produced by the Ferrostan process at Windhur, Balochistan, with capacity of 120,000 tonnes a year.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Cans and containers",
+      "summary": "Tin cans made at the company's canning plant in Malir, Karachi, for cooking oil, foods, beverages and other packaged goods.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for PCAL. Every fact here is attributable — see sourceNote. No image is attached. Head office address and telephone left null: the site's contact page did not resolve during this pass.",
+  "symbol": "PCAL",
+  "description": "Pakistan Cables Limited was conceived in 1953 by the late Amir S. Chinoy and is one of Pakistan's longest-established cable manufacturers. It operated under the authority of British Insulated Callender's Cables between 1953 and 1993, and produces wires and cables, PVC compounds and wiring accessories.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://pakistancables.com",
+  "ceo": "Fahd Kamal Chinoy",
+  "sourceNote": "Company website (pakistancables.com: home, our products, management team), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Wires and cables",
+      "summary": "General wiring cables, and low- and medium-voltage power cables, made with 99.99% pure copper and cable-grade PVC.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PVC compound",
+      "summary": "Flexible PVC compounds for cable insulation and sheathing, produced at a dedicated plant since 2007.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Wiring accessories",
+      "summary": "Switches and wiring accessories for homes, offices and public buildings.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

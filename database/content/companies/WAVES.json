@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for WAVES. Every fact here is attributable — see sourceNote. No image is attached.",
+  "symbol": "WAVES",
+  "description": "Waves Corporation Limited, originally Waves Singer Pakistan Limited, is a Pakistani home-appliance manufacturer founded in 1971, when it introduced the country's first deep freezer. It was renamed following a 2017 merger with Cool Industries and sells under the slogan 'Naam hi Kafi hai'.",
+  "headOffice": "9 KM Multan Road, Hanjarwal, Lahore, Pakistan",
+  "phone": "+92 42 3541 5421",
+  "website": "https://waves.com.pk",
+  "ceo": "Haroon Ahmad Khan",
+  "sourceNote": "Company website (waves.com.pk: about, product range, contact) and the company's PSX quarterly report naming the chief executive, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Water heaters",
+      "summary": "Waves water heaters for domestic use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Instant water heaters",
+      "summary": "Waves instant water heaters.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Microwave ovens",
+      "summary": "Waves microwave ovens.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

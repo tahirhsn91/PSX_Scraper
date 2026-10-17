@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for DIIL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of the company's own facility exists, and a generic industry photograph would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "DIIL",
+  "description": "Diamond Industries Limited was incorporated on 18 June 1989 as Diamond Industries (Private) Limited, began commercial production on 11 November 1989, and was converted into a public limited company on 3 August 1994. Its principal activity is the manufacture and sale of foam products and PVA products for industrial and domestic use, from its works on the 23-km Multan Road at Mohlanwal, Lahore.",
+  "headOffice": "23-km, Multan Road, Mohlanwal, Lahore, Punjab, Pakistan",
+  "phone": "+92 42 111 111 666",
+  "website": "https://www.dil.com.pk",
+  "ceo": "Iftikhar Shaffi",
+  "sourceNote": "Written from: https://www.dil.com.pk/ (incorporation, start of production and conversion to a public company, registered address) and the exchange's company record at https://dps.psx.com.pk/company/DIIL (principal activity of foam and PVA products, and the chief executive) — the same activity statement appears in the company's own filing at https://psx.com.pk/psx/file-attachment/189102.pdf. Telephone is as printed on the company's PSX correspondence (042-111-111-666) (accessed 2026-10-17)",
+  "products": [
+    {
+      "name": "Foam products",
+      "summary": "Polyurethane foam and allied foam products for household and industrial use.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "PVA products",
+      "summary": "PVA products supplied for industrial and domestic consumption, as described in the company's stated principal activity.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

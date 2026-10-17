@@ -1,0 +1,47 @@
+{
+  "_comment": "Editorial content for GVGL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "GVGL",
+  "description": "Ghani Value Glass Limited is a glass-processing company incorporated in Pakistan in 1967, listed on the Pakistan Stock Exchange and part of the Ghani Group of Industries. It adds value to glass produced within the group — toughening, laminating, silvering and screen printing — making architectural safety glass, mirrors, home-appliance glass and bullet-resistant glass.",
+  "headOffice": "40-L, Model Town Extension, Lahore, Pakistan",
+  "phone": "+92 42 111 949 949",
+  "website": "https://ghanivalueglass.com",
+  "ceo": "Anwaar Ahmad Khan",
+  "sourceNote": "Company website (ghanivalueglass.com: about us, contact us) and the PSX Data Portal company record for GVGL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Tempered glass",
+      "summary": "Toughened architectural safety glass, including bent and double-glazed variants.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Mirror",
+      "summary": "Silver mirror produced on the company's mirror line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Laminated glass",
+      "summary": "Laminated and triplex safety glass.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Bullet-resistant glass",
+      "summary": "Bullet-resistant glazing (BRG) for security applications.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Home-appliance glass",
+      "summary": "Screen-printed glass for domestic appliances.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

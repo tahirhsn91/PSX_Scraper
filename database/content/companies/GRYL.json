@@ -1,0 +1,33 @@
+{
+  "_comment": "Editorial content for GRYL. Every fact here is attributable — see sourceNote. headOffice is null: the company publishes phone, fax and email but no street address on its site. ceo is null: the key management page names a CFO, company secretary and officers, not a chief executive. No image is attached.",
+  "symbol": "GRYL",
+  "description": "Grays Leasing Limited was incorporated in Pakistan in August 1995 as a public limited company and commenced operations in February 1997, and its shares are listed on the Pakistan Stock Exchange. Its stated objective is to carry on the business of leasing and lease operations of all kinds and to provide advisory services, and it says its strength lies in a diversified client portfolio and a wide range of financial products.",
+  "headOffice": null,
+  "phone": "+92 42 35770381-2",
+  "website": "https://graysleasing.com",
+  "ceo": null,
+  "sourceNote": "Company website (graysleasing.com: home, contact-us, key-management), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Car leasing",
+      "summary": "Flexible vehicle leasing for individuals, which the company describes as its core retail product.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Corporate vehicle leasing",
+      "summary": "Fleet and corporate vehicle leasing with customised leasing support and vehicle financing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Advisory services",
+      "summary": "Advisory services the company offers alongside leasing.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

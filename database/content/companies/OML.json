@@ -1,0 +1,19 @@
+{
+  "_comment": "Editorial content for OML. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "OML",
+  "description": "Olympia Mills Limited was incorporated in 1960 as Olympia Spinning & Weaving Mills Limited and changed its name in November 2017 after shareholders approved a change of principal line of business. It is no longer a textile manufacturer: its business is the renting and leasing of its factory building and paper plant machinery at its Landhi Industrial Area site in Karachi.",
+  "headOffice": "Plot No. H/23/3, Landhi Industrial Area, Karachi",
+  "phone": "+92 21 3508 0923-4",
+  "website": "https://olympiamills.com",
+  "ceo": "M. Waqar Monnoo",
+  "sourceNote": "Company website (olympiamills.com: group profile and shareholder contact) and the PSX company profile (dps.psx.com.pk/company/OML: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Factory and plant leasing",
+      "summary": "Renting and leasing of the company's factory building and paper plant machinery at Landhi Industrial Area, Karachi.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

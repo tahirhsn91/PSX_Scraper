@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for LEUL. Every fact is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility was available, and a generic stock photo would imply it is theirs.",
+  "symbol": "LEUL",
+  "description": "Leather Up Limited is a Karachi-based manufacturer and exporter of leather goods incorporated on 2 December 1990, converted to a public limited company in May 1993 and listed on the Pakistan Stock Exchange since September 1994. It makes leather bags, leather garments and other leather goods for export markets, and its factory and head office are in the DHA area of Karachi.",
+  "headOffice": "23/C, 15th Commercial Street, Phase-2-Ext, DHA, Karachi, Pakistan",
+  "phone": "+92 21 3588 0771",
+  "website": "https://leatherupltd.com",
+  "ceo": "S. Khalid Hussein Shah",
+  "sourceNote": "Company website (leatherupltd.com: about, contact us) and the PSX Data Portal company record for LEUL, read 2026-10-17.",
+  "products": [
+    {
+      "name": "Leather bags",
+      "summary": "Leather bags manufactured for export customers.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Leather garments",
+      "summary": "Leather jackets and garments, the company's original product line.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

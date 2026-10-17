@@ -1,0 +1,11 @@
+{
+  "_comment": "This is an exchange-traded fund, not a company. The description covers the fund, its manager and what it tracks, taken from the fund's own offering document or fund page. It has no chief executive or board of its own, so `ceo` is null; products are empty because a fund sells units, not products. No image is attached.",
+  "symbol": "UBLPETF",
+  "description": "UBL Pakistan Enterprise Exchange Traded Fund (UBLPETF) is an open-ended exchange-traded fund managed by UBL Fund Managers Limited and listed on the Pakistan Stock Exchange. Launched in March 2020, it tracks the UBL PSX Pakistan Enterprise Index, a nine-stock portfolio that excludes the oil and gas sector, with quarterly rebalancing and semi-annual reconstitution.",
+  "headOffice": "4th Floor, STSM Building, Beaumont Road, Civil Lines, Karachi, Pakistan",
+  "phone": "+92 21 111 825 262",
+  "website": "https://www.ublfunds.com.pk",
+  "ceo": null,
+  "sourceNote": "Company website (ublfunds.com.pk: UBL Pakistan Enterprise ETF fund page and fund information) and UBL Fund Managers' annual report for head office details, read 2026-10-17.",
+  "products": []
+}

@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "GDL",
+  "description": "Ghani Dairies Limited is a corporate dairy farm producing fresh raw milk to what it describes as global standards. It was established in 2020 and converted into a public limited company in 2025, and operates from Rahdari, Noor Pur Thal in District Khushab, under the Ghani Group.",
+  "headOffice": "45 – Aurangzeb Block, New Garden Town, Lahore, Pakistan",
+  "phone": "+92 42 35952184-5",
+  "website": "https://ghanidairies.com",
+  "ceo": "Hafiz Avais Ghani",
+  "sourceNote": "Company website (ghanidairies.com: company-profile, board-of-directors, contact, products), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Raw milk",
+      "summary": "Fresh, premium-quality raw milk produced at the company's dairy farm in District Khushab.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

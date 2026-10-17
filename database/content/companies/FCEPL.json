@@ -1,0 +1,19 @@
+{
+  "_comment": "No image is attached: no licence-cleared photograph of this company's own facility is available, and a generic industry photo would imply it is theirs. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "FCEPL",
+  "description": "FrieslandCampina Engro Pakistan Limited is a dairy company that describes its purpose as nourishing Pakistan. It operates two production facilities, at Sukkur and Sahiwal, a dairy farm at Nara, and a milk-supply network of independent farmers and more than 1,300 milk collection centres, selling through a nationwide retail footprint.",
+  "headOffice": null,
+  "phone": null,
+  "website": "https://frieslandcampina.com/pk",
+  "ceo": null,
+  "sourceNote": "Company website (frieslandcampina.com/pk: about-us), read 2026-10-17. The site publishes a press contact address only, with no registered office or telephone number.",
+  "products": [
+    {
+      "name": "Dairy products",
+      "summary": "Milk and dairy products manufactured at the company's Sukkur and Sahiwal facilities.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

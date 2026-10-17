@@ -1,0 +1,68 @@
+{
+  "_comment": "Editorial content for HUMNL. Every fact here is attributable — see sourceNote. No image is attached. Add imagePath/imageSource/imageLicence together when a real one is available.",
+  "symbol": "HUMNL",
+  "description": "HUM Network Limited is a Pakistani media company operating television, news, film and digital businesses, and describes itself as one of the largest broadcasting brands with a following among the South Asian diaspora. Its brands span entertainment (HUM TV, HUM Masala, HUM Sitaray, HUM Pashto 1), news (HUM News), film (HUM Films), digital media, PR and publication, HUM Mart and Ten Sports. The company is listed on the Pakistan Stock Exchange.",
+  "headOffice": "HUM TV, Plot No. 10/11, Hassan Ali Street, Off. I.I. Chundrigar Road, Karachi 74000, Pakistan",
+  "phone": null,
+  "website": "https://humnetwork.tv",
+  "ceo": "Duraid Qureshi",
+  "sourceNote": "Company website (humnetwork.tv: company-profile, company-information, contact), read 2026-10-17. The Karachi head-office page publishes only a fax number, so phone is left empty.",
+  "products": [
+    {
+      "name": "HUM TV",
+      "summary": "Entertainment television channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HUM News",
+      "summary": "News channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HUM Films",
+      "summary": "Film production and distribution brand.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HUM Masala",
+      "summary": "Food and lifestyle channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HUM Sitaray",
+      "summary": "Entertainment channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HUM Pashto 1",
+      "summary": "Pashto-language channel.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "HUM Mart",
+      "summary": "Retail brand listed among the network's businesses.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Ten Sports",
+      "summary": "Sports channel listed among the network's brands.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}

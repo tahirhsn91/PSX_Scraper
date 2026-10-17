@@ -1,0 +1,26 @@
+{
+  "_comment": "Editorial content for UBDL. Every fact here is attributable — see sourceNote. No image is attached: no licence-cleared photograph of this company's own facility exists on the open licence sources, and a generic industry photo would imply it is theirs.",
+  "symbol": "UBDL",
+  "description": "United Brands Limited is a distribution and marketing company, incorporated in 1965 as Batlay Match Industries Limited, renamed UDL Industries Limited in 1987 and United Brands Limited in 2006. It imports, sells and distributes consumer goods through roughly 100 branches and seven warehouses across Pakistan. Multinational brands it has handled include Lindt chocolate, Ovaltine malted drink, Kellogg's cereals and snacks, and Pringles. It is a subsidiary of International Brands Limited.",
+  "headOffice": "2nd Floor, One IBL Center, Block 7 & 8, Delhi Mercantile Muslim Cooperative Housing Society, Main Shahrah-e-Faisal, Karachi",
+  "phone": "+92 21 3717 0176-180",
+  "website": "https://ubrands.biz",
+  "ceo": "Zubair Razzak Palwala",
+  "sourceNote": "Company website (ubrands.biz: about us, profile of the company, contact) and the PSX company profile (dps.psx.com.pk/company/UBDL: business description, key people, address), read 2026-10-17.",
+  "products": [
+    {
+      "name": "Distribution and warehousing",
+      "summary": "Import, sales, distribution and warehousing of consumer goods through about 100 branches and seven warehouses across Pakistan.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    },
+    {
+      "name": "Represented brands",
+      "summary": "Multinational consumer brands handled by the company have included Lindt chocolate, Ovaltine malted drink, Kellogg's cereals and snacks, and Pringles.",
+      "imagePath": null,
+      "imageSource": null,
+      "imageLicence": null
+    }
+  ]
+}
