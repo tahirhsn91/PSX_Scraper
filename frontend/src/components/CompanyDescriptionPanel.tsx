@@ -100,43 +100,48 @@ export function CompanyDescriptionPanel({ profile, sector }: Props) {
   return (
     <SectionCard title="Company Description">
       <Stack spacing={3}>
-        <Grid container spacing={1.5}>
-          <Grid item xs={12} sm={6} md={4}>
-            <StatTile label="Sector" value={usableSector(sector) ?? DASH} />
+        {/* The Grid must not be a direct Stack child: Stack pins its children's margin to 0,
+            which strips the Grid's negative gutter while keeping its +12px width, pushing the
+            last tile 12px past the card padding and onto the border. */}
+        <Box>
+          <Grid container spacing={1.5}>
+            <Grid item xs={12} sm={6} md={4}>
+              <StatTile label="Sector" value={usableSector(sector) ?? DASH} />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <StatTile label="CEO" value={profile.ceo ?? DASH} />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <StatTile
+                label="Phone"
+                value={
+                  profile.phone ? (
+                    <Link href={`tel:${profile.phone.replace(/\s+/g, '')}`}>{profile.phone}</Link>
+                  ) : (
+                    DASH
+                  )
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <StatTile
+                label="Website"
+                value={
+                  href ? (
+                    <Link href={href} target="_blank" rel="noopener noreferrer">
+                      {profile.website}
+                    </Link>
+                  ) : (
+                    DASH
+                  )
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={8}>
+              <StatTile label="Head office" value={profile.headOffice ?? DASH} />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <StatTile label="CEO" value={profile.ceo ?? DASH} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <StatTile
-              label="Phone"
-              value={
-                profile.phone ? (
-                  <Link href={`tel:${profile.phone.replace(/\s+/g, '')}`}>{profile.phone}</Link>
-                ) : (
-                  DASH
-                )
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <StatTile
-              label="Website"
-              value={
-                href ? (
-                  <Link href={href} target="_blank" rel="noopener noreferrer">
-                    {profile.website}
-                  </Link>
-                ) : (
-                  DASH
-                )
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={8}>
-            <StatTile label="Head office" value={profile.headOffice ?? DASH} />
-          </Grid>
-        </Grid>
+        </Box>
 
         {profile.description && (
           <Box>
