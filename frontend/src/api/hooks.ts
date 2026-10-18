@@ -4,7 +4,7 @@ import type {
   ScreenerPreset, SectorDetail, IndicatorsResponse, PerformanceResponse, CompareResponse, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
-  StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod, AnnouncementList,
+  StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod, AnnouncementList, DividendLedger,
 } from '../types';
 
 /** Stable string for a filters object, so the query key changes only when the criteria change. */
@@ -414,4 +414,19 @@ export const useAnnouncements = (params: {
           params: { symbol: params.symbol || undefined, category: params.category || undefined, page: params.page ?? 1, limit: params.limit ?? 50 },
         })
       ).data,
+  });
+
+/** The dividend ledger. Filters are part of the query key, so a filtered view is a shareable URL. */
+export const useDividendLedger = (params: {
+  symbol?: string;
+  from?: string;
+  to?: string;
+  minYield?: number;
+  page?: number;
+  limit?: number;
+} = {}) =>
+  useQuery({
+    queryKey: ['dividends', 'ledger', params],
+    queryFn: async () =>
+      (await api.get<DividendLedger>('/dividends', { params: { ...params, limit: params.limit ?? 100 } })).data,
   });
