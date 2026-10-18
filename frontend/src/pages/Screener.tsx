@@ -9,9 +9,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControlLabel,
   Grid,
   MenuItem,
   Stack,
+  Switch,
   TablePagination,
   TextField,
   Typography,
@@ -38,6 +40,8 @@ const FIELDS: { key: keyof StockFilters; label: string; percent?: boolean }[] = 
   { key: 'maxPb', label: 'Max P/B' },
   { key: 'minRoe', label: 'Min ROE', percent: true },
   { key: 'maxDebtToEquity', label: 'Max debt/equity' },
+  { key: 'minRsi', label: 'Min RSI (14)' },
+  { key: 'maxRsi', label: 'Max RSI (14)' },
   { key: 'minReturn', label: 'Min return', percent: true },
   { key: 'maxReturn', label: 'Max return', percent: true },
 ];
@@ -49,6 +53,17 @@ const PERIODS: { key: NonNullable<StockFilters['returnPeriod']>; label: string; 
   { key: '3m', label: '3M', sessions: 64 },
   { key: '6m', label: '6M', sessions: 127 },
   { key: '1y', label: '1Y', sessions: 253 },
+];
+
+/**
+ * Close versus a moving average. The server judges this on its own indicator board — the same
+ * series the stock page draws — so the filter and the Technical section cannot disagree.
+ */
+const MA_RELATIONS: { key: NonNullable<StockFilters['maRelation']>; label: string }[] = [
+  { key: 'above_sma50', label: 'Above SMA 50' },
+  { key: 'below_sma50', label: 'Below SMA 50' },
+  { key: 'above_sma200', label: 'Above SMA 200' },
+  { key: 'below_sma200', label: 'Below SMA 200' },
 ];
 
 const PAGE_SIZE = 50;
@@ -64,6 +79,7 @@ function buildFilters(
   criteria: Record<string, string>,
   sector: string,
   period: StockFilters['returnPeriod'],
+  maRelation: StockFilters['maRelation'] | '',
 ): StockFilters {
   const f: StockFilters = {};
   for (const field of FIELDS) {
@@ -73,6 +89,7 @@ function buildFilters(
   if (sector) f.sector = sector;
   // The period travels with the return bounds: without it "min return 20%" would have no window.
   if (period) f.returnPeriod = period;
+  if (maRelation) f.maRelation = maRelation;
   return f;
 }
 
@@ -92,6 +109,7 @@ function parseScreen(params: URLSearchParams): {
   criteria: Record<string, string>;
   sector: string;
   period: NonNullable<StockFilters['returnPeriod']> | '';
+  maRelation: NonNullable<StockFilters['maRelation']> | '';
   sort: SortState | null;
   page: number;
   presetKey: string;
@@ -113,10 +131,15 @@ function parseScreen(params: URLSearchParams): {
     ? periodRaw
     : '') as NonNullable<StockFilters['returnPeriod']> | '';
   if (period) filters.returnPeriod = period;
+  const maRaw = params.get('maRelation');
+  const maRelation = (MA_RELATIONS.some((m) => m.key === maRaw) ? maRaw : '') as
+    | NonNullable<StockFilters['maRelation']>
+    | '';
+  if (maRelation) filters.maRelation = maRelation;
   const sortKey = params.get('sort');
   const sort = sortKey ? ({ key: sortKey, direction: params.get('order') === 'desc' ? 'desc' : 'asc' } as SortState) : null;
   const page = Math.max(1, Number(params.get('page') ?? '1') || 1);
-  return { filters, criteria, sector, period, sort, page, presetKey: params.get('preset') ?? '' };
+  return { filters, criteria, sector, period, maRelation, sort, page, presetKey: params.get('preset') ?? '' };
 }
 
 /** Serialise a screen back to the query string, dropping anything at its default. */
@@ -133,6 +156,7 @@ function screenParams(
   }
   if (filters.sector) next.set('sector', filters.sector);
   if (filters.returnPeriod) next.set('returnPeriod', filters.returnPeriod);
+  if (filters.maRelation) next.set('maRelation', filters.maRelation);
   if (presetKey) next.set('preset', presetKey);
   if (sort?.key) {
     next.set('sort', String(sort.key));
@@ -151,12 +175,15 @@ export function Screener() {
   const [criteria, setCriteria] = useState<Record<string, string>>(view.criteria);
   const [sector, setSector] = useState(view.sector);
   const [period, setPeriod] = useState(view.period);
+  const [maRelation, setMaRelation] = useState(view.maRelation);
+  const [showTech, setShowTech] = useState(false);
 
   // Follow Back / Forward: the form should show what the results show.
   useEffect(() => {
     setCriteria(view.criteria);
     setSector(view.sector);
     setPeriod(view.period);
+    setMaRelation(view.maRelation);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- keyed on the query string on purpose
   }, [params.toString()]);
 
@@ -179,7 +206,7 @@ export function Screener() {
     (sort?.direction as SortOrder) ?? 'asc',
     undefined,
     undefined,
-    hasFilters ? applied : undefined,
+    hasFilters || showTech ? { ...applied, ...(showTech ? { technical: true } : {}) } : undefined,
     presetKey || undefined,
   );
   const activePreset = data?.preset;
@@ -189,13 +216,14 @@ export function Screener() {
     setCriteria((c) => ({ ...c, [key]: e.target.value }));
 
   const apply = () => {
-    setParams(screenParams(buildFilters(criteria, sector, period || undefined), presetKey, null, 1));
+    setParams(screenParams(buildFilters(criteria, sector, period || undefined, maRelation), presetKey, null, 1));
   };
   const reset = () => {
     setParams(new URLSearchParams());
     setCriteria({});
     setSector('');
     setPeriod('');
+    setMaRelation('');
   };
 
   /** Choose a named screen: its criteria, ordering and reason all come from the server. */
@@ -343,6 +371,26 @@ export function Screener() {
       sortKey: 'roe',
       hideBelow: 'md',
     },
+    ...(showTech
+      ? [
+          {
+            key: 'rsi',
+            header: 'RSI (14)',
+            align: 'right' as const,
+            render: (r: StockListItem) =>
+              r.rsi != null ? formatNumber(r.rsi, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : DASH,
+            hideBelow: 'md' as const,
+          },
+          {
+            key: 'ma',
+            header: 'vs SMA',
+            align: 'right' as const,
+            render: (r: StockListItem) =>
+              r.maRelation === 'above_sma50' ? 'Above 50' : r.maRelation === 'below_sma50' ? 'Below 50' : DASH,
+            hideBelow: 'md' as const,
+          },
+        ]
+      : []),
     ...(presetKey || activePeriodMeta
       ? []
       : [
@@ -529,6 +577,23 @@ export function Screener() {
               ))}
             </TextField>
           </Grid>
+          <Grid item xs={6} sm={4} md={3}>
+            <TextField
+              fullWidth
+              size="small"
+              select
+              label="Moving average"
+              value={maRelation}
+              onChange={(e) => setMaRelation(e.target.value as typeof maRelation)}
+            >
+              <MenuItem value="">Any</MenuItem>
+              {MA_RELATIONS.map((m) => (
+                <MenuItem key={m.key} value={m.key}>
+                  {m.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
           {FIELDS.map((f) => (
             <Grid item xs={6} sm={4} md={3} key={f.key as string}>
               <TextField
@@ -543,6 +608,16 @@ export function Screener() {
             </Grid>
           ))}
         </Grid>
+        <Box sx={{ mt: 1 }}>
+          <FormControlLabel
+            control={<Switch size="small" checked={showTech} onChange={(e) => setShowTech(e.target.checked)} />}
+            label={
+              <Typography variant="body2">
+                Show RSI and moving-average columns
+              </Typography>
+            }
+          />
+        </Box>
         <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
           <Button variant="contained" onClick={apply}>
             Apply
@@ -570,6 +645,13 @@ export function Screener() {
         }
         flush
       >
+        {data?.technical && (applied.minRsi != null || applied.maxRsi != null || applied.maRelation) ? (
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', px: 2, pt: 1.5 }}>
+            {data.technical.excluded} stocks are left out of technical filters: they have fewer than{' '}
+            {data.technical.minimumSessions} sessions of history in the last 500 days, so RSI and the
+            averages cannot be computed. They are excluded rather than treated as zero.
+          </Typography>
+        ) : null}
         <DataTable
           columns={columns}
           rows={data?.items ?? []}

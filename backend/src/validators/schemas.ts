@@ -34,6 +34,16 @@ export const stocksQuery = paginationQuery.extend({
   returnPeriod: z.enum(['1w', '1m', '3m', '6m', '1y']).optional(),
   minReturn: z.coerce.number().min(-100).max(100000).optional(),
   maxReturn: z.coerce.number().min(-100).max(100000).optional(),
+  /** Wilder RSI(14) bounds. Rows without enough history are excluded, never treated as 0. */
+  minRsi: z.coerce.number().min(0).max(100).optional(),
+  maxRsi: z.coerce.number().min(0).max(100).optional(),
+  /** Close versus a simple moving average, judged on the latest stored session. */
+  maRelation: z.enum(['above_sma50', 'below_sma50', 'above_sma200', 'below_sma200']).optional(),
+  /** Ask for RSI/MA columns without filtering (the screener's optional technical columns). */
+  technical: z
+    .union([z.literal('1'), z.literal('true'), z.boolean()])
+    .optional()
+    .transform((v) => v === true || v === '1' || v === 'true'),
   sort: z
     .enum(['symbol', 'price', 'week52Low', 'week52High', 'change', 'changePercent', 'volume', 'marketCap', 'points', 'weight', 'dividendYield', 'peRatio', 'pbRatio', 'roe', 'beta', 'return'])
     .optional(),

@@ -80,6 +80,11 @@ export interface StockListItem {
   returnSessions?: number | null;
   /** Present only when the row came from a named screen: why this row is on the list. */
   reason?: string;
+  /** Technical columns, present when the screen asked for them (`technical=1`). */
+  rsi?: number | null;
+  sma50?: number | null;
+  sma200?: number | null;
+  maRelation?: 'above_sma50' | 'below_sma50' | null;
   id: string;
   symbol: string;
   companyName: string | null;
@@ -169,6 +174,17 @@ export interface StocksPage extends Paginated<StockListItem> {
    * scope without a second request; an unscoped request answers with `total` alone.
    */
   groups?: { kse100: number; rest: number };
+  /**
+   * Present when technical data was computed for this page: the window its indicators were judged
+   * over, and how many stocks were left out for lack of history. Stated so a filter cannot look
+   * like it covered the whole board when it did not.
+   */
+  technical?: {
+    windowStart: string | null;
+    windowEnd: string | null;
+    minimumSessions: number;
+    excluded: number;
+  };
 }
 
 export interface SearchResult {
@@ -393,6 +409,13 @@ export interface StockFilters {
   /** Minimum / maximum price return over that window, in percent. */
   minReturn?: number;
   maxReturn?: number;
+  /** Wilder RSI(14) bounds, computed server-side by the indicator engine. */
+  minRsi?: number;
+  maxRsi?: number;
+  /** Close versus a simple moving average on the latest session. */
+  maRelation?: 'above_sma50' | 'below_sma50' | 'above_sma200' | 'below_sma200';
+  /** Ask for the technical columns without filtering on them. */
+  technical?: boolean;
   /** A watchlist: "give me these specific symbols". Sent as a comma-joined string. */
   symbols?: string[];
 }
