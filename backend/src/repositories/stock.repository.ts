@@ -216,6 +216,9 @@ const returnLateral = (back: number) => Prisma.sql`
         WHERE stock_id = s.id AND close IS NOT NULL
         ORDER BY last_trade_date::date DESC, last_trade_date DESC
       ) per_day
+      -- The window functions run before LIMIT, so the outer ORDER BY is what makes LIMIT keep the
+      -- *most recent* sessions rather than an arbitrary 21 rows.
+      ORDER BY d DESC
       LIMIT ${back}
     )
     SELECT

@@ -14,6 +14,7 @@ import {
 } from '../services/technicalUniverse.service';
 import { SCREENER_PRESETS, presetSummaries } from '../services/screenerPresets';
 import { computeIndicators, type IndicatorKey } from '../services/indicators.service';
+import { performance } from '../services/performance.service';
 import { cacheGet, cacheSet } from '../services/cache';
 import { HISTORY_RANGES, rangeToFrom, type HistoryRange } from '../utils/range';
 import { valid } from '../middleware/validate';
@@ -315,4 +316,26 @@ export const indicators: RequestHandler = async (req, res) => {
   await cacheSet(key, payload, 300);
   res.setHeader('X-Cache', 'MISS');
   res.json(payload);
+};
+
+
+/**
+ * Period returns plus a rebased index comparison for one symbol.
+ *
+ * Kept apart from `getStock` because the chart re-reads it whenever the range or the benchmark
+ * changes, and the detail payload should not grow for a section below the fold.
+ */
+export const stockPerformance: RequestHandler = async (req, res) => {
+  const { symbol } = valid<Sym>(req, 'params');
+  const rangeRaw = String(req.query.range ?? '1Y').toUpperCase();
+  if (!(HISTORY_RANGES as readonly string[]).includes(rangeRaw)) {
+    res.status(422).json({ error: { code: 'INVALID_RANGE', message: `range must be one of ${HISTORY_RANGES.join(', ')}` } });
+    return;
+  }
+  const index = String(req.query.index ?? 'KSE100').toUpperCase();
+  if (!/^[A-Z0-9]{2,20}$/.test(index)) {
+    res.status(422).json({ error: { code: 'INVALID_INDEX', message: 'index must be an index symbol' } });
+    return;
+  }
+  res.json(await performance(symbol, rangeRaw as never, index));
 };

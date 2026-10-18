@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
-  ScreenerPreset, SectorDetail, IndicatorsResponse, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
+  ScreenerPreset, SectorDetail, IndicatorsResponse, PerformanceResponse, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
   StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod,
@@ -339,6 +339,16 @@ export const useSectors = () =>
   useQuery({
     queryKey: keys.sectors,
     queryFn: async () => (await api.get<{ items: SectorSummary[] }>('/market/sectors')).data,
+  });
+
+/** Period returns plus a rebased index comparison. */
+export const usePerformance = (symbol: string, range: string, index = 'KSE100') =>
+  useQuery({
+    queryKey: ['performance', symbol, range, index],
+    queryFn: async () =>
+      (await api.get<PerformanceResponse>(`/stocks/${symbol}/performance`, { params: { range, index } })).data,
+    enabled: Boolean(symbol),
+    staleTime: 5 * 60 * 1000,
   });
 
 /** Technical indicators for a symbol's current range (cached server-side for five minutes). */
