@@ -472,6 +472,27 @@ export interface IndicatorsResponse {
   series: IndicatorSeries[];
 }
 
+export interface CompareSeries {
+  symbol: string;
+  name: string | null;
+  points: { date: string; value: number }[];
+  returnPct: number;
+  volatilityPct: number;
+  maxDrawdownPct: number;
+  sessions: number;
+}
+
+/** Two to five symbols over one shared window, each rebased to 100 at the first common date. */
+export interface CompareResponse {
+  period: '1m' | '3m' | '6m' | '1y' | '3y';
+  windowStart: string | null;
+  windowEnd: string | null;
+  series: CompareSeries[];
+  excluded: { symbol: string; reason: string }[];
+  /** Symbols whose shorter history set the shared window. */
+  shortenedBy: { symbol: string; sessions: number }[];
+}
+
 export interface PeriodReturn {
   period: '1w' | '1m' | '3m' | '6m' | '1y';
   sessions: number;

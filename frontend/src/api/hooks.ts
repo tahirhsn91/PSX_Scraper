@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
-  ScreenerPreset, SectorDetail, IndicatorsResponse, PerformanceResponse, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
+  ScreenerPreset, SectorDetail, IndicatorsResponse, PerformanceResponse, CompareResponse, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
   StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod,
@@ -339,6 +339,16 @@ export const useSectors = () =>
   useQuery({
     queryKey: keys.sectors,
     queryFn: async () => (await api.get<{ items: SectorSummary[] }>('/market/sectors')).data,
+  });
+
+/** Normalised comparison of 2–5 symbols over one shared window. */
+export const useCompare = (symbols: string[], period: string) =>
+  useQuery({
+    queryKey: ['compare', symbols.join(','), period],
+    queryFn: async () =>
+      (await api.get<CompareResponse>('/compare', { params: { symbols: symbols.join(','), period } })).data,
+    enabled: symbols.length >= 2,
+    staleTime: 60 * 1000,
   });
 
 /** Period returns plus a rebased index comparison. */
