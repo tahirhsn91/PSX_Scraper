@@ -1,0 +1,42 @@
+name: CI
+
+# Runs on every pull request and on develop. Production deploys live in deploy.yml and are triggered
+# only by a push to main — this workflow never deploys anything.
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend unit tests and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # `npm install`, not `npm ci`: this repository does not track frontend/package-lock.json
+      # (it is excluded in .git/info/exclude), so there is no lockfile for `ci` to install from.
+      - run: npm install --no-audit --no-fund
+
+      # These are pure unit/component tests: jsdom, no network, no database, no live scraping.
+      - run: npm test
+
+      # A build failure is a real defect even when the tests pass (types are checked by `tsc -b`).
+      - run: npm run build
+
+  # The Playwright smoke cannot run here yet: it needs the compose stack and the data it holds.
+  # `npm --prefix frontend run test:e2e` with PLAYWRIGHT_BASE_URL pointed at a running stack is the
+  # manual gate until a seeded service container exists.
