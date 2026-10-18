@@ -7,6 +7,11 @@ import { syncService } from '../services/sync.service';
 import { marketCapService } from '../services/marketCap.service';
 import { stockLogoService } from '../services/stockLogo.service';
 import { companyProfileService } from '../services/companyProfile.service';
+import {
+  technicalUniverse,
+  matchesTechnical,
+  type TechnicalCriteria,
+} from '../services/technicalUniverse.service';
 import { SCREENER_PRESETS, presetSummaries } from '../services/screenerPresets';
 import { computeIndicators, type IndicatorKey } from '../services/indicators.service';
 import { cacheGet, cacheSet } from '../services/cache';
@@ -50,11 +55,52 @@ export const listStocks: RequestHandler = async (req, res) => {
 
   // A preset supplies its own criteria and ordering; explicit screener filters may narrow it
   // further (a preset inside a sector), but they cannot widen what the preset means.
-  const filters = preset ? { ...preset.filters, ...(toStockFilters(q) ?? {}) } : toStockFilters(q);
+  let filters = preset ? { ...preset.filters, ...(toStockFilters(q) ?? {}) } : toStockFilters(q);
   const sort = q.sort ?? preset?.sort;
   const order = q.sort ? q.order : preset?.order ?? q.order;
 
+  // Technical filters resolve to a set of stock ids *before* the page query runs, so pagination,
+  // ordering and totals stay in SQL. `technical=1` alone only asks for the columns.
+  const criteria: TechnicalCriteria = {
+    minRsi: q.minRsi,
+    maxRsi: q.maxRsi,
+    maRelation: q.maRelation,
+  };
+  const filtersOnTechnical =
+    criteria.minRsi != null || criteria.maxRsi != null || criteria.maRelation != null;
+  const universe = filtersOnTechnical || q.technical
+    ? await technicalUniverse()
+    : null;
+  if (universe && filtersOnTechnical) {
+    const allowed: string[] = [];
+    for (const [id, row] of universe.rows) {
+      if (matchesTechnical(row, row.close, criteria)) allowed.push(id);
+    }
+    filters = filters ?? {};
+    filters.ids = allowed;
+  }
+
   const result = await stockService.list(q.page, q.limit, sort, order, q.group, q.index, filters);
+
+  if (universe) {
+    result.items = result.items.map((row) => {
+      const t = universe.rows.get(row.id);
+      return {
+        ...row,
+        rsi: t?.rsi ?? null,
+        sma50: t?.sma50 ?? null,
+        sma200: t?.sma200 ?? null,
+        maRelation:
+          t?.sma50 == null || row.currentPrice == null
+            ? null
+            : row.currentPrice > t.sma50
+              ? 'above_sma50'
+              : row.currentPrice < t.sma50
+                ? 'below_sma50'
+                : null,
+      };
+    });
+  }
 
   if (preset) {
     const start = (result.page - 1) * result.limit;
@@ -67,6 +113,16 @@ export const listStocks: RequestHandler = async (req, res) => {
 
   res.json({
     ...result,
+    ...(universe
+      ? {
+          technical: {
+            windowStart: universe.windowStart,
+            windowEnd: universe.windowEnd,
+            minimumSessions: universe.minimumSessions,
+            excluded: universe.excluded,
+          },
+        }
+      : {}),
     ...(preset
       ? {
           preset: {
