@@ -267,8 +267,9 @@ export const indicators: RequestHandler = async (req, res) => {
   const sets = parseSets(req.query.sets);
 
   // Versioned: the cached payload embeds the maths, so a change to the engine must not keep
-  // serving the previous answers for five minutes.
-  const key = `indicators:v1:${symbol}:${range}:${[...sets].sort().join(',')}`;
+  // serving the previous answers for five minutes. v2: ATR no longer resets on a session with no
+  // high/low, and the payload carries `historySessions`.
+  const key = `indicators:v2:${symbol}:${range}:${[...sets].sort().join(',')}`;
   const cached = await cacheGet<Record<string, unknown>>(key);
   if (cached) {
     res.setHeader('X-Cache', 'HIT');
@@ -305,6 +306,10 @@ export const indicators: RequestHandler = async (req, res) => {
     symbol,
     range,
     sessions: windowCandles.length,
+    // Every session the maths could see, not just the requested window. When this equals
+    // `sessions` the range already covers the whole record and a wider range cannot help — the
+    // reader is told the stock is too new rather than sent to widen a range that cannot widen.
+    historySessions: candles.items.length,
     from: windowCandles[0]?.time ?? null,
     to: windowCandles[windowCandles.length - 1]?.time ?? null,
     // The same caveats the candles endpoint reports: readings dropped as implausible, and readings

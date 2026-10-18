@@ -122,6 +122,33 @@ describe('ATR', () => {
       1.007218, 1.004812, 1.003208, 1.058805,
     ]);
   });
+
+  it('keeps the running average across a session with no high/low', () => {
+    // The EOD path stores open and close only, so a session whose quote never arrived is stored
+    // without high/low and has no true range. That is one missing observation, not the end of
+    // the series: ATR must resume on the next session instead of waiting n sessions to re-seed.
+    // Before this, one gap blanked the indicator for n sessions — 272 of 511 symbols ended up
+    // with an empty ATR tail.
+    const gapped = CANDLES.map((c, i) =>
+      i === 6 || i === 7 ? { ...c, high: null, low: null } : c,
+    );
+    const full = atr(CANDLES, 3);
+    const cut = atr(gapped, 3);
+
+    expect(cut.slice(0, 6)).toEqual(full.slice(0, 6));
+    expect(cut[6]).toBeNull();
+    expect(cut[7]).toBeNull();
+
+    // Session 8 carries a range again: (previous ATR × (n-1) + today's range) / n.
+    const c8 = CANDLES[8]!;
+    const prevClose = CANDLES[7]!.close!;
+    const tr8 = Math.max(
+      c8.high! - c8.low!,
+      Math.abs(c8.high! - prevClose),
+      Math.abs(c8.low! - prevClose),
+    );
+    expect(cut[8]).toBeCloseTo((cut[5]! * 2 + tr8) / 3, 10);
+  });
 });
 
 describe('relative volume', () => {
