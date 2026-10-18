@@ -523,3 +523,17 @@ model SourceHealth {
 
   @@map("source_health")
 }
+
+/// One first-party product event (#212). Deliberately carries no identifier: see
+/// backend/src/analytics/events.ts for what is and is not recorded.
+model ProductEvent {
+  id        String   @id @default(uuid())
+  name      String
+  path      String?
+  props     Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([name, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("product_events")
+}

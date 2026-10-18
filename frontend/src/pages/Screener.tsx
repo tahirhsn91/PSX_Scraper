@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { track } from '../lib/analytics';
 import {
   Alert,
   Box,
@@ -267,6 +268,7 @@ export function Screener() {
 
   /** Sorting is a change to the question, so it goes in the URL and returns to page one. */
   const changeSort = (next: SortState | null) => {
+    track('screener_filter_applied', { filter: 'criteria' });
     setParams(screenParams(applied, presetKey, next, 1));
   };
   const changePage = (p: number) => {
