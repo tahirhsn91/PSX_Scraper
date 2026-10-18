@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
+import { track } from '../lib/analytics';
 import {
   Box,
   Button,
@@ -184,6 +185,11 @@ const RATIO_TILES: { key: keyof NonNullable<StockDetail['ratios']>; label: strin
 
 export function StockDetails() {
   const { symbol = '' } = useParams();
+
+  // No symbol in the payload: what was viewed is the person's business (#212).
+  useEffect(() => {
+    if (symbol) track('stock_viewed');
+  }, [symbol]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const qc = useQueryClient();

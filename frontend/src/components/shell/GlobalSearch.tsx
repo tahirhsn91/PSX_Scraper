@@ -3,6 +3,7 @@ import { Autocomplete, Box, CircularProgress, InputAdornment, TextField, Typogra
 import SearchIcon from '@mui/icons-material/SearchRounded';
 import { useNavigate } from 'react-router-dom';
 import { useSearch } from '../../api/hooks';
+import { track } from '../../lib/analytics';
 import type { SearchResult } from '../../types';
 
 export interface GlobalSearchProps {
@@ -64,7 +65,11 @@ export function GlobalSearch({
       noOptionsText={enabled ? 'No matches' : 'Type at least two characters'}
       onInputChange={(_e, value) => setInput(value)}
       onChange={(_e, value) => {
-        if (value && typeof value !== 'string') go(`/stocks/${value.symbol}`);
+        if (value && typeof value !== 'string') {
+          // Position only: which result someone chose, never which stock it was.
+          track('search_result_selected', { position: results.findIndex((r) => r.symbol === value.symbol) });
+          go(`/stocks/${value.symbol}`);
+        }
       }}
       onKeyDown={(e) => {
         if (e.key !== 'Enter') return;
@@ -72,7 +77,10 @@ export function GlobalSearch({
         const typed = input.trim();
         if (prevented || typed.length === 0) return;
         const exact = results.some((r) => r.symbol.toLowerCase() === typed.toLowerCase());
-        if (!exact) go(`/search?q=${encodeURIComponent(typed)}`);
+        if (!exact) {
+          track('search_submitted', { resultCount: results.length, hadResults: results.length > 0 });
+          go(`/search?q=${encodeURIComponent(typed)}`);
+        }
       }}
       renderOption={(props, option) => (
         <Box component="li" {...props} key={option.symbol} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
