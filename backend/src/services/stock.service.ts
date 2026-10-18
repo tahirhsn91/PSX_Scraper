@@ -8,6 +8,7 @@ import { kse100GroupCounts } from './kse100Membership.service';
 import {
   getStockDetail, getPriceHistory, getCandles, type Candle,
 } from '../repositories/stockDetail.repository';
+import { actionsForSymbol, adjustSeries } from './corporateActions.service';
 import { scoreFundamentals } from './fundamentals.service';
 import { getCachedSectorMedians, getCachedBeta } from './detailCache';
 import { enqueueSync, cancelSyncJob } from '../jobs/queues';
@@ -271,16 +272,30 @@ export const stockService = {
    * No dates means "every session we hold" — the chart's default request, and what makes the
    * view open on the earliest day on record rather than a fixed window.
    */
-  async candles(symbol: string, opts: { interval?: '1D'; range?: HistoryRange; from?: Date; to?: Date }) {
+  async candles(
+    symbol: string,
+    opts: { interval?: '1D'; range?: HistoryRange; from?: Date; to?: Date; adjusted?: boolean },
+  ) {
     // A range preset wins over an explicit from, matching how /history resolves it.
     const from = opts.range ? rangeToFrom(opts.range) : opts.from;
     const res = await getCandles(symbol, from, opts.to);
     if (res === null) throw new NotFoundError(`Stock not tracked: ${symbol.toUpperCase()}`);
-    const items: Candle[] = res.items;
+    let items: Candle[] = res.items;
+    // Fetched even when not adjusting: the chart needs to know whether a basis switch would do
+    // anything before it offers one. One indexed query, and 0 rows for almost every symbol today.
+    const actions = await actionsForSymbol(symbol);
+    const basis: 'as-traded' | 'adjusted' = opts.adjusted && actions.length > 0 ? 'adjusted' : 'as-traded';
+    // Adjustment is opt-in and multiplicative: prices before a split/bonus are restated in today's
+    // share count. With no actions on record this is a no-op and the series is returned unchanged.
+    if (basis === 'adjusted') items = adjustSeries(items, actions);
     return {
       symbol: symbol.toUpperCase(),
       interval: opts.interval ?? '1D',
       range: opts.range ?? null,
+      // Which basis the caller is looking at. A chart that does not say is a chart that lies
+      // across a split.
+      basis,
+      actions: actions.length,
       count: items.length,
       // Readings thrown away, and readings kept with implausible fields nulled (see
       // buildCandles). Both are reported so contaminated sessions are visible in the response

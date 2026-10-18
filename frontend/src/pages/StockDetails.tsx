@@ -208,7 +208,9 @@ export function StockDetails() {
   // One range control drives both views: the API resolves the preset (1W … MAX) to a lower
   // bound, so the candle chart really does show one week when 1W is picked.
   const [chartMode, setChartMode] = useState<ChartMode>('line');
-  const { data: candles, isLoading: candlesLoading } = useCandles(symbol);
+  // As traded unless the reader asks otherwise — the stored series is what printed.
+  const [adjusted, setAdjusted] = useState(false);
+  const { data: candles, isLoading: candlesLoading } = useCandles(symbol, adjusted);
   const syncStock = useSyncStock();
   const { data: status } = useSyncStatus(syncStock.isPending);
   // Sticky header + quick-jump nav height, reported by the nav so anchors scroll below both bars.
@@ -732,7 +734,26 @@ export function StockDetails() {
                 <Skeleton variant="rounded" height={340} />
               ) : (
                 <>
-                  <CandleChart data={candles} range={range} height={isMobile ? 260 : 380} />
+                  {(candles?.actions ?? 0) > 0 && (
+                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+                    <Typography variant="caption" color="text.secondary">Price basis</Typography>
+                    <Button
+                      size="small"
+                      variant={!adjusted ? 'contained' : 'outlined'}
+                      onClick={() => setAdjusted(false)}
+                    >
+                      As traded
+                    </Button>
+                    <Button
+                      size="small"
+                      variant={adjusted ? 'contained' : 'outlined'}
+                      onClick={() => setAdjusted(true)}
+                    >
+                      Adjusted
+                    </Button>
+                  </Stack>
+                )}
+                <CandleChart data={candles} range={range} height={isMobile ? 260 : 380} />
                   {candles && (
                     <Typography
                       variant="caption"
@@ -746,6 +767,10 @@ export function StockDetails() {
                       earlier sessions
                       {candles.sanitised > 0 &&
                         ` · ${candles.sanitised} readings with impossible fields ignored`}
+                      {' · '}
+                      {adjusted && candles.actions > 0
+                        ? `adjusted for ${candles.actions} split/bonus action${candles.actions === 1 ? '' : 's'}`
+                        : 'as traded (no split/bonus adjustment applied)'}
                       {candles.skipped > 0 &&
                         ` · ${candles.skipped} readings discarded as impossible`}
                     </Typography>
