@@ -430,3 +430,30 @@ export const useDividendLedger = (params: {
     queryFn: async () =>
       (await api.get<DividendLedger>('/dividends', { params: { ...params, limit: params.limit ?? 100 } })).data,
   });
+
+/** Data-source registry + per-source health (#214). */
+export interface DataSourceView {
+  id: string;
+  name: string;
+  category: string;
+  provides: string[];
+  hosts: string[];
+  files: string[];
+  licence: { status: string; notes: string };
+  rateLimit: string | null;
+  enabled: boolean;
+  lastSuccessAt: string | null;
+  lastFailureAt: string | null;
+  lastError: string | null;
+  successCount: number;
+  failureCount: number;
+  attempts: number;
+  errorRate: number;
+}
+
+export const useDataSources = () =>
+  useQuery({
+    queryKey: ['sync', 'sources'],
+    queryFn: async () => (await api.get<{ sources: DataSourceView[]; disabled: string[]; unknownDisabledIds: string[]; unlicensedCount: number }>('/sync/sources')).data,
+    staleTime: 30_000,
+  });
