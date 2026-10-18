@@ -1,4 +1,5 @@
 import axios from "axios";
+import { adminToken } from "../lib/adminToken";
 
 const baseURL =
   (import.meta.env.VITE_API_URL as string) || "http://localhost:4000/api/v1";
@@ -29,6 +30,12 @@ export const api = axios.create({ baseURL, timeout: 20000 });
 
 api.interceptors.request.use((config) => {
   config.headers["x-request-id"] = newRequestId();
+  // Mutating calls carry the admin token; reads never do, so a missing token cannot break browsing.
+  const method = (config.method ?? "get").toLowerCase();
+  if (method !== "get" && method !== "head") {
+    const token = adminToken();
+    if (token) config.headers["x-admin-token"] = token;
+  }
   return config;
 });
 

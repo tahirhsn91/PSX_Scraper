@@ -16,6 +16,7 @@ import SyncIcon from '@mui/icons-material/SyncRounded';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { PageHeader } from '../components/ui/PageHeader';
+import { AdminTokenField } from '../components/AdminTokenField';
 import { useSyncAll, useSyncLogs } from '../api/hooks';
 import { DASH, formatDateTime, formatDuration, formatRelative, formatTime } from '../lib/format';
 import type { SyncLog } from '../types';
@@ -146,6 +147,7 @@ export function SyncLogs() {
 
   return (
     <Box>
+      <AdminTokenField />
       <PageHeader
         title="Sync logs"
         subtitle="Every scrape attempt the worker has recorded, newest first"
