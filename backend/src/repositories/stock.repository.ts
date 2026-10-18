@@ -244,6 +244,8 @@ export interface StockFilters {
    * present whenever a return is filtered or sorted on; the controller defaults it to one month.
    */
   returnPeriod?: ReturnPeriod;
+  /** Restricts the page to these stock ids (technical filters resolve to a set first). */
+  ids?: string[];
   minReturn?: number;
   maxReturn?: number;
   /** A specific set of symbols (a watchlist). Bound as a parameter, never assembled into the text. */
@@ -268,6 +270,7 @@ export function hasRatioFilters(filters?: StockFilters): boolean {
 function buildScreenerClauses(filters?: StockFilters): Prisma.Sql[] {
   if (!filters) return [];
   const c: Prisma.Sql[] = [];
+  if (filters.ids) c.push(Prisma.sql`s.id = ANY(${filters.ids})`);
   if (filters.sector) c.push(Prisma.sql`s.sector = ${filters.sector}`);
   if (filters.minPrice != null) c.push(Prisma.sql`p.current_price >= ${filters.minPrice}`);
   if (filters.maxPrice != null) c.push(Prisma.sql`p.current_price <= ${filters.maxPrice}`);
