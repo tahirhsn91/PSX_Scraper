@@ -7,6 +7,7 @@ import marketRoutes from './market.routes';
 import compareRoutes from './compare.routes';
 import { announcementsRouter } from './announcements.routes';
 import dividendsRouter from './dividends.routes';
+import alertsRouter from './alerts.routes';
 
 const router = Router();
 router.use('/stocks', stockRoutes);
@@ -17,4 +18,5 @@ router.use('/market', marketRoutes);
 router.use('/compare', compareRoutes);
 router.use('/announcements', announcementsRouter);
 router.use('/dividends', dividendsRouter);
+router.use('/alerts', alertsRouter);
 export default router;
