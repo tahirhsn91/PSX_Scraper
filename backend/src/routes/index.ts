@@ -5,6 +5,7 @@ import syncRoutes from './sync.routes';
 import indexRoutes from './indices.routes';
 import marketRoutes from './market.routes';
 import compareRoutes from './compare.routes';
+import { announcementsRouter } from './announcements.routes';
 
 const router = Router();
 router.use('/stocks', stockRoutes);
@@ -13,4 +14,5 @@ router.use('/search', searchRoutes);
 router.use('/sync', syncRoutes);
 router.use('/market', marketRoutes);
 router.use('/compare', compareRoutes);
+router.use('/announcements', announcementsRouter);
 export default router;
