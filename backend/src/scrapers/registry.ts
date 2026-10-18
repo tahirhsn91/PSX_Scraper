@@ -1,4 +1,5 @@
 import { IStockScraper } from '../types/scraper';
+import { isSourceEnabled } from '../data-sources';
 import { PSXScraper } from './psx.scraper';
 import { SarmaayaScraper } from './sarmaaya.scraper';
 import { SarmaayaFundamentalsScraper } from './sarmaayaFundamentals.scraper';
@@ -14,8 +15,14 @@ class ScraperRegistry {
     this.scrapers.set(scraper.source, scraper);
   }
 
+  /**
+   * The scrapers this deployment will actually run.
+   *
+   * Filtered through the data-source registry so `DATA_SOURCES_DISABLED=psx` takes a provider out of
+   * the pipeline with no code change (#214) — the flag is read per call, not at boot.
+   */
   enabled(): IStockScraper[] {
-    return Array.from(this.scrapers.values());
+    return Array.from(this.scrapers.values()).filter((s) => isSourceEnabled(s.source));
   }
 
   get(source: string): IStockScraper | undefined {
