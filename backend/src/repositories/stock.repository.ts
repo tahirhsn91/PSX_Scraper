@@ -229,6 +229,8 @@ const returnLateral = (back: number) => Prisma.sql`
 
 export interface StockFilters {
   sector?: string;
+  /** Restrict to PSX KMI All Shares (Shariah) constituents. */
+  shariah?: boolean;
   minPrice?: number;
   maxPrice?: number;
   minMarketCap?: number;
@@ -275,6 +277,16 @@ function buildScreenerClauses(filters?: StockFilters): Prisma.Sql[] {
   const c: Prisma.Sql[] = [];
   if (filters.ids) c.push(Prisma.sql`s.id = ANY(${filters.ids})`);
   if (filters.sector) c.push(Prisma.sql`s.sector = ${filters.sector}`);
+  // Shariah screening is *published index membership*, never an inference from sector or name:
+  // the constituent table is the only defensible source, and it is read here rather than hard-coded
+  // so a refresh of the index changes the screen.
+  if (filters.shariah) {
+    c.push(Prisma.sql`s.id IN (
+      SELECT ic.stock_id FROM index_constituents ic
+      JOIN market_indices mi ON mi.id = ic.index_id
+      WHERE mi.symbol = 'KMIALLSHR'
+    )`);
+  }
   if (filters.minPrice != null) c.push(Prisma.sql`p.current_price >= ${filters.minPrice}`);
   if (filters.maxPrice != null) c.push(Prisma.sql`p.current_price <= ${filters.maxPrice}`);
   if (filters.minMarketCap != null) c.push(Prisma.sql`p.market_cap >= ${filters.minMarketCap}`);
