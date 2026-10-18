@@ -21,6 +21,7 @@ import {
 import { useScreenerPresets, useSectors, useStocks } from '../api/hooks';
 import { screenUrl, useSavedScreens } from '../lib/savedScreens';
 import { PageHeader } from '../components/ui/PageHeader';
+import { ShariahToggle } from '../components/ShariahToggle';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column, type SortState } from '../components/ui/DataTable';
 import { ChangePill } from '../components/ui/ChangePill';
@@ -126,6 +127,7 @@ function parseScreen(params: URLSearchParams): {
   }
   const sector = params.get('sector') ?? '';
   if (sector) filters.sector = sector;
+  if (params.get('shariah') === '1') filters.shariah = true;
   const periodRaw = params.get('returnPeriod');
   const period = (periodRaw === '1w' || periodRaw === '1m' || periodRaw === '3m' || periodRaw === '6m' || periodRaw === '1y'
     ? periodRaw
@@ -155,6 +157,7 @@ function screenParams(
     if (v != null) next.set(field.key as string, String(v));
   }
   if (filters.sector) next.set('sector', filters.sector);
+  if (filters.shariah) next.set('shariah', '1');
   if (filters.returnPeriod) next.set('returnPeriod', filters.returnPeriod);
   if (filters.maRelation) next.set('maRelation', filters.maRelation);
   if (presetKey) next.set('preset', presetKey);
@@ -420,6 +423,15 @@ export function Screener() {
       <PageHeader
         title="Stock screener"
         subtitle="Filter the whole universe by price, size, fundamentals and period return, then sort any column"
+      />
+      <ShariahToggle
+        on={!!applied.shariah}
+        onToggle={() => {
+          const next = new URLSearchParams(params);
+          if (applied.shariah) next.delete('shariah');
+          else next.set('shariah', '1');
+          setParams(next, { replace: true });
+        }}
       />
       <SectionCard title="Named screens" sx={{ mb: 3 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>

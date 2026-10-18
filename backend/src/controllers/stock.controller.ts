@@ -27,6 +27,7 @@ type Sym = z.infer<typeof symbolParam>;
 function toStockFilters(q: StocksQuery): StockFilters | undefined {
   const f: StockFilters = {};
   if (q.sector) f.sector = q.sector;
+  if (q.shariah) f.shariah = true;
   if (q.minPrice != null) f.minPrice = q.minPrice;
   if (q.maxPrice != null) f.maxPrice = q.maxPrice;
   if (q.minMarketCap != null) f.minMarketCap = q.minMarketCap;

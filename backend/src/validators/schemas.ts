@@ -39,6 +39,11 @@ export const stocksQuery = paginationQuery.extend({
   maxRsi: z.coerce.number().min(0).max(100).optional(),
   /** Close versus a simple moving average, judged on the latest stored session. */
   maRelation: z.enum(['above_sma50', 'below_sma50', 'above_sma200', 'below_sma200']).optional(),
+  /** Restrict to PSX KMI All Shares (Shariah) index members — published membership, never inferred. */
+  shariah: z
+    .union([z.literal('1'), z.literal('true'), z.boolean()])
+    .optional()
+    .transform((v) => v === true || v === '1' || v === 'true'),
   /** Ask for RSI/MA columns without filtering (the screener's optional technical columns). */
   technical: z
     .union([z.literal('1'), z.literal('true'), z.boolean()])

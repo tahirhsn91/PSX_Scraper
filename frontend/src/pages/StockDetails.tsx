@@ -29,6 +29,7 @@ import { FundamentalsPanel } from '../components/FundamentalsPanel';
 import { CompanyDescriptionPanel } from '../components/CompanyDescriptionPanel';
 import { IncomeStatementPanel } from '../components/IncomeStatementPanel';
 import { QuickJumpNav, type QuickJumpSection } from '../components/QuickJumpNav';
+import { ShariahBadge } from '../components/ShariahBadge';
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { PageHeader } from '../components/ui/PageHeader';
@@ -543,6 +544,8 @@ export function StockDetails() {
           </Box>
         ))}
       </Paper>
+
+      <ShariahBadge symbol={symbol} />
 
       <QuickJumpNav sections={navSections} onOffsetChange={setScrollOffset} />
 

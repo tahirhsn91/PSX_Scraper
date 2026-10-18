@@ -394,6 +394,8 @@ export interface HistoryJobStatus {
 
 /** Screener criteria, mirroring the API's optional filter fields. Absent means "no criterion". */
 export interface StockFilters {
+  /** Restrict to PSX KMI All Shares (Shariah) constituents — published membership, never inferred. */
+  shariah?: boolean;
   sector?: string;
   minPrice?: number;
   maxPrice?: number;
