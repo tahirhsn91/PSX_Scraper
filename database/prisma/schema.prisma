@@ -36,6 +36,7 @@ model Stock {
   dividends   Dividend[]
   corporateActions CorporateAction[]
   announcements Announcement[]
+  alerts Alert[]
   financials  Financial[]
   ratios      Ratio[]
   incomeStatements IncomeStatement[]
@@ -462,4 +463,49 @@ model Announcement {
   @@index([stockId, publishedAt])
   @@index([category])
   @@map("announcements")
+}
+
+/// A data condition the reader asked to be told about — never a recommendation.
+///
+/// Ownership is a device token: the app has no accounts, and a token is the smallest thing that can
+/// survive a page reload. It is an opaque string the browser generates and keeps in localStorage, and
+/// it maps to a real user id later without touching these rows.
+model Alert {
+  id              String    @id @default(uuid())
+  ownerToken      String    @map("owner_token")
+  stockId         String    @map("stock_id")
+  /// PRICE_ABOVE | PRICE_BELOW | PCT_MOVE | RSI_ABOVE | RSI_BELOW | CROSS_ABOVE_SMA | CROSS_BELOW_SMA
+  kind            String
+  threshold       Decimal?  @db.Decimal(18, 4)
+  /// A fired alert stays quiet for this long. Without it a price sitting on the line would fire
+  /// every single poll.
+  cooldownMinutes Int       @default(60) @map("cooldown_minutes")
+  paused          Boolean   @default(false)
+  lastFiredAt     DateTime? @map("last_fired_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  stock  Stock        @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  events AlertEvent[]
+
+  @@index([ownerToken])
+  @@index([stockId])
+  @@map("alerts")
+}
+
+/// One firing. Kept even when delivery fails, with the failure recorded — an alert that silently
+/// never arrived is worse than one that is late.
+model AlertEvent {
+  id             String   @id @default(uuid())
+  alertId        String   @map("alert_id")
+  firedAt        DateTime @default(now()) @map("fired_at")
+  value          Decimal? @db.Decimal(18, 4)
+  message        String
+  channel        String   @default("in-app")
+  deliveryStatus String   @default("stored") @map("delivery_status")
+  error          String?
+
+  alert Alert @relation(fields: [alertId], references: [id], onDelete: Cascade)
+
+  @@index([alertId, firedAt])
+  @@map("alert_events")
 }

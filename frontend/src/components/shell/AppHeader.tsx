@@ -14,6 +14,7 @@ const NAV = [
   { label: 'Sectors', to: '/sectors' },
   { label: 'Dividends', to: '/dividends' },
   { label: 'Announcements', to: '/announcements' },
+  { label: 'Alerts', to: '/alerts' },
   { label: 'Watchlist', to: '/watchlist' },
   { label: 'Compare', to: '/compare' },
   ...(isDev ? [{ label: 'Sync Logs', to: '/logs' }] : []),
@@ -141,6 +142,10 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                     // viewport and pushed the page 10px sideways. 8px keeps every item on one
                     // line and hands the space back to the search field.
                     px: { md: 1, xl: 1.5 },
+                    // Without these the pills shrink to fit and overlap each other instead of the
+                    // strip scrolling — which is what happened when the ninth destination landed.
+                    flexShrink: 0,
+                    whiteSpace: 'nowrap',
                     minHeight: 34,
                     borderRadius: 999,
                     fontSize: '0.875rem',
