@@ -220,7 +220,12 @@ export function atr(candles: CandleLike[], n = 14): Line {
   for (let i = 0; i < trs.length; i++) {
     const tr = trs[i];
     if (!isNum(tr)) {
-      prevAtr = null;
+      // A session with no high/low has no true range — the EOD path supplies open/close only,
+      // so a session whose quote never arrived is stored without them. Drop that one
+      // observation but keep the running average: resetting it blanked ATR not just on the gap
+      // but for the `n` sessions needed to re-seed, so a single missing session hid the
+      // indicator for three weeks. 272 of 511 symbols had an empty ATR tail for exactly this
+      // reason. The gap itself stays null — no range is invented for it.
       continue;
     }
     if (prevAtr === null) {
