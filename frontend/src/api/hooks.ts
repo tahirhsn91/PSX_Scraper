@@ -4,7 +4,7 @@ import type {
   ScreenerPreset, SectorDetail, IndicatorsResponse, PerformanceResponse, CompareResponse, Paginated, StocksPage, StockListGroup, StockDetail, SearchResult, PriceRow,
   SyncLog, SyncStatus, HistoryRange, HistoryJobStatus, StockSortField, SortOrder, CandleSeries,
   IndexSummary, StockFilters, MarketOverview, SectorSummary, DividendData,
-  StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod,
+  StockProfileResponse, MarketStatus, MoversPayload, MoverType, MoverPeriod, AnnouncementList,
 } from '../types';
 
 /** Stable string for a filters object, so the query key changes only when the criteria change. */
@@ -397,4 +397,21 @@ export const useScreenerPresets = () =>
     queryKey: ['screener', 'presets'],
     queryFn: async () => (await api.get<{ items: ScreenerPreset[] }>('/stocks/presets')).data,
     staleTime: 60 * 60 * 1000,
+  });
+
+/** Official notices, newest first. An empty list is a valid answer — see the page's empty state. */
+export const useAnnouncements = (params: {
+  symbol?: string;
+  category?: string;
+  page?: number;
+  limit?: number;
+} = {}) =>
+  useQuery({
+    queryKey: ['announcements', params],
+    queryFn: async () =>
+      (
+        await api.get<AnnouncementList>('/announcements', {
+          params: { symbol: params.symbol || undefined, category: params.category || undefined, page: params.page ?? 1, limit: params.limit ?? 50 },
+        })
+      ).data,
   });

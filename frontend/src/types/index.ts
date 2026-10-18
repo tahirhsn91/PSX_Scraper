@@ -639,3 +639,30 @@ export interface MoversPayload {
     tradedValueNote: string;
   };
 }
+
+export type AnnouncementCategory =
+  | 'RESULTS'
+  | 'DIVIDEND'
+  | 'BOARD_MEETING'
+  | 'MATERIAL_DISCLOSURE'
+  | 'CORPORATE_ACTION'
+  | 'OTHER';
+
+export interface AnnouncementRow {
+  id: string;
+  title: string;
+  summary: string | null;
+  category: AnnouncementCategory;
+  publishedAt: string;
+  source: string;
+  sourceUrl: string;
+  symbol: string | null;
+  companyName: string | null;
+}
+
+export interface AnnouncementList {
+  total: number;
+  page: number;
+  limit: number;
+  items: AnnouncementRow[];
+}

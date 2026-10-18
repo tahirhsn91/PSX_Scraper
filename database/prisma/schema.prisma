@@ -35,6 +35,7 @@ model Stock {
   prices      StockPrice[]
   dividends   Dividend[]
   corporateActions CorporateAction[]
+  announcements Announcement[]
   financials  Financial[]
   ratios      Ratio[]
   incomeStatements IncomeStatement[]
@@ -429,4 +430,33 @@ model CorporateAction {
   @@unique([stockId, type, exDate])
   @@index([stockId, exDate])
   @@map("corporate_actions")
+}
+
+/// An official notice: the exchange's or the company's own announcement.
+///
+/// `stock_id` is nullable because a notice can be market-wide (a holiday, a rule change) and forcing
+/// a stock would either drop those rows or attach them to something arbitrary.
+model Announcement {
+  id          String    @id @default(uuid())
+  stockId     String?   @map("stock_id")
+  category    String
+  title       String
+  summary     String?
+  body        String?
+  publishedAt DateTime  @map("published_at")
+  source      String
+  sourceUrl   String    @map("source_url")
+  /// Stable identity of the notice at its source (its own id, or a hash of title+date+symbol).
+  /// Unique with `source` so re-running the ingestor never stores the same notice twice.
+  dedupeKey   String    @map("dedupe_key")
+  fetchedAt   DateTime  @default(now()) @map("fetched_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  stock Stock? @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([source, dedupeKey])
+  @@index([publishedAt])
+  @@index([stockId, publishedAt])
+  @@index([category])
+  @@map("announcements")
 }

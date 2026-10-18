@@ -21,6 +21,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { useQueryClient } from '@tanstack/react-query';
 import { CandleChart } from '../components/CandleChart';
 import { TechnicalSection } from '../components/TechnicalSection';
+import { StockAnnouncements } from '../components/StockAnnouncements';
 import { PerformanceSection } from '../components/PerformanceSection';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { FundamentalsPanel } from '../components/FundamentalsPanel';
@@ -92,6 +93,7 @@ const SECTIONS: QuickJumpSection[] = [
   { id: 'section-company', label: 'Company Description' },
   { id: 'section-fundamentals', label: 'Fundamentals' },
   { id: 'section-financials', label: 'Financials' },
+  { id: 'section-announcements', label: 'Announcements' },
   { id: 'section-ratios', label: 'Ratios' },
   { id: 'section-dividends', label: 'Dividends' },
   { id: 'section-related', label: 'Related' },
@@ -792,6 +794,12 @@ export function StockDetails() {
         <Box component="section" id="section-technical" sx={{ scrollMarginTop: scrollOffset }}>
           <Reveal>
             <TechnicalSection symbol={symbol} range={range} />
+          </Reveal>
+        </Box>
+
+        <Box component="section" id="section-announcements" sx={{ scrollMarginTop: scrollOffset }}>
+          <Reveal>
+            <StockAnnouncements symbol={symbol} />
           </Reveal>
         </Box>
 
