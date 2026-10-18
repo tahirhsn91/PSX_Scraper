@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { z } from 'zod';
 import { syncService } from '../services/sync.service';
+import { getDataSourcesView } from '../services/dataSources.service';
 import { valid } from '../middleware/validate';
 import { clearFailedBody, logsQuery } from '../validators/schemas';
 
@@ -21,4 +22,12 @@ export const clearFailed: RequestHandler = async (req, res) => {
 export const syncLogs: RequestHandler = async (req, res) => {
   const q = valid<z.infer<typeof logsQuery>>(req, 'query');
   res.json(await syncService.logs(q));
+};
+
+/**
+ * GET /sync/sources (#214). Licence status and per-source health for operators. Read-only, like the
+ * other GETs on this router.
+ */
+export const dataSources: RequestHandler = async (_req, res) => {
+  res.json(await getDataSourcesView());
 };

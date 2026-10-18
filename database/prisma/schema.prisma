@@ -509,3 +509,17 @@ model AlertEvent {
   @@index([alertId, firedAt])
   @@map("alert_events")
 }
+
+/// Last known state of one external data source (#214). Written by the scrape runner per provider
+/// outcome; `source` matches the ids in backend/src/data-sources.ts.
+model SourceHealth {
+  source        String    @id
+  lastSuccessAt DateTime? @map("last_success_at")
+  lastFailureAt DateTime? @map("last_failure_at")
+  lastError     String?   @map("last_error")
+  successCount  Int       @default(0) @map("success_count")
+  failureCount  Int       @default(0) @map("failure_count")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("source_health")
+}

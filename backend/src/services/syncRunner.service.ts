@@ -2,6 +2,7 @@ import { scrapeSymbol } from '../scrapers/orchestrator';
 import { hasUsablePrice } from '../repositories/scrapeResult.repository';
 import { verifyAndPersist } from './verifiedWrite.service';
 import { syncLogRepository } from '../repositories/syncLog.repository';
+import { sourceHealthRepository } from '../repositories/sourceHealth.repository';
 import { stockRepository } from '../repositories/stock.repository';
 import { psxQuoteScraper } from '../scrapers/psxQuotes.scraper';
 import { childLogger } from '../utils/logger';
@@ -47,6 +48,11 @@ export async function runOneSync(symbol: string, onProgress?: ProgressFn): Promi
 
   try {
     const { result, outcomes, partial } = await scrapeSymbol(sym);
+    // Feed the per-source health view (#214). Best-effort: a failure to record health must never
+    // fail the scrape it describes, so it is not awaited.
+    void sourceHealthRepository.record(outcomes).catch((err: unknown) => {
+      log.warn('source_health.record_failed', { error: err instanceof Error ? err.message : String(err) });
+    });
     await stampSessionDate(result);
     await onProgress?.(60, 'persisting');
     // Same door as the universe pass (verifiedWrite.service): a value that fails verification is
