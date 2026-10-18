@@ -471,6 +471,8 @@ export interface IndicatorsResponse {
   symbol: string;
   range: string;
   sessions: number;
+  /** Sessions the engine could see, including history before the window. */
+  historySessions: number;
   from: string | null;
   to: string | null;
   skipped: number;

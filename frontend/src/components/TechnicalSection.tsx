@@ -177,7 +177,13 @@ export function TechnicalSection({ symbol, range }: { symbol: string; range: His
 
           {/* RSI */}
           {rsi?.insufficientData ? (
-            <PanelUnavailable label={`RSI(14)`} required={rsi.requiredSessions} available={rsi.availableSessions} />
+            <PanelUnavailable
+              label="RSI(14)"
+              required={rsi.requiredSessions}
+              available={rsi.availableSessions}
+              historySessions={data?.historySessions}
+              since={data?.from}
+            />
           ) : (
             <Box>
               <Typography variant="subtitle2" gutterBottom>
@@ -203,6 +209,8 @@ export function TechnicalSection({ symbol, range }: { symbol: string; range: His
               label="MACD(12,26,9)"
               required={macdLine.requiredSessions}
               available={macdLine.availableSessions}
+              historySessions={data?.historySessions}
+              since={data?.from}
             />
           ) : (
             <Box>
@@ -266,13 +274,34 @@ export function TechnicalSection({ symbol, range }: { symbol: string; range: His
   );
 }
 
-function PanelUnavailable({ label, required, available }: { label: string; required: number; available: number }) {
+function PanelUnavailable({
+  label,
+  required,
+  available,
+  historySessions,
+  since,
+}: {
+  label: string;
+  required: number;
+  available: number;
+  /**
+   * Sessions the engine could see overall. When the range already holds all of them the reader
+   * is looking at the stock's whole record, and "widen the range" would be advice that cannot
+   * work — a recently listed stock simply has not traded enough sessions yet.
+   */
+  historySessions?: number;
+  since?: string | null;
+}) {
+  const wholeRecord = historySessions != null && available >= historySessions;
   return (
     <Box sx={{ border: '1px dashed', borderColor: 'divider', borderRadius: 1, p: 2 }}>
       <Typography variant="subtitle2">{label} unavailable</Typography>
       <Typography variant="caption" color="text.secondary">
-        This range holds {available} sessions; the indicator needs {required}. Widen the range to see
-        it — an empty axis would suggest the value is zero.
+        {wholeRecord
+          ? `${label} needs ${required} sessions and this stock has ${available} on record${
+              since ? `, from ${since}` : ''
+            }. It appears once ${required} sessions have traded — an empty axis would suggest the value is zero.`
+          : `This range holds ${available} sessions; the indicator needs ${required}. Widen the range to see it — an empty axis would suggest the value is zero.`}
       </Typography>
     </Box>
   );
