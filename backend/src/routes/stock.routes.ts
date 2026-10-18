@@ -42,6 +42,11 @@ router.get('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.getSto
 router.delete('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.deleteStock));
 router.post('/:symbol/sync', mutationLimiter, validate(symbolParam, 'params'), asyncHandler(ctrl.syncStock));
 router.get(
+  '/:symbol/performance',
+  validate(symbolParam, 'params'),
+  asyncHandler(ctrl.stockPerformance),
+);
+router.get(
   '/:symbol/history',
   validate(symbolParam, 'params'),
   validate(historyQuery, 'query'),

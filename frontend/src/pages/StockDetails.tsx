@@ -21,6 +21,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { useQueryClient } from '@tanstack/react-query';
 import { CandleChart } from '../components/CandleChart';
 import { TechnicalSection } from '../components/TechnicalSection';
+import { PerformanceSection } from '../components/PerformanceSection';
 import { TradingViewChart } from '../components/TradingViewChart';
 import { FundamentalsPanel } from '../components/FundamentalsPanel';
 import { CompanyDescriptionPanel } from '../components/CompanyDescriptionPanel';
@@ -83,6 +84,7 @@ type ChartMode = 'candles' | 'line' | 'tradingview';
 /** The page's sections, in reading order. `id` is the anchor the sticky quick-jump scrolls to. */
 const SECTIONS: QuickJumpSection[] = [
   { id: 'section-history', label: 'History' },
+  { id: 'section-performance', label: 'Performance' },
   { id: 'section-technical', label: 'Technical' },
   // The company write-up sits straight after the chart: it is context for the numbers above it,
   // and putting it first would push the price history — what the page is actually for — below
@@ -754,6 +756,12 @@ export function StockDetails() {
               <TradingViewChart symbol={symbol} height={isMobile ? 360 : 460} />
             )}
           </SectionCard>
+        </Box>
+
+        <Box component="section" id="section-performance" sx={{ scrollMarginTop: scrollOffset }}>
+          <Reveal>
+            <PerformanceSection symbol={symbol} />
+          </Reveal>
         </Box>
 
         <Box component="section" id="section-technical" sx={{ scrollMarginTop: scrollOffset }}>

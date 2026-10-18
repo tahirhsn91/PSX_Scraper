@@ -472,6 +472,26 @@ export interface IndicatorsResponse {
   series: IndicatorSeries[];
 }
 
+export interface PeriodReturn {
+  period: '1w' | '1m' | '3m' | '6m' | '1y';
+  sessions: number;
+  available: number | null;
+  value: number | null;
+}
+
+/** One symbol's returns and its rebased comparison with an index. */
+export interface PerformanceResponse {
+  symbol: string;
+  returns: PeriodReturn[];
+  benchmark: {
+    index: { symbol: string; name: string };
+    base: 100;
+    baseDate: string | null;
+    points: { date: string; stock: number; index: number }[];
+    carried: boolean;
+  } | null;
+}
+
 export interface SectorConstituent {
   symbol: string;
   companyName: string | null;
