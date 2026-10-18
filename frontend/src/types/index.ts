@@ -62,6 +62,10 @@ export interface IndexSummary {
 export interface CandleSeries {
   symbol: string;
   interval: '1D';
+  /** Which price basis the series is in. */
+  basis: 'as-traded' | 'adjusted';
+  /** Corporate actions on record for this symbol; 0 means adjustment is a no-op. */
+  actions: number;
   count: number;
   /** Readings discarded because they cannot belong to this symbol (contaminated rows). */
   skipped: number;

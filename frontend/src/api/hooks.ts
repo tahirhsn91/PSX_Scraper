@@ -147,10 +147,11 @@ export const useIndexHistory = (symbol: string, limit = 40) =>
  * a truncated series into empty space. It also means switching a range refetches nothing.
  * (The API still accepts `range` for callers that genuinely want a bounded window.)
  */
-export const useCandles = (symbol: string) =>
+export const useCandles = (symbol: string, adjusted = false) =>
   useQuery({
-    queryKey: keys.candles(symbol),
-    queryFn: async () => (await api.get<CandleSeries>(`/stocks/${symbol}/candles`)).data,
+    queryKey: [...keys.candles(symbol), { adjusted }],
+    queryFn: async () =>
+      (await api.get<CandleSeries>(`/stocks/${symbol}/candles${adjusted ? '?adjusted=true' : ''}`)).data,
     enabled: !!symbol,
   });
 
