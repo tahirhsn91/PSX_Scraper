@@ -4,6 +4,7 @@ import { validate } from '../middleware/validate';
 import { asyncHandler } from '../middleware/errorHandler';
 import { stocksQuery, addStockBody, symbolParam, historyQuery, historySyncBody, candlesQuery } from '../validators/schemas';
 import { mutationLimiter } from '../middleware/rateLimit';
+import { requireAdmin } from '../middleware/requireAdmin';
 
 const router = Router();
 
@@ -23,7 +24,7 @@ router.get(
   validate(candlesQuery, 'query'),
   asyncHandler(ctrl.stockCandles),
 );
-router.post('/', mutationLimiter, validate(addStockBody, 'body'), asyncHandler(ctrl.addStock));
+router.post('/', mutationLimiter, requireAdmin, validate(addStockBody, 'body'), asyncHandler(ctrl.addStock));
 // Two segments, so the one-segment `/:symbol` routes below cannot shadow it. The company profile
 // is its own read for the same reason it is its own controller: it is editorial content the page
 // fetches after the numbers, and it is absent for most symbols.
@@ -33,14 +34,14 @@ router.get(
   asyncHandler(ctrl.stockProfile),
 );
 // Two segments, so the one-segment `/:symbol` routes below cannot shadow it.
-router.post('/market-cap/refresh', mutationLimiter, asyncHandler(ctrl.refreshMarketCaps));
-router.post('/beta/refresh', mutationLimiter, asyncHandler(ctrl.refreshBeta));
-router.post('/logos/refresh', mutationLimiter, asyncHandler(ctrl.refreshStockLogos));
+router.post('/market-cap/refresh', mutationLimiter, requireAdmin, asyncHandler(ctrl.refreshMarketCaps));
+router.post('/beta/refresh', mutationLimiter, requireAdmin, asyncHandler(ctrl.refreshBeta));
+router.post('/logos/refresh', mutationLimiter, requireAdmin, asyncHandler(ctrl.refreshStockLogos));
 // Before `/:symbol`, or "presets" would be read as a ticker.
 router.get('/presets', asyncHandler(ctrl.listPresets));
 router.get('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.getStock));
-router.delete('/:symbol', validate(symbolParam, 'params'), asyncHandler(ctrl.deleteStock));
-router.post('/:symbol/sync', mutationLimiter, validate(symbolParam, 'params'), asyncHandler(ctrl.syncStock));
+router.delete('/:symbol', requireAdmin, validate(symbolParam, 'params'), asyncHandler(ctrl.deleteStock));
+router.post('/:symbol/sync', mutationLimiter, requireAdmin, validate(symbolParam, 'params'), asyncHandler(ctrl.syncStock));
 router.get(
   '/:symbol/performance',
   validate(symbolParam, 'params'),
@@ -54,7 +55,7 @@ router.get(
 );
 router.post(
   '/:symbol/history/sync',
-  mutationLimiter,
+  mutationLimiter, requireAdmin,
   validate(symbolParam, 'params'),
   validate(historySyncBody, 'body'),
   asyncHandler(ctrl.syncHistory),

@@ -4,6 +4,7 @@ import { validate } from '../middleware/validate';
 import { asyncHandler } from '../middleware/errorHandler';
 import { paginationQuery, symbolParam, historyQuery, candlesQuery } from '../validators/schemas';
 import { mutationLimiter } from '../middleware/rateLimit';
+import { requireAdmin } from '../middleware/requireAdmin';
 
 const router = Router();
 
@@ -21,7 +22,7 @@ router.get(
   validate(historyQuery, 'query'),
   asyncHandler(ctrl.indexHistory),
 );
-router.post('/:symbol/sync', mutationLimiter, validate(symbolParam, 'params'), asyncHandler(ctrl.syncIndex));
+router.post('/:symbol/sync', mutationLimiter, requireAdmin, validate(symbolParam, 'params'), asyncHandler(ctrl.syncIndex));
 router.get('/:symbol/sync/status', validate(symbolParam, 'params'), asyncHandler(ctrl.indexSyncStatus));
 
 export default router;
