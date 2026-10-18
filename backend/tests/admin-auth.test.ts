@@ -105,6 +105,9 @@ describe('route wiring', () => {
         if (call.includes('requireAdmin')) continue;
         // The alerts router authenticates with a device token instead — that is its authorisation.
         if (file === 'alerts.routes.ts') continue;
+        // Event collection is anonymous by design (#212): it carries no identifier to authorise, and
+        // it is rate-limited rather than token-guarded. Everything else that mutates must be guarded.
+        if (file === 'analytics.routes.ts') continue;
         unguarded.push(`${file}: ${(call.split('\n')[0] ?? '').trim()}`);
       }
     }
