@@ -80,6 +80,9 @@ services:
       # Vite's HMR client must dial the port the BROWSER sees — the published host
       # port (FRONTEND_PORT), not the container-internal 5173. See frontend/vite.config.ts.
       VITE_HMR_CLIENT_PORT: ${FRONTEND_PORT:-5173}
+      # Where the browser keeps the admin token. Configurable so a dev stack can use its own key
+      # instead of sharing one with a production tab open in the same browser profile.
+      VITE_ADMIN_TOKEN_KEY: ${VITE_ADMIN_TOKEN_KEY:-psx:admin-token}
     volumes:
       - ./frontend:/app
       - /app/node_modules
