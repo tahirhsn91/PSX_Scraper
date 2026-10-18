@@ -135,6 +135,14 @@ export const candlesQuery = z.object({
   range: rangeSchema.optional(),
   from: z.coerce.date().optional(),
   to: z.coerce.date().optional(),
+  /**
+   * Split- and bonus-adjusted closes. Off by default: the stored series is as traded, and a caller
+   * who has not asked for adjustment should get the prices that actually printed.
+   */
+  adjusted: z
+    .union([z.literal('1'), z.literal('true'), z.literal('false'), z.boolean()])
+    .optional()
+    .transform((x) => x === true || x === '1' || x === 'true'),
 });
 
 export const logsQuery = z.object({
