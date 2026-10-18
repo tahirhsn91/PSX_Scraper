@@ -13,6 +13,7 @@ const NAV = [
   { label: 'Screener', to: '/screener' },
   { label: 'Sectors', to: '/sectors' },
   { label: 'Dividends', to: '/dividends' },
+  { label: 'Announcements', to: '/announcements' },
   { label: 'Watchlist', to: '/watchlist' },
   { label: 'Compare', to: '/compare' },
   ...(isDev ? [{ label: 'Sync Logs', to: '/logs' }] : []),
