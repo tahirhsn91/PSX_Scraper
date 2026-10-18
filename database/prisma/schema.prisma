@@ -86,6 +86,9 @@ model Dividend {
   id               String    @id @default(uuid())
   stockId          String    @map("stock_id")
   announcementDate DateTime? @map("announcement_date")
+  /// First session trading without the entitlement. The source publishes none today, so it is
+  /// nullable and rendered as an em dash — never inferred from the book-closure date.
+  exDate     DateTime? @map("ex_date") @db.Date
   bookClosure      DateTime? @map("book_closure")
   paymentDate      DateTime? @map("payment_date")
   dividend         Decimal?  @db.Decimal(18, 4)

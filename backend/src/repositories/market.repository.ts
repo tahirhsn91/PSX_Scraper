@@ -405,6 +405,120 @@ export class MarketRepository {
     }));
   }
 
+
+  /**
+   * The dividend ledger: one row per declared dividend, with the dates the source actually carries.
+   *
+   * `ex_date` comes from the table, which is currently always null — the provider publishes no
+   * ex-dividend date, and inferring one from the book-closure date would invent a fact that feeds
+   * price adjustment later. The column exists so the notice feed can fill it, not so the UI can guess.
+   *
+   * `yieldTtm` = everything declared in the last 365 days ÷ the latest price. The window is stated
+   * in the UI because "dividend yield" is otherwise a number with no definition attached.
+   */
+  async dividendLedger(q: {
+    symbol?: string;
+    from?: Date;
+    to?: Date;
+    minYield?: number;
+    page: number;
+    limit: number;
+  }) {
+    const where = [
+      q.symbol ? Prisma.sql`AND s.symbol = ${q.symbol.toUpperCase()}` : Prisma.empty,
+      q.from ? Prisma.sql`AND d.announcement_date >= ${q.from}` : Prisma.empty,
+      q.to ? Prisma.sql`AND d.announcement_date <= ${q.to}` : Prisma.empty,
+    ];
+
+    const base = Prisma.sql`
+      WITH price AS (
+        SELECT s.id AS stock_id,
+               COALESCE(
+                 (SELECT sp.current_price FROM stock_prices sp
+                   WHERE sp.stock_id = s.id AND sp.current_price IS NOT NULL
+                   ORDER BY sp.last_trade_date DESC LIMIT 1),
+                 (SELECT sp.close FROM stock_prices sp
+                   WHERE sp.stock_id = s.id
+                   ORDER BY sp.last_trade_date DESC LIMIT 1)
+               ) AS price
+        FROM stocks s
+      ),
+      ttm AS (
+        SELECT stock_id, SUM(dividend) AS amount
+        FROM dividends
+        WHERE announcement_date >= (CURRENT_DATE - INTERVAL '365 days')
+        GROUP BY stock_id
+      )
+      SELECT s.symbol, s.company_name, d.dividend, d.announcement_date, d.book_closure, d.payment_date,
+             d.ex_date, p.price, t.amount AS ttm_amount,
+             CASE
+               WHEN d.payment_date IS NOT NULL AND d.payment_date <= CURRENT_DATE THEN 'paid'
+               WHEN d.payment_date IS NULL THEN 'unknown'
+               ELSE 'declared'
+             END AS status
+      FROM dividends d
+      JOIN stocks s ON s.id = d.stock_id
+      LEFT JOIN price p ON p.stock_id = d.stock_id
+      LEFT JOIN ttm t ON t.stock_id = d.stock_id
+      WHERE TRUE ${Prisma.join(where, ' ')}
+    `;
+
+    const rows = await prisma.$queryRaw<
+      Array<{
+        symbol: string;
+        company_name: string | null;
+        dividend: Prisma.Decimal | null;
+        announcement_date: Date | null;
+        book_closure: Date | null;
+        payment_date: Date | null;
+        ex_date: Date | null;
+        price: Prisma.Decimal | null;
+        ttm_amount: Prisma.Decimal | null;
+        status: string;
+      }>
+    >(Prisma.sql`
+      SELECT * FROM (${base}) led
+      ${
+        q.minYield != null
+          ? Prisma.sql`WHERE led.ttm_amount IS NOT NULL AND led.price > 0
+              AND (led.ttm_amount / led.price * 100) >= ${q.minYield}`
+          : Prisma.empty
+      }
+      ORDER BY led.announcement_date DESC NULLS LAST, led.symbol ASC
+      LIMIT ${q.limit} OFFSET ${(q.page - 1) * q.limit}
+    `);
+
+    const counted = await prisma.$queryRaw<Array<{ total: bigint }>>(Prisma.sql`
+      SELECT COUNT(*)::bigint AS total FROM (${base}) led
+      ${
+        q.minYield != null
+          ? Prisma.sql`WHERE led.ttm_amount IS NOT NULL AND led.price > 0
+              AND (led.ttm_amount / led.price * 100) >= ${q.minYield}`
+          : Prisma.empty
+      }
+    `);
+
+    return {
+      total: Number(counted[0]?.total ?? 0),
+      items: rows.map((r) => {
+        const price = r.price != null ? Number(r.price) : null;
+        const ttm = r.ttm_amount != null ? Number(r.ttm_amount) : null;
+        return {
+          symbol: r.symbol,
+          companyName: r.company_name,
+          amount: r.dividend != null ? Number(r.dividend) : null,
+          announcementDate: r.announcement_date ? r.announcement_date.toISOString().slice(0, 10) : null,
+          bookClosure: r.book_closure ? r.book_closure.toISOString().slice(0, 10) : null,
+          paymentDate: r.payment_date ? r.payment_date.toISOString().slice(0, 10) : null,
+          exDate: r.ex_date ? r.ex_date.toISOString().slice(0, 10) : null,
+          status: r.status,
+          price,
+          yieldTtm: price && price > 0 && ttm != null ? (ttm / price) * 100 : null,
+        };
+      }),
+    };
+  }
+
   /**
    * Highest dividend yield, ranked over each symbol's newest ratio row. A yield of 0 is a
    * reading; only a null (no ratio published) is excluded.

@@ -666,3 +666,23 @@ export interface AnnouncementList {
   limit: number;
   items: AnnouncementRow[];
 }
+
+export interface DividendLedgerRow {
+  symbol: string;
+  companyName: string | null;
+  amount: number | null;
+  announcementDate: string | null;
+  bookClosure: string | null;
+  paymentDate: string | null;
+  /** Null until the notice feed fills it — the provider publishes no ex-date. */
+  exDate: string | null;
+  status: 'paid' | 'declared' | 'unknown';
+  price: number | null;
+  /** Sum declared in the last 365 days ÷ latest price, in percent. */
+  yieldTtm: number | null;
+}
+
+export interface DividendLedger {
+  total: number;
+  items: DividendLedgerRow[];
+}
