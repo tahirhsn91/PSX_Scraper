@@ -337,11 +337,21 @@ export function StockDetails() {
   const price = data.price;
   const visibleDividends = showAllDividends ? data.dividends : data.dividends.slice(0, 3);
   const visiblePeers = showAllPeers ? peers : peers.slice(0, 4);
-  const chart = (history?.items ?? [])
-    .filter((p) => p.close != null && p.lastTradeDate)
-    .slice()
-    .reverse();
-
+  // One point per session, not per reading. `/history` returns every stored reading, and a session
+  // that was polled again is stored under a new timestamp, so the same day can arrive several times
+  // (2026-09-15 holds 25 readings for HUBC, and a year of 1Y history came back as 323 rows for 258
+  // sessions). A repeated x value on a point-scale axis breaks the line's domain — the plot stops
+  // where the duplicates start, which is why the chart appeared to end weeks before the last trade.
+  // The newest reading of a day wins, and a reading has to carry a close to be plotted at all.
+  const chart = (() => {
+    const byDay = new Map<string, { lastTradeDate: string; close: number }>();
+    for (const p of history?.items ?? []) {
+      if (p.close == null || !p.lastTradeDate) continue;
+      const day = String(p.lastTradeDate).slice(0, 10);
+      if (!byDay.has(day)) byDay.set(day, { lastTradeDate: p.lastTradeDate, close: p.close });
+    }
+    return [...byDay.values()].reverse();
+  })();
   // The window's own direction — first reading to last — which is what tones the line and the wash
   // beneath it. Read off the same series the chart draws, so the colour can never describe a
   // different window than the line does. Deliberately not `trendOf`: see `seriesTrend`.
@@ -715,6 +725,10 @@ export function StockDetails() {
                       </Box>{' '}
                       over {range === 'MAX' ? 'all stored sessions' : rangeLabel(range)} ·{' '}
                       {formatNumber(lineTrend.first)} → {formatNumber(lineTrend.last)}
+                      {/* The axis drops the tick on the final session at most widths, so the run is
+                        * named here: without it the chart reads as if it stopped weeks earlier,
+                        * whenever the last label that fits lands mid-month. */}
+                      {chart.length > 0 && ` on ${formatDate(chart[chart.length - 1]!.lastTradeDate)}`}
                     </Typography>
                   )}
                 </>

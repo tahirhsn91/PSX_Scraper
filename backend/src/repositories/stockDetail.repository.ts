@@ -33,8 +33,6 @@ export async function getPriceHistory(
   symbol: string,
   from: Date | undefined,
   to: Date | undefined,
-  limit: number,
-  offset: number,
 ) {
   const stock = await prisma.stock.findUnique({ where: { symbol: symbol.toUpperCase() }, select: { id: true } });
   if (!stock) return null;
@@ -42,11 +40,59 @@ export async function getPriceHistory(
     stockId: stock.id,
     ...(from || to ? { lastTradeDate: { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) } } : {}),
   };
-  const [items, total] = await Promise.all([
-    prisma.stockPrice.findMany({ where, orderBy: { lastTradeDate: 'desc' }, skip: offset, take: limit }),
-    prisma.stockPrice.count({ where }),
-  ]);
-  return { items, total };
+  // Every reading, oldest first. The unique index is on (stock_id, last_trade_date), so a session
+  // that was polled more than once is stored under several timestamps and arrives here several
+  // times — `sessionise` below is what turns them back into one day per session.
+  const items = await prisma.stockPrice.findMany({ where, orderBy: { lastTradeDate: 'asc' } });
+  return { items };
+}
+
+/** One stored reading, as far as a session series cares. */
+export interface PriceReading {
+  lastTradeDate: Date;
+  open: number | null;
+  high: number | null;
+  low: number | null;
+  close: number | null;
+  currentPrice: number | null;
+  volume: number | null;
+}
+
+/**
+ * Collapse the readings of a window into one row per session.
+ *
+ * A session is polled repeatedly and each poll is a row, so `2026-09-15` can be 25 rows for one
+ * stock. Charts and returns are per session: a repeated x value on a point axis breaks the line's
+ * domain (the plot stopped weeks before the last trade day) and triple-counts a day in any average.
+ * Readings arrive oldest first, so the freshest value wins per field while a null never overwrites a
+ * value an earlier reading carried — the same rule `buildCandles` merges by.
+ */
+export function sessionise(rows: Array<{
+  lastTradeDate: Date | null;
+  open: unknown;
+  high: unknown;
+  low: unknown;
+  close: unknown;
+  currentPrice: unknown;
+  volume: bigint | number | null;
+}>): PriceReading[] {
+  const byDay = new Map<string, PriceReading>();
+  for (const r of rows) {
+    if (!r.lastTradeDate) continue;
+    const day = candleDay(r.lastTradeDate);
+    const prev = byDay.get(day);
+    const close = toNum(r.close) ?? toNum(r.currentPrice);
+    byDay.set(day, {
+      lastTradeDate: r.lastTradeDate,
+      open: toNum(r.open) ?? prev?.open ?? null,
+      high: toNum(r.high) ?? prev?.high ?? null,
+      low: toNum(r.low) ?? prev?.low ?? null,
+      close: close ?? prev?.close ?? null,
+      currentPrice: toNum(r.currentPrice) ?? prev?.currentPrice ?? null,
+      volume: r.volume == null ? prev?.volume ?? null : Number(r.volume),
+    });
+  }
+  return [...byDay.values()].sort((a, b) => b.lastTradeDate.getTime() - a.lastTradeDate.getTime());
 }
 
 /** One daily candle, in the shape a candlestick chart wants. */
