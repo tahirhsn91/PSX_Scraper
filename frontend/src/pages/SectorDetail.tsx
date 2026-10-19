@@ -56,14 +56,28 @@ function MoveList({ title, rows, empty }: { title: string; rows: SectorConstitue
       ) : (
         <Stack spacing={1}>
           {rows.map((r) => (
-            <Stack key={r.symbol} direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+            <Stack
+              key={r.symbol}
+              // The whole row is the link — a reader who aims at the company name should land on the
+              // stock page, not have to hit the three letters of the symbol.
+              component={RouterLink}
+              to={`/stocks/${r.symbol}`}
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              spacing={1}
+              sx={{
+                textDecoration: 'none',
+                color: 'inherit',
+                borderRadius: 1,
+                mx: -0.5,
+                px: 0.5,
+                py: 0.25,
+                '&:hover': { bgcolor: 'action.hover' },
+              }}
+            >
               <Box sx={{ minWidth: 0 }}>
-                <Typography
-                  component={RouterLink}
-                  to={`/stocks/${r.symbol}`}
-                  variant="body2"
-                  sx={{ textDecoration: 'none', color: 'text.primary', fontWeight: 500 }}
-                >
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   {r.symbol}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" display="block" noWrap>
