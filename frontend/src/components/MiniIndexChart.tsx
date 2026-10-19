@@ -265,7 +265,7 @@ export function MiniIndexChart({
             const area = `${line} L ${points[points.length - 1].x} ${box.h} L ${points[0].x} ${box.h} Z`;
             return (
               <>
-                <path d={area} fill={colour} fillOpacity={0.12} stroke="none" />
+                <path d={area} fill={colour} fillOpacity={0.1} stroke="none" />
                 {/* The whole path follows the index, so a card cannot show a trend the index did
                     not have — but the stroke takes today's tone, which is what the card answers. */}
                 <path
@@ -274,7 +274,10 @@ export function MiniIndexChart({
                   d={line}
                   fill="none"
                   stroke={colour}
-                  strokeWidth={2}
+                  // 1.5, not 2: on a 46px box a 2px stroke reads as a heavy ribbon rather than a
+                  // trend, and the smoothing then makes the thick runs look blobby. Round caps keep
+                  // the ends clean at the thinner weight.
+                  strokeWidth={1.5}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   vectorEffect="non-scaling-stroke"
@@ -323,12 +326,21 @@ export function MiniIndexChart({
             position: 'absolute',
             left: `${markerLeft}%`,
             top: `${markerTop}%`,
-            width: 5,
-            height: 5,
-            ml: '-2.5px',
-            mt: '-2.5px',
+            width: 4.5,
+            height: 4.5,
+            ml: '-2.25px',
+            mt: '-2.25px',
             borderRadius: '50%',
             bgcolor: colour,
+            // The marker arrives as the line reaches it: waiting out the draw's last third keeps
+            // the dot from hanging in empty space ahead of its own series. `backwards` holds the
+            // hidden start state through the delay and releases the element when it ends.
+            animation: drawing ? `spark-dot 220ms ${theme.app.motion.easing} 340ms backwards` : 'none',
+            '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
+            '@keyframes spark-dot': {
+              from: { opacity: 0, transform: 'scale(0.4)' },
+              to: { opacity: 1, transform: 'scale(1)' },
+            },
           }}
         />
       )}
