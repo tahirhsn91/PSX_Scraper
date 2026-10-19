@@ -290,18 +290,18 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
       <SectionCard
         title="Performance Insights"
         subtitle={
-          hasAnyMetric
-            ? `Scored from ${currentAssessed} current${
-                futureAssessed ? ` and ${futureAssessed} forward` : ''
-              } metrics`
-            : 'No fundamentals published for this stock'
+          insights?.overall != null
+            ? `Five pillars · ${insights.coverage.scored} of ${insights.coverage.applicable} published metrics`
+            : hasAnyMetric
+              ? 'Not enough published metrics to score'
+              : 'No fundamentals published for this stock'
         }
         action={
           <IconButton
             onClick={() =>
               setInfo({
                 title: 'Performance Insights',
-                what: 'Calculated from the current Fundamentals metrics — not a forecast, not a recommendation.',
+                what: 'Five pillars — profitability, growth, valuation, financial health and dividend. Each metric is scored on its published level and its rank among sector peers, then the pillars are weighted. A company reporting a loss cannot be rated Strong. Not a forecast, not a recommendation.',
               })
             }
             aria-label="What is Performance Insights?"
@@ -311,7 +311,7 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
           </IconButton>
         }
       >
-        {hasAnyMetric && insights ? (
+        {insights?.overall != null ? (
           <Stack spacing={2}>
             <Stack
               direction="row"
@@ -362,19 +362,84 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
                 }
                 tone={insights.future.score == null ? 'muted' : insights.future.score >= 67 ? 'up' : insights.future.score >= 34 ? 'warning' : 'down'}
               />
+              </Stack>
+
+              {/* The breakdown is the honest part of the score: five pillars the reader can check
+                  against the numbers in the Fundamentals block above. */}
+              <Box sx={{ maxWidth: 460 }}>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.75 }}>
+                  How the score breaks down
+                </Typography>
+                <Stack spacing={0.6}>
+                  {insights.pillars.map((p) => (
+                    <Box
+                      key={p.key}
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: '104px 1fr 26px',
+                        alignItems: 'center',
+                        columnGap: 1,
+                      }}
+                    >
+                      <Typography variant="caption" color="text.secondary" noWrap>
+                        {p.label}
+                      </Typography>
+                      <Box
+                        role="img"
+                        aria-label={`${p.label} ${p.score} out of 100`}
+                        sx={{ height: 6, borderRadius: 3, bgcolor: 'action.hover', overflow: 'hidden' }}
+                      >
+                        <Box
+                          sx={{
+                            width: `${Math.max(0, Math.min(100, p.score))}%`,
+                            height: '100%',
+                            borderRadius: 3,
+                            bgcolor:
+                              p.score >= 67
+                                ? theme.palette.up.main
+                                : p.score >= 34
+                                  ? theme.palette.warning.main
+                                  : theme.palette.down.main,
+                          }}
+                        />
+                      </Box>
+                      <Typography
+                        variant="caption"
+                        sx={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}
+                      >
+                        {p.score}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Stack>
+              </Box>
+
+              {insights.capped && (
+                <Typography variant="caption" color="text.secondary">
+                  {insights.capped === 'loss'
+                    ? 'Held below Strong: the company reported a loss per share.'
+                    : 'Held below Strong: shareholders’ equity is negative.'}
+                </Typography>
+              )}
             </Stack>
-          </Stack>
-        ) : (
+          ) : hasAnyMetric && insights ? (
+            <Typography variant="body2" color="text.secondary">
+              Only {insights.coverage.scored} of {insights.coverage.applicable} metrics are published
+              for this stock. A score needs at least four across two pillars — a number built from two
+              ratios would not mean anything, so none is shown.
+            </Typography>
+          ) : (
           <Typography variant="body2" color="text.secondary">
-            The source publishes no fundamentals for this stock, so there is nothing to score — a
-            blank means the figure does not exist, not that it is zero.
+            Not enough published fundamentals to score this stock — fewer than four of the twelve
+            scored metrics exist for it, and a number built from one or two ratios would not mean
+            anything. A blank means the figure does not exist, not that it is zero.
           </Typography>
         )}
       </SectionCard>
 
       <SectionCard
         title="Future Outlook"
-        subtitle="Forward-looking view from growth, profitability and leverage"
+        subtitle="Forward-looking view from growth and profitability"
         // No rule under the header: the verdict is the answer to the header, not a new section.
         divider={false}
         action={
@@ -382,7 +447,7 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
             onClick={() =>
               setInfo({
                 title: 'Future Outlook',
-                what: 'Derived from the current Fundamentals metrics — an indication of trajectory, not a guarantee of future returns.',
+                what: 'Weighted from growth (60%) and profitability (40%). When the source publishes no growth figures it repeats the current performance and says so. An indication of trajectory, not a guarantee of future returns.',
               })
             }
             aria-label="What is Future Outlook?"
@@ -461,7 +526,7 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, maxWidth: '62ch' }}>
                   {insights.future.fallback
                     ? 'Growth figures are not published for this stock, so the outlook is derived from its current fundamentals.'
-                    : 'Based on revenue growth, EPS growth, profitability and leverage relative to the sector and to fixed benchmarks.'}
+                    : 'Weighted from revenue and EPS growth and from profitability, each scored on its published level and against sector peers.'}
                 </Typography>
               </Box>
             );
