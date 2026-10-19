@@ -313,18 +313,29 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
       >
         {hasAnyMetric && insights ? (
           <Stack spacing={2}>
-            <Stack direction="row" spacing={2} alignItems="baseline" flexWrap="wrap" useFlexGap>
+            <Stack
+              direction="row"
+              alignItems="baseline"
+              flexWrap="wrap"
+              useFlexGap
+              columnGap={1.25}
+              rowGap={0.75}
+            >
               <Typography variant="h3" sx={{ color: scoreColor(insights.overall, theme), lineHeight: 1 }}>
                 {insights.overall ?? DASH}
               </Typography>
-              {insights.verdict && (
-                <Typography variant="overline" color="text.secondary">
-                  {VERDICT_LABEL[insights.verdict]}
+              {/* Verdict and scale read as one phrase — "STRONG out of 100" — so the caption sits
+                  on the verdict's baseline instead of a full grid gap away from it. */}
+              <Box sx={{ display: 'flex', alignItems: 'baseline', columnGap: 0.75 }}>
+                {insights.verdict && (
+                  <Typography variant="overline" color="text.secondary">
+                    {VERDICT_LABEL[insights.verdict]}
+                  </Typography>
+                )}
+                <Typography variant="caption" color="text.secondary">
+                  out of 100
                 </Typography>
-              )}
-              <Typography variant="caption" color="text.secondary">
-                out of 100
-              </Typography>
+              </Box>
             </Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <StatTile
