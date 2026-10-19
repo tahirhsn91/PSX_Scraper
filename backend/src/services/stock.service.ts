@@ -6,7 +6,7 @@ import { deletedSymbolRepository } from '../repositories/deletedSymbol.repositor
 import { indexRepository } from '../repositories/index.repository';
 import { kse100GroupCounts } from './kse100Membership.service';
 import {
-  getStockDetail, getPriceHistory, getCandles, type Candle,
+  getStockDetail, getPriceHistory, getCandles, sessionise, type Candle,
 } from '../repositories/stockDetail.repository';
 import { actionsForSymbol, adjustSeries } from './corporateActions.service';
 import { scoreFundamentals } from './fundamentals.service';
@@ -316,15 +316,22 @@ export const stockService = {
     // A range preset takes precedence over an explicit `from`.
     const from = opts.range ? rangeToFrom(opts.range) : opts.from;
     const offset = (page - 1) * limit;
-    const res = await getPriceHistory(symbol, from, opts.to, limit, offset);
+    const res = await getPriceHistory(symbol, from, opts.to);
     if (res === null) throw new NotFoundError(`Stock not tracked: ${symbol.toUpperCase()}`);
+    // One row per session. A session polled several times is stored as several readings, and
+    // returning them as-is gives the chart duplicate days: a repeated x value breaks a point axis,
+    // so the plot stopped weeks before the last trade day. `total` counts sessions for the same
+    // reason — it is what the caller can page through.
+    const sessions = sessionise(res.items);
+    const total = sessions.length;
+    const items = sessions.slice(offset, offset + limit);
     return {
-      items: res.items.map((p) => ({
-        currentPrice: num(p.currentPrice), open: num(p.open), high: num(p.high),
-        low: num(p.low), close: num(p.close), volume: p.volume != null ? Number(p.volume) : null,
+      items: items.map((p) => ({
+        currentPrice: p.currentPrice, open: p.open, high: p.high,
+        low: p.low, close: p.close, volume: p.volume,
         lastTradeDate: p.lastTradeDate,
       })),
-      page, limit, total: res.total, totalPages: Math.ceil(res.total / limit),
+      page, limit, total, totalPages: Math.ceil(total / limit),
     };
   },
 };

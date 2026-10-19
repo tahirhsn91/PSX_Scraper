@@ -1,4 +1,4 @@
-import { candleDay, toCandle, buildCandles, type Candle } from '../src/repositories/stockDetail.repository';
+import { candleDay, toCandle, buildCandles, sessionise, type Candle } from '../src/repositories/stockDetail.repository';
 import { candlesQuery } from '../src/validators/schemas';
 import { rangeToFrom, HISTORY_RANGES } from '../src/utils/range';
 
@@ -199,3 +199,67 @@ describe('the candles query', () => {
     expect(candlesQuery.safeParse({ range: '2D' }).success).toBe(false);
   });
 });
+
+describe('sessionise', () => {
+  type Reading = {
+    lastTradeDate: Date | null;
+    open: number | null;
+    high: number | null;
+    low: number | null;
+    close: number | null;
+    currentPrice: number | null;
+    volume: number | null;
+  };
+  const reading = (over: Partial<Reading> = {}): Reading => ({
+    lastTradeDate: new Date('2026-09-16T11:00:00.000Z'),
+    open: null,
+    high: null,
+    low: null,
+    close: 100,
+    currentPrice: 100,
+    volume: null,
+    ...over,
+  });
+
+  it('returns one row per session, not one per reading', () => {
+    // The chart is drawn from this: three polls of one session are one point, not three, and a
+    // repeated x value is what broke the point axis in the first place.
+    const out = sessionise([
+      reading({ lastTradeDate: new Date('2026-09-15T11:00:00.000Z'), close: 99 }),
+      reading({ lastTradeDate: new Date('2026-09-16T11:00:00.000Z'), close: 100 }),
+      reading({ lastTradeDate: new Date('2026-09-16T12:30:00.000Z'), close: 101 }),
+      reading({ lastTradeDate: new Date('2026-09-16T15:45:00.000Z'), close: 102 }),
+    ]);
+    expect(out).toHaveLength(2);
+    expect(out[0]!.close).toBe(102); // newest session, newest reading
+    expect(out[1]!.close).toBe(99);
+  });
+
+  it('keeps the freshest value per field and never lets a null erase one', () => {
+    const [day] = sessionise([
+      reading({ open: 98, high: 102, low: 97, close: 100, volume: 5000 }),
+      reading({
+        lastTradeDate: new Date('2026-09-16T12:00:00.000Z'),
+        open: null,
+        high: null,
+        low: null,
+        close: 101,
+        volume: null,
+      }),
+    ]);
+    expect(day!.close).toBe(101);
+    expect(day!.open).toBe(98);
+    expect(day!.high).toBe(102);
+    expect(day!.low).toBe(97);
+    expect(day!.volume).toBe(5000);
+  });
+
+  it('falls back to currentPrice when a reading carries no close', () => {
+    const [day] = sessionise([reading({ close: null, currentPrice: 77 })]);
+    expect(day!.close).toBe(77);
+  });
+
+  it('drops a reading with no timestamp rather than inventing a day', () => {
+    expect(sessionise([reading({ lastTradeDate: null })])).toHaveLength(0);
+  });
+  });
