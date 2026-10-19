@@ -11,6 +11,11 @@ export interface SectionCardProps {
   children: ReactNode;
   /** Drop the body padding so a table can meet the card edges. */
   flush?: boolean;
+  /**
+   * Rule between the header and the body. Off for a card whose body continues the header — a
+   * verdict that reads as part of the sentence above it, not as a separate section.
+   */
+  divider?: boolean;
   sx?: SxProps<Theme>;
   /**
    * Fade and lift this card as it scrolls into view. Opt-in, because it adds a wrapper element —
@@ -21,7 +26,7 @@ export interface SectionCardProps {
 }
 
 /** A titled surface. Every page section is one of these, so headers and edges match everywhere. */
-export function SectionCard({ title, subtitle, action, children, flush = false, sx, reveal = false }: SectionCardProps) {
+export function SectionCard({ title, subtitle, action, children, flush = false, divider = true, sx, reveal = false }: SectionCardProps) {
   const hasHeader = Boolean(title || subtitle || action);
   const card = (
     <Card variant="outlined" sx={{ display: 'flex', flexDirection: 'column', ...sx }}>
@@ -49,7 +54,7 @@ export function SectionCard({ title, subtitle, action, children, flush = false, 
             </Box>
             {action}
           </Stack>
-          <Divider />
+          {divider && <Divider />}
         </>
       )}
       <Box sx={{ p: flush ? 0 : 1.5, flexGrow: 1, minHeight: 0 }}>{children}</Box>
