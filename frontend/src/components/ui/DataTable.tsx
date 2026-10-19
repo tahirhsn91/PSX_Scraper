@@ -1,4 +1,4 @@
-import { memo, ReactNode } from 'react';
+import { memo, type MouseEvent, type ReactNode } from 'react';
 import {
   Box,
   Card,
@@ -17,7 +17,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { ErrorPanel, StatePanel } from './StatePanel';
 
 export interface Column<T> {
@@ -60,7 +60,11 @@ export interface DataTableProps<T> {
   rowKey: (row: T) => string;
   /** Accessible name for the table — "Results" tells a screen-reader user nothing. */
   ariaLabel?: string;
-  /** Row destination: rendered as a real link in the first cell, so rows are keyboard reachable. */
+  /**
+   * Row destination. The first cell renders a real link (keyboard, middle-click, "open in new
+   * tab") and the rest of the row navigates on click, so aiming at the company name or the price
+   * opens the same page. Below the card breakpoint the whole card is the link.
+   */
   rowHref?: (row: T) => string;
   loading?: boolean;
   /** Error message; renders the error state instead of rows. */
@@ -164,6 +168,7 @@ function DataTableInner<T>({
   transitionKey,
 }: DataTableProps<T>) {
   const theme = useTheme();
+  const navigate = useNavigate();
   // `'never'` is not a breakpoint: it means no width renders the card list at all.
   const cardQuery = useMediaQuery(theme.breakpoints.down(cardsBelow === 'never' ? 'sm' : cardsBelow));
   const isCardView = cardsBelow === 'never' ? false : cardQuery;
@@ -311,12 +316,27 @@ function DataTableInner<T>({
           >
             {rows.map((row) => {
               const href = rowHref?.(row);
+              // A row with a destination is clickable anywhere on it. The first-cell link stays for
+              // keyboards and middle-click; this handler covers the obvious human move — aiming at
+              // the company name, the change pill or the price.
+              const followRow = href
+                ? (event: MouseEvent<HTMLTableRowElement>) => {
+                    // A cell may hold its own control (that link, a button). Let it win, so the
+                    // click never becomes two navigations.
+                    if ((event.target as HTMLElement).closest('a, button, input, select, textarea, [role="button"]')) return;
+                    // Leave modified clicks alone: the browser opens a new tab, the app does not.
+                    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                    // Finishing a text selection is not a click on the row.
+                    if ((window.getSelection()?.toString() ?? '') !== '') return;
+                    navigate(href);
+                  }
+                : undefined;
               return (
                 <TableRow
                   key={rowKey(row)}
                   hover
-                  onClick={onRowClick ? () => onRowClick(row) : undefined}
-                  sx={onRowClick ? { cursor: 'pointer' } : undefined}
+                  onClick={onRowClick ? () => onRowClick(row) : followRow}
+                  sx={onRowClick || href ? { cursor: 'pointer' } : undefined}
                 >
                   {columns.map((c, index) => (
                     <TableCell
