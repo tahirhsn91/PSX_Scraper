@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Box, Skeleton, Tooltip, Typography, useTheme } from '@mui/material';
 import { useIndexHistory } from '../api/hooks';
 import { toCandles, toneOf, type MiniCandle } from '../lib/candles';
@@ -116,27 +116,11 @@ export function MiniIndexChart({
   const candles = useMemo(() => toCandles(data?.items ?? [], sessions), [data, sessions]);
 
   /**
-   * Draw the line once, per mount, but only once the page has painted. The history request
-   * resolves while the board and its table are still doing their first render, so a reveal
-   * started at that moment loses its opening frames — the animation stalls and then snaps to
-   * the end. Two frames is one paint: the reveal then runs on a quiet main thread and reads as
-   * a continuous draw. The fallback covers a background tab, where rAF does not fire and the
-   * line would otherwise stay held at the start of the reveal for ever.
+   * No stroke-dash draw-in here. `pathLength` does not rescale a CSS `stroke-dasharray` in Chrome,
+   * so `dasharray: 1` paints 1px dashes instead of one dash the length of the path — at 2px the
+   * round caps hid the gaps, but at 1.5px the line reads as broken. The line is drawn complete;
+   * the session-change fade and the marker's arrival carry the entrance instead.
    */
-  const [drawing, setDrawing] = useState(false);
-  useEffect(() => {
-    if (drawing || candles.length < 2) return;
-    let second = 0;
-    const first = requestAnimationFrame(() => {
-      second = requestAnimationFrame(() => setDrawing(true));
-    });
-    const fallback = setTimeout(() => setDrawing(true), 1200);
-    return () => {
-      cancelAnimationFrame(first);
-      cancelAnimationFrame(second);
-      clearTimeout(fallback);
-    };
-  }, [candles.length, drawing]);
 
   /**
    * Resolve a palette token to the colour to paint with. SVG children take paint as an attribute
@@ -226,34 +210,6 @@ export function MiniIndexChart({
             from: { opacity: 0.7 },
             to: { opacity: 1 },
           },
-          // The line draws itself once per mount and stays drawn: `pathLength={1}` normalises the
-          // dash maths and `forwards` holds the finished state. Until `drawing` is armed the path
-          // is held at the very start of the dash — present and laid out, so arming it is one
-          // style change and the reveal begins on the first frame after the page has painted.
-          ...(drawing
-            ? {
-                '& .spark-line': {
-                  strokeDasharray: 1,
-                  strokeDashoffset: 1,
-                  animation: `spark-draw 450ms ${theme.app.motion.easing} forwards`,
-                  // The draw is decoration; with motion reduced the line is simply drawn.
-                  '@media (prefers-reduced-motion: reduce)': {
-                    animation: 'none',
-                    strokeDasharray: 'none',
-                    strokeDashoffset: 0,
-                  },
-                },
-                '@keyframes spark-draw': {
-                  from: { strokeDashoffset: 1 },
-                  to: { strokeDashoffset: 0 },
-                },
-              }
-            : {
-                '& .spark-line': {
-                  strokeDasharray: 1,
-                  strokeDashoffset: 1,
-                },
-              }),
         }}
       >
         {variant === 'line' ? (
@@ -270,7 +226,6 @@ export function MiniIndexChart({
                     not have — but the stroke takes today's tone, which is what the card answers. */}
                 <path
                   className="spark-line"
-                  pathLength={1}
                   d={line}
                   fill="none"
                   stroke={colour}
@@ -332,10 +287,10 @@ export function MiniIndexChart({
             mt: '-2.25px',
             borderRadius: '50%',
             bgcolor: colour,
-            // The marker arrives as the line reaches it: waiting out the draw's last third keeps
-            // the dot from hanging in empty space ahead of its own series. `backwards` holds the
-            // hidden start state through the delay and releases the element when it ends.
-            animation: drawing ? `spark-dot 220ms ${theme.app.motion.easing} 340ms backwards` : 'none',
+            // The marker arrives with the line rather than hanging in empty space ahead of it:
+            // a short fade-and-scale on mount. `backwards` holds the hidden start state until the
+            // animation runs, so the dot never shows before its own series does.
+            animation: `spark-dot 200ms ${theme.app.motion.easing} backwards`,
             '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
             '@keyframes spark-dot': {
               from: { opacity: 0, transform: 'scale(0.4)' },
