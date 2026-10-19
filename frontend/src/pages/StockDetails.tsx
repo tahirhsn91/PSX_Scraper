@@ -19,6 +19,7 @@ import {
 import SyncIcon from '@mui/icons-material/Sync';
 import DownloadIcon from '@mui/icons-material/Download';
 import { LineChart } from '@mui/x-charts/LineChart';
+import type { ChartsAxisContentProps } from '@mui/x-charts/ChartsTooltip';
 import { useQueryClient } from '@tanstack/react-query';
 import { CandleChart } from '../components/CandleChart';
 import { TechnicalSection } from '../components/TechnicalSection';
@@ -128,6 +129,44 @@ const rangeLabel = (r: HistoryRange): string =>
     '5Y': 'past 5 years',
     MAX: 'all stored sessions',
   })[r];
+
+/**
+ * The mobile readout for the price line.
+ *
+ * MUI X's default tooltip is a card anchored at the pointer — roughly 120×70 px — so on a 240 px
+ * phone chart it sits on top of the very line the reader is dragging along. This keeps the same
+ * two facts (session date, close) in a single line, and the popper offsets it above the touch
+ * point so the plot stays visible.
+ */
+function CompactAxisTooltip({ axisValue, series, dataIndex }: ChartsAxisContentProps) {
+  const first = series[0];
+  const raw = first && dataIndex != null ? first.data?.[dataIndex] : null;
+  const value = typeof raw === 'number' ? formatNumber(raw) : DASH;
+  const label = (first as unknown as { label?: string } | undefined)?.label ?? 'Close';
+  return (
+    <Box
+      sx={{
+        px: 1,
+        py: 0.25,
+        fontSize: 11,
+        lineHeight: 1.45,
+        whiteSpace: 'nowrap',
+        bgcolor: 'background.paper',
+        border: 1,
+        borderColor: 'divider',
+        borderRadius: 1,
+        boxShadow: 1,
+        pointerEvents: 'none',
+      }}
+    >
+      <Box component="span" sx={{ fontWeight: 600 }}>
+        {String(axisValue)}
+      </Box>
+      {' · '}
+      {label} {value}
+    </Box>
+  );
+}
 
 type Dividend = StockDetail['dividends'][number];
 
@@ -691,6 +730,21 @@ export function StockDetails() {
                     sx={{
                       '& .MuiAreaElement-root': { fill: lineColor, fillOpacity: 0.12 },
                     }}
+                    // On a phone the default tooltip card is anchored at the finger and covers
+                    // most of a 240 px plot; a single line, pushed above the touch point, leaves
+                    // the line readable while dragging.
+                    slots={isMobile ? { axisContent: CompactAxisTooltip } : undefined}
+                    slotProps={
+                      isMobile
+                        ? {
+                            popper: {
+                              // Lift the readout off the touch point. Popper writes `margin: 0` inline,
+                              // so this has to outrank it.
+                              sx: { pointerEvents: 'none', marginTop: '-46px !important' },
+                            },
+                          }
+                        : undefined
+                    }
                     series={[
                       {
                         data: chart.map((p) => p.close as number),
