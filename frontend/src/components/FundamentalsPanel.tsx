@@ -12,7 +12,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import type { Theme } from '@mui/material/styles';
+import { alpha, type Theme } from '@mui/material/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CloseIcon from '@mui/icons-material/Close';
@@ -375,6 +375,8 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
       <SectionCard
         title="Future Outlook"
         subtitle="Forward-looking view from growth, profitability and leverage"
+        // No rule under the header: the verdict is the answer to the header, not a new section.
+        divider={false}
         action={
           <IconButton
             onClick={() =>
@@ -391,26 +393,79 @@ export function FundamentalsPanel({ ratios, insights }: FundamentalsPanelProps) 
         }
       >
         {insights?.outlook ? (
-          <>
-            <Typography
-              variant="h5"
-              sx={{
-                color:
-                  insights.outlook === 'positive'
-                    ? theme.palette.up.main
-                    : insights.outlook === 'cautious'
-                      ? theme.palette.down.main
-                      : theme.palette.warning.main,
-              }}
-            >
-              {OUTLOOK_LABEL[insights.outlook]}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {insights.future.fallback
-                ? 'Growth figures are not published for this stock, so the outlook is derived from its current fundamentals.'
-                : 'Based on revenue growth, EPS growth, profitability and leverage relative to the sector and to fixed benchmarks.'}
-            </Typography>
-          </>
+          (() => {
+            const tone =
+              insights.outlook === 'positive'
+                ? theme.palette.up.main
+                : insights.outlook === 'cautious'
+                  ? theme.palette.down.main
+                  : theme.palette.warning.main;
+            const glyph =
+              insights.outlook === 'positive' ? '▲' : insights.outlook === 'cautious' ? '▼' : '●';
+            return (
+              <Box
+                sx={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  borderRadius: 1.5,
+                  border: '1px solid',
+                  // Tint and rule carry the verdict's tone; the label and glyph carry it in words,
+                  // so colour is never the only signal.
+                  borderColor: alpha(tone, theme.palette.mode === 'dark' ? 0.34 : 0.2),
+                  bgcolor: alpha(tone, theme.palette.mode === 'dark' ? 0.12 : 0.06),
+                  pl: 2,
+                  pr: 1.5,
+                  py: 1.25,
+                  // Hug the sentence instead of stretching a wide bar across the card.
+                  width: 'fit-content',
+                  maxWidth: '100%',
+                  boxSizing: 'border-box',
+                  // The panel settles in once, and its accent draws down with it — the reading is
+                  // "this is the answer", not a replay on every poll.
+                  animation: `outlook-in 240ms ${theme.app.motion.easing} backwards`,
+                  '@keyframes outlook-in': {
+                    from: { opacity: 0, transform: 'translateY(6px)' },
+                    to: { opacity: 1, transform: 'none' },
+                  },
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    inset: '0 auto 0 0',
+                    width: 3,
+                    bgcolor: tone,
+                    transformOrigin: 'top center',
+                    animation: `outlook-accent 320ms ${theme.app.motion.easing} backwards`,
+                  },
+                  '@keyframes outlook-accent': {
+                    from: { transform: 'scaleY(0)' },
+                    to: { transform: 'scaleY(1)' },
+                  },
+                  '@media (prefers-reduced-motion: reduce)': {
+                    animation: 'none',
+                    '&::before': { animation: 'none' },
+                  },
+                }}
+              >
+                <Stack direction="row" spacing={0.75} alignItems="center">
+                  <Box
+                    component="span"
+                    aria-hidden
+                    sx={{ color: tone, fontSize: 13, lineHeight: 1 }}
+                  >
+                    {glyph}
+                  </Box>
+                  <Typography variant="h5" sx={{ color: tone, lineHeight: 1.2 }}>
+                    {OUTLOOK_LABEL[insights.outlook]}
+                  </Typography>
+                </Stack>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, maxWidth: '62ch' }}>
+                  {insights.future.fallback
+                    ? 'Growth figures are not published for this stock, so the outlook is derived from its current fundamentals.'
+                    : 'Based on revenue growth, EPS growth, profitability and leverage relative to the sector and to fixed benchmarks.'}
+                </Typography>
+              </Box>
+            );
+          })()
         ) : (
           <Typography variant="body2" color="text.secondary">
             Not enough published fundamentals to estimate the outlook.
