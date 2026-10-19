@@ -1,158 +1,226 @@
 import {
-  FUNDAMENTAL_METRICS,
-  CURRENT_KEYS,
-  FUTURE_KEYS,
-  metricCredit,
+  METRIC_RULES,
+  MIN_METRICS,
+  MIN_PEERS,
+  LOSS_CAP,
+  NEGATIVE_EQUITY_CAP,
   scoreFundamentals,
-  medianOf,
-  mediansOf,
+  peerStatsOf,
+  percentileOf,
+  metricScores,
+  pillarScores,
   verdictOf,
   outlookOf,
+  isFinancialSector,
+  medianOf,
+  type PeerStats,
+  type RatioMap,
 } from '../src/services/fundamentals.service';
 
-describe('fundamentals scoring (#131)', () => {
-  test('the metric list carries every one of the 17 requested fields exactly once', () => {
-    const keys = FUNDAMENTAL_METRICS.map((m) => m.key);
-    expect(new Set(keys).size).toBe(17);
-    expect(keys).toEqual(expect.arrayContaining([
-      'eps', 'peRatio', 'bookValue', 'pbRatio', 'dividendYield', 'dps', 'payoutRatio',
-      'roe', 'roa', 'roic', 'debtToEquity', 'currentRatio', 'netProfitMargin',
-      'revenueGrowth', 'epsGrowth', 'freeFloatShares', 'freeFloatPercent',
-    ]));
+/** A sector with no peer distributions: every metric is scored on its absolute curve only. */
+const soloPeer = (sector = 'CEMENT'): PeerStats => ({ sector, distributions: {} });
+
+describe('fundamentals scoring v2', () => {
+  test('the metric list scores 12 ratios — rupee amounts are gates, not scores', () => {
+    const keys = METRIC_RULES.map((m) => m.key);
+    expect(keys).toHaveLength(12);
+    // EPS / book value / DPS are not scored on level: a 5 rupee EPS is not comparable to a 300 rupee one.
+    expect(keys).not.toContain('eps');
+    expect(keys).not.toContain('bookValue');
+    expect(keys).not.toContain('dps');
+    expect(keys).toContain('roe');
+    expect(keys).toContain('peRatio');
+    expect(keys).toContain('epsGrowth');
   });
 
-  test('current and future groups overlap on trajectory metrics, free float is informational only', () => {
-    const neutral = FUNDAMENTAL_METRICS.filter((m) => m.direction === 'neutral').map((m) => m.key);
-    expect(neutral).toEqual(['freeFloatShares', 'freeFloatPercent']);
-    // Leverage and profitability are both a current state AND a forward-looking trajectory signal.
-    const currentSet = new Set(CURRENT_KEYS);
-    const futureSet = new Set(FUTURE_KEYS);
-    for (const key of ['debtToEquity', 'roe', 'roic', 'netProfitMargin']) {
-      expect(currentSet.has(key)).toBe(true);
-      expect(futureSet.has(key)).toBe(true);
-    }
-    // Growth is forward-only.
-    for (const key of ['revenueGrowth', 'epsGrowth']) {
-      expect(futureSet.has(key)).toBe(true);
-      expect(currentSet.has(key)).toBe(false);
-    }
+  test('curves are continuous, so scores are not a handful of steps', () => {
+    const roe = METRIC_RULES.find((m) => m.key === 'roe')!;
+    expect(roe.curve(0)).toBe(0);
+    expect(roe.curve(12.5)).toBe(50);
+    expect(roe.curve(25)).toBe(100);
+    expect(roe.curve(40)).toBe(100); // clamped
+
+    const pe = METRIC_RULES.find((m) => m.key === 'peRatio')!;
+    expect(pe.curve(8)).toBe(100);
+    expect(pe.curve(21.5)).toBe(50);
+    expect(pe.curve(35)).toBe(0);
+    expect(pe.curve(-4)).toBe(0); // a loss has no meaningful P/E
+
+    const payout = METRIC_RULES.find((m) => m.key === 'payoutRatio')!;
+    expect(payout.curve(42)).toBe(100);
+    expect(payout.curve(10)).toBeLessThan(100);
+    expect(payout.curve(90)).toBeLessThan(20);
   });
 
-  test('metricCredit: higher-better earns full credit only by beating both signals', () => {
-    // ROE: benchmark 15, higher-better.
-    expect(metricCredit('roe', 20, 10)).toBe(1);    // beats benchmark (>=15) and median (>=10)
-    expect(metricCredit('roe', 12, 10)).toBe(0.5);  // beats median, misses benchmark
-    expect(metricCredit('roe', 18, 25)).toBe(0.5);  // beats benchmark, misses median
-    expect(metricCredit('roe', 5, 10)).toBe(0);     // beats neither
+  test('percentiles need a real peer group, and rank correctly when they have one', () => {
+    expect(percentileOf(5, [1, 2, 3])).toBeNull(); // fewer than MIN_PEERS
+    expect(MIN_PEERS).toBe(8);
+    const sorted = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    expect(percentileOf(5, sorted)).toBeCloseTo((4 / 8) * 100); // four below, eight gaps
+    expect(percentileOf(1, sorted)).toBe(0);
+    expect(percentileOf(9, sorted)).toBe(100);
   });
 
-  test('metricCredit: lower-better never treats a negative value as a bargain', () => {
-    // P/E: benchmark 20, lower-better.
-    expect(metricCredit('peRatio', 12, 15)).toBe(1);   // beats benchmark and median
-    expect(metricCredit('peRatio', 25, 30)).toBe(0.5); // beats median only
-    expect(metricCredit('peRatio', -5, 15)).toBe(0);   // negative P/E is a loss, not a bargain
-  });
-
-  test('metricCredit: range metric (payout ratio 20–70) is benchmark-only', () => {
-    expect(metricCredit('payoutRatio', 50, null)).toBe(1);   // inside 20–70
-    expect(metricCredit('payoutRatio', 90, 40)).toBe(0);     // outside 20–70
-  });
-
-  test('metricCredit: neutral and unpublished metrics are excluded, not scored as zero', () => {
-    expect(metricCredit('freeFloatShares', 600_000_000, 400_000_000)).toBeNull();
-    expect(metricCredit('roe', null, 10)).toBeNull();
-    expect(metricCredit('roe', undefined, 10)).toBeNull();
-  });
-
-  test('medianOf and mediansOf compute medians and skip unpublished values', () => {
-    expect(medianOf([])).toBeNull();
-    expect(medianOf([3, 1, 2])).toBe(2);
-    expect(medianOf([1, 2, 3, 4])).toBe(2.5);
-    const medians = mediansOf([
-      { roe: 10, peRatio: 20, currentRatio: null },
-      { roe: 20, peRatio: 30, currentRatio: 1.5 },
-      { roe: 30, peRatio: null, currentRatio: 2.0 },
+  test('peerStatsOf sorts the published values and skips nulls', () => {
+    const peer = peerStatsOf('CEMENT', [
+      { roe: 20, peRatio: 8 },
+      { roe: 5, peRatio: null },
+      { roe: null, peRatio: 12 },
     ]);
-    expect(medians.roe).toBe(20);
-    expect(medians.peRatio).toBe(25);       // (20+30)/2
-    expect(medians.currentRatio).toBe(1.75); // (1.5+2.0)/2
+    expect(peer.distributions.roe).toEqual([5, 20]);
+    expect(peer.distributions.peRatio).toEqual([8, 12]);
+    expect(peer.distributions.roa).toBeUndefined();
   });
 
-  test('scoreFundamentals: the math is the mean credit, not a guess', () => {
-    // A clean, fully-assessed example where the verdict follows the arithmetic.
-    const ratios: Record<string, number | null> = {
-      // Current — all beat both benchmark and median except P/E and D/E (miss both).
-      eps: 10, peRatio: 30, bookValue: 100, pbRatio: 4, dividendYield: 6, dps: 5,
-      payoutRatio: 50, roe: 20, roa: 8, roic: 12, debtToEquity: 2, currentRatio: 2,
-      netProfitMargin: 15,
-      // Future — revenue and EPS growth beat both; D/E (leverage) misses both.
+  test('metricScores blends absolute quality with the sector percentile', () => {
+    const peer: PeerStats = {
+      sector: 'CEMENT',
+      distributions: { roe: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
+    };
+    const [roe] = metricScores({ roe: 9 }, peer);
+    // absolute 9/25 = 36, percentile 100 → 68
+    expect(roe!.score).toBeCloseTo(0.5 * 36 + 0.5 * 100, 5);
+    // with no distribution it is the absolute score alone
+    const [solo] = metricScores({ roe: 9 }, soloPeer());
+    expect(solo!.score).toBeCloseTo(36, 5);
+  });
+
+  test('pillarScores averages within a pillar, not across pillars', () => {
+    const scores = metricScores({ roe: 25, roa: 15 }, soloPeer());
+    expect(pillarScores(scores).profitability).toBeCloseTo(100, 5);
+  });
+
+  test('the arithmetic: absolute curves, weighted pillars, mean of the two views', () => {
+    // Every metric lands exactly on the middle of its curve, payout inside its band.
+    const ratios: RatioMap = {
+      roe: 12.5, roa: 7.5, netProfitMargin: 12.5,
+      peRatio: 21.5, pbRatio: 3.5,
+      dividendYield: 4.5, payoutRatio: 42.5,
+      revenueGrowth: 10, epsGrowth: 10,
+      debtToEquity: 1.4, currentRatio: 1.65,
+      eps: 5, bookValue: 50,
+    };
+
+    const ins = scoreFundamentals(ratios, soloPeer());
+
+    // current: profitability .45*50 + valuation .30*50 + income .15*75 + health .10*50 = 53.75
+    expect(ins.current.score).toBe(54);
+    // future: growth .6*50 + profitability .4*50 = 50
+    expect(ins.future.score).toBe(50);
+    expect(ins.future.fallback).toBe(false);
+    expect(ins.overall).toBe(52);
+    expect(ins.verdict).toBe('fair');
+    expect(ins.outlook).toBe('neutral');
+    expect(ins.pillars.map((p) => p.key)).toEqual(['profitability', 'growth', 'valuation', 'health', 'income']);
+    expect(ins.pillars.find((p) => p.key === 'income')!.score).toBe(75);
+  });
+
+  test('a bank is not failed on leverage and liquidity ratios it does not report', () => {
+    const ratios: RatioMap = {
+      roe: 20, roa: 10, netProfitMargin: 20,
+      peRatio: 6, pbRatio: 1,
+      dividendYield: 6, payoutRatio: 50,
       revenueGrowth: 15, epsGrowth: 20,
-      freeFloatShares: 500_000_000, freeFloatPercent: 45,
-    };
-    // Medians chosen so every current metric beats the median (>= for higher, <= for lower)
-    // and P/E / D/E miss the *benchmark* (P/E 30 > 20, D/E 2 > 1).
-    const medians: Record<string, number | null> = {
-      eps: 5, peRatio: 15, bookValue: 50, pbRatio: 2, dividendYield: 3, dps: 2,
-      payoutRatio: 40, roe: 10, roa: 4, roic: 6, debtToEquity: 1, currentRatio: 1,
-      netProfitMargin: 8, revenueGrowth: 5, epsGrowth: 8,
-      freeFloatShares: 300_000_000, freeFloatPercent: 30,
+      // Nonsense for a bank — they must be ignored, not scored as failures.
+      debtToEquity: 9, currentRatio: 0.4,
     };
 
-    const ins = scoreFundamentals(ratios, medians);
+    const ins = scoreFundamentals(ratios, soloPeer('COMMERCIAL BANKS'));
 
-    // Current: 13 metrics. P/E (30 > 20), P/B (4 > 3) and D/E (2 > 1) all miss their benchmark
-    // AND their median, so they score 0; the other ten beat both and score 1.
-    // Sum = 10 over 13 -> 76.9 -> 77.
-    expect(ins.current.assessed).toBe(13);
-    expect(ins.current.score).toBe(Math.round((10 / 13) * 100)); // 77
-
-    // Future: 6 metrics (growth + leverage + profitability). revenueGrowth, epsGrowth, roe, roic
-    // and netProfitMargin all beat both benchmark and median (1 each); D/E (2, median 1,
-    // lower-better) misses both -> 0. Sum = 5 over 6 -> 83.
-    expect(ins.future.assessed).toBe(6);
-    expect(ins.future.score).toBe(Math.round((5 / 6) * 100)); // 83
-    expect(ins.future.fallback).toBe(false);
-
-    expect(ins.overall).toBe(Math.round((77 + 83) / 2)); // 80
+    expect(isFinancialSector('COMMERCIAL BANKS')).toBe(true);
+    expect(ins.coverage).toEqual({ scored: 9, applicable: 9 });
+    expect(ins.current.score).toBe(85);
+    expect(ins.future.score).toBe(69);
+    expect(ins.overall).toBe(77);
     expect(ins.verdict).toBe('strong');
-    expect(ins.outlook).toBe('positive');
   });
 
-  test('scoreFundamentals: the outlook falls back to current metrics when no forward metric is published', () => {
-    const ratios: Record<string, number | null> = {
-      eps: 20, roe: null, roa: null, roic: null, peRatio: null, pbRatio: null, dividendYield: null,
-      dps: null, payoutRatio: null, debtToEquity: null, currentRatio: null,
-      netProfitMargin: null, bookValue: null,
-      revenueGrowth: null, epsGrowth: null, freeFloatShares: null, freeFloatPercent: null,
-    };
-    const medians: Record<string, number | null> = { eps: 10 };
-    const ins = scoreFundamentals(ratios, medians);
-    // EPS is current-only: it scores in current, and the outlook falls back to that score.
-    expect(ins.current.assessed).toBe(1);
-    expect(ins.current.score).toBe(100);
-    expect(ins.future.assessed).toBe(0);
-    expect(ins.future.score).toBe(100); // fallback
-    expect(ins.future.fallback).toBe(true);
-    expect(ins.outlook).toBe('positive');
+  test('the same ratios in a non-financial sector are held back by the same leverage', () => {
+    const ins = scoreFundamentals(
+      { roe: 20, roa: 10, netProfitMargin: 20, peRatio: 6, pbRatio: 1, debtToEquity: 9, currentRatio: 0.4 },
+      soloPeer('CEMENT'),
+    );
+    // D/E 9 and current ratio 0.4 both score 0, dragging the health pillar and the current view down.
+    expect(ins.pillars.find((p) => p.key === 'health')!.score).toBe(0);
+    expect(ins.current.score).toBeLessThan(85);
   });
 
-  test('scoreFundamentals: a stock with no published metrics has no score and no outlook', () => {
-    const ins = scoreFundamentals({}, {});
-    expect(ins.current.score).toBeNull();
-    expect(ins.future.score).toBeNull();
-    expect(ins.future.fallback).toBe(false);
+  test('two published ratios are a dash, not a performance score', () => {
+    const ins = scoreFundamentals({ peRatio: 5, pbRatio: 0.8 }, soloPeer());
+    expect(ins.coverage).toEqual({ scored: 2, applicable: 12 });
     expect(ins.overall).toBeNull();
     expect(ins.verdict).toBeNull();
     expect(ins.outlook).toBeNull();
+    expect(MIN_METRICS).toBe(4);
   });
 
-  test('verdictOf and outlookOf map score bands to labels', () => {
+  test('four metrics across two pillars are enough to score', () => {
+    const ins = scoreFundamentals({ roe: 20, roa: 10, peRatio: 10, pbRatio: 2 }, soloPeer());
+    expect(ins.overall).not.toBeNull();
+    expect(ins.coverage.scored).toBe(4);
+  });
+
+  test('a loss-maker can never read Strong, however cheap its ratios look', () => {
+    const ins = scoreFundamentals(
+      {
+        roe: 45, roa: 25, netProfitMargin: 35, peRatio: 3, pbRatio: 0.4,
+        dividendYield: 12, payoutRatio: 40, revenueGrowth: 40, epsGrowth: 80,
+        debtToEquity: 0.1, currentRatio: 3,
+        eps: -2.5,
+      },
+      soloPeer(),
+    );
+    expect(ins.capped).toBe('loss');
+    expect(ins.current.score).toBe(LOSS_CAP);
+    expect(ins.future.score).toBe(LOSS_CAP);
+    expect(ins.overall).toBe(LOSS_CAP);
+    expect(ins.verdict).toBe('fair'); // 49 is still "fair" — but never "strong"
+    expect(ins.outlook).toBe('neutral');
+  });
+
+  test('negative equity caps harder than a loss', () => {
+    const ins = scoreFundamentals(
+      { roe: 45, roa: 25, netProfitMargin: 35, peRatio: 3, pbRatio: 0.4, bookValue: -12 },
+      soloPeer(),
+    );
+    expect(ins.capped).toBe('negative-equity');
+    expect(ins.overall).toBe(NEGATIVE_EQUITY_CAP);
+  });
+
+  test('the forward view falls back to the current view when no growth series exists', () => {
+    const ins = scoreFundamentals(
+      { roe: 20, roa: 10, netProfitMargin: 20, peRatio: 12, pbRatio: 2 },
+      soloPeer(),
+    );
+    expect(ins.future.fallback).toBe(true);
+    expect(ins.future.score).toBe(ins.current.score);
+  });
+
+  test('a stock with no published ratios has no score at all', () => {
+    const ins = scoreFundamentals({}, soloPeer());
+    expect(ins.coverage.scored).toBe(0);
+    expect(ins.current.score).toBeNull();
+    expect(ins.future.score).toBeNull();
+    expect(ins.overall).toBeNull();
+    expect(ins.verdict).toBeNull();
+    expect(ins.outlook).toBeNull();
+    expect(ins.pillars).toEqual([]);
+  });
+
+  test('verdict and outlook bands', () => {
     expect(verdictOf(null)).toBeNull();
     expect(verdictOf(67)).toBe('strong');
-    expect(verdictOf(50)).toBe('fair');
-    expect(verdictOf(10)).toBe('weak');
-    expect(outlookOf(80)).toBe('positive');
-    expect(outlookOf(40)).toBe('neutral');
-    expect(outlookOf(20)).toBe('cautious');
+    expect(verdictOf(66)).toBe('fair');
+    expect(verdictOf(34)).toBe('fair');
+    expect(verdictOf(33)).toBe('weak');
+    expect(outlookOf(67)).toBe('positive');
+    expect(outlookOf(34)).toBe('neutral');
+    expect(outlookOf(33)).toBe('cautious');
+  });
+
+  test('medianOf still works for the median tiles', () => {
+    expect(medianOf([])).toBeNull();
+    expect(medianOf([3, 1, 2])).toBe(2);
+    expect(medianOf([1, 2, 3, 4])).toBe(2.5);
   });
 });

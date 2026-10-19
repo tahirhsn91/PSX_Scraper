@@ -10,7 +10,7 @@ import {
 } from '../repositories/stockDetail.repository';
 import { actionsForSymbol, adjustSeries } from './corporateActions.service';
 import { scoreFundamentals } from './fundamentals.service';
-import { getCachedSectorMedians, getCachedBeta } from './detailCache';
+import { getCachedSectorPeerStats, getCachedBeta } from './detailCache';
 import { enqueueSync, cancelSyncJob } from '../jobs/queues';
 import { ConflictError, NotFoundError, ValidationError } from '../types/errors';
 import { rangeToFrom, HistoryRange } from '../utils/range';
@@ -119,9 +119,9 @@ export const stockService = {
     // the card says so in a note rather than presenting one as the other. Both stay null for a
     // symbol with no dividend on record: a dash, never a zero and never a borrowed figure.
     const newestDividend = s.dividends[0];
-    // Fundamentals insights (#131): score the stock's ratios against its sector's medians and the
-    // fixed benchmarks. A stock with no ratios, or whose sector is missing or the data defect
-    // `"undefined"`, gets `null` (the UI hides the block rather than inventing a score).
+    // Fundamentals insights: score the stock's ratios against its sector peers and the published
+    // curves. A stock with no ratios, or whose sector is missing or the data defect `"undefined"`,
+    // gets `null` (the UI hides the block rather than inventing a score).
     const ratioMap: Record<string, number | null> | null = ratio
       ? {
           eps: num(ratio.eps), peRatio: num(ratio.peRatio), bookValue: num(ratio.bookValue),
@@ -135,7 +135,7 @@ export const stockService = {
       : null;
     const insights =
       ratioMap && s.sector && s.sector !== 'undefined'
-        ? scoreFundamentals(ratioMap, await getCachedSectorMedians(s.sector))
+        ? scoreFundamentals(ratioMap, await getCachedSectorPeerStats(s.sector))
         : null;
     return {
       id: s.id,

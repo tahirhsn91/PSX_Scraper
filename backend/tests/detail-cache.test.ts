@@ -1,6 +1,6 @@
 /**
  * Cache-aside for the two detail-view computations that were repeated per visitor:
- * a sector's median ratios (identical for every stock in the sector) and a symbol's beta
+ * a sector's peer distributions (identical for every stock in the sector) and a symbol's beta
  * (recomputed on every detail view, but moving only ~daily).
  *
  * `../src/config` is mocked because `env.ts` calls `process.exit(1)` when DATABASE_URL/REDIS_URL
@@ -24,7 +24,7 @@ jest.mock('../src/repositories/fundamentals.repository', () => ({
   getSectorRatioRows: jest.fn(),
 }));
 
-import { getCachedSectorMedians, getCachedBeta } from '../src/services/detailCache';
+import { getCachedSectorPeerStats, getCachedBeta } from '../src/services/detailCache';
 import { cacheGet, cacheSet } from '../src/services/cache';
 import { betaService, type BetaResult } from '../src/services/beta.service';
 import { getSectorRatioRows } from '../src/repositories/fundamentals.repository';
@@ -40,26 +40,29 @@ beforeEach(() => {
   cacheSetMock.mockResolvedValue(undefined);
 });
 
-describe('getCachedSectorMedians', () => {
-  it('normalises the sector into the key and stores the medians with the TTL', async () => {
+describe('getCachedSectorPeerStats', () => {
+  it('normalises the sector into the key and stores the distributions with the TTL', async () => {
     ratioRowsMock.mockResolvedValue([
-      { peRatio: 10, eps: 5 },
-      { peRatio: 20, eps: 7 },
+      { peRatio: 20, roe: 5 },
+      { peRatio: 10, roe: null },
     ]);
 
-    await getCachedSectorMedians('TEXTILE SPINNING');
+    await getCachedSectorPeerStats('TEXTILE SPINNING');
 
     expect(cacheSetMock).toHaveBeenCalledTimes(1);
     const [key, cached, ttl] = cacheSetMock.mock.calls[0] as [string, unknown, number];
-    expect(key).toBe('sector-medians:v1:textile-spinning');
-    expect(cached).toMatchObject({ peRatio: 15, eps: 6 });
+    expect(key).toBe('sector-peers:v2:textile-spinning');
+    expect(cached).toMatchObject({
+      sector: 'TEXTILE SPINNING',
+      distributions: { peRatio: [10, 20], roe: [5] },
+    });
     expect(ttl).toBe(3600);
   });
 
   it('serves a cached value without hitting the repository', async () => {
-    cacheGetMock.mockResolvedValue({ peRatio: 15, eps: 6 });
+    cacheGetMock.mockResolvedValue({ sector: 'TEXTILE SPINNING', distributions: { peRatio: [10, 20] } });
 
-    await getCachedSectorMedians('TEXTILE SPINNING');
+    await getCachedSectorPeerStats('TEXTILE SPINNING');
 
     expect(ratioRowsMock).not.toHaveBeenCalled();
     expect(cacheSetMock).not.toHaveBeenCalled();
