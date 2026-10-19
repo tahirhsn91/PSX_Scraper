@@ -294,6 +294,16 @@ export interface StockDetail {
     current: { score: number | null; assessed: number };
     future: { score: number | null; assessed: number; fallback: boolean };
     outlook: 'positive' | 'neutral' | 'cautious' | null;
+    /** Pillar breakdown behind the score, in display order. */
+    pillars: Array<{
+      key: 'profitability' | 'growth' | 'valuation' | 'health' | 'income';
+      label: string;
+      score: number;
+    }>;
+    /** Metrics scored vs metrics that apply to this sector — the confidence signal. */
+    coverage: { scored: number; applicable: number };
+    /** Set when the score was held down by a reported loss or negative equity. */
+    capped: 'loss' | 'negative-equity' | null;
   } | null;
   financials: Array<{
     year: number;

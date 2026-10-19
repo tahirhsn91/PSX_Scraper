@@ -1,224 +1,340 @@
 /**
- * Fundamental-analysis scoring for the Stock Details page (issue #131).
+ * Fundamental scoring behind the Performance Insights panel.
  *
- * Each of the 17 metrics is judged **two ways** and the two are combined: against the median of the
- * stocks in the same sector, and against a fixed benchmark. A metric earns full credit for beating
- * both, half credit for beating one, and none for beating neither; a metric the source did not
- * publish is excluded from both the numerator and the denominator (it is a dash, not a zero).
+ * ## Why this replaced the binary test
  *
- * The sub-scores and the rubric are deliberately pure and exported for tests: the "math shown, not
- * just the verdict" acceptance criterion is met by unit-testing `scoreFundamentals` against a known
- * stock's numbers, while the median query lives in `fundamentals.repository.ts`.
+ * The first version judged every metric "beats the benchmark and the sector median" and paid
+ * 1 / 0.5 / 0 for it. Three problems showed up once it ran on the whole board:
+ *
+ *  - scores could only be multiples of 100/13, so hundreds of stocks landed on 0, 8, 15, 23…
+ *  - one industry-blind benchmark could fail a whole sector — commercial banks always carry D/E
+ *    far above 1 and publish no current ratio, so a strong bank could score single digits;
+ *  - two published ratios (P/E and P/B) were enough to produce a "performance" score.
+ *
+ * ## What it does now
+ *
+ * 1. Each metric becomes 0–100 from a published curve (ROE 0 → 0, 25% → 100, and so on).
+ * 2. That is blended 50/50 with the stock's percentile among peers when at least 8 peers publish
+ *    the metric — a bank is judged against banks, but a whole weak sector cannot lift itself.
+ * 3. Metrics roll up into five pillars. Metrics that do not apply to a sector are skipped, never
+ *    failed (banks: no D/E, no current ratio, no ROIC).
+ * 4. Pillars are weighted into a current and a forward view; the overall score is their mean.
+ * 5. A score needs at least 4 metrics across 2 pillars, otherwise it is `null` — a dash, not a guess.
+ * 6. Loss-makers and negative-equity companies are capped, so a company reporting a loss can never
+ *    read "Strong" however cheap its ratios look.
  */
 
-export type Direction = 'higher' | 'lower' | 'range' | 'neutral';
+export type Pillar = 'profitability' | 'growth' | 'valuation' | 'health' | 'income';
 
-export interface MetricSpec {
-  /** The `RatioDTO` field this metric reads. */
+export const PILLAR_LABELS: Record<Pillar, string> = {
+  profitability: 'Profitability',
+  growth: 'Growth',
+  valuation: 'Valuation',
+  health: 'Financial health',
+  income: 'Dividend',
+};
+
+export type Unit = 'rs' | 'pct' | 'x';
+
+export interface MetricRule {
+  /** The ratio field this metric reads. */
   key: string;
   label: string;
-  /** How a value is judged: higher-better, lower-better, inside a band, or informational only. */
-  direction: Direction;
-  /** Fixed benchmark lower bound (>= for `higher`, <= for `lower`, >= for `range`). Null for neutral. */
-  benchmark: number | null;
-  /** Upper bound for `range` metrics (payout ratio 20–70). */
-  benchmarkHigh?: number;
-  /** Display unit, so the tooltip and the tile agree. */
-  unit: 'rs' | 'pct' | 'x' | 'shares';
+  pillar: Pillar;
+  unit: Unit;
+  /** 0–100 for a published value. */
+  curve: (value: number) => number;
+  /** Metrics a financial company does not meaningfully report. */
+  financialOnly?: 'skip';
+}
+
+const clamp = (v: number, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
+
+/** 0 at `zero`, 100 at `full`, linear and clamped in between (higher is better). */
+const scaleUp = (v: number, zero: number, full: number) => clamp(((v - zero) / (full - zero)) * 100);
+
+/** 100 at or below `best`, 0 at or above `worst` (lower is better). */
+const scaleDown = (v: number, best: number, worst: number) => clamp(((worst - v) / (worst - best)) * 100);
+
+/** 100 inside the band, falling to 0 at either edge. */
+const band = (v: number, goodLo: number, goodHi: number, zeroLo: number, zeroHi: number) =>
+  v < goodLo ? scaleUp(v, zeroLo, goodLo) : v > goodHi ? scaleDown(v, goodHi, zeroHi) : 100;
+
+/**
+ * The scored metrics. Rupee amounts (EPS, book value, DPS) are *not* scored on level — a 5 rupee EPS
+ * is not comparable with a 300 rupee one — they are used as solvency gates below instead.
+ */
+export const METRIC_RULES: MetricRule[] = [
+  { key: 'roe', label: 'ROE', pillar: 'profitability', unit: 'pct', curve: (v) => scaleUp(v, 0, 25) },
+  { key: 'roa', label: 'ROA', pillar: 'profitability', unit: 'pct', curve: (v) => scaleUp(v, 0, 15) },
+  {
+    key: 'netProfitMargin', label: 'Net margin', pillar: 'profitability', unit: 'pct',
+    curve: (v) => scaleUp(v, 0, 25),
+  },
+  {
+    key: 'roic', label: 'ROIC', pillar: 'profitability', unit: 'pct',
+    curve: (v) => scaleUp(v, 0, 20), financialOnly: 'skip',
+  },
+  {
+    key: 'peRatio', label: 'P/E', pillar: 'valuation', unit: 'x',
+    // A loss-maker has no meaningful P/E; the solvency gate handles it, so clamp at zero here.
+    curve: (v) => (v <= 0 ? 0 : scaleDown(v, 8, 35)),
+  },
+  { key: 'pbRatio', label: 'P/B', pillar: 'valuation', unit: 'x', curve: (v) => (v < 0 ? 0 : scaleDown(v, 1, 6)) },
+  { key: 'dividendYield', label: 'Dividend yield', pillar: 'income', unit: 'pct', curve: (v) => scaleUp(v, 0, 9) },
+  { key: 'payoutRatio', label: 'Payout ratio', pillar: 'income', unit: 'pct', curve: (v) => band(v, 25, 60, 0, 95) },
+  { key: 'revenueGrowth', label: 'Revenue growth', pillar: 'growth', unit: 'pct', curve: (v) => scaleUp(v, -10, 30) },
+  { key: 'epsGrowth', label: 'EPS growth', pillar: 'growth', unit: 'pct', curve: (v) => scaleUp(v, -20, 40) },
+  {
+    key: 'debtToEquity', label: 'D/E', pillar: 'health', unit: 'x',
+    curve: (v) => (v < 0 ? 0 : scaleDown(v, 0.3, 2.5)),
+    financialOnly: 'skip',
+  },
+  {
+    key: 'currentRatio', label: 'Current ratio', pillar: 'health', unit: 'x',
+    curve: (v) => scaleUp(v, 0.8, 2.5), financialOnly: 'skip',
+  },
+];
+
+/** Sectors whose balance sheet makes leverage and liquidity ratios meaningless. */
+const FINANCIAL_SECTORS = new Set([
+  'COMMERCIAL BANKS',
+  'INSURANCE',
+  'INV. BANKS / INV. COS. / SECURITIES COS.',
+  'MODARABAS',
+  'LEASING COMPANIES',
+  'MUTUAL FUNDS',
+]);
+
+export const isFinancialSector = (sector: string) => FINANCIAL_SECTORS.has(sector.toUpperCase());
+
+/** Weights. The current view asks "how is it doing now"; the forward view how it may develop. */
+export const CURRENT_WEIGHTS: Record<Pillar, number> = {
+  profitability: 0.45,
+  valuation: 0.3,
+  income: 0.15,
+  health: 0.1,
+  growth: 0,
+};
+export const FUTURE_WEIGHTS: Record<Pillar, number> = {
+  growth: 0.6,
+  profitability: 0.4,
+  valuation: 0,
+  income: 0,
+  health: 0,
+};
+
+/** A metric needs this many peer values before its percentile is worth using. */
+export const MIN_PEERS = 8;
+
+export type RatioMap = Record<string, number | null | undefined>;
+
+/** Peer distributions for one sector: each metric's published values, sorted ascending. */
+export type Distributions = Record<string, number[]>;
+
+export interface PeerStats {
+  sector: string;
+  distributions: Distributions;
 }
 
 /**
- * The 17 metrics in the Fundamentals section. Fixed benchmarks are the proposal recorded in the
- * issue (ROE >= 15, ROA >= 5, ROIC >= 10, net margin >= 10, D/E <= 1, current ratio >= 1.5,
- * P/E <= 20, P/B <= 3, dividend yield >= 4, payout 20–70, revenue/EPS growth >= 10, and a positive
- * EPS / book value / DPS) — confirm in review.
+ * Build the peer distributions a sector is scored against. Pure, so the maths is testable without
+ * a database; `detailCache` caches the result per sector.
  */
-export const FUNDAMENTAL_METRICS: MetricSpec[] = [
-  { key: 'eps', label: 'EPS', direction: 'higher', benchmark: 0, unit: 'rs' },
-  { key: 'peRatio', label: 'P/E', direction: 'lower', benchmark: 20, unit: 'x' },
-  { key: 'bookValue', label: 'Book Value / Share', direction: 'higher', benchmark: 0, unit: 'rs' },
-  { key: 'pbRatio', label: 'P/B', direction: 'lower', benchmark: 3, unit: 'x' },
-  { key: 'dividendYield', label: 'Dividend Yield', direction: 'higher', benchmark: 4, unit: 'pct' },
-  { key: 'dps', label: 'DPS', direction: 'higher', benchmark: 0, unit: 'rs' },
-  { key: 'payoutRatio', label: 'Payout Ratio', direction: 'range', benchmark: 20, benchmarkHigh: 70, unit: 'pct' },
-  { key: 'roe', label: 'ROE', direction: 'higher', benchmark: 15, unit: 'pct' },
-  { key: 'roa', label: 'ROA', direction: 'higher', benchmark: 5, unit: 'pct' },
-  { key: 'roic', label: 'ROIC', direction: 'higher', benchmark: 10, unit: 'pct' },
-  { key: 'debtToEquity', label: 'D/E', direction: 'lower', benchmark: 1, unit: 'x' },
-  { key: 'currentRatio', label: 'Current Ratio', direction: 'higher', benchmark: 1.5, unit: 'x' },
-  { key: 'netProfitMargin', label: 'Net Profit Margin', direction: 'higher', benchmark: 10, unit: 'pct' },
-  { key: 'revenueGrowth', label: 'Revenue Growth', direction: 'higher', benchmark: 10, unit: 'pct' },
-  { key: 'epsGrowth', label: 'EPS Growth', direction: 'higher', benchmark: 10, unit: 'pct' },
-  { key: 'freeFloatShares', label: 'Free Float Share', direction: 'neutral', benchmark: null, unit: 'shares' },
-  { key: 'freeFloatPercent', label: 'Free Float Share %', direction: 'neutral', benchmark: null, unit: 'pct' },
-];
-
-const SPEC = new Map(FUNDAMENTAL_METRICS.map((m) => [m.key, m]));
-
-/** Metrics scored for *current* performance: profitability, valuation, per-share, leverage, liquidity, dividend. */
-export const CURRENT_KEYS = [
-  'eps', 'peRatio', 'bookValue', 'pbRatio', 'dividendYield', 'dps', 'payoutRatio',
-  'roe', 'roa', 'roic', 'debtToEquity', 'currentRatio', 'netProfitMargin',
-];
-
-/**
- * Metrics scored for *future* performance. Growth is the direct forward signal; leverage and
- * profitability (ROE / ROIC / net margin) are the "trajectory" indicators the issue means by
- * "future performance based on current metrics", and they are published for far more stocks than
- * the two growth series alone, so the Future Outlook is not left blank for the majority of the
- * board. `debtToEquity` also appears in `CURRENT_KEYS` on purpose — it is both a balance-sheet
- * state (current) and the "leverage direction" of the forward view.
- */
-export const FUTURE_KEYS = [
-  'revenueGrowth', 'epsGrowth', 'debtToEquity', 'roe', 'roic', 'netProfitMargin',
-];
-
-/** A sector-median map: metric key -> median, or null when no peer publishes the metric. */
-export type SectorMedians = Record<string, number | null>;
-
-/**
- * Whether a value beats its fixed benchmark.
- *
- * `lower` benchmarks treat a negative value as *not* beating (a negative P/E or P/B is a loss /
- * negative equity, not a bargain); `range` benchmarks are a closed band.
- */
-function beatsBenchmark(value: number, spec: MetricSpec): boolean {
-  if (spec.direction === 'neutral') return false;
-  if (spec.direction === 'higher') return value >= (spec.benchmark ?? 0);
-  if (spec.direction === 'lower') return value >= 0 && value <= (spec.benchmark ?? 0);
-  // range
-  const high = spec.benchmarkHigh ?? spec.benchmark ?? 0;
-  return value >= (spec.benchmark ?? 0) && value <= high;
-}
-
-/** Whether a value beats the sector median, in the metric's direction. */
-function beatsMedian(value: number, median: number | null, spec: MetricSpec): boolean {
-  if (median === null || spec.direction === 'neutral') return false;
-  if (spec.direction === 'range') return value >= (spec.benchmark ?? 0) && value <= (spec.benchmarkHigh ?? spec.benchmark ?? 0);
-  if (spec.direction === 'higher') return value >= median;
-  return value >= 0 && value <= median; // lower
-}
-
-/** Credit for one metric: 1 (both), 0.5 (one), 0 (neither), or null (excluded — no value). */
-export function metricCredit(
-  key: string,
-  value: number | null | undefined,
-  median: number | null | undefined,
-): number | null {
-  const spec = SPEC.get(key);
-  if (!spec || spec.direction === 'neutral') return null;
-  if (value === null || value === undefined) return null;
-  // A `range` metric has only the benchmark band as a signal — there is no meaningful "median" to
-  // beat for "payout ratio inside 20–70".
-  if (spec.direction === 'range') {
-    return beatsBenchmark(value, spec) ? 1 : 0;
+export function peerStatsOf(sector: string, rows: RatioMap[]): PeerStats {
+  const distributions: Distributions = {};
+  for (const rule of METRIC_RULES) {
+    const values = rows
+      .map((row) => row[rule.key])
+      .filter((v): v is number => v !== null && v !== undefined && Number.isFinite(v))
+      .sort((a, b) => a - b);
+    if (values.length > 0) distributions[rule.key] = values;
   }
-  const b = beatsBenchmark(value, spec);
-  const m = beatsMedian(value, median ?? null, spec);
-  if (b && m) return 1;
-  if (b || m) return 0.5;
-  return 0;
+  return { sector, distributions };
 }
 
-/** Mean credit -> 0–100, rounding to the nearest integer. Excludes unassessed metrics. */
-function subScore(keys: string[], ratios: Record<string, number | null | undefined>, medians: SectorMedians) {
-  let sum = 0;
-  let assessed = 0;
-  for (const key of keys) {
-    const credit = metricCredit(key, ratios[key], medians[key]);
-    if (credit === null) continue;
-    sum += credit;
-    assessed += 1;
+/** Percentile of `value` among `sorted` (0–100), or null when there are too few peers. */
+export function percentileOf(value: number, sorted: number[] | undefined): number | null {
+  if (!sorted || sorted.length < MIN_PEERS) return null;
+  let below = 0;
+  for (const v of sorted) {
+    if (v < value) below += 1;
+    else break;
   }
-  const score = assessed === 0 ? null : Math.round((sum / assessed) * 100);
-  return { score, assessed };
+  return (below / (sorted.length - 1)) * 100;
 }
 
-export interface FundamentalsInsights {
-  /** 0–100, the mean of the current and future sub-scores (only when at least one metric was assessed). */
-  overall: number | null;
-  /** Qualitative label for the overall score. */
-  verdict: 'strong' | 'fair' | 'weak' | null;
-  current: { score: number | null; assessed: number };
-  future: { score: number | null; assessed: number; fallback: boolean };
-  /** The Future Outlook verdict, derived from the future sub-score alone. */
-  outlook: 'positive' | 'neutral' | 'cautious' | null;
+export interface MetricScore {
+  key: string;
+  label: string;
+  pillar: Pillar;
+  value: number;
+  score: number;
 }
 
-/** A qualitative label from a 0–100 score. */
-export function verdictOf(score: number | null): 'strong' | 'fair' | 'weak' | null {
+/** Score one stock against its peers. Skips metrics that are absent or do not apply. */
+export function metricScores(ratios: RatioMap, peer: PeerStats): MetricScore[] {
+  const financial = isFinancialSector(peer.sector);
+  const out: MetricScore[] = [];
+  for (const rule of METRIC_RULES) {
+    if (financial && rule.financialOnly === 'skip') continue;
+    const value = ratios[rule.key];
+    if (value === null || value === undefined || !Number.isFinite(value)) continue;
+    const absolute = clamp(rule.curve(value));
+    const pct = percentileOf(value, peer.distributions[rule.key]);
+    out.push({
+      key: rule.key,
+      label: rule.label,
+      pillar: rule.pillar,
+      value,
+      // Half the call is absolute quality, half is standing among peers.
+      score: pct === null ? absolute : 0.5 * absolute + 0.5 * pct,
+    });
+  }
+  return out;
+}
+
+/** Mean score per pillar, over the pillars that have at least one metric. */
+export function pillarScores(scores: MetricScore[]): Partial<Record<Pillar, number>> {
+  const sums: Partial<Record<Pillar, { total: number; n: number }>> = {};
+  for (const s of scores) {
+    const acc = (sums[s.pillar] ??= { total: 0, n: 0 });
+    acc.total += s.score;
+    acc.n += 1;
+  }
+  const out: Partial<Record<Pillar, number>> = {};
+  for (const [pillar, acc] of Object.entries(sums) as [Pillar, { total: number; n: number }][]) {
+    out[pillar] = acc.total / acc.n;
+  }
+  return out;
+}
+
+/** Weighted mean over the pillars present, renormalised so a missing pillar is not a penalty. */
+function weighted(pillars: Partial<Record<Pillar, number>>, weights: Record<Pillar, number>): number | null {
+  let total = 0;
+  let weight = 0;
+  for (const [pillar, score] of Object.entries(pillars) as [Pillar, number][]) {
+    const w = weights[pillar];
+    if (!w) continue;
+    total += score * w;
+    weight += w;
+  }
+  return weight === 0 ? null : total / weight;
+}
+
+export type Verdict = 'strong' | 'fair' | 'weak';
+export type Outlook = 'positive' | 'neutral' | 'cautious';
+
+export function verdictOf(score: number | null): Verdict | null {
   if (score === null) return null;
   if (score >= 67) return 'strong';
   if (score >= 34) return 'fair';
   return 'weak';
 }
 
-export function outlookOf(score: number | null): 'positive' | 'neutral' | 'cautious' | null {
+export function outlookOf(score: number | null): Outlook | null {
   if (score === null) return null;
   if (score >= 67) return 'positive';
   if (score >= 34) return 'neutral';
   return 'cautious';
 }
 
-/**
- * Score a stock's ratios against its sector's medians and the fixed benchmarks.
- *
- * `ratios` is the flat numeric map the API already serves (each metric null when unpublished);
- * `medians` is the same shape with each sector median, or null when no peer publishes it.
- */
-export function scoreFundamentals(
-  ratios: Record<string, number | null | undefined>,
-  medians: SectorMedians,
-): FundamentalsInsights {
-  const current = subScore(CURRENT_KEYS, ratios, medians);
-  const future = subScore(FUTURE_KEYS, ratios, medians);
+/** A company reporting a loss, or with negative equity, cannot be rated Strong however cheap it looks. */
+export const LOSS_CAP = 49;
+export const NEGATIVE_EQUITY_CAP = 34;
 
-  // The Future Outlook must not go blank just because the source publishes no growth series for a
-  // stock (the common case: ~2/3 of the board has no revenue/EPS-growth figures). Per the issue,
-  // future performance is "based on current metrics", so when no forward-looking metric exists the
-  // outlook falls back to the current sub-score and is flagged as such.
-  const futureScore = future.score ?? current.score;
-  const futureFallback = future.score === null && futureScore !== null;
+export interface PillarScore {
+  key: Pillar;
+  label: string;
+  score: number;
+}
 
-  let overall: number | null = null;
-  if (current.score !== null && futureScore !== null) {
-    overall = Math.round((current.score + futureScore) / 2);
-  } else if (current.score !== null) {
-    overall = current.score;
-  } else if (futureScore !== null) {
-    overall = futureScore;
-  }
+export interface FundamentalsInsights {
+  overall: number | null;
+  verdict: Verdict | null;
+  current: { score: number | null; assessed: number };
+  future: { score: number | null; assessed: number; fallback: boolean };
+  outlook: Outlook | null;
+  /** Pillar scores in a fixed display order; only the pillars with data. */
+  pillars: PillarScore[];
+  /** Metrics scored vs metrics that apply to this sector — the reader's confidence signal. */
+  coverage: { scored: number; applicable: number };
+  /** Set when the score was held down by a loss or negative equity. */
+  capped: 'loss' | 'negative-equity' | null;
+}
+
+const PILLAR_ORDER: Pillar[] = ['profitability', 'growth', 'valuation', 'health', 'income'];
+
+/** Minimum evidence before any score is published. */
+export const MIN_METRICS = 4;
+export const MIN_PILLARS = 2;
+
+export function scoreFundamentals(ratios: RatioMap, peer: PeerStats): FundamentalsInsights {
+  const financial = isFinancialSector(peer.sector);
+  const scores = metricScores(ratios, peer);
+  const pillars = pillarScores(scores);
+
+  const applicable = METRIC_RULES.filter((r) => !(financial && r.financialOnly === 'skip')).length;
+  const coverage = { scored: scores.length, applicable };
+  const enough = scores.length >= MIN_METRICS && Object.keys(pillars).length >= MIN_PILLARS;
+
+  const currentRaw = enough ? weighted(pillars, CURRENT_WEIGHTS) : null;
+  const futureRaw = enough ? weighted(pillars, FUTURE_WEIGHTS) : null;
+
+  const eps = ratios.eps;
+  const book = ratios.bookValue;
+  const loss = eps !== null && eps !== undefined && Number.isFinite(eps) && eps < 0;
+  const negativeEquity = book !== null && book !== undefined && Number.isFinite(book) && book < 0;
+  const cap = negativeEquity ? NEGATIVE_EQUITY_CAP : loss ? LOSS_CAP : null;
+
+  const applyCap = (v: number | null) => (v === null || cap === null ? v : Math.min(v, cap));
+  const currentCapped = applyCap(currentRaw);
+  const current = currentCapped === null ? null : Math.round(currentCapped);
+
+  // The forward view falls back to the current view when no growth series is published — flagged,
+  // so the panel can say so instead of implying a growth forecast that does not exist.
+  const fallback = currentRaw !== null && pillars.growth === undefined;
+  const futureRawFinal = fallback ? currentRaw : futureRaw ?? currentRaw;
+  const futureCapped = applyCap(futureRawFinal);
+  const future = futureCapped === null ? null : Math.round(futureCapped);
+
+  const parts = [current, future].filter((v): v is number => v !== null);
+  const overall = parts.length === 0 ? null : Math.round(parts.reduce((a, b) => a + b, 0) / parts.length);
+
+  // Only report a cap when it actually held the score down; a company scoring 17 on its own merits
+  // should not be told it was capped.
+  const rawParts = [currentRaw, futureRawFinal].filter((v): v is number => v !== null);
+  const rawOverall = rawParts.length === 0 ? null : rawParts.reduce((a, b) => a + b, 0) / rawParts.length;
+  const capped = cap !== null && overall !== null && rawOverall !== null && rawOverall > overall
+    ? negativeEquity
+      ? 'negative-equity'
+      : 'loss'
+    : null;
 
   return {
     overall,
     verdict: verdictOf(overall),
-    current,
-    future: { score: futureScore, assessed: future.assessed, fallback: futureFallback },
-    outlook: outlookOf(futureScore),
+    current: { score: current, assessed: scores.length },
+    future: {
+      score: future,
+      assessed: scores.filter((s) => FUTURE_WEIGHTS[s.pillar] > 0).length,
+      fallback,
+    },
+    outlook: outlookOf(future),
+    pillars: PILLAR_ORDER.filter((p) => pillars[p] !== undefined).map((p) => ({
+      key: p,
+      label: PILLAR_LABELS[p],
+      score: Math.round(pillars[p]!),
+    })),
+    coverage,
+    capped,
   };
 }
 
-/** The median of a list of numbers, or null when the list is empty. */
+/** Median of a numeric list, or null when empty. */
 export function medianOf(values: number[]): number | null {
   if (values.length === 0) return null;
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 === 0 ? (sorted[mid - 1]! + sorted[mid]!) / 2 : sorted[mid]!;
-}
-
-/**
- * Compute per-metric medians from a list of one-row-per-stock ratio objects (already filtered to a
- * sector). Pure so the median maths can be tested without the database.
- */
-export function mediansOf(rows: Array<Record<string, number | null | undefined>>): SectorMedians {
-  const out: SectorMedians = {};
-  for (const spec of FUNDAMENTAL_METRICS) {
-    const values: number[] = [];
-    for (const row of rows) {
-      const v = row[spec.key];
-      if (v !== null && v !== undefined) values.push(v);
-    }
-    out[spec.key] = medianOf(values);
-  }
-  return out;
 }

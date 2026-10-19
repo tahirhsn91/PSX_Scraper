@@ -1,22 +1,22 @@
 import { betaService, type BetaResult } from './beta.service';
 import { getSectorRatioRows } from '../repositories/fundamentals.repository';
-import { mediansOf, type SectorMedians } from './fundamentals.service';
+import { peerStatsOf, type PeerStats } from './fundamentals.service';
 import { cacheGet, cacheSet } from './cache';
 import { env } from '../config';
 
 /**
- * Cache-aside for a sector's median ratios. The Fundamentals panel compares a stock against its
- * peers' medians, and every stock in a sector computes the *same* medians — so this is repeated
- * work per visitor with a result that changes only when a sync writes a new ratio row. The pure
- * median maths stays in `fundamentals.service.ts` (unit-tested without a cache or database).
+ * Cache-aside for a sector's peer statistics (each metric's sorted values, used for percentile
+ * ranking). Every stock in a sector scores against the *same* distribution — repeated work per
+ * visitor with a result that changes only when a sync writes a new ratio row. The pure maths stays
+ * in `fundamentals.service.ts` (unit-tested without a cache or database).
  */
-export async function getCachedSectorMedians(sector: string): Promise<SectorMedians> {
-  const key = `sector-medians:v1:${sector.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
-  const cached = await cacheGet<SectorMedians>(key);
+export async function getCachedSectorPeerStats(sector: string): Promise<PeerStats> {
+  const key = `sector-peers:v2:${sector.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+  const cached = await cacheGet<PeerStats>(key);
   if (cached) return cached;
-  const medians = mediansOf(await getSectorRatioRows(sector));
-  await cacheSet(key, medians, env.SECTOR_MEDIANS_CACHE_TTL);
-  return medians;
+  const peer = peerStatsOf(sector, await getSectorRatioRows(sector));
+  await cacheSet(key, peer, env.SECTOR_MEDIANS_CACHE_TTL);
+  return peer;
 }
 
 /**
