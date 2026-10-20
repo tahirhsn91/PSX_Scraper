@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { alpha } from '@mui/material/styles';
 import {
   Box,
   Chip,
@@ -146,13 +147,17 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
       onClose={onClose}
       maxWidth="sm"
       aria-label="Search stocks"
-      // Invisible on purpose: the page stays exactly as it was behind the window. A dimmed backdrop
-      // turns a lookup into a mode the reader has to escape.
-      BackdropProps={{ invisible: true }}
+      // A light scrim and a 3px blur: enough to push the board behind the window out of focus, not
+      // enough to hide it. The page is still there — this is a lookup, not a mode.
+      BackdropProps={{
+        sx: (theme) => ({
+          bgcolor: alpha(theme.palette.background.default, 0.2),
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)',
+        }),
+      }}
       PaperProps={{
         sx: {
-          mt: { xs: '6vh', sm: '12vh' },
-          mb: 'auto',
           // Dialog's default paper margin is 32px a side, which on a 390px phone hands 64px of a
           // number table to the gutter. The margin, not the width, is what the flex row takes away.
           mx: { xs: 1.5, sm: 4 },
