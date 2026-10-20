@@ -13,8 +13,12 @@ describe('buildOrderBy', () => {
     expect(buildOrderBy('change', 'desc')).toBe('p.change DESC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('marketCap', 'desc')).toBe('p.market_cap DESC NULLS LAST, s.symbol ASC');
     expect(buildOrderBy('changePercent', 'desc')).toBe('p.change_percent DESC NULLS LAST, s.symbol ASC');
-    expect(buildOrderBy('week52Low', 'asc')).toBe('p.week52_low ASC NULLS LAST, s.symbol ASC');
-    expect(buildOrderBy('week52High', 'asc')).toBe('p.week52_high ASC NULLS LAST, s.symbol ASC');
+    expect(buildOrderBy('week52Low', 'asc')).toBe(
+      'COALESCE(p.week52_low, w52.week52_low) ASC NULLS LAST, s.symbol ASC',
+    );
+    expect(buildOrderBy('week52High', 'asc')).toBe(
+      'COALESCE(p.week52_high, w52.week52_high) ASC NULLS LAST, s.symbol ASC',
+    );
     // The contribution column, which the dashboard opens on descending: the join's resolved value,
     // so the order matches the figure on screen.
     expect(buildOrderBy('points', 'desc')).toBe('pt.points DESC NULLS LAST, s.symbol ASC');

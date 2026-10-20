@@ -109,6 +109,14 @@ export const stockService = {
     // never a figure derived from a handful of days.
     const beta = await getCachedBeta(s.symbol);
     const price = s.prices[0];
+    // 52-week range (#258): the latest session row carries none when the quote poll created it
+    // before the company sync ran — and PSX refuses the company page for days at a time, which is
+    // how every stock came to read empty. Fall back to the newest published range (bounded to a
+    // week); when there is none, both fields stay null and the UI shows a dash rather than a guess.
+    const week52 =
+      price && (price.week52High == null || price.week52Low == null)
+        ? await stockRepository.latestWeek52Range(s.id)
+        : null;
     const ratio = s.ratios[0];
     // `dividends` arrives newest announcement first, so the first row is the newest one the source
     // has published. The two top-level fields are that row spelled out for the valuation card
@@ -158,8 +166,8 @@ export const stockService = {
             open: num(price.open),
             close: num(price.close),
             marketCap: num(price.marketCap),
-            week52High: num(price.week52High),
-            week52Low: num(price.week52Low),
+            week52High: num(price.week52High) ?? week52?.high ?? null,
+            week52Low: num(price.week52Low) ?? week52?.low ?? null,
             lastTradeDate: price.lastTradeDate,
           }
         : null,
