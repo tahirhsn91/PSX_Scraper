@@ -85,8 +85,11 @@ export interface StockListItem {
 export const SORTABLE_COLUMNS = {
   symbol: 's.symbol',
   price: 'p.current_price',
-  week52Low: 'p.week52_low',
-  week52High: 'p.week52_high',
+  // Sorted on the value the column *shows*, not the raw one: when the newest row has no range the
+  // stand-in (`week52Lateral`) supplies one, and ordering on the null column would sort those rows
+  // to the bottom while their cell prints a number.
+  week52Low: 'COALESCE(p.week52_low, w52.week52_low)',
+  week52High: 'COALESCE(p.week52_high, w52.week52_high)',
   change: 'p.change',
   changePercent: 'p.change_percent',
   volume: 'p.volume',
@@ -226,6 +229,35 @@ const returnLateral = (back: number) => Prisma.sql`
       MAX(rn)::int AS available
     FROM r
   ) pr ON true`;
+
+/**
+ * How long a published 52-week range may stand in for a row that has none.
+ *
+ * The range is published on the company page only, so the session row the quote poll creates
+ * carries none until the company sync writes it. When that page is refused — PSX does refuse it,
+ * for days at a time — every stock's range blanks at once, which is exactly how all 511 rows came
+ * to read empty. A week-old range still describes the last twelve months closely enough to show;
+ * an older one does not, and a dash is the honest answer there.
+ */
+export const WEEK52_FALLBACK_DAYS = 7;
+
+/**
+ * The newest published 52-week range for a symbol, bounded to {@link WEEK52_FALLBACK_DAYS}.
+ *
+ * Used by both the list/search SQL (`week52Lateral`) and the detail page, so all three surfaces
+ * answer the same question the same way.
+ */
+const week52Lateral = () => Prisma.sql`
+  LEFT JOIN LATERAL (
+    SELECT week52_high, week52_low
+    FROM stock_prices
+    WHERE stock_id = s.id
+      AND week52_high IS NOT NULL
+      AND week52_low IS NOT NULL
+      AND last_trade_date >= now() - ${Prisma.raw(`interval '${WEEK52_FALLBACK_DAYS} days'`)}
+    ORDER BY last_trade_date DESC NULLS LAST
+    LIMIT 1
+  ) w52 ON true`;
 
 export interface StockFilters {
   sector?: string;
@@ -609,6 +641,30 @@ export class StockRepository {
   }
 
   /**
+   * The newest *published* 52-week range for a symbol, or null.
+   *
+   * The detail page reads its price from the latest session row, which has no range when the quote
+   * poll created it before the company sync ran (or when PSX refused the company page). This is the
+   * same stand-in the list and search queries apply through `week52Lateral`, and it is bounded to
+   * {@link WEEK52_FALLBACK_DAYS} for the same reason: an older range no longer describes the last
+   * twelve months, so the honest answer there is a dash.
+   */
+  async latestWeek52Range(stockId: string): Promise<{ high: number; low: number } | null> {
+    const row = await prisma.stockPrice.findFirst({
+      where: {
+        stockId,
+        week52High: { not: null },
+        week52Low: { not: null },
+        lastTradeDate: { gte: new Date(Date.now() - WEEK52_FALLBACK_DAYS * 86_400_000) },
+      },
+      orderBy: { lastTradeDate: 'desc' },
+      select: { week52High: true, week52Low: true },
+    });
+    if (!row?.week52High || !row?.week52Low) return null;
+    return { high: Number(row.week52High), low: Number(row.week52Low) };
+  }
+
+  /**
    * A page of tracked symbols with their newest priced row.
    *
    * Raw SQL rather than `findMany` because the sort key lives on a *related* row: price,
@@ -647,7 +703,8 @@ export class StockRepository {
       prisma.$queryRaw<RawStockListRow[]>(Prisma.sql`
         SELECT s.id, s.symbol, s.company_name, s.sector, s.logo_url,
                p.current_price, p.change, p.change_percent, p.volume, p.market_cap,
-               p.week52_high, p.week52_low,
+               COALESCE(p.week52_high, w52.week52_high) AS week52_high,
+               COALESCE(p.week52_low, w52.week52_low) AS week52_low,
                p.last_trade_date,
                sl.completed_at AS last_synced_at,
                pt.points, pt.weight, pt.index_symbol AS points_index_symbol,
@@ -661,6 +718,7 @@ export class StockRepository {
           FROM stock_prices WHERE stock_id = s.id AND current_price IS NOT NULL
           ORDER BY last_trade_date DESC NULLS LAST LIMIT 1
         ) p ON true
+        ${week52Lateral()}
         LEFT JOIN LATERAL (
           SELECT completed_at FROM sync_logs
           WHERE stock_id = s.id
@@ -754,7 +812,8 @@ export class StockRepository {
     >(Prisma.sql`
       SELECT s.id, s.symbol, s.company_name, s.sector, s.logo_url,
              p.current_price, p.change, p.change_percent, p.volume, p.market_cap,
-             p.week52_high, p.week52_low,
+             COALESCE(p.week52_high, w52.week52_high) AS week52_high,
+             COALESCE(p.week52_low, w52.week52_low) AS week52_low,
              p.last_trade_date,
              sl.completed_at AS last_synced_at,
              pt.points, pt.weight, pt.index_symbol AS points_index_symbol
@@ -765,6 +824,7 @@ export class StockRepository {
         FROM stock_prices WHERE stock_id = s.id AND current_price IS NOT NULL
         ORDER BY last_trade_date DESC NULLS LAST LIMIT 1
       ) p ON true
+      ${week52Lateral()}
       LEFT JOIN LATERAL (
         SELECT completed_at FROM sync_logs
         WHERE stock_id = s.id AND status IN ('SUCCESS','PARTIAL')
