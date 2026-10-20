@@ -1,10 +1,10 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { AppHeader } from './shell/AppHeader';
 import { MarketTicker } from './shell/MarketTicker';
 import { BottomNav } from './shell/BottomNav';
-import { SearchSheet } from './shell/SearchSheet';
+import { SearchDialog } from './shell/SearchDialog';
 import { EnvBanner } from './EnvBanner';
 import { layout } from '../theme/tokens';
 
@@ -18,6 +18,24 @@ import { layout } from '../theme/tokens';
 export function Layout({ children }: { children: ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const openSearch = () => setSearchOpen(true);
+
+  // ⌘K / Ctrl+K from anywhere: the window is the app's only search, so it gets the shortcut a
+  // reader reaches for before they look for a magnifier.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const typing = (e.target as HTMLElement | null)?.closest('input, textarea, select, [contenteditable="true"]');
+      const chord = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k';
+      // "/" is the shortcut that survives the browser: Chrome takes Ctrl+K for its own address bar,
+      // so the chord is a bonus where it works and the slash is the one to rely on.
+      const slash = e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey && !typing;
+      if (chord || slash) {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   // Only the path, not the query: the screener's filters live in the query string and moving a
   // filter must not remount the page (and replay the entrance) under the reader.
   const { pathname } = useLocation();
@@ -85,7 +103,7 @@ export function Layout({ children }: { children: ReactNode }) {
       </Box>
 
       <BottomNav onOpenSearch={openSearch} />
-      <SearchSheet open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </Box>
   );
 }
