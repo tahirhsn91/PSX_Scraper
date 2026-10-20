@@ -2,7 +2,6 @@ import { AppBar, Box, Button, Container, IconButton, Stack, Toolbar, Typography,
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { GlobalSearch } from './GlobalSearch';
 import { ThemeMenu } from './ThemeMenu';
 import { layout } from '../../theme/tokens';
 import { isDev } from '../../lib/env';
@@ -160,35 +159,38 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
             })}
           </Box>
 
-          {/* The field is its own surface on top of the dark bar. Left to inherit, an outlined input
-              would draw a near-black border on a near-black bar. */}
-          <Box
+          {/* One search control at every width. The inline field that used to live here was squeezed
+              by the nav pills to 87px on a 1280 screen, so the magnifier, the placeholder and the
+              98px suggestion popup were all clipped to a sliver. A button that opens the search
+              window gives the bar a label it can actually show, and the window room to breathe. */}
+          <Button
+            onClick={onOpenSearch}
+            startIcon={<SearchRoundedIcon />}
+            aria-label="Search stocks"
             sx={{
-              flexGrow: 1,
-              flexShrink: 1,
-              minWidth: 0,
-              // The inline field needs room the md-sized bar does not have once eight nav pills are
-              // showing, so below lg the magnifier opens the full-screen search sheet instead.
-              display: { xs: 'none', lg: 'block' },
-              maxWidth: 420,
+              display: { xs: 'none', lg: 'inline-flex' },
               ml: 'auto',
               mr: 1,
-              '& .MuiOutlinedInput-root': {
-                bgcolor: 'nav.field',
-                '& fieldset': { borderColor: 'nav.fieldBorder' },
-                '&:hover fieldset': { borderColor: 'nav.fieldBorder' },
-                '&.Mui-focused fieldset': { borderColor: 'nav.active' },
-              },
-              '& .MuiInputBase-input': { color: 'nav.fieldText' },
-              // No label rule: the field carries no visible label, because an MUI label here straddles
-              // the field's fill and the bar behind it — two backgrounds, and no single colour passes
-              // against both. The icon and the placeholder are inside the field, on its fill alone.
-              '& .MuiInputBase-input::placeholder': { color: 'nav.fieldLabel', opacity: 1 },
-              '& .MuiInputAdornment-root .MuiSvgIcon-root': { color: 'nav.fieldLabel' },
+              flexShrink: 0,
+              minHeight: 38,
+              // 1.25 keeps the trigger no wider than the field it replaced (86px vs 96px): the nav
+              // pills are already over their box at 1280, and search must not take the space.
+              px: 1.25,
+              borderRadius: 999,
+              textTransform: 'none',
+              fontSize: '0.8125rem',
+              fontWeight: 500,
+              color: 'nav.fieldLabel',
+              bgcolor: 'nav.field',
+              border: 1,
+              borderColor: 'nav.fieldBorder',
+              '&:hover': { bgcolor: 'nav.hover', color: 'nav.text', borderColor: 'nav.active' },
+              '& .MuiButton-startIcon': { color: 'nav.fieldLabel', mr: 0.75 },
+              '&:hover .MuiButton-startIcon': { color: 'nav.text' },
             }}
           >
-            <GlobalSearch />
-          </Box>
+            Search
+          </Button>
 
           <Stack direction="row" spacing={0.5} sx={{ ml: { xs: 'auto', md: 0 }, alignItems: 'center', flexShrink: 0 }}>
             <IconButton
