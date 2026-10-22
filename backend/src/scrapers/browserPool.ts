@@ -25,9 +25,13 @@ class BrowserPool {
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
-        // Reduces Chromium's process/memory footprint — helps on very
-        // constrained instances, at some cost to crash isolation.
-        '--single-process',
+        // `--single-process` used to sit here to trim Chromium's footprint on a
+        // constrained instance, but the installed Chromium 155 no longer launches with
+        // it: every attempt failed with "Failed to launch the browser process", and each
+        // failure left a chrome_crashpad zombie behind — thousands of them, until the
+        // container hit its PID limit and could not fork at all. `--no-zygote` keeps most
+        // of the footprint reduction and still launches cleanly on Chromium 155. Remove
+        // this flag, not that one; re-adding `--single-process` reintroduces the outage.
         '--no-zygote',
         // Chrome's crash-reporter subprocess (crashpad_handler) needs a
         // writable $HOME to create its crash database. Running as a non-root
