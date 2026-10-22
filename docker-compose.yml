@@ -128,6 +128,12 @@ services:
       context: .
       dockerfile: backend/Dockerfile.worker
     restart: unless-stopped
+    # Run tini as PID 1 so orphaned Chromium children are reaped. Node stays PID 1
+    # otherwise, and it does not reap processes it did not spawn — a failed Chromium
+    # launch leaves a `chrome_crashpad` zombie per attempt, and they pile up until the
+    # container hits its PID limit and every fork fails. This is the second half of the
+    # fix; the first is dropping `--single-process` from the browser pool.
+    init: true
     # Largest cap: this process owns the Puppeteer browser pool, so Chromium's memory
     # lives inside this limit alongside the Node heap.
     mem_limit: 2g
