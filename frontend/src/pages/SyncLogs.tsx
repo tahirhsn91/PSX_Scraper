@@ -39,7 +39,19 @@ function ErrorCell({ message }: { message: string | null }) {
   const firstLine = message.split('\n')[0]!.trim();
   return (
     <Tooltip title={message} enterDelay={400}>
-      <Typography variant="body2" noWrap sx={{ maxWidth: { xs: 220, md: 320 } }}>
+      {/* One clipped line is enough in the desktop table, where the tooltip is a hover away. On a
+          phone there is no hover and 220px hides most of the reason, so the card lets it wrap. */}
+      <Typography
+        variant="body2"
+        sx={{
+          maxWidth: { xs: '100%', md: 320 },
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: { xs: 3, md: 1 },
+          overflow: 'hidden',
+          overflowWrap: 'anywhere',
+        }}
+      >
         {firstLine}
       </Typography>
     </Tooltip>

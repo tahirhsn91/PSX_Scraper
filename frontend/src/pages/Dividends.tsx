@@ -28,6 +28,7 @@ const ledgerColumns: Column<DividendLedgerRow>[] = [
     render: (r) => r.companyName ?? DASH,
     noWrap: true,
     hideBelow: 'md',
+    mobileRole: 'subtitle',
   },
   {
     key: 'amount',
@@ -92,6 +93,7 @@ const yieldColumns: Column<YieldRow>[] = [
     render: (r) => r.companyName ?? DASH,
     noWrap: true,
     hideBelow: 'md',
+    mobileRole: 'subtitle',
   },
   { key: 'sector', header: 'Sector', render: (r) => r.sector ?? DASH, noWrap: true, hideBelow: 'md' },
   {

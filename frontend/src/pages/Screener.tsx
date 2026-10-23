@@ -289,6 +289,7 @@ export function Screener() {
       render: (r) => r.companyName ?? DASH,
       noWrap: true,
       hideBelow: 'md',
+      mobileRole: 'subtitle',
     },
     {
       key: 'sector',
