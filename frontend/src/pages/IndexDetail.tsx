@@ -37,14 +37,16 @@ const CONSTITUENT_COLUMNS: Column<StockListItem>[] = [
     header: 'Company',
     render: (s) => s.companyName ?? DASH,
     noWrap: true,
-    mobileRole: 'meta',
+    // The card's second line belongs to the name; as a labelled meta it read
+    // "FFC Company Fauji Fertilizer Company Limited" in one run-on row.
+    mobileRole: 'subtitle',
   },
   {
     key: 'price',
     header: 'Price',
     align: 'right',
     render: (s) => (s.currentPrice == null ? DASH : formatNumber(s.currentPrice)),
-    mobileRole: 'meta',
+    mobileRole: 'value',
   },
   {
     key: 'change',

@@ -48,6 +48,7 @@ export function Movers() {
         header: 'Symbol',
         width: 96,
         nowrap: true,
+        mobileRole: 'title',
         render: (r) => (
           <Typography variant="body2" fontWeight={600}>
             {r.symbol}
@@ -58,6 +59,9 @@ export function Movers() {
         key: 'company',
         header: 'Company',
         nowrap: true,
+        // The phone card leads with the symbol and needs the name under it — without a subtitle the
+        // list rendered as a column of bare tickers.
+        mobileRole: 'subtitle',
         render: (r) => (
           <Typography variant="body2" color="text.secondary" noWrap>
             {r.companyName ?? DASH}
@@ -69,6 +73,7 @@ export function Movers() {
         header: 'Price',
         align: 'right',
         width: 96,
+        mobileRole: 'value',
         render: (r) => formatNumber(r.price),
       },
       {
@@ -76,6 +81,7 @@ export function Movers() {
         header: 'Day',
         align: 'right',
         width: 96,
+        mobileRole: 'meta',
         render: (r) => <ChangePill value={r.changePercent} variant="soft" />,
       },
       {
@@ -83,6 +89,7 @@ export function Movers() {
         header: `Return · ${PERIOD_SUFFIX[period]}`,
         align: 'right',
         width: 132,
+        mobileRole: 'meta',
         render: (r) => <ChangePill value={r.periodReturnPercent} variant="soft" />,
       },
       {
@@ -90,6 +97,7 @@ export function Movers() {
         header: 'Volume',
         align: 'right',
         width: 104,
+        mobileRole: 'meta',
         render: (r) => formatVolume(r.volume) ?? DASH,
       },
       {

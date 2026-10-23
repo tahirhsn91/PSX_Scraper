@@ -18,6 +18,7 @@ const COLUMNS: Column<SectorConstituent>[] = [
     render: (r) => r.companyName ?? DASH,
     noWrap: true,
     hideBelow: 'md',
+    mobileRole: 'subtitle',
   },
   { key: 'price', header: 'Price', align: 'right', render: (r) => formatNumber(r.currentPrice), mobileRole: 'value' },
   {

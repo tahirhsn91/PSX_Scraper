@@ -717,6 +717,8 @@ export function Dashboard() {
            * the card list, so the table carries a floor and its container takes the scroll. */
           cardsBelow="never"
           minTableWidth={1180}
+          /* The symbol stays pinned while the phone swipes right to Price and Change. */
+          stickyFirstColumn
           /* Rationed widths: nine columns carry a share and Company takes the rest, so one long
            * name clips instead of wrapping and setting the height of every row. */
           fixed

@@ -124,6 +124,14 @@ export interface DataTableProps<T> {
    */
   minTableWidth?: number;
   /**
+   * Keeps the first column pinned while the table scrolls sideways on a phone.
+   *
+   * `cardsBelow="never"` is a deliberate choice on the dashboard — the phone gets the same rows as
+   * the desktop — but without a pinned symbol a reader who swipes right to reach Price no longer
+   * knows which row they are reading. Pinned on xs only; desktop is unchanged.
+   */
+  stickyFirstColumn?: boolean;
+  /**
    * Changes whenever the rows on screen represent a different question — a new sort, a new page,
    * the other index's member list. The body then fades and lifts 4px into place (160ms) instead
    * of swapping rows under the reader with no transition at all.
@@ -165,6 +173,7 @@ function DataTableInner<T>({
   cardsBelow = 'md',
   fixed = false,
   minTableWidth,
+  stickyFirstColumn = false,
   transitionKey,
 }: DataTableProps<T>) {
   const theme = useTheme();
@@ -180,10 +189,21 @@ function DataTableInner<T>({
   };
 
   /** Columns hidden below a breakpoint stop taking part in the layout at that width. */
-  const cellSx = (c: Column<T>) =>
-    c.hideBelow
+  const cellSx = (c: Column<T>, index: number) => ({
+    ...(c.hideBelow
       ? { display: { xs: 'none', sm: c.hideBelow === 'sm' ? 'table-cell' : 'none', md: 'table-cell' } }
-      : undefined;
+      : {}),
+    ...(stickyFirstColumn && index === 0
+      ? {
+          position: { xs: 'sticky', md: 'static' },
+          left: 0,
+          zIndex: { xs: 2, md: 'auto' },
+          backgroundColor: 'background.paper',
+          // A hairline shadow is the only cue that the table continues to the right.
+          boxShadow: { xs: '6px 0 8px -8px rgba(0,0,0,0.45)', md: 'none' },
+        }
+      : {}),
+  });
 
   /**
    * The header row, shared by the loading and the loaded states — so a sort the reader just clicked
@@ -193,7 +213,7 @@ function DataTableInner<T>({
   const headRow = () => (
     <TableHead>
       <TableRow>
-        {columns.map((c) => {
+        {columns.map((c, index) => {
           const sorted = Boolean(sort && c.sortKey && sort.key === c.sortKey);
           const canSort = Boolean(c.sortKey && onSortChange);
           return (
@@ -202,7 +222,7 @@ function DataTableInner<T>({
               align={c.align}
               width={c.width}
               aria-sort={sorted ? (sort?.direction === 'asc' ? 'ascending' : 'descending') : undefined}
-              sx={cellSx(c)}
+              sx={{ ...cellSx(c, index), ...(stickyFirstColumn && index === 0 ? { zIndex: { xs: 3, md: 'auto' } } : {}) }}
             >
               {canSort ? (
                 <TableSortLabel
@@ -343,9 +363,7 @@ function DataTableInner<T>({
                       key={c.key}
                       align={c.align}
                       sx={{
-                        ...(c.hideBelow
-                          ? { display: { xs: 'none', sm: c.hideBelow === 'sm' ? 'table-cell' : 'none', md: 'table-cell' } }
-                          : {}),
+                        ...cellSx(c, index),
                         ...(c.noWrap ? { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } : {}),
                       }}
                     >
@@ -424,16 +442,54 @@ function MobileCards<T>({
         const inner = (
           <Stack direction="row" spacing={1.5} alignItems="flex-start" justifyContent="space-between">
             <Box sx={{ minWidth: 0 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600 }} noWrap>
+              {/* `component="div"`, not the default <h6>: most title columns render their own
+                  Typography, and an <h6> wrapping a <p> is invalid nesting that browsers repair in
+                  unpredictable ways. The child is flattened back to the card title's own type. */}
+              <Typography
+                variant="subtitle1"
+                component="div"
+                sx={{
+                  fontWeight: 600,
+                  '& > *': { m: 0, fontSize: 'inherit', fontWeight: 'inherit', lineHeight: 'inherit' },
+                }}
+              >
                 {titleCol.render(row)}
               </Typography>
               {subtitleCol && (
-                <Typography variant="body2" color="text.secondary" sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                // Two lines, not one clipped line: a company name cut mid-word ("Pervez Ahmed
+                // Consultancy Serv…") reads as missing data. Clamped so a pathological name cannot
+                // push the figures off the card.
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    // Column renderers are written for table cells and several return their own
+                    // <Typography noWrap>. As a block child that nowrap defeats the clamp, so the
+                    // name was cut after one line; inlined, the text belongs to the clamp again and
+                    // ellipsises on the second line.
+                    '& > *': {
+                      display: 'inline',
+                      m: 0,
+                      // `noWrap` ships its own class, so the inherited override needs the flag.
+                      whiteSpace: 'normal !important',
+                      overflow: 'visible',
+                      textOverflow: 'clip',
+                      fontSize: 'inherit',
+                      fontWeight: 'inherit',
+                      color: 'inherit',
+                      lineHeight: 'inherit',
+                    },
+                  }}
+                >
                   {subtitleCol.render(row)}
                 </Typography>
               )}
               {metaCols.length > 0 && (
-                <Stack direction="row" spacing={1.5} useFlexGap sx={{ mt: 0.5, flexWrap: 'wrap' }}>
+                <Stack direction="row" sx={{ mt: 0.5, flexWrap: 'wrap', columnGap: 1.5, rowGap: 0.5 }}>
                   {metaCols.map((c) => (
                     <Stack key={c.key} direction="row" spacing={0.5} alignItems="center">
                       <Typography variant="caption" color="text.secondary">

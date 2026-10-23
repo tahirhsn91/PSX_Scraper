@@ -250,7 +250,14 @@ export function Compare() {
           ) : null}
           {comparison && comparison.series.length >= 2 ? (
             <TableContainer sx={{ mt: 2 }}>
-              <Table size="small" aria-label="Normalised comparison statistics">
+              <Table
+                size="small"
+                aria-label="Normalised comparison statistics"
+                /* Four right-aligned figures in a 332px card: the default 16px cell padding pushed
+                   the drawdown column off the edge, so the padding tightens and the two long
+                   headers are allowed to wrap instead of setting the table's width. */
+                sx={{ '& th, & td': { px: { xs: 0.75, sm: 2 } }, '& th': { whiteSpace: 'normal' } }}
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell>Symbol</TableCell>
