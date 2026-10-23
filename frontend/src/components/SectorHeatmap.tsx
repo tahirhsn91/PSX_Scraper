@@ -113,6 +113,9 @@ export function SectorHeatmap({ sectors }: { sectors: SectorSummary[] }) {
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
+                // "PHARMACEUTICALS" is one word: without a break opportunity it ran past the tile
+                // edge instead of using the second line.
+                overflowWrap: 'anywhere',
                 minHeight: '2.6em',
               }}
             >
