@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../database/prisma';
+import { shariahMembers } from './stock.repository';
 
 /** One stock in a movers list — just enough for a compact row. */
 export interface MoverRow {
@@ -72,6 +73,8 @@ export interface SectorConstituent {
   changePercent: number | null;
   marketCap: number | null;
   volume: number | null;
+  /** Member of the PSX-KMI All Share (Shariah) index — published membership, never inferred. */
+  shariahCompliant: boolean;
 }
 
 /** Market-wide breadth over the newest priced row of every tracked symbol. */
@@ -349,7 +352,12 @@ export class MarketRepository {
       changePercent: r.change_percent != null ? Number(r.change_percent) : null,
       marketCap: r.market_cap != null ? Number(r.market_cap) : null,
       volume: r.volume != null ? Number(r.volume) : null,
+      // Filled below, once, for the whole sector.
+      shariahCompliant: false,
     }));
+
+    const members = await shariahMembers(constituents.map((c) => c.symbol));
+    for (const c of constituents) c.shariahCompliant = members.has(c.symbol);
 
     return {
       sector,

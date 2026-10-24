@@ -5,6 +5,7 @@ import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { StatTile } from '../components/ui/StatTile';
 import { DataTable, type Column } from '../components/ui/DataTable';
+import { ShariahMark } from '../components/ui/ShariahMark';
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataStatus } from '../components/ui/DataStatus';
 import { DASH, formatMarketCap, formatNumber } from '../lib/format';
@@ -196,6 +197,7 @@ export function SectorDetailPage() {
             flush
           >
             <DataTable
+              rowBadge={(r) => (r.shariahCompliant ? <ShariahMark /> : null)}
               columns={COLUMNS}
               rows={data?.constituents ?? []}
               rowKey={(r) => r.symbol}

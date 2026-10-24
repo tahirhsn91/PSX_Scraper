@@ -132,6 +132,12 @@ export interface DataTableProps<T> {
    */
   stickyFirstColumn?: boolean;
   /**
+   * Optional mark rendered beside the first column — the Shariah badge sits to the right of every
+   * ticker. A render prop rather than a boolean so DataTable stays generic: the page decides what
+   * the mark is, the table only decides where it goes.
+   */
+  rowBadge?: (row: T) => ReactNode;
+  /**
    * Changes whenever the rows on screen represent a different question — a new sort, a new page,
    * the other index's member list. The body then fades and lifts 4px into place (160ms) instead
    * of swapping rows under the reader with no transition at all.
@@ -174,6 +180,7 @@ function DataTableInner<T>({
   fixed = false,
   minTableWidth,
   stickyFirstColumn = false,
+  rowBadge,
   transitionKey,
 }: DataTableProps<T>) {
   const theme = useTheme();
@@ -307,7 +314,7 @@ function DataTableInner<T>({
         }}
         aria-busy={stale || undefined}
       >
-        <MobileCards columns={columns} rows={rows} rowKey={rowKey} rowHref={rowHref} />
+        <MobileCards columns={columns} rows={rows} rowKey={rowKey} rowHref={rowHref} rowBadge={rowBadge} />
       </Box>
     ) : (
       <TableContainer sx={{ maxHeight }}>
@@ -367,10 +374,17 @@ function DataTableInner<T>({
                         ...(c.noWrap ? { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } : {}),
                       }}
                     >
-                      {index === 0 && href ? (
-                        <MuiLink component={RouterLink} to={href} sx={{ fontWeight: 600, color: 'inherit' }}>
-                          {c.render(row)}
-                        </MuiLink>
+                      {index === 0 ? (
+                        <Stack direction="row" spacing={0.75} alignItems="center" sx={{ minWidth: 0 }}>
+                          {href ? (
+                            <MuiLink component={RouterLink} to={href} sx={{ fontWeight: 600, color: 'inherit' }}>
+                              {c.render(row)}
+                            </MuiLink>
+                          ) : (
+                            c.render(row)
+                          )}
+                          {rowBadge?.(row)}
+                        </Stack>
                       ) : (
                         c.render(row)
                       )}
@@ -424,11 +438,13 @@ function MobileCards<T>({
   rows,
   rowKey,
   rowHref,
+  rowBadge,
 }: {
   columns: Column<T>[];
   rows: T[];
   rowKey: (row: T) => string;
   rowHref?: (row: T) => string;
+  rowBadge?: (row: T) => ReactNode;
 }) {
   const titleCol = columns.find((c) => c.mobileRole === 'title') ?? columns[0];
   const subtitleCol = columns.find((c) => c.mobileRole === 'subtitle');
@@ -450,10 +466,16 @@ function MobileCards<T>({
                 component="div"
                 sx={{
                   fontWeight: 600,
+                  // Flex, because a title column renders its own block-level <p>: with plain inline
+                  // flow the badge dropped to a line of its own under the ticker.
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.75,
                   '& > *': { m: 0, fontSize: 'inherit', fontWeight: 'inherit', lineHeight: 'inherit' },
                 }}
               >
                 {titleCol.render(row)}
+                {rowBadge?.(row)}
               </Typography>
               {subtitleCol && (
                 // Two lines, not one clipped line: a company name cut mid-word ("Pervez Ahmed

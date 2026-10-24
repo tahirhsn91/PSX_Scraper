@@ -1,4 +1,5 @@
 import { moversRepository, type MoverStatRow } from '../repositories/movers.repository';
+import { shariahMembers } from '../repositories/stock.repository';
 
 /**
  * Ranked movers, with the period each ranking is measured over.
@@ -36,6 +37,8 @@ export interface MoverRow {
   relativeVolume: number | null;
   /** Why this row is on this list, in words a reader can check against the columns. */
   reason: string;
+  /** Member of the PSX-KMI All Share (Shariah) index — published membership, never inferred. */
+  shariahCompliant: boolean;
 }
 
 export interface MoversPayload {
@@ -134,6 +137,8 @@ export function rankMovers(
       avgVolume20: s.avgVolume20 === null ? null : Math.round(s.avgVolume20),
       relativeVolume,
       reason: '',
+      // Filled by `list()` below, where the membership lookup can batch every symbol on the page.
+      shariahCompliant: false,
     };
   });
 
@@ -164,6 +169,11 @@ export const moversService = {
   async list(type: MoverType, period: MoverPeriod, limit: number): Promise<MoversPayload> {
     const stats = await moversRepository.stats();
     const { rows, excludedIlliquid } = rankMovers(stats, type, period, limit);
+
+    // One lookup for the page rather than a join in the ranking's SQL: the badge is presentation,
+    // and the ranking must keep working even if membership has not synced yet.
+    const members = await shariahMembers(rows.map((r) => r.symbol));
+    for (const row of rows) row.shariahCompliant = members.has(row.symbol);
 
     return {
       type,

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
+import { ShariahMark } from '../components/ui/ShariahMark';
 import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { StatTile } from '../components/ui/StatTile';
@@ -341,6 +342,7 @@ export function IndexDetail() {
             </Box>
           ) : (
             <DataTable
+              rowBadge={(r) => (r.shariahCompliant ? <ShariahMark /> : null)}
               columns={CONSTITUENT_COLUMNS}
               rows={constituents}
               ariaLabel={`${data.symbol} constituents`}
