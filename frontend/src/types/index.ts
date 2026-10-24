@@ -95,6 +95,8 @@ export interface StockListItem {
   sector: string | null;
   /** Company logo URL for the SYMBOL column icon; null when no source published one (letter avatar then). */
   logoUrl: string | null;
+  /** Member of the PSX-KMI All Share (Shariah) index — published membership, never inferred. */
+  shariahCompliant?: boolean;
   currentPrice: number | null;
   /**
    * Absolute change for the session, in the exchange's own units. Optional: the API sets it only
@@ -198,6 +200,8 @@ export interface SearchResult {
   lastSyncedAt: string | null;
   /** Served by the API but previously untyped and unrendered. */
   sector?: string | null;
+  /** Member of the PSX-KMI All Share (Shariah) index — published membership, never inferred. */
+  shariahCompliant?: boolean;
   lastTradeDate: string | null;
 }
 
@@ -538,6 +542,8 @@ export interface SectorConstituent {
   changePercent: number | null;
   marketCap: number | null;
   volume: number | null;
+  /** Member of the PSX-KMI All Share (Shariah) index — published membership, never inferred. */
+  shariahCompliant?: boolean;
 }
 
 /** One sector's drill-down: aggregate, members, and where the classification came from. */
@@ -638,6 +644,8 @@ export interface Mover {
   avgVolume20: number | null;
   relativeVolume: number | null;
   reason: string;
+  /** Member of the PSX-KMI All Share (Shariah) index — published membership, never inferred. */
+  shariahCompliant?: boolean;
 }
 
 export interface MoversPayload {

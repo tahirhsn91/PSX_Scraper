@@ -20,6 +20,7 @@ import { useSearch, useStocks } from '../../api/hooks';
 import { track } from '../../lib/analytics';
 import { DASH, GLYPH, formatNumber, formatPercent, trendOf } from '../../lib/format';
 import type { SearchResult, StockListItem } from '../../types';
+import { ShariahMark } from '../ui/ShariahMark';
 
 /** How many KSE-100 members the empty state offers — the list scrolls past the fold. */
 const SUGGESTIONS = 12;
@@ -339,7 +340,12 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
                         >
                           {i + 1}
                         </Typography>
-                        <Typography sx={{ fontWeight: 700, fontSize: '0.875rem', width: 64 }}>{s.symbol}</Typography>
+                        <Typography
+                            sx={{ fontWeight: 700, fontSize: '0.875rem', width: 64, display: 'flex', alignItems: 'center', gap: 0.5 }}
+                          >
+                            {s.symbol}
+                            {s.shariahCompliant && <ShariahMark size={12} />}
+                          </Typography>
                         <Typography
                           variant="body2"
                           noWrap
@@ -431,7 +437,12 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
                       bgcolor: isActive ? 'action.hover' : 'transparent',
                     }}
                   >
-                    <Typography sx={{ fontWeight: 700, fontSize: '0.875rem', width: 72 }}>{r.symbol}</Typography>
+                    <Typography
+                        sx={{ fontWeight: 700, fontSize: '0.875rem', width: 72, display: 'flex', alignItems: 'center', gap: 0.5 }}
+                      >
+                        {r.symbol}
+                        {r.shariahCompliant && <ShariahMark size={12} />}
+                      </Typography>
                     <Box sx={{ flex: 1, minWidth: 0 }}>
                       <Typography variant="body2" noWrap title={r.companyName ?? undefined}>
                         {r.companyName ?? DASH}

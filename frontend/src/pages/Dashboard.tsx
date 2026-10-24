@@ -34,6 +34,7 @@ import { ChangePill } from "../components/ui/ChangePill";
 import { LiveNumber } from "../components/ui/LiveNumber";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { DataTable, type Column, type SortState } from "../components/ui/DataTable";
+import { ShariahMark } from '../components/ui/ShariahMark';
 import { useToast } from "../components/ui/ToastProvider";
 import { DASH, formatCount, formatMarketCap, formatNumber, formatRupees, formatSigned } from "../lib/format";
 import { isDev } from "../lib/env";
@@ -710,6 +711,7 @@ export function Dashboard() {
           <DataStatus dataset="quotes" />
         </Box>
         <DataTable
+          rowBadge={(r) => (r.shariahCompliant ? <ShariahMark /> : null)}
           columns={COLUMNS}
           rows={tableRows}
           ariaLabel="Tracked securities"

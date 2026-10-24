@@ -32,6 +32,7 @@ import { CompanyDescriptionPanel } from '../components/CompanyDescriptionPanel';
 import { IncomeStatementPanel } from '../components/IncomeStatementPanel';
 import { QuickJumpNav, type QuickJumpSection } from '../components/QuickJumpNav';
 import { ShariahBadge } from '../components/ShariahBadge';
+import { ShariahMark } from '../components/ui/ShariahMark';
 import { ChangePill } from '../components/ui/ChangePill';
 import { DataTable, type Column } from '../components/ui/DataTable';
 import { PageHeader } from '../components/ui/PageHeader';
@@ -416,7 +417,15 @@ export function StockDetails() {
   return (
     <Box>
       <PageHeader
-        title={data.symbol}
+        title={
+          // The mark rides with the ticker itself, so the page answers "is this Shariah compliant?"
+          // where the reader is already looking. `indices` is the live membership list the API
+          // returns for this stock — no extra request, and no inference from the sector.
+          <Stack direction="row" alignItems="center" component="span" sx={{ gap: 1, display: 'flex' }}>
+            {data.symbol}
+            {data.indices.includes('KMIALLSHR') && <ShariahMark size={22} />}
+          </Stack>
+        }
         subtitle={
           usableSector(data.sector) ? (
             <>

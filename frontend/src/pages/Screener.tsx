@@ -25,6 +25,7 @@ import { PageHeader } from '../components/ui/PageHeader';
 import { ShariahToggle } from '../components/ShariahToggle';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column, type SortState } from '../components/ui/DataTable';
+import { ShariahMark } from '../components/ui/ShariahMark';
 import { ChangePill } from '../components/ui/ChangePill';
 import { formatMarketCap, formatNumber, DASH } from '../lib/format';
 import type { StockFilters, StockListItem, StockSortField, SortOrder } from '../types';
@@ -668,6 +669,7 @@ export function Screener() {
           </Typography>
         ) : null}
         <DataTable
+          rowBadge={(r) => (r.shariahCompliant ? <ShariahMark /> : null)}
           columns={columns}
           rows={data?.items ?? []}
           rowKey={(r) => r.symbol}

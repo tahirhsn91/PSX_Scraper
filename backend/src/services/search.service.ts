@@ -30,8 +30,8 @@ export const searchService = {
     if (term.length < 1) return { query: term, results: [] };
     // The payload-shape version in the key means an entry cached by an older build
     // (which carried no `sector`) can't be served for SEARCH_CACHE_TTL seconds after
-    // the deploy that added it.
-    const key = `search:v2:${term.toLowerCase()}:${limit}`;
+    // the deploy that added it. v3 adds `shariahCompliant`.
+    const key = `search:v3:${term.toLowerCase()}:${limit}`;
     const cached = await cacheGet<SearchResponse>(key);
     if (cached) return cached;
 
@@ -45,6 +45,7 @@ export const searchService = {
         // placeholder: clients key their sector pickers off this value.
         sector: r.sector,
         currentPrice: r.currentPrice,
+        shariahCompliant: r.shariahCompliant,
         lastSyncedAt: r.lastSyncedAt,
         lastTradeDate: r.lastTradeDate,
       })),

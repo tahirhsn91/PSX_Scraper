@@ -4,6 +4,7 @@ import { PageHeader } from '../components/ui/PageHeader';
 import { DataStatus } from '../components/ui/DataStatus';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column } from '../components/ui/DataTable';
+import { ShariahMark } from '../components/ui/ShariahMark';
 import { ChangePill } from '../components/ui/ChangePill';
 import { useMovers } from '../api/hooks';
 import { DASH, formatCount, formatNumber, formatVolume } from '../lib/format';
@@ -182,6 +183,7 @@ export function Movers() {
 
       <SectionCard flush>
         <DataTable
+          rowBadge={(r) => (r.shariahCompliant ? <ShariahMark /> : null)}
           columns={columns}
           rows={data?.rows ?? []}
           rowKey={(r) => r.symbol}

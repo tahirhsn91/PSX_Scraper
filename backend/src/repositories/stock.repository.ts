@@ -8,6 +8,14 @@ export interface StockListItem {
   sector: string | null;
   /** Company logo URL, or null when no source published one (the frontend shows a letter avatar). */
   logoUrl: string | null;
+  /**
+   * True when the stock is a member of the PSX-KMI All Share (Shariah) index.
+   *
+   * Published index membership, never an inference from sector or name: the badge this drives says
+   * "this stock is on the exchange's Shariah list", which is a fact we can point at, not a fatwa we
+   * issued. False for a stock in no index and for one whose membership we have not synced.
+   */
+  shariahCompliant: boolean;
   currentPrice: number | null;
   /**
    * Absolute change for the session, in the exchange's own units. Optional, and only ever set
@@ -410,6 +418,33 @@ type RawStockListRow = {
   return_sessions?: number | null;
 };
 
+/**
+ * The Shariah (KMI All Share) members among these symbols.
+ *
+ * One indexed query per page of rows, not a join on every list query: membership lives in
+ * `index_constituents`, and the list/search builders are several hand-written SQL statements that
+ * would each need the same EXISTS clause. `Set` because the caller asks per row.
+ */
+export async function shariahMembers(symbols: string[]): Promise<Set<string>> {
+  const unique = [...new Set(symbols.filter(Boolean))];
+  if (unique.length === 0) return new Set();
+  const rows = await prisma.$queryRaw<Array<{ symbol: string }>>`
+    SELECT DISTINCT s.symbol
+    FROM index_constituents ic
+    JOIN market_indices mi ON mi.id = ic.index_id
+    JOIN stocks s ON s.id = ic.stock_id
+    WHERE mi.symbol = 'KMIALLSHR' AND s.symbol = ANY(${unique}::text[])
+  `;
+  return new Set(rows.map((r) => r.symbol));
+}
+
+/** Adds `shariahCompliant` to a page of rows without changing their order or shape otherwise. */
+async function withShariah<T extends { symbol: string }>(items: T[]): Promise<Array<T & { shariahCompliant: boolean }>> {
+  if (items.length === 0) return [];
+  const members = await shariahMembers(items.map((i) => i.symbol));
+  return items.map((item) => ({ ...item, shariahCompliant: members.has(item.symbol) }));
+}
+
 /** One mapping for both list and search — they read the same columns and must agree. */
 function toListItem(r: RawStockListRow): StockListItem {
   const item: StockListItem = {
@@ -418,6 +453,8 @@ function toListItem(r: RawStockListRow): StockListItem {
     companyName: r.company_name,
     sector: r.sector,
     logoUrl: r.logo_url,
+    // Default; `withShariah` sets the real answer for a page of rows.
+    shariahCompliant: false,
     currentPrice: r.current_price ? Number(r.current_price) : null,
     changePercent: r.change_percent ? Number(r.change_percent) : null,
     // `!= null`, not truthiness: 0 shares traded is a reading, not an absent value.
@@ -773,7 +810,7 @@ export class StockRepository {
         ${where}
       `),
     ]);
-    return { items: rows.map(toListItem), total: totals[0]?.total ?? 0 };
+    return { items: await withShariah(rows.map(toListItem)), total: totals[0]?.total ?? 0 };
   }
 
   create(symbol: string): Promise<Stock> {
@@ -849,7 +886,7 @@ export class StockRepository {
                         similarity(coalesce(s.company_name,''), ${term})) DESC
       LIMIT ${limit}
     `);
-    return rows.map(toListItem);
+    return withShariah(rows.map(toListItem));
   }
 }
 

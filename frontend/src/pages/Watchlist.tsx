@@ -5,6 +5,7 @@ import { useWatchlist } from '../lib/watchlist';
 import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { DataTable, type Column } from '../components/ui/DataTable';
+import { ShariahMark } from '../components/ui/ShariahMark';
 import { WatchButton } from '../components/WatchButton';
 import { ChangePill } from '../components/ui/ChangePill';
 import { StatePanel } from '../components/ui/StatePanel';
@@ -103,6 +104,7 @@ export function Watchlist() {
           />
         ) : (
           <DataTable
+            rowBadge={(r) => (r.shariahCompliant ? <ShariahMark /> : null)}
             columns={columns}
             rows={data?.items ?? []}
             rowKey={(r) => r.symbol}
