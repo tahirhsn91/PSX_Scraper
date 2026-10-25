@@ -196,7 +196,9 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
       open={open}
       onClose={onClose}
       maxWidth="sm"
-      aria-label="Search stocks"
+      // Name the dialog itself, not just the scrim: the label used to land on the Modal root
+      // (role=presentation), leaving the role="dialog" paper unnamed (axe: aria-dialog-name).
+      aria-labelledby="search-dialog-title"
       // A light scrim and a 3px blur: enough to push the board behind the window out of focus, not
       // enough to hide it. The page is still there — this is a lookup, not a mode.
       BackdropProps={{
@@ -223,6 +225,12 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
         },
       }}
     >
+      <Typography
+        id="search-dialog-title"
+        sx={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}
+      >
+        Search stocks
+      </Typography>
       <Stack direction="row" alignItems="center" spacing={1.25} sx={{ px: 2, py: 1.25 }}>
         <SearchRoundedIcon sx={{ color: 'text.secondary' }} />
         <InputBase
@@ -245,6 +253,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
       <Box sx={{ position: 'relative' }}>
         <Box
           id="search-dialog-list"
+          tabIndex={0}
           role="listbox"
           aria-label={enabled ? 'Search results' : 'Top weight in KSE-100'}
           sx={{

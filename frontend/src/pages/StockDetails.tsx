@@ -233,7 +233,7 @@ export function StockDetails() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const qc = useQueryClient();
-  const { data, isLoading, isError } = useStock(symbol);
+  const { data, isLoading, isError, error, refetch, isFetching } = useStock(symbol);
   // Editorial, below the fold, and absent for most symbols — so it is fetched on its own and the
   // page never waits on it. Must stay above the early returns below: the hook order has to be
   // stable across the loading, error and loaded renders.
@@ -355,18 +355,32 @@ export function StockDetails() {
   }
 
   if (isError || !data) {
+    // Two different failures used to share one message ("may not be tracked yet"), so a dropped
+    // connection blamed the symbol and the only action was to go back. Separate them, and give the
+    // network case a retry that re-runs the query.
+    const status = (error as { response?: { status?: number } } | null)?.response?.status;
+    const notFound = status === 404;
     return (
       <StatePanel
         kind="error"
-        title={`Could not load ${symbol}`}
-        description="It may not be tracked yet, or the symbol is not on the exchange."
+        title={notFound ? `No tracked record for ${symbol}` : `Could not reach the data service`}
+        description={
+          notFound
+            ? `${symbol} is not in the tracked universe. It may have been delisted, renamed, or never captured — the exchange list is the source of truth.`
+            : `The request for ${symbol} did not complete${status ? ` (HTTP ${status})` : ' (network error)'}. The data itself may be fine; try again before assuming the symbol is missing.`
+        }
         action={
-          <Stack direction="row" spacing={1}>
-            <Button variant="contained" component={RouterLink} to="/">
-              Back to the market board
-            </Button>
-            <Button component={RouterLink} to="/search">
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            {!notFound && (
+              <Button variant="contained" onClick={() => refetch()} disabled={isFetching}>
+                {isFetching ? 'Retrying…' : 'Retry'}
+              </Button>
+            )}
+            <Button variant={notFound ? 'contained' : 'outlined'} component={RouterLink} to="/search">
               Search symbols
+            </Button>
+            <Button component={RouterLink} to="/">
+              Market board
             </Button>
           </Stack>
         }

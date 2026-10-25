@@ -72,6 +72,9 @@ function CompareChart({
   // Five hues that stay distinguishable in sequence — reusing the up/down palette would paint two
   // symbols the same green and make the lines unreadable exactly where they cross.
   const colours = ['#2E7D32', '#F9A825', '#C62828', '#1565C0', '#6A1B9A'];
+  // Paired with the hues: solid, long dash, short dash, dash-dot, dotted. A reader who cannot tell
+  // green from red can still follow one line across the chart.
+  const DASHES = [undefined, '6 3', '2 2', '8 3 2 3', '1 3'];
   const all = series.flatMap((s) => s.points.map((p) => p.value));
   const min = Math.min(...all);
   const max = Math.max(...all);
@@ -91,6 +94,9 @@ function CompareChart({
             key={s.symbol}
             fill="none"
             stroke={colours[i % colours.length]}
+            // Colour alone cannot separate the lines for a colour-blind reader: each series also
+            // gets its own dash pattern, repeated on the legend swatch below.
+            strokeDasharray={DASHES[i % DASHES.length]}
             strokeWidth={1.4}
             vectorEffect="non-scaling-stroke"
             points={s.points
@@ -102,7 +108,14 @@ function CompareChart({
       <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 1 }}>
         {series.map((s, i) => (
           <Typography key={s.symbol} variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 10, height: 2, bgcolor: colours[i % colours.length], display: 'inline-block' }} />
+            <Box
+              sx={{
+                width: 14,
+                height: 0,
+                display: 'inline-block',
+                borderTop: `2px ${DASHES[i % DASHES.length] ? 'dashed' : 'solid'} ${colours[i % colours.length]}`,
+              }}
+            />
             {s.symbol} {s.returnPct >= 0 ? '+' : ''}
             {s.returnPct.toFixed(1)}%
           </Typography>

@@ -22,8 +22,32 @@ import {
  * correlated sum per index made the endpoint exceed the client's timeout — the sum has to compare
  * `last_trade_date` as a date, which no index can serve, so it degraded to a scan per index.
  */
-async function derivedVolumes(): Promise<Map<string, number>> {
-  const scopes = await indexRepository.constituentVolumeScopes();
+const VOLUME_TTL_MS = 30_000;
+const volumeCache = new Map<string, { at: number; value: Map<string, number> }>();
+
+/**
+ * The memo in front of `computeDerivedVolumes`. The figure changes only when the index sync writes a
+ * new session, so a 30s TTL cannot show a stale number as if it were live — the value is labelled
+ * with the session it belongs to either way. The dashboard asks for all 18 indices on every mount,
+ * and the underlying scan takes seconds on a cold cache.
+ */
+async function derivedVolumes(indexId?: string): Promise<Map<string, number>> {
+  const key = indexId ?? '*';
+  const hit = volumeCache.get(key);
+  if (hit && Date.now() - hit.at < VOLUME_TTL_MS) return hit.value;
+
+  const value = await computeDerivedVolumes(indexId);
+  // Bounded by construction (18 indices + the all-indices key), but drop stale entries anyway.
+  for (const [k, v] of volumeCache) if (Date.now() - v.at > VOLUME_TTL_MS) volumeCache.delete(k);
+  volumeCache.set(key, { at: Date.now(), value });
+  return value;
+}
+
+/**
+ * The uncached derivation: resolve the days that matter, then one range scan for member volumes.
+ */
+async function computeDerivedVolumes(indexId?: string): Promise<Map<string, number>> {
+  const scopes = await indexRepository.constituentVolumeScopes(indexId);
   const dayOf = (d: Date) => Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   const days = scopes.flatMap((s) => [s.session, s.check_day].filter((d): d is Date => d != null).map(dayOf));
   if (days.length === 0) return new Map();
@@ -80,7 +104,9 @@ export const indexService = {
     if (!index) throw new NotFoundError(`Index not tracked: ${sym}`);
     // Two rows are enough: newest close, plus the one before it for previousClose.
     const daily = await indexRepository.latestValues(index.id, 2);
-    const derived = await derivedVolumes();
+    // Only this index's derived volume is rendered here; passing the id keeps the constituent sum
+    // to one index instead of eighteen (the page used to wait on all of them).
+    const derived = await derivedVolumes(index.id);
     // 1-year and year-to-date return windows. The 1-year base is the latest close at or before a
     // year ago; the YTD base is the year's *first* session (Sarmaaya's own convention — the index
     // the user's example cites measures "year to date" from the first trading day, not the previous

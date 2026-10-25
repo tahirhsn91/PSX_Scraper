@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useAnnouncements } from '../api/hooks';
+import { PageHeader } from '../components/ui/PageHeader';
 import { SectionCard } from '../components/ui/SectionCard';
 import { StatePanel } from '../components/ui/StatePanel';
 
@@ -60,13 +61,11 @@ export function Announcements() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
-      <Typography variant="h5" fontWeight={700} gutterBottom>
-        Announcements
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Notices published by the exchange and by companies, as published. Every row links to the
-        original document; nothing here is editorial.
-      </Typography>
+      <PageHeader
+        crumbs={[{ label: 'Dashboard', to: '/' }, { label: 'Announcements' }]}
+        title="Announcements"
+        subtitle="Notices published by the exchange and by companies, as published. Every row links to the original document; nothing here is editorial."
+      />
 
       <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mb: 2 }}>
         {CATEGORIES.map((c) => (

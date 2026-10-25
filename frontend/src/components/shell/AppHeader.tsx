@@ -1,17 +1,40 @@
-import { AppBar, Box, Button, Container, IconButton, Stack, Toolbar, Typography, alpha } from '@mui/material';
+import { useState } from 'react';
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Toolbar,
+  Typography,
+  alpha,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { ThemeMenu } from './ThemeMenu';
 import { layout } from '../../theme/tokens';
 import { isDev } from '../../lib/env';
 
-const NAV = [
-  { label: 'Dashboard', to: '/' },
-  { label: 'Movers', to: '/movers' },
-  { label: 'Screener', to: '/screener' },
-  { label: 'Sectors', to: '/sectors' },
-  { label: 'Dividends', to: '/dividends' },
+/**
+ * `primary` items stay in the bar at every width; the rest move into a "More" menu below xl.
+ * Nine pills plus the brand, the search control and two icon buttons overflow a 1440 bar — the
+ * audit measured the strip at 853px of content in an 832px box, leaving "Sync Logs" clipped under
+ * the search button. The five that stay are the once-a-day destinations; the menu names the
+ * current page when you are inside it, so the bar never hides where you are.
+ */
+const NAV: { label: string; to: string; primary?: boolean }[] = [
+  { label: 'Dashboard', to: '/', primary: true },
+  { label: 'Movers', to: '/movers', primary: true },
+  { label: 'Screener', to: '/screener', primary: true },
+  { label: 'Sectors', to: '/sectors', primary: true },
+  { label: 'Dividends', to: '/dividends', primary: true },
   { label: 'Announcements', to: '/announcements' },
   { label: 'Alerts', to: '/alerts' },
   { label: 'Watchlist', to: '/watchlist' },
@@ -47,6 +70,28 @@ const portfolioLink = (): { component: 'a'; href: string; target: string; rel: s
  */
 export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
   const { pathname } = useLocation();
+  const theme = useTheme();
+  // All nine fit only on a very wide bar; below xl the extra destinations live in "More".
+  const wide = useMediaQuery(theme.breakpoints.up('xl'));
+  const [moreEl, setMoreEl] = useState<null | HTMLElement>(null);
+  const isActive = (to: string) => (to === '/' ? pathname === '/' : pathname.startsWith(to));
+  const inline = NAV.filter((i) => wide || i.primary);
+  const overflow = NAV.filter((i) => !(wide || i.primary));
+  const overflowActive = overflow.find((i) => isActive(i.to));
+  const pillSx = {
+    px: { md: 1, xl: 1.5 },
+    flexShrink: 0,
+    whiteSpace: 'nowrap' as const,
+    // 40px, matching MuiButton's default target, rather than the 34px these pills used to be.
+    minHeight: 40,
+    borderRadius: 999,
+    fontSize: '0.875rem',
+  };
+  const pillColor = (active: boolean) => ({
+    color: active ? 'nav.active' : 'nav.textMuted',
+    bgcolor: active ? 'nav.hover' : 'transparent',
+    '&:hover': { bgcolor: 'nav.hover', color: 'nav.text' },
+  });
 
   return (
     <AppBar
@@ -127,8 +172,8 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
               '&::-webkit-scrollbar': { display: 'none' },
             }}
           >
-            {NAV.map((item) => {
-              const active = item.to === '/' ? pathname === '/' : pathname.startsWith(item.to);
+            {inline.map((item) => {
+              const active = isActive(item.to);
               return (
                 <Button
                   key={item.to}
@@ -136,27 +181,47 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                   to={item.to}
                   color="inherit"
                   aria-current={active ? 'page' : undefined}
-                  sx={{
-                    // Tighter below xl: eight pills at 12px each side overflowed a 1280px
-                    // viewport and pushed the page 10px sideways. 8px keeps every item on one
-                    // line and hands the space back to the search field.
-                    px: { md: 1, xl: 1.5 },
-                    // Without these the pills shrink to fit and overlap each other instead of the
-                    // strip scrolling — which is what happened when the ninth destination landed.
-                    flexShrink: 0,
-                    whiteSpace: 'nowrap',
-                    minHeight: 34,
-                    borderRadius: 999,
-                    fontSize: '0.875rem',
-                    color: active ? 'nav.active' : 'nav.textMuted',
-                    bgcolor: active ? 'nav.hover' : 'transparent',
-                    '&:hover': { bgcolor: 'nav.hover', color: 'nav.text' },
-                  }}
+                  sx={{ ...pillSx, ...pillColor(active) }}
                 >
                   {item.label}
                 </Button>
               );
             })}
+            {overflow.length > 0 && (
+              <>
+                <Button
+                  color="inherit"
+                  onClick={(e) => setMoreEl(e.currentTarget)}
+                  aria-haspopup="menu"
+                  aria-expanded={moreEl ? 'true' : undefined}
+                  aria-current={overflowActive ? 'page' : undefined}
+                  endIcon={<ExpandMoreRoundedIcon sx={{ fontSize: 18 }} />}
+                  sx={{ ...pillSx, ...pillColor(Boolean(overflowActive)), gap: 0.25 }}
+                >
+                  {overflowActive ? overflowActive.label : 'More'}
+                </Button>
+                <Menu
+                  anchorEl={moreEl}
+                  open={Boolean(moreEl)}
+                  onClose={() => setMoreEl(null)}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                  MenuListProps={{ 'aria-label': 'More destinations', dense: true }}
+                >
+                  {overflow.map((item) => (
+                    <MenuItem
+                      key={item.to}
+                      component={RouterLink}
+                      to={item.to}
+                      selected={isActive(item.to)}
+                      onClick={() => setMoreEl(null)}
+                    >
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            )}
           </Box>
 
           {/* One search control at every width. The inline field that used to live here was squeezed
@@ -197,7 +262,10 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
               onClick={onOpenSearch}
               aria-label="Search stocks"
               sx={{
-                display: { lg: 'none' },
+                // The bottom bar already carries Search below `md`; on a 320px phone this extra
+                // 44px icon pushed the toolbar 6px past the viewport. Keep it only where the
+                // bottom bar is absent.
+                display: { xs: 'none', sm: 'inline-flex', lg: 'none' },
                 color: 'nav.textMuted',
                 '&:hover': { color: 'nav.text', bgcolor: 'nav.hover' },
               }}

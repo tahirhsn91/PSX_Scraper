@@ -10,6 +10,26 @@ const hmrClientPort = Number(process.env.VITE_HMR_CLIENT_PORT) || undefined;
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        /**
+         * Split the vendor libraries out of the entry chunk.
+         *
+         * The entry was 536 KB, and it changed whenever any page did — so a one-line copy fix
+         * invalidated the React/MUI bundle in every visitor's cache. One `vendor` group changes on
+         * a dependency bump, not on a page edit; pages are already route-split in `App.tsx`.
+         *
+         * Deliberately one group, not react/mui/data: splitting those apart produced
+         * "Cannot access 'te' before initialization" at runtime, because MUI and React reach back
+         * into each other's modules and the split broke their initialisation order. If this is ever
+         * refined, load the built `dist` in a browser before merging — `vite build` passes either
+         * way.
+         */
+        manualChunks: (id) => (id.includes('node_modules') ? 'vendor' : undefined),
+      },
+    },
+  },
   server: {
     port: 5173,
     host: true,
