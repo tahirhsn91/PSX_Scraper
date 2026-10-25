@@ -21,6 +21,8 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { ThemeMenu } from './ThemeMenu';
 import { layout } from '../../theme/tokens';
 import { isDev } from '../../lib/env';
+import { PORTFOLIO_LINK } from '../../lib/links';
+import { AppMenu } from './AppMenu';
 
 /**
  * `primary` items stay in the bar at every width; the rest move into a "More" menu below xl.
@@ -41,25 +43,6 @@ const NAV: { label: string; to: string; primary?: boolean }[] = [
   { label: 'Compare', to: '/compare' },
   ...(isDev ? [{ label: 'Sync Logs', to: '/logs' }] : []),
 ];
-
-/**
- * Where the portfolio manager lives.
- *
- * Overridable per environment so a dev stack can point at a dev manager, but it defaults to the live
- * one on purpose: a link that only works once someone has filled in an `.env` entry is a link that
- * breaks on the next fresh clone. Read at build time by Vite, like `VITE_API_URL`.
- */
-const PORTFOLIO_URL = (import.meta.env.VITE_PORTFOLIO_URL as string) || 'https://manager.myportfolio365.com/';
-
-/** Shared by the labelled button and the icon-only phone twin, so they can never drift apart. */
-const portfolioLink = (): { component: 'a'; href: string; target: string; rel: string } => ({
-  component: 'a',
-  href: PORTFOLIO_URL,
-  target: '_blank',
-  // `noopener` blocks the new tab from reaching back through `window.opener`; `noreferrer` also drops
-  // the referrer, so the manager's analytics cannot read this app's URL — including a dev host.
-  rel: 'noopener noreferrer',
-});
 
 /**
  * Top bar: brand, primary navigation, global search (desktop), theme control.
@@ -109,6 +92,7 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
     >
       <Container maxWidth={false} sx={{ maxWidth: layout.contentMaxWidth, px: { xs: 2, md: 3 } }}>
         <Toolbar disableGutters sx={{ gap: 1.5 }}>
+          <AppMenu />
           <Box
             component={RouterLink}
             to="/"
@@ -277,7 +261,7 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
                 plus icons only, and a full label would push the theme control off-screen — so it
                 collapses to its icon rather than disappearing. */}
             <Button
-              {...portfolioLink()}
+              {...PORTFOLIO_LINK}
               disableElevation
               startIcon={<AccountBalanceWalletRoundedIcon />}
               sx={{
@@ -319,7 +303,7 @@ export function AppHeader({ onOpenSearch }: { onOpenSearch: () => void }) {
               </Box>
             </Button>
             <IconButton
-              {...portfolioLink()}
+              {...PORTFOLIO_LINK}
               aria-label="Track your portfolio"
               sx={{
                 display: { xs: 'inline-flex', sm: 'none', md: 'inline-flex', lg: 'none' },
