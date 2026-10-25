@@ -27,7 +27,11 @@ test('dashboard renders the market overview', async ({ page }) => {
 
 test('search reaches a stock page', async ({ page }) => {
   await page.goto('/');
-  const search = page.getByRole('combobox', { name: /search/i }).first();
+  // Search is a dialog opened from the header (it replaced the always-visible combobox in #216's
+  // follow-up), so the journey starts with the trigger, not the field.
+  await page.getByRole('button', { name: 'Search stocks' }).first().click();
+  const search = page.getByRole('dialog').getByRole('textbox');
+  await expect(search).toBeFocused();
   await search.fill('OGDC');
   await page.keyboard.press('Enter');
   // Enter opens the results page; a result click is what reaches the stock.

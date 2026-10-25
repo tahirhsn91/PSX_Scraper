@@ -57,7 +57,7 @@ function PerfChart({
           {stockGain.toFixed(1)}% since {baseDate ?? 'the first session'}
         </Typography>
         <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-          <Box sx={{ width: 10, height: 2, bgcolor: palette.gold, display: 'inline-block' }} />
+          <Box sx={{ width: 14, height: 0, display: 'inline-block', borderTop: `2px dashed ${palette.gold}` }} />
           {indexName} {indexGain >= 0 ? '+' : ''}
           {indexGain.toFixed(1)}% since {baseDate ?? 'the first session'}
         </Typography>
@@ -66,7 +66,8 @@ function PerfChart({
         <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" width="100%" height={160} role="img"
           aria-label={`${symbol} against ${indexName}, both rebased to 100 on ${baseDate ?? 'the first session'}`}>
           <line x1={0} x2={w} y1={y(100)} y2={y(100)} stroke="currentColor" strokeOpacity={0.2} strokeDasharray="2 2" />
-          <polyline points={path('index')} fill="none" stroke={palette.gold} strokeWidth={1.2} vectorEffect="non-scaling-stroke" />
+          {/* Dashed, so the index is identifiable without relying on the gold/green difference. */}
+          <polyline points={path('index')} fill="none" stroke={palette.gold} strokeWidth={1.4} strokeDasharray="5 3" vectorEffect="non-scaling-stroke" />
           <polyline points={path('stock')} fill="none" stroke={palette.up} strokeWidth={1.4} vectorEffect="non-scaling-stroke" />
         </svg>
       </Box>

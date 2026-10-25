@@ -257,10 +257,15 @@ function Breadth({ counts }: { counts: { up: number; down: number; flat: number;
       useFlexGap
       flexWrap="wrap"
       role="status"
-      aria-label="Market breadth across the tracked indices"
+      aria-label={`Indices: ${counts.up} advancing, ${counts.down} declining, ${counts.flat} unchanged`}
     >
+      {/* The label says what is being counted. Without it the strip read as stock breadth and sat
+          directly above a stock-breadth card with different numbers (audit UX-08). */}
+      <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
+        Indices
+      </Typography>
       {cell('▲', 'advancers', counts.up, 'success.main')}
-      {cell('▼', 'decliners', counts.down, 'error.main')}
+      {cell('▼', 'decliners', counts.down, 'down.onSoft')}
       {cell('·', 'unchanged', counts.flat)}
       {/* Only when it happens: an unwritten index is neither a gain nor a loss, and saying so
           beats folding it into "unchanged". */}

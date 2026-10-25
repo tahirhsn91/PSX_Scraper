@@ -68,7 +68,11 @@ export function StatTile({
       </Stack>
       <Typography
         variant={centered ? 'h1' : 'h5'}
-        sx={{ color: toneColor, lineHeight: 1.2, ...(centered ? { textAlign: 'center' } : {}) }}
+        // A KPI value is data, not a heading. Rendering it as h1 put seven level-one headings on
+        // the dashboard (the page title plus six breadth tiles) and made heading navigation
+        // meaningless; the visual size is kept, the outline is not.
+        component="p"
+        sx={{ color: toneColor, lineHeight: 1.2, m: 0, ...(centered ? { textAlign: 'center' } : {}) }}
         title={valueTitle}
       >
         {value}

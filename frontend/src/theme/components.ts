@@ -137,7 +137,10 @@ export const componentsFor = (theme: Theme): Components<Theme> => {
           minHeight: 32,
           '&.Mui-selected': {
             backgroundColor: t.selectedWash,
-            color: t.primary.main,
+            // primaryActive, not primary: primary on its own 8% wash measures 4.3:1 (axe), just
+            // under AA for 13px text. The darker green clears it in light mode; dark mode keeps
+            // the bright green, which is already 6:1+ on a card.
+            color: theme.palette.mode === 'dark' ? t.primary.main : t.primary.dark,
             borderColor: t.primary.main,
             '&:hover': { backgroundColor: t.selectedWash },
           },
@@ -154,7 +157,9 @@ export const componentsFor = (theme: Theme): Components<Theme> => {
     MuiChip: {
       styleOverrides: {
         root: { borderRadius: radius.pill, fontWeight: 600, fontSize: '0.75rem' },
-        sizeSmall: { height: 22, fontSize: '0.6875rem' },
+        // 26px, not MUI's 22: WCAG 2.2 target size (2.5.8) is 24px, and the filter chips on
+        // Announcements, Dividends and the screener are buttons, not decoration.
+        sizeSmall: { height: 26, fontSize: '0.6875rem' },
       },
     },
 

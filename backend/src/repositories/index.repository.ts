@@ -82,7 +82,10 @@ export class IndexRepository {
    * a single range scan on `stock_prices.last_trade_date` (the column's index is unusable once it is
    * cast to a date, and a correlated sum per index takes the endpoint past the client's timeout).
    */
-  async constituentVolumeScopes() {
+  async constituentVolumeScopes(indexId?: string) {
+    // The list endpoint needs every index; a single index page needs only its own scope. Filtering
+    // here keeps the (expensive) constituent sum below proportional to what the caller renders.
+    const where = indexId ? Prisma.sql`WHERE mi.id = ${indexId}` : Prisma.empty;
     const rows = await prisma.$queryRaw<
       Array<{ id: string; symbol: string; session: Date | null; check_day: Date | null; published: bigint | null; members: number }>
     >`
@@ -99,6 +102,7 @@ export class IndexRepository {
         ORDER BY iv.trade_date DESC
         LIMIT 1
       ) p ON true
+      ${where}
       ORDER BY mi.symbol
     `;
     return rows;

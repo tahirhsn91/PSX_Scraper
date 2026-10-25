@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import { api } from '../api/client';
 import { PageHeader } from '../components/ui/PageHeader';
+import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+import { useToast } from '../components/ui/ToastProvider';
 import { SectionCard } from '../components/ui/SectionCard';
 import { StatePanel } from '../components/ui/StatePanel';
 import { deviceToken } from '../lib/deviceToken';
@@ -96,6 +98,7 @@ export function Alerts() {
         )
       ).data,
     onSuccess: () => {
+      notify({ message: `${symbol.trim().toUpperCase()} alert created`, severity: 'success' });
       setSymbol('');
       setThreshold('');
       setFormError(null);
@@ -108,15 +111,25 @@ export function Alerts() {
 
   const toggle = useMutation({
     mutationFn: async (a: AlertRow) => (await api.patch(`/alerts/${a.id}`, { paused: !a.paused }, headers)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['alerts', token] }),
+    onSuccess: (_data, a) => {
+      notify({ message: a.paused ? `${a.symbol} alert resumed` : `${a.symbol} alert paused`, severity: 'success' });
+      qc.invalidateQueries({ queryKey: ['alerts', token] });
+    },
   });
 
   const remove = useMutation({
     mutationFn: async (a: AlertRow) => (await api.delete(`/alerts/${a.id}`, headers)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['alerts', token] }),
+    onSuccess: (_data, a) => {
+      notify({ message: `${a.symbol} alert deleted`, severity: 'success' });
+      setPendingDelete(null);
+      qc.invalidateQueries({ queryKey: ['alerts', token] });
+    },
+    onError: () => notify({ message: 'Could not delete the alert', severity: 'error' }),
   });
 
   const rows = list.data?.items ?? [];
+  const [pendingDelete, setPendingDelete] = useState<AlertRow | null>(null);
+  const { notify } = useToast();
   const needsThreshold = kind !== 'CROSS_ABOVE_SMA' && kind !== 'CROSS_BELOW_SMA';
 
   return (
@@ -125,12 +138,6 @@ export function Alerts() {
         title="Alerts"
         subtitle="Conditions on price and RSI, checked while this page is open"
       />
-
-      <MuiAlert severity="info" sx={{ mb: 2 }}>
-        These are data conditions you set, not recommendations. Checks run when this page is open and
-        every minute after; there is no background sender, and nothing is emailed. Alerts are tied to
-        this browser — clearing site data removes them.
-      </MuiAlert>
 
       <SectionCard title="New alert" sx={{ mb: 3 }}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} useFlexGap flexWrap="wrap">
@@ -185,6 +192,14 @@ export function Alerts() {
         </Typography>
       </SectionCard>
 
+      {/* The scope caveats sit after the form: a reader who wants to set an alert should meet the
+          controls first, and these still explain the limits before the alert list. */}
+      <MuiAlert severity="info" sx={{ mb: 3 }}>
+        These are data conditions you set, not recommendations. Checks run when this page is open and
+        every minute after; there is no background sender, and nothing is emailed. Alerts are tied to
+        this browser — clearing site data removes them.
+      </MuiAlert>
+
       <SectionCard
         title="Your alerts"
         subtitle={
@@ -219,7 +234,7 @@ export function Alerts() {
                   <Button size="small" onClick={() => toggle.mutate(a)}>
                     {a.paused ? 'Resume' : 'Pause'}
                   </Button>
-                  <IconButton size="small" aria-label={`Delete alert for ${a.symbol}`} onClick={() => remove.mutate(a)}>
+                  <IconButton size="small" aria-label={`Delete alert for ${a.symbol}`} onClick={() => setPendingDelete(a)}>
                     ✕
                   </IconButton>
                 </Stack>
@@ -240,6 +255,18 @@ export function Alerts() {
           </Stack>
         )}
       </SectionCard>
+
+      <ConfirmDialog
+        open={Boolean(pendingDelete)}
+        tone="error"
+        title={`Delete the ${pendingDelete?.symbol ?? ''} alert?`}
+        message={`This removes "${pendingDelete?.description ?? ''}" from this browser. It cannot be undone.`}
+        confirmLabel="Delete alert"
+        pendingLabel="Deleting…"
+        pending={remove.isPending}
+        onConfirm={() => pendingDelete && remove.mutate(pendingDelete)}
+        onClose={() => setPendingDelete(null)}
+      />
     </Container>
   );
 }
