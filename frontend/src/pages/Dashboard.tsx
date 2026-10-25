@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import SyncIcon from "@mui/icons-material/SyncRounded";
 import AddIcon from "@mui/icons-material/AddRounded";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAddStock, useIndices, useStocks, useSyncAll, useSyncStatus } from "../api/hooks";
 import { FailuresPanel } from "../components/FailuresPanel";
@@ -29,7 +29,6 @@ import { PageHeader } from "../components/ui/PageHeader";
 import { DataStatus } from "../components/ui/DataStatus";
 import { SectionCard } from "../components/ui/SectionCard";
 import { Reveal } from "../components/ui/Reveal";
-import { StatTile } from "../components/ui/StatTile";
 import { ChangePill } from "../components/ui/ChangePill";
 import { LiveNumber } from "../components/ui/LiveNumber";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
@@ -593,66 +592,46 @@ export function Dashboard() {
         }
       />
 
-      <Box
-        sx={{
-          display: "grid",
-          gap: 1.5,
-          gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", md: "repeat(4, minmax(0, 1fr))" },
-          mb: 2.5,
-        }}
-      >
-        <StatTile
-          label="Tracked stocks"
-          value={<LiveNumber value={universeCount} format={formatCount} countUp flash />}
-          footer={
-            <Typography variant="caption" color="text.secondary">
-              {data ? `${data.items.length} on this page` : "loading…"}
-            </Typography>
-          }
-        />
-        {isDev && (
-          <StatTile
-            label="Active syncs"
-            value={
-              <LiveNumber
-                value={inFlightCount}
-                format={formatCount}
-                countUp
-                flash
-                pulse={inFlightCount > 0}
-              />
-            }
-            footer={
-              <Typography variant="caption" color="text.secondary">
-                {syncingAll ? "syncing now" : "idle"}
-              </Typography>
-            }
-          />
-        )}
-        {isDev && (
-          <StatTile
-            label="Waiting"
-            value={<LiveNumber value={queuedCount} format={formatCount} countUp flash />}
-            footer={
-              <Typography variant="caption" color="text.secondary">
-                queued plus delayed
-              </Typography>
-            }
-          />
-        )}
-        {isDev && (
-          <StatTile
-            label="Failed"
-            value={<LiveNumber value={failedCount} format={formatCount} countUp flash />}
-            tone={failedCount > 0 ? "down" : "muted"}
-            footer={
-              <Typography variant="caption" color="text.secondary">
-                {failedCount > 0 ? "see Failed jobs below" : "none"}
-              </Typography>
-            }
-          />
-        )}
-      </Box>
+      {/* The page subtitle already says "511 tracked securities"; a KPI card repeating the same
+          number was the only tile in the row in production, so it read as a broken grid. The
+          queue line below is the only status the operator needs here. */}
+
+      {/* Queue depth is an operator metric, not a market one. It used to occupy three KPI cards on
+          the same row as "tracked stocks", so a dev visitor met "FAILED 201" before any price.
+          One quiet line, dev only, with the logs one click away. */}
+      {isDev && (
+        <Stack
+          direction="row"
+          spacing={1.5}
+          useFlexGap
+          flexWrap="wrap"
+          alignItems="center"
+          sx={{ mb: 2.5, px: 0.5 }}
+        >
+          <Typography variant="caption" color="text.secondary">
+            Sync queue
+          </Typography>
+          <Typography variant="body2" sx={{ fontVariantNumeric: "tabular-nums" }}>
+            {inFlightCount} active · {queuedCount} waiting
+          </Typography>
+          {/* A filled warning Chip put white label text on the page background in axe (1.12:1):
+              the MUI chip's contrastText is meant for its own fill. Plain text in the warning tone
+              is legible (6:1+) and quieter, which is what an operator metric should be. */}
+          <Typography
+            variant="body2"
+            sx={{
+              fontVariantNumeric: "tabular-nums",
+              fontWeight: failedCount > 0 ? 600 : 400,
+              color: failedCount > 0 ? "warning.main" : "text.secondary",
+            }}
+          >
+            {failedCount} failed
+          </Typography>
+          <Button size="small" component={RouterLink} to="/logs">
+            Open sync logs
+          </Button>
+        </Stack>
+      )}
 
       {isDev && syncingAll && (
         <Box sx={{ mb: 2.5 }}>
