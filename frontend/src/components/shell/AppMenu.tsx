@@ -8,9 +8,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  SvgIcon,
   Typography,
+  type SvgIconProps,
 } from '@mui/material';
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import SpaceDashboardRoundedIcon from '@mui/icons-material/SpaceDashboardRounded';
 import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
@@ -26,6 +27,28 @@ import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { isDev } from '../../lib/env';
 import { PORTFOLIO_LINK } from '../../lib/links';
+
+/**
+ * Three bars with the middle one stopping short on the right — the "fries" menu mark.
+ *
+ * Hand-drawn rather than MUI's `MenuRounded` so the middle bar can be clipped independently: at
+ * 24px a 3.5px difference is visible without making the button look like a different icon set. The
+ * stroke, caps and optical size match MUI's rounded set, so it sits beside the other icons
+ * unchanged.
+ */
+function FriesMenuIcon(props: SvgIconProps) {
+  return (
+    <SvgIcon {...props} viewBox="0 0 24 24">
+      <path
+        d="M3.5 6.5h17M3.5 12h13.5M3.5 17.5h17"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+      />
+    </SvgIcon>
+  );
+}
 
 interface MenuItem {
   label: string;
@@ -108,7 +131,7 @@ export function AppMenu() {
           flexShrink: 0,
         }}
       >
-        <MenuRoundedIcon />
+        <FriesMenuIcon />
       </IconButton>
 
       <Drawer
