@@ -715,6 +715,37 @@ export const openapiSpec = {
     },
   },
 
+    "/api/v1/roi": {
+      get: {
+        tags: ["Tools"],
+        summary: "Return on investment",
+        description:
+          "Holding return, monthly DCA against a lump sum, or up to four symbols compared on one window. " +
+          "Prices are stored session closes; fees and taxes are the caller's inputs. Dividends are dated " +
+          "by their stored announcement date because PSX ex-dates are not in the dataset, and a window " +
+          "containing an unadjusted split or bonus is reported in `meta.warnings` instead of being annualised.",
+        parameters: [
+          { name: "mode", in: "query", schema: { type: "string", enum: ["single", "dca", "compare"] }, description: "Default single." },
+          { name: "symbol", in: "query", schema: { type: "string" }, description: "Single/DCA: one ticker." },
+          { name: "symbols", in: "query", schema: { type: "string" }, description: "Compare: 2-4 comma-separated tickers." },
+          { name: "start", in: "query", required: true, schema: { type: "string", format: "date" } },
+          { name: "end", in: "query", schema: { type: "string", format: "date" }, description: "Defaults to the latest completed session." },
+          { name: "amount", in: "query", required: true, schema: { type: "number", minimum: 100 }, description: "Lump sum, or the monthly contribution in DCA mode." },
+          { name: "dayOfMonth", in: "query", schema: { type: "integer", minimum: 1, maximum: 31 }, description: "DCA only; moved forward to the next session." },
+          { name: "feePct", in: "query", schema: { type: "number", minimum: 0, maximum: 5 }, description: "Per-side percent fee, default 0.15." },
+          { name: "feeFlat", in: "query", schema: { type: "number", minimum: 0 }, description: "Per-side flat fee in rupees." },
+          { name: "divTax", in: "query", schema: { type: "number", minimum: 0, maximum: 50 }, description: "Percent withheld from dividends." },
+          { name: "cgt", in: "query", schema: { type: "number", minimum: 0, maximum: 50 }, description: "Percent tax on the capital gain at sale." },
+        ],
+        responses: {
+          "200": { description: "Calculation result with meta.assumptions and meta.warnings" },
+          "400": { description: "Invalid parameters", content: { "application/json": { example: { error: { code: "VALIDATION_ERROR", message: "The start date is after the end date" } } } } },
+          "404": { description: "Symbol has no stored sessions" },
+          "429": { description: "Rate limited" },
+        },
+      },
+    },
+
   components: {
     parameters: {
       Symbol: {

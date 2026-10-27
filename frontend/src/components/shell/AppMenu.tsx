@@ -22,6 +22,7 @@ import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
 import CompareArrowsRoundedIcon from '@mui/icons-material/CompareArrowsRounded';
+import CalculateRoundedIcon from '@mui/icons-material/CalculateRounded';
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
@@ -85,6 +86,7 @@ const SECTIONS: { title: string; items: MenuItem[] }[] = [
       { label: 'Watchlist', to: '/watchlist', icon: <StarRoundedIcon fontSize="small" /> },
       { label: 'Alerts', to: '/alerts', icon: <NotificationsActiveRoundedIcon fontSize="small" /> },
       { label: 'Compare', to: '/compare', icon: <CompareArrowsRoundedIcon fontSize="small" /> },
+      { label: 'ROI Calculator', to: '/roi', icon: <CalculateRoundedIcon fontSize="small" /> },
     ],
   },
   ...(isDev

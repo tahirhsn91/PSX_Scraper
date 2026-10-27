@@ -12,3 +12,16 @@ export const mutationLimiter = rateLimit({
   store: new RedisStore({ sendCommand: (...args: string[]) => (redis as any).call(...args) }),
   message: { error: { code: 'RATE_LIMITED', message: 'Too many requests, slow down.' } },
 });
+
+/**
+ * Read-only calculation endpoint: generous enough for a page of comparisons, tight enough that a
+ * script cannot use the server as a free maths engine.
+ */
+export const roiLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: new RedisStore({ sendCommand: (...args: string[]) => (redis as any).call(...args) }),
+  message: { error: { code: 'RATE_LIMITED', message: 'Too many requests, slow down.' } },
+});

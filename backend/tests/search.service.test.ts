@@ -43,6 +43,9 @@ const row = (over: Partial<StockListItem> = {}): StockListItem => ({
   companyName: 'Fauji Fertilizer Company Limited',
   sector: 'FERTILIZER',
   logoUrl: null,
+  // Added to StockListItem by the Shariah PR (#263); this fixture predates it and must carry the
+  // field or the suite does not compile. A test row is not in the index unless it says so.
+  shariahCompliant: false,
   currentPrice: 540.41,
   changePercent: 0.99,
   volume: 582743,
@@ -96,7 +99,9 @@ describe('searchService.search', () => {
 
     expect(cacheSetMock).toHaveBeenCalledTimes(1);
     const [key, cached, ttl] = cacheSetMock.mock.calls[0] as [string, SearchResponse, number];
-    expect(key).toBe('search:v2:ffc:20');
+    // v3 is the payload that carries shariahCompliant (#263); the version bump is what stops a
+    // pre-deploy entry being served with the new field missing.
+    expect(key).toBe('search:v3:ffc:20');
     expect(cached.results[0]?.sector).toBe('FERTILIZER');
     expect(ttl).toBe(45);
   });
