@@ -308,7 +308,7 @@ export default function RoiCalculator() {
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
-              label={mode === 'dca' ? 'First month' : 'Buy date'}
+              label={mode === 'dca' ? 'First month' : mode === 'compare' ? 'Start date' : 'Buy date'}
               type="date"
               value={start}
               onChange={(e) => setStart(e.target.value)}
