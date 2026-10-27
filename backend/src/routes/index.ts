@@ -9,6 +9,7 @@ import compareRoutes from './compare.routes';
 import { announcementsRouter } from './announcements.routes';
 import dividendsRouter from './dividends.routes';
 import alertsRouter from './alerts.routes';
+import roiRouter from './roi.routes';
 
 const router = Router();
 router.use('/stocks', stockRoutes);
@@ -21,4 +22,5 @@ router.use('/compare', compareRoutes);
 router.use('/announcements', announcementsRouter);
 router.use('/dividends', dividendsRouter);
 router.use('/alerts', alertsRouter);
+router.use('/roi', roiRouter);
 export default router;
