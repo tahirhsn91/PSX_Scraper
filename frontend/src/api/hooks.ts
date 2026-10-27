@@ -1,3 +1,4 @@
+import type { RoiParams, RoiResponse } from '../types/roi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './client';
 import type {
@@ -457,3 +458,35 @@ export const useDataSources = () =>
     queryFn: async () => (await api.get<{ sources: DataSourceView[]; disabled: string[]; unknownDisabledIds: string[]; unlicensedCount: number }>('/sync/sources')).data,
     staleTime: 30_000,
   });
+
+/**
+ * ROI calculation. Disabled until the page has a complete request, so opening /roi does not fire a
+ * call with an empty symbol, and every keystroke in a text field does not become a request: the page
+ * only submits when the form is valid.
+ */
+export const useRoi = (params: RoiParams | null) =>
+  useQuery({
+    queryKey: ['roi', params],
+    queryFn: async () => (await api.get<RoiResponse>('/roi', { params: flattenRoiParams(params!) })).data,
+    enabled: Boolean(params),
+    staleTime: 60 * 1000,
+    retry: false,
+  });
+
+/** Query string shape: one comma-joined list for compare, a single `symbol` otherwise. */
+function flattenRoiParams(p: RoiParams): Record<string, string | number> {
+  const out: Record<string, string | number> = {
+    mode: p.mode,
+    start: p.start,
+    amount: p.amount,
+    feePct: p.feePct,
+    feeFlat: p.feeFlat,
+    divTax: p.divTax,
+    cgt: p.cgt,
+  };
+  if (p.end) out.end = p.end;
+  if (p.mode === 'compare') out.symbols = (p.symbols ?? []).join(',');
+  else if (p.symbol) out.symbol = p.symbol;
+  if (p.mode === 'dca' && p.dayOfMonth) out.dayOfMonth = p.dayOfMonth;
+  return out;
+}
