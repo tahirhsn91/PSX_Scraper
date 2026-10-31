@@ -400,9 +400,18 @@ export default function RoiCalculator() {
             subtitle={`${prettyDate(result.holding.buy.session)} → ${prettyDate(result.holding.sell.session)} · ${result.holding.holdingDays} days · ${result.holding.sessions} sessions`}
           >
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(3, minmax(0, auto))' }, gap: 2, justifyContent: 'start', mb: 2 }}>
-              <Stat label="TOTAL RETURN" value={pct(result.holding.returnPct)} tone={result.holding.returnPct >= 0 ? 'up' : 'down'} hint={money(result.holding.profit)} />
+              <Stat
+                label="TOTAL RETURN"
+                value={pct(result.holding.returnPct)}
+                tone={result.holding.returnPct >= 0 ? 'up' : 'down'}
+                hint={`${money(result.holding.profit)} on ${money(result.holding.paidIn)} paid in`}
+              />
               <Stat label="ANNUALISED (XIRR)" value={result.holding.annualisedPct == null ? '—' : pct(result.holding.annualisedPct)} hint={result.holding.annualisedPct == null ? 'Not shown under a year or across a split' : 'Money-weighted, actual/365'} />
-              <Stat label="MAX DRAWDOWN" value={`${result.holding.maxDrawdownPct.toFixed(2)}%`} hint="Peak to trough, position value, excludes dividends" />
+              <Stat
+                label="MAX DRAWDOWN"
+                value={`${result.holding.maxDrawdownPct.toFixed(2)}%`}
+                hint="Peak to trough on the close, excludes dividends"
+              />
             </Box>
 
             <EquityChart points={result.holding.series} label={`Position value of ${result.holding.symbol} from ${result.holding.buy.session} to ${result.holding.sell.session}`} />
@@ -410,11 +419,23 @@ export default function RoiCalculator() {
             <RowTable
               rows={[
                 { label: `Shares bought at ${money(result.holding.buy.price)}`, value: String(result.holding.quantity) },
-                { label: 'Cash deployed (incl. buy fee)', value: money(result.holding.invested), strong: true },
-                { label: 'Leftover cash', value: money(result.holding.leftover) },
+                { label: 'Cash paid in', value: money(result.holding.paidIn), strong: true },
+                { label: 'Deployed in shares (incl. buy fee)', value: money(result.holding.invested) },
+                { label: 'Leftover cash, never invested', value: money(result.holding.leftover) },
                 { label: 'Buy fee', value: money(result.holding.buyFees) },
                 { label: `Dividends (${result.holding.dividends.count} recorded)`, value: money(result.holding.dividends.net) },
-                { label: `Sold at ${money(result.holding.sell.price)} · fee ${money(result.holding.proceeds.sellFees)}`, value: money(result.holding.proceeds.net) },
+                ...(result.holding.dividends.tax > 0
+                  ? [{ label: 'Dividend tax withheld', value: money(result.holding.dividends.tax) }]
+                  : []),
+                {
+                  label: `Sold at ${money(result.holding.sell.price)} · fee ${money(result.holding.proceeds.sellFees)}`,
+                  value: money(result.holding.proceeds.gross),
+                },
+                ...(result.holding.proceeds.tax > 0
+                  ? [{ label: 'Capital gains tax at sale', value: money(result.holding.proceeds.tax) }]
+                  : []),
+                { label: 'Net proceeds', value: money(result.holding.proceeds.net) },
+                { label: 'Return excluding dividends', value: pct(result.holding.dividendFreePct) },
                 { label: 'Profit', value: money(result.holding.profit), strong: true },
               ]}
             />
@@ -431,25 +452,35 @@ export default function RoiCalculator() {
       {result?.dca && (
         <Stack spacing={2} sx={{ mt: 2 }}>
           <SectionCard
-            title={`${result.dca.symbol} · ${result.dca.months} monthly buys`}
-            subtitle={`${prettyDate(result.meta.window.start)} → ${prettyDate(result.dca.sell.session)} · ${prettyDate(result.dca.sell.session)} at ${money(result.dca.sell.price)}`}
+            title={`${result.dca.symbol} · ${result.dca.months} scheduled monthly buys`}
+            subtitle={`${prettyDate(result.meta.window.start)} → ${prettyDate(result.dca.sell.session)} · sold at ${money(result.dca.sell.price)}`}
           >
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, minmax(0, auto))' }, gap: 2, justifyContent: 'start', mb: 2 }}>
-              <Stat label="TOTAL RETURN" value={pct(result.dca.returnPct)} tone={result.dca.returnPct >= 0 ? 'up' : 'down'} hint={money(result.dca.profit)} />
-              <Stat label="ANNUALISED (XIRR)" value={result.dca.annualisedPct == null ? '—' : pct(result.dca.annualisedPct)} hint={result.dca.annualisedPct == null ? 'Not shown under a year' : 'Money-weighted, actual/365'} />
-              <Stat label="INVESTED" value={money(result.dca.totalInvested)} hint={`avg cost ${money(result.dca.averageCost)}`} />
-              <Stat label="MAX DRAWDOWN" value={`${result.dca.maxDrawdownPct.toFixed(2)}%`} hint="Price drawdown, contribution-neutral" />
+              <Stat
+                label="TOTAL RETURN"
+                value={pct(result.dca.returnPct)}
+                tone={result.dca.returnPct >= 0 ? 'up' : 'down'}
+                hint={`${money(result.dca.profit)} on ${money(result.dca.totalContributed)} contributed`}
+              />
+              <Stat label="ANNUALISED (XIRR)" value={result.dca.annualisedPct == null ? '—' : pct(result.dca.annualisedPct)} hint={result.dca.annualisedPct == null ? 'Not shown under a year or across a split' : 'Money-weighted, actual/365'} />
+              <Stat label="CASH CONTRIBUTED" value={money(result.dca.totalContributed)} hint={`${result.dca.months} months`} />
+              <Stat label="MAX DRAWDOWN" value={`${result.dca.maxDrawdownPct.toFixed(2)}%`} hint="Peak to trough on the close, contribution-neutral" />
             </Box>
 
             <EquityChart points={result.dca.series} label={`Monthly plan value for ${result.dca.symbol}`} />
             <Divider sx={{ my: 2 }} />
             <RowTable
               rows={[
-                { label: 'Months bought', value: String(result.dca.months) },
+                { label: 'Months scheduled', value: String(result.dca.months) },
+                { label: 'Months that bought a share', value: String(result.dca.contributions.filter((c) => c.quantity > 0).length) },
                 { label: 'Shares held', value: String(result.dca.quantity) },
+                { label: 'Cash contributed', value: money(result.dca.totalContributed), strong: true },
+                { label: `Deployed in shares (incl. fees, avg cost ${money(result.dca.averageCost)})`, value: money(result.dca.totalInvested) },
+                { label: 'Leftover cash, never invested', value: money(result.dca.leftover) },
                 { label: 'Dividends recorded', value: money(result.dca.dividends.net) },
+                { label: 'Return excluding dividends', value: pct(result.dca.dividendFreePct) },
                 { label: 'Value at sale (net of fee)', value: money(result.dca.terminalValue) },
-                { label: 'Lump sum of the same cash, same window', value: `${pct(result.dca.lumpSum.returnPct)} · ${money(result.dca.lumpSum.terminalValue)}`, strong: true },
+                { label: 'All cash contributed as one lump sum, same window', value: `${pct(result.dca.lumpSum.returnPct)} · ${money(result.dca.lumpSum.terminalValue)}`, strong: true },
               ]}
             />
             {result.dca.benchmark && (
@@ -486,7 +517,14 @@ export default function RoiCalculator() {
                     <Typography variant="caption" color="text.secondary" noWrap>{r.name}</Typography>
                   </td>
                   <td><Typography variant="body2" sx={{ fontWeight: 700, color: r.returnPct >= 0 ? theme.palette.chart.up : theme.palette.chart.down }}>{pct(r.returnPct)}</Typography></td>
-                  <td><Typography variant="body2">{r.annualisedPct == null ? '—' : pct(r.annualisedPct)}</Typography></td>
+                  <td>
+                    <Typography variant="body2">{r.annualisedPct == null ? '—' : pct(r.annualisedPct)}</Typography>
+                    {r.annualisedPct == null && r.note && (
+                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', maxWidth: 220, ml: 'auto' }}>
+                        {r.note}
+                      </Typography>
+                    )}
+                  </td>
                   <td><Typography variant="body2">{r.maxDrawdownPct == null ? '—' : `${r.maxDrawdownPct.toFixed(1)}%`}</Typography></td>
                   <td><Typography variant="body2">{money(r.terminalValue)}</Typography></td>
                 </tr>

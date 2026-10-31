@@ -68,13 +68,18 @@ export interface RoiHolding {
   sell: { requested: string; session: string; price: number; movedFromRequest: boolean };
   sessions: number;
   quantity: number;
+  /** Cash the reader put in. The return is measured against this, not against what got deployed. */
+  paidIn: number;
   invested: number;
   buyFees: number;
   leftover: number;
   dividends: { count: number; gross: number; tax: number; net: number; items: { date: string; perShare: number }[] };
   proceeds: { gross: number; sellFees: number; tax: number; net: number };
   profit: number;
+  /** Profit over cash paid in. */
   returnPct: number;
+  /** The same return with recorded dividends taken out, so the timing approximation is visible. */
+  dividendFreePct: number;
   /** Annualised (XIRR) percent, or null when the holding is under a year or cannot be solved. */
   annualisedPct: number | null;
   holdingDays: number;
@@ -84,17 +89,25 @@ export interface RoiHolding {
 
 export interface RoiContribution {
   date: string;
+  /** The scheduled contribution, whether or not it bought anything. */
   amount: number;
   price: number;
+  /** 0 when the month could not afford a share; the cash is carried to the next month. */
   quantity: number;
   fees: number;
+  /** Cash still unspent after this month, including anything carried into it. */
+  unspent: number;
 }
 
 export interface RoiDca {
   symbol: string;
   name: string | null;
   contributions: RoiContribution[];
+  /** Scheduled months, including months that could not buy a share. */
   months: number;
+  /** What the reader paid in: months × amount. */
+  totalContributed: number;
+  /** What actually bought shares, fees included. */
   totalInvested: number;
   leftover: number;
   quantity: number;
@@ -103,7 +116,9 @@ export interface RoiDca {
   terminalValue: number;
   dividends: { count: number; gross: number; tax: number; net: number };
   profit: number;
+  /** Profit over cash contributed. */
   returnPct: number;
+  dividendFreePct: number;
   annualisedPct: number | null;
   holdingDays: number;
   maxDrawdownPct: number;
@@ -119,6 +134,7 @@ export interface RoiRow {
   annualisedPct: number | null;
   maxDrawdownPct: number | null;
   terminalValue: number | null;
+  /** Why a figure is missing — e.g. a corporate action suppressed the annualised rate. */
   note?: string;
 }
 
@@ -177,6 +193,7 @@ export async function latestSession(): Promise<string> {
   }
   const fallback = await prisma.$queryRawUnsafe<{ d: string }[]>(`
     SELECT max(last_trade_date)::date::text AS d FROM stock_prices
+    WHERE extract(isodow FROM last_trade_date) BETWEEN 1 AND 5
   `);
   if (!fallback[0]?.d) throw new NotFoundError('No stored sessions');
   return fallback[0].d;
@@ -197,6 +214,10 @@ async function loadSeries(symbols: string[], from: string, to: string): Promise<
         FROM stock_prices
         WHERE stock_id = s.id AND close IS NOT NULL AND close > 0
           AND last_trade_date::date BETWEEN $2::date AND $3::date
+          -- The board has picked up weekend-stamped rows (a Sunday sync wrote 2,447 of them). A
+          -- session is a weekday; anything else would put a "buy" on a Sunday and inflate the
+          -- session count the page prints.
+          AND extract(isodow FROM last_trade_date) BETWEEN 1 AND 5
         ORDER BY last_trade_date::date DESC, last_trade_date DESC
       ) per_day_inner
       ORDER BY d ASC
@@ -234,6 +255,7 @@ async function loadIndex(symbol: string, from: string, to: string): Promise<Map<
     FROM index_values iv
     JOIN market_indices mi ON mi.id = iv.index_id
     WHERE mi.symbol = $1 AND iv.trade_date::date BETWEEN $2::date AND $3::date
+      AND extract(isodow FROM iv.trade_date) BETWEEN 1 AND 5
     ORDER BY iv.trade_date ASC
     `,
     symbol,
@@ -293,20 +315,22 @@ export function sessionOnOrBefore(dates: string[], date: string): string | null 
 /**
  * A split or bonus shows up as a price step that no market move explains.
  *
- * The test is deliberately conservative: a step of 25% or more, and only when the price lands on a
- * simple fraction of the previous close (halving, a third, a tenth, or the reverse). A stock that
- * merely fell 30% does not land on 1/2.000 of its previous close, so it does not trip the warning.
+ * Bonus issues in Pakistan are routinely 10%, 20%, 25% or 50% — price ratios of 1.1, 1.2, 1.25 and
+ * 1.5 — so the test starts there, not at 2. A step smaller than the exchange's ±7.5% circuit band is
+ * left alone: an ordinary down day must never be reported as a corporate action. The ratio has to
+ * land on one of the listed fractions within 1%, which is tight enough that a 42% fall is not a
+ * "1:2 bonus" and a 50% fall still is.
  */
 export function suspectedAction(prev: number, close: number): number | null {
   if (!(prev > 0) || !(close > 0)) return null;
+  if (Math.abs(close / prev - 1) < 0.075) return null; // inside the circuit band: a normal session
   const ratio = prev / close;
-  const fractions = [2, 3, 4, 5, 6, 8, 10, 12.5, 20];
-  for (const f of fractions) {
-    if (Math.abs(ratio / f - 1) <= 0.03) return f;
-  }
-  for (const f of fractions) {
-    if (Math.abs(ratio * f - 1) <= 0.03) return 1 / f;
-  }
+  // 0.4% is tight enough that a −9.6% market fall is not a 1:10 bonus (−9.09%) and a +9.5% rally is
+  // not a reverse split: an ex-date step lands on the fraction almost exactly, because it is one.
+  const fractions = [1.1, 1.2, 1.25, 1.3333, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6, 8, 10, 12.5, 20];
+  for (const f of fractions) if (Math.abs(ratio / f - 1) <= 0.004) return f;
+  // Consolidations only exist at 2:1 and above; a 1.1 factor here would flag an ordinary +10% day.
+  for (const f of fractions) if (f >= 2 && Math.abs(ratio * f - 1) <= 0.004) return round2(1 / f);
   return null;
 }
 
@@ -377,12 +401,12 @@ interface Lot {
 export function buyLot(cashP: number, priceRs: number, feePct: number, feeFlatRs: number): Lot {
   const priceP = paisa(priceRs);
   const flatP = paisa(feeFlatRs);
-  const bps = Math.round(feePct * 100); // 0.15% → 15 basis points
-  const perShare = priceP * (1 + bps / 10_000);
+  // The rate is used as given, not rounded to whole basis points: 0.155% must not be charged as 0.16%.
+  const perShare = priceP * (1 + feePct / 100);
   const qty = Math.max(0, Math.floor((cashP - flatP) / perShare));
   if (qty === 0) return { quantity: 0, invested: 0, fees: 0, leftover: cashP, deployed: 0 };
   const gross = qty * priceP;
-  const fees = Math.round((gross * bps) / 10_000) + flatP;
+  const fees = Math.round((gross * feePct) / 100) + flatP;
   const invested = gross + fees;
   return { quantity: qty, invested, fees, leftover: cashP - invested, deployed: gross };
 }
@@ -450,19 +474,22 @@ interface SimInput {
 
 interface SimOutput {
   quantity: number;
-  invested: number; // paisa
+  /** Cash the reader put in: every contribution, whether or not it bought a share. */
+  paidIn: number;
+  invested: number; // paisa actually converted into shares, fees included
   fees: number;
   leftover: number;
   dividends: { count: number; gross: number; tax: number; net: number; items: { date: string; perShare: number }[] };
   proceeds: { gross: number; fees: number; tax: number; net: number };
   profit: number;
   returnPct: number;
+  dividendFreePct: number;
   annualisedPct: number | null;
   holdingDays: number;
   series: RoiPoint[];
   warnings: RoiWarning[];
   flows: { date: string; amount: number }[];
-  lots: { date: string; price: number; quantity: number; fees: number }[];
+  lots: { date: string; price: number; quantity: number; fees: number; amount: number; unspent: number }[];
 }
 
 function simulate(input: SimInput): SimOutput {
@@ -472,6 +499,7 @@ function simulate(input: SimInput): SimOutput {
   let quantity = 0;
   let leftover = 0;
   let invested = 0;
+  let paidIn = 0;
   let fees = 0;
   let divGross = 0;
   let divTax = 0;
@@ -479,7 +507,7 @@ function simulate(input: SimInput): SimOutput {
   const divItems: { date: string; perShare: number }[] = [];
   const flows: { date: string; amount: number }[] = [];
   const points: RoiPoint[] = [];
-  const lots: { date: string; price: number; quantity: number; fees: number }[] = [];
+  const lots: { date: string; price: number; quantity: number; fees: number; amount: number; unspent: number }[] = [];
 
   type Event = { date: string; kind: 'buy'; cashP: number } | { date: string; kind: 'div'; perShare: number };
   const events: Event[] = [
@@ -495,6 +523,10 @@ function simulate(input: SimInput): SimOutput {
     while (ei < events.length && events[ei]!.date <= d) {
       const ev = events[ei]!;
       if (ev.kind === 'buy') {
+        paidIn += ev.cashP;
+        // Every contribution is a cash flow on the day it is paid, even when it buys nothing: the
+        // money left the reader's account that day, and the XIRR has to see it.
+        flows.push({ date: ev.date, amount: -ev.cashP / 100 });
         const price = closes.get(d) ?? closes.get(ev.date);
         if (price && price > 0) {
           const lot = buyLot(ev.cashP + leftover, price, feePct, feeFlatRs);
@@ -503,10 +535,11 @@ function simulate(input: SimInput): SimOutput {
             invested += lot.invested;
             fees += lot.fees;
             leftover = lot.leftover;
-            lots.push({ date: d, price, quantity: lot.quantity, fees: lot.fees });
-            flows.push({ date: d, amount: -lot.invested / 100 });
+            lots.push({ date: d, price, quantity: lot.quantity, fees: lot.fees, amount: ev.cashP, unspent: leftover });
           } else {
             leftover = ev.cashP + leftover;
+            // No shares: the month still happened, and the table has to say so rather than drop it.
+            lots.push({ date: d, price, quantity: 0, fees: 0, amount: ev.cashP, unspent: leftover });
           }
         }
       } else if (quantity > 0) {
@@ -528,18 +561,20 @@ function simulate(input: SimInput): SimOutput {
   const sellClose = closes.get(sellDate);
   if (!sellClose) throw new ValidationError('No stored close on the sell session');
   const grossP = quantity * paisa(sellClose);
-  const bps = Math.round(feePct * 100);
-  const sellFeesP = Math.round((grossP * bps) / 10_000) + paisa(feeFlatRs);
+  const sellFeesP = Math.round((grossP * feePct) / 100) + paisa(feeFlatRs);
   const gainP = grossP - sellFeesP - invested;
   const cgtP = gainP > 0 ? Math.round((gainP * Math.round(cgtPct * 100)) / 10_000) : 0;
   const netP = grossP - sellFeesP - cgtP;
-  flows.push({ date: sellDate, amount: netP / 100 });
+  // Unspent cash comes back with the sale, so both the profit and the XIRR flows are complete.
+  flows.push({ date: sellDate, amount: (netP + leftover) / 100 });
 
   // The final point is the sale itself, so the chart's last value is the money the reader gets.
-  points.push({ date: sellDate, value: rupees(netP) });
+  points.push({ date: sellDate, value: rupees(netP + leftover) });
 
-  const profitP = netP + (divGross - divTax) - invested;
-  const returnPct = invested > 0 ? round2((profitP / invested) * 100) : 0;
+  const profitP = netP + leftover + (divGross - divTax) - paidIn;
+  const returnPct = paidIn > 0 ? round2((profitP / paidIn) * 100) : 0;
+  const divNetP = divGross - divTax;
+  const dividendFreePct = paidIn > 0 ? round2(((netP + leftover - paidIn) / paidIn) * 100) : 0;
   const holdingDays = Math.max(
     0,
     Math.round((new Date(`${sellDate}T00:00:00Z`).getTime() - new Date(`${firstBuy}T00:00:00Z`).getTime()) / DAY_MS),
@@ -568,13 +603,15 @@ function simulate(input: SimInput): SimOutput {
 
   return {
     quantity,
+    paidIn,
     invested,
     fees,
     leftover,
-    dividends: { count: divCount, gross: divGross, tax: divTax, net: divGross - divTax, items: divItems },
+    dividends: { count: divCount, gross: divGross, tax: divTax, net: divNetP, items: divItems },
     proceeds: { gross: grossP, fees: sellFeesP, tax: cgtP, net: netP },
     profit: profitP,
     returnPct,
+    dividendFreePct,
     annualisedPct: annualisedPct == null ? null : round2(annualisedPct),
     holdingDays,
     series: points,
@@ -582,6 +619,12 @@ function simulate(input: SimInput): SimOutput {
     flows,
     lots,
   };
+}
+
+/** Peak-to-trough fall of the close series itself: contribution-neutral, dividends excluded. */
+function priceDrawdown(closes: Map<string, number>, from: string, to: string): number {
+  const values = [...closes.entries()].filter(([d]) => d >= from && d <= to).map(([, v]) => v);
+  return maxDrawdown(values);
 }
 
 /** Downsample a daily series so a ten-year chart is not a 2,600-point payload. */
@@ -596,17 +639,17 @@ function thin(points: RoiPoint[], max = 400): RoiPoint[] {
 
 export const ASSUMPTIONS = [
   'Prices are the stored session close: no slippage, no intraday fill, no partial execution.',
+  'Return is measured against the cash you paid in, so cash that never bought a share is counted as the idle money it was.',
   'Fees are your inputs, not official PSX or broker rates.',
   'Taxes default to zero and are applied to recorded dividends and to the capital gain at sale.',
-  'Dividends are dated by the stored announcement date — PSX ex-dates are not in our data, so a sale that lands between announcement and ex-date may be credited a dividend it did not earn.',
-  'Splits and bonus issues are not adjusted in stored prices while corporate_actions is empty.',
+  'Dividends are credited on the stored announcement date because PSX ex-dates are not in our data. A sale or purchase that lands between announcement and ex-date can therefore be credited a dividend it did not earn, or miss one it did; every result also shows the return with dividends removed.',
+  'Splits and bonus issues are not adjusted in stored prices while corporate_actions is empty; a step of 7.5% or more that lands on a simple ratio is reported and its annualised rate withheld.',
   'Only currently stored securities are included, so long-run results carry survivorship bias.',
   'Past performance is not a forecast and this is not investment advice.',
 ];
 
 function baseWarnings(): RoiWarning[] {
   return [
-    { code: 'DIVIDEND_TIMING_APPROXIMATED', message: 'Dividends use the announcement date as the entitlement marker.' },
     { code: 'SURVIVORSHIP', message: 'Only securities currently in the database are included.' },
   ];
 }
@@ -683,6 +726,18 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
     });
 
     warnings.push(...sim.warnings);
+    if (sim.quantity === 0) {
+      throw new ValidationError(
+        `Rs ${input.amount.toLocaleString('en-PK')} cannot buy one share of ${sym} at Rs ${buyPrice} — one share plus the fee costs Rs ${round2(buyPrice * (1 + input.feePct / 100))}.`,
+      );
+    }
+    if (sim.dividends.count > 0) {
+      warnings.push({
+        code: 'DIVIDEND_TIMING_APPROXIMATED',
+        symbol: sym,
+        message: `${sim.dividends.count} dividend${sim.dividends.count === 1 ? '' : 's'} (Rs ${rupees(sim.dividends.net).toLocaleString('en-PK')} net) credited by announcement date, not ex-date: a sale shortly after an announcement may be credited a dividend it did not earn. The return excluding dividends is shown beside it.`,
+      });
+    }
     const buyVol = s.volumes.get(buySession);
     const sellVol = s.volumes.get(sellSession);
     if (buyVol === 0) warnings.push({ code: 'ZERO_VOLUME_SESSION', date: buySession, message: 'No shares changed hands on the buy session; the close is a carried price.' });
@@ -699,6 +754,7 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
       sell: { requested: end, session: sellSession, price: sellPrice, movedFromRequest: sellSession !== end },
       sessions: dates.filter((d) => d >= buySession && d <= sellSession).length,
       quantity: sim.quantity,
+      paidIn: rupees(sim.paidIn),
       invested: investedRs,
       buyFees: rupees(sim.fees),
       leftover: rupees(sim.leftover),
@@ -717,9 +773,10 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
       },
       profit: rupees(sim.profit),
       returnPct: sim.returnPct,
+      dividendFreePct: sim.dividendFreePct,
       annualisedPct: sim.annualisedPct,
       holdingDays: sim.holdingDays,
-      maxDrawdownPct: maxDrawdown(sim.series.map((p) => p.value)),
+      maxDrawdownPct: priceDrawdown(s.closes, buySession, sellSession),
       series: thin(sim.series),
     };
 
@@ -737,7 +794,7 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
         returnPct: bReturn,
         annualisedPct: annualiseLevels(startLevel, endLevel, holding.holdingDays),
         maxDrawdownPct: maxDrawdown(idxDates.map((d) => idx.get(d)!)),
-        terminalValue: round2(rupees(sim.invested) * (1 + bReturn / 100)),
+        terminalValue: round2(rupees(sim.paidIn) * (1 + bReturn / 100)),
         note: 'index level, dividends reinvested by the index',
       };
     } else {
@@ -780,16 +837,33 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
       cgtPct: input.cgtPct,
     });
     warnings.push(...sim.warnings);
+    if (sim.quantity === 0) {
+      const priced = [...s.closes.entries()].filter(([d]) => d >= schedule[0]! && d <= sellSession);
+      const cheapest = Math.min(...priced.map(([, v]) => v));
+      throw new ValidationError(
+        `Rs ${input.amount.toLocaleString('en-PK')} a month never buys a share of ${sym} — the cheapest close in this window is Rs ${round2(cheapest)}.`,
+      );
+    }
+    if (sim.dividends.count > 0) {
+      warnings.push({
+        code: 'DIVIDEND_TIMING_APPROXIMATED',
+        symbol: sym,
+        message: `${sim.dividends.count} dividend${sim.dividends.count === 1 ? '' : 's'} (Rs ${rupees(sim.dividends.net).toLocaleString('en-PK')} net) credited by announcement date, not ex-date; the return excluding dividends is shown beside it.`,
+      });
+    }
     if (sim.holdingDays < 365) {
       warnings.push({ code: 'SHORT_HOLDING', message: `Plan ran ${sim.holdingDays} days — no annualised figure under a year.` });
     }
 
+    // One row per scheduled month, including the months that could not afford a share — otherwise the
+    // table silently drops cash the reader actually paid in.
     const contributions: RoiContribution[] = sim.lots.map((l) => ({
       date: l.date,
-      amount: input.amount,
+      amount: rupees(l.amount),
       price: l.price,
       quantity: l.quantity,
       fees: rupees(l.fees),
+      unspent: rupees(l.unspent),
     }));
 
     // Lump sum: the same cash the plan actually deployed, in at the first session with the same fees.
@@ -798,7 +872,7 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
     const lump = simulate({
       dates,
       closes: s.closes,
-      contributions: [{ date: firstDate, cashP: sim.invested }],
+      contributions: [{ date: firstDate, cashP: sim.paidIn }],
       sellDate: sellSession,
       feePct: input.feePct,
       feeFlatRs: input.feeFlat,
@@ -841,7 +915,8 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
       symbol: sym,
       name: s.name,
       contributions,
-      months: contributions.length,
+      months: schedule.length,
+      totalContributed: rupees(sim.paidIn),
       totalInvested: rupees(sim.invested),
       leftover: rupees(sim.leftover),
       quantity: sim.quantity,
@@ -851,11 +926,10 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
       dividends: { count: sim.dividends.count, gross: rupees(sim.dividends.gross), tax: rupees(sim.dividends.tax), net: rupees(sim.dividends.net) },
       profit: rupees(sim.profit),
       returnPct: sim.returnPct,
+      dividendFreePct: sim.dividendFreePct,
       annualisedPct: sim.annualisedPct,
       holdingDays: sim.holdingDays,
-      maxDrawdownPct: maxDrawdown(
-        dates.filter((d) => d >= firstDate && d <= sellSession).map((d) => s.closes.get(d)!).filter((n) => n > 0),
-      ),
+      maxDrawdownPct: priceDrawdown(s.closes, firstDate, sellSession),
       lumpSum: {
         returnPct: lump.returnPct,
         annualisedPct: lump.annualisedPct,
@@ -906,6 +980,18 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
   const commonEnd = prepared.map((p) => p.end).sort()[0]!;
   if (commonStart >= commonEnd) throw new ValidationError('The symbols do not overlap in this window');
 
+  // A symbol that did not trade on the shared start has no buy price. Excluding it is honest;
+  // letting it through produces a 0.00% row that reads like a flat stock rather than a gap.
+  for (let i = prepared.length - 1; i >= 0; i--) {
+    if (!prepared[i]!.s.closes.has(commonStart)) {
+      excluded.push({ symbol: prepared[i]!.sym, reason: `no close on the shared start session, ${commonStart}` });
+      prepared.splice(i, 1);
+    }
+  }
+  if (prepared.length < 2) {
+    throw new ValidationError(`Fewer than two symbols traded on ${commonStart}, the first session they share`);
+  }
+
   const overlapSessions = prepared[0]!.dates.filter((d) => d >= commonStart && d <= commonEnd).length;
   if (overlapSessions < 30) {
     throw new ValidationError(`Only ${overlapSessions} sessions overlap between these symbols; at least 30 are needed`);
@@ -924,13 +1010,22 @@ export async function calculateRoi(input: RoiInput): Promise<RoiResult> {
       divTaxPct: input.divTaxPct,
       cgtPct: input.cgtPct,
     });
+    // The per-symbol warnings are the reason a row has no annualised figure; dropping them leaves the
+    // table showing "—" with no explanation anywhere on the page.
+    warnings.push(...sim.warnings.map((w) => ({ ...w, symbol: p.sym })));
+    const split = sim.warnings.some((w) => w.code === 'CORPORATE_ACTION_SUSPECTED');
     rows.push({
       symbol: p.sym,
       name: p.s.name,
       returnPct: sim.returnPct,
       annualisedPct: sim.annualisedPct,
-      maxDrawdownPct: maxDrawdown(sim.series.map((x) => x.value)),
+      maxDrawdownPct: priceDrawdown(p.s.closes, commonStart, commonEnd),
       terminalValue: rupees(sim.proceeds.net),
+      note: split
+        ? 'split or bonus inside the window — stored prices are unadjusted, so the annualised rate is withheld'
+        : sim.holdingDays < 365
+          ? 'held under a year — no annualised rate'
+          : undefined,
     });
   }
 

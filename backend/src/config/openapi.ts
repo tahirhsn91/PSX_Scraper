@@ -721,9 +721,12 @@ export const openapiSpec = {
         summary: "Return on investment",
         description:
           "Holding return, monthly DCA against a lump sum, or up to four symbols compared on one window. " +
-          "Prices are stored session closes; fees and taxes are the caller's inputs. Dividends are dated " +
-          "by their stored announcement date because PSX ex-dates are not in the dataset, and a window " +
-          "containing an unadjusted split or bonus is reported in `meta.warnings` instead of being annualised.",
+          "Prices are stored session closes; fees and taxes are the caller's inputs. The return and the XIRR " +
+          "are measured against the cash actually paid in (`paidIn` / `totalContributed`), so money that never " +
+          "bought a share is not mistaken for capital at work, and every result also carries a dividend-free " +
+          "return (`dividendFreePct`). Dividends are dated by their stored announcement date because PSX " +
+          "ex-dates are not in the dataset, and a window containing an unadjusted split or bonus is reported " +
+          "in `meta.warnings`, with its annualised rate withheld.",
         parameters: [
           { name: "mode", in: "query", schema: { type: "string", enum: ["single", "dca", "compare"] }, description: "Default single." },
           { name: "symbol", in: "query", schema: { type: "string" }, description: "Single/DCA: one ticker." },

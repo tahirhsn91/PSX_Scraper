@@ -28,6 +28,8 @@ export interface RoiHolding {
   sell: { requested: string; session: string; price: number; movedFromRequest: boolean };
   sessions: number;
   quantity: number;
+  /** Cash the reader paid in; `returnPct` is measured against this. */
+  paidIn: number;
   invested: number;
   buyFees: number;
   leftover: number;
@@ -35,6 +37,8 @@ export interface RoiHolding {
   proceeds: { gross: number; sellFees: number; tax: number; net: number };
   profit: number;
   returnPct: number;
+  /** The same return with recorded dividends removed. */
+  dividendFreePct: number;
   annualisedPct: number | null;
   holdingDays: number;
   maxDrawdownPct: number;
@@ -54,8 +58,9 @@ export interface RoiRow {
 export interface RoiDca {
   symbol: string;
   name: string | null;
-  contributions: { date: string; amount: number; price: number; quantity: number; fees: number }[];
+  contributions: { date: string; amount: number; price: number; quantity: number; fees: number; unspent: number }[];
   months: number;
+  totalContributed: number;
   totalInvested: number;
   leftover: number;
   quantity: number;
@@ -65,6 +70,7 @@ export interface RoiDca {
   dividends: { count: number; gross: number; tax: number; net: number };
   profit: number;
   returnPct: number;
+  dividendFreePct: number;
   annualisedPct: number | null;
   holdingDays: number;
   maxDrawdownPct: number;

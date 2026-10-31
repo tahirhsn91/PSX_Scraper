@@ -27,6 +27,7 @@ import {
 const DAY = 86_400_000;
 const SYMBOL = 'ZZROI1';
 const SPLIT = 'ZZROI2';
+const PRICEY = 'ZZROI3';
 
 /** A stored session stamped 16:00 PKT, the way every row is. */
 function sessionAt(isoDate: string): Date {
@@ -106,6 +107,14 @@ describe('suspectedAction — a split is a step, not a crash', () => {
     expect(suspectedAction(100, 70)).toBeNull(); // −30%, not a simple fraction
     expect(suspectedAction(100, 95)).toBeNull();
     expect(suspectedAction(100, 100)).toBeNull();
+    expect(suspectedAction(100, 92.7)).toBeNull(); // −7.3%, inside the circuit band
+  });
+
+  it('recognises the bonus ratios PSX actually issues', () => {
+    expect(suspectedAction(100, 90.91)).toBeCloseTo(1.1, 2); // 1:10 bonus
+    expect(suspectedAction(100, 83.33)).toBeCloseTo(1.2, 2); // 1:5 bonus
+    expect(suspectedAction(100, 80)).toBeCloseTo(1.25, 2); // 1:4 bonus
+    expect(suspectedAction(100, 66.67)).toBeCloseTo(1.5, 2); // 1:2 bonus
   });
 });
 
@@ -162,7 +171,7 @@ describe('dcaSchedule — month ends and missing days', () => {
 
 describe('calculateRoi — entitlement boundaries against stored rows', () => {
   beforeAll(async () => {
-    await prisma.stock.deleteMany({ where: { symbol: { in: [SYMBOL, SPLIT] } } });
+    await prisma.stock.deleteMany({ where: { symbol: { in: [SYMBOL, SPLIT, PRICEY] } } });
 
     const stock = await prisma.stock.create({
       data: { symbol: SYMBOL, companyName: 'ZZ ROI test' },
@@ -171,12 +180,28 @@ describe('calculateRoi — entitlement boundaries against stored rows', () => {
     for (const [d, close] of [
       ['2026-09-01', 100],
       ['2026-09-10', 110],
-      ['2026-09-20', 120],
+      ['2026-09-21', 120],
     ] as const) {
       await prisma.stockPrice.create({
         data: { stockId: stock.id, close, currentPrice: close, volume: 1000n, lastTradeDate: sessionAt(d) },
       });
     }
+    const pricey = await prisma.stock.create({
+      data: { symbol: PRICEY, companyName: 'ZZ pricey test' },
+      select: { id: true },
+    });
+    for (const [d, close] of [
+      ['2026-09-01', 3000],
+      ['2026-09-10', 3000],
+      ['2026-09-21', 3000],
+      ['2026-10-01', 3000],
+      ['2026-10-15', 3000],
+    ] as const) {
+      await prisma.stockPrice.create({
+        data: { stockId: pricey.id, close, currentPrice: close, volume: 1000n, lastTradeDate: sessionAt(d) },
+      });
+    }
+
     await prisma.dividend.create({
       data: { stockId: stock.id, dividend: 5, announcementDate: new Date('2026-09-10T00:00:00.000Z') },
     });
@@ -214,16 +239,18 @@ describe('calculateRoi — entitlement boundaries against stored rows', () => {
     });
 
   it('credits a dividend announced after the buy date', async () => {
-    const r = await run('2026-09-01', '2026-09-20');
+    const r = await run('2026-09-01', '2026-09-21');
     expect(r.holding!.quantity).toBe(100);
     expect(r.holding!.dividends.count).toBe(1);
     expect(r.holding!.dividends.gross).toBe(500);
     expect(r.holding!.profit).toBe(2_500); // 12,000 proceeds + 500 dividend − 10,000
+    expect(r.holding!.paidIn).toBe(10_000);
     expect(r.holding!.returnPct).toBe(25);
+    expect(r.holding!.dividendFreePct).toBe(20); // the same case with the dividend taken out
   });
 
   it('does not credit a dividend when the buy date is the announcement date', async () => {
-    const r = await run('2026-09-10', '2026-09-20');
+    const r = await run('2026-09-10', '2026-09-21');
     expect(r.holding!.dividends.count).toBe(0);
     expect(r.holding!.quantity).toBe(90);
   });
@@ -234,13 +261,13 @@ describe('calculateRoi — entitlement boundaries against stored rows', () => {
   });
 
   it('resolves a weekend start forward to the next session', async () => {
-    const r = await run('2026-09-05', '2026-09-20');
+    const r = await run('2026-09-05', '2026-09-21');
     expect(r.holding!.buy.session).toBe('2026-09-10');
     expect(r.holding!.buy.movedFromRequest).toBe(true);
   });
 
   it('withholds the annualised figure under a year and says why', async () => {
-    const r = await run('2026-09-01', '2026-09-20');
+    const r = await run('2026-09-01', '2026-09-21');
     expect(r.holding!.annualisedPct).toBeNull();
     expect(r.meta.warnings.some((w) => w.code === 'SHORT_HOLDING')).toBe(true);
   });
@@ -261,13 +288,57 @@ describe('calculateRoi — entitlement boundaries against stored rows', () => {
     expect(r.holding!.annualisedPct).toBeNull();
   });
 
+  it('rejects a deposit that cannot buy one share instead of reporting 0.00%', async () => {
+    await expect(
+      calculateRoi({
+        mode: 'single',
+        symbols: [PRICEY],
+        start: '2026-09-01',
+        end: '2026-09-21',
+        amount: 2_000,
+        feePct: 0,
+        feeFlat: 0,
+        divTaxPct: 0,
+        cgtPct: 0,
+      }),
+    ).rejects.toThrow(/cannot buy one share/);
+  });
+
+  it('keeps every scheduled DCA month, including the ones that buy nothing', async () => {
+    const r = await calculateRoi({
+      mode: 'dca',
+      symbols: [PRICEY],
+      start: '2026-09-01',
+      end: '2026-10-15',
+      amount: 2_500,
+      dayOfMonth: 1,
+      feePct: 1,
+      feeFlat: 0,
+      divTaxPct: 0,
+      cgtPct: 0,
+    });
+    // Two months of 2,500 against a 3,000 share: September buys nothing and carries its cash,
+    // October buys one share with the accumulated 5,000. The table has to show both months.
+    expect(r.dca!.months).toBe(2);
+    expect(r.dca!.contributions).toHaveLength(2);
+    expect(r.dca!.contributions[0]!.quantity).toBe(0);
+    expect(r.dca!.contributions[0]!.unspent).toBe(2_500);
+    expect(r.dca!.contributions[1]!.quantity).toBe(1);
+    expect(r.dca!.totalContributed).toBe(5_000);
+    expect(r.dca!.totalInvested).toBe(3_030); // 3,000 of shares + 1% buy fee
+    expect(r.dca!.leftover).toBe(1_970);
+    // The fees are the whole loss, measured on the 5,000 paid in, not the 3,030 deployed:
+    // (2,970 sale + 1,970 leftover − 5,000) / 5,000 = −1.2%.
+    expect(r.dca!.returnPct).toBe(-1.2);
+  });
+
   it('rejects a symbol with no stored sessions', async () => {
     await expect(
       calculateRoi({
         mode: 'single',
         symbols: ['ZZNOPE'],
         start: '2026-09-01',
-        end: '2026-09-20',
+        end: '2026-09-21',
         amount: 10_000,
         feePct: 0,
         feeFlat: 0,
