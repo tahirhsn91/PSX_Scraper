@@ -87,7 +87,7 @@ export function PerformanceSection({ symbol }: { symbol: string }) {
   return (
     <SectionCard
       title="Performance"
-      subtitle="Price return, dividends excluded · returns counted in sessions"
+      subtitle="Total return — dividends included from their ex-date, splits and bonuses adjusted · counted in sessions"
       action={
         <Stack direction="row" spacing={0.5}>
           {RANGES.map((r) => (
@@ -120,7 +120,16 @@ export function PerformanceSection({ symbol }: { symbol: string }) {
                 title={
                   r.value == null
                     ? `Needs ${r.sessions} sessions; ${symbol} has ${r.available ?? 0} in this window.`
-                    : `${r.sessions} sessions${r.available != null && r.available < r.sessions ? ` (capped at ${r.available})` : ''}`
+                    : [
+                        `${r.sessions} sessions${r.available != null && r.available < r.sessions ? ` (capped at ${r.available})` : ''}`,
+                        `price return ${r.value >= 0 ? '+' : ''}${r.value.toFixed(2)}%`,
+                        r.dividends > 0
+                          ? `includes Rs ${r.dividends.toFixed(2)} of dividends, counted on their ex-date and not reinvested`
+                          : 'no dividend went ex- inside this window',
+                        r.adjusted ? 'prices adjusted for a split or bonus inside the window' : null,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')
                 }
               >
                 <Box sx={{ minWidth: 74 }}>
@@ -132,7 +141,17 @@ export function PerformanceSection({ symbol }: { symbol: string }) {
                       {DASH}
                     </Typography>
                   ) : (
-                    <ChangePill value={r.value} size="sm" />
+                    <ChangePill value={r.totalReturn ?? r.value} size="sm" />
+                  )}
+                  {(r.dividends > 0 || r.adjusted) && (
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      display="block"
+                      sx={{ mt: 0.25, fontSize: '0.65rem', lineHeight: 1.2 }}
+                    >
+                      {r.dividends > 0 ? 'incl. div' : 'split-adj.'}
+                    </Typography>
                   )}
                 </Box>
               </Tooltip>
