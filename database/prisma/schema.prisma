@@ -422,6 +422,9 @@ model CorporateAction {
   ratioTo    Decimal?  @map("ratio_to") @db.Decimal(18, 6)
   /// Cash amount per share, in PKR, for CASH_DIVIDEND (and the consideration of a RIGHTS issue).
   amount     Decimal?  @db.Decimal(24, 4)
+  /// The percentage the exchange published: of face value for a dividend/right, of shares held
+  /// for a bonus. `amount` is filled only when the matching dividend row is already stored.
+  percent    Decimal?  @db.Decimal(8, 4)
   /// `confirmed` once the exchange has published it; anything else (rumour, proposed) is kept but
   /// not applied to prices.
   status     String    @default("confirmed")

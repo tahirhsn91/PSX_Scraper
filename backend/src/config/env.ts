@@ -97,6 +97,17 @@ const envSchema = z.object({
     .transform((v) => v === 'true'),
   MARKET_HOLIDAYS_REFRESH_CRON: z.string().default('15 2 * * *'),
   /**
+   * PSX's financial-announcement register — every cash dividend, bonus and right issue, with the
+   * book-closure dates the ex-date is derived from. One page a day, read before the open so a scrip
+   * that goes ex- today is already adjusted when the first quote lands. 02:40 UTC is 07:40 PKT,
+   * after the holiday refresh this depends on.
+   */
+  CORPORATE_ACTIONS_REFRESH_ENABLED: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((v) => v === 'true'),
+  CORPORATE_ACTIONS_REFRESH_CRON: z.string().default('40 2 * * *'),
+  /**
    * Spacing for the per-symbol leg of the refresh. It runs only for symbols the bulk pass could not
    * serve and that have no cap yet, and this host starts answering 429 to a fast walk (measured
    * 2026-09-25: 150 pages in ~2 minutes earned a refusal on the next pass). Slow by default; the

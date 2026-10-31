@@ -1,6 +1,6 @@
 import { Job } from 'bullmq';
 import { env } from '../config';
-import { QuotePollJobData, KSE100_MEMBERSHIP_JOB, MARKET_CAP_JOB, MARKET_CAP_CARRY_JOB, MARKET_HOLIDAYS_JOB, SESSION_CANDLE_JOB, LOGO_REFRESH_JOB } from '../jobs/queues';
+import { QuotePollJobData, KSE100_MEMBERSHIP_JOB, MARKET_CAP_JOB, MARKET_CAP_CARRY_JOB, MARKET_HOLIDAYS_JOB, SESSION_CANDLE_JOB, LOGO_REFRESH_JOB, CORPORATE_ACTIONS_JOB } from '../jobs/queues';
 import { syncSessionCandles } from '../services/sessionCandle.service';
 import type { SessionCandleSummary } from '../services/sessionCandle.service';
 import { syncAllIndexMembership } from '../services/indexMembership.service';
@@ -8,6 +8,8 @@ import { marketCapService } from '../services/marketCap.service';
 import { stockLogoService } from '../services/stockLogo.service';
 import type { StockLogoRefreshSummary } from '../services/stockLogo.service';
 import { refreshMarketHolidays } from '../services/marketCalendar.service';
+import { refreshCorporateActions } from '../services/corporateActionIngest.service';
+import type { CorporateActionIngestStats } from '../services/corporateActionIngest.service';
 import type { HolidayRefreshStats } from '../services/marketCalendar.service';
 import type { AllIndexMembershipSummary } from '../services/indexMembership.service';
 import type { MarketCapRefreshSummary, MarketCapCarrySummary } from '../services/marketCap.service';
@@ -67,7 +69,7 @@ let perSymbolCursor = 0;
  */
 export async function processQuotePollJob(
   job: Job<QuotePollJobData>,
-): Promise<QuotePollSummary | AllIndexMembershipSummary | MarketCapRefreshSummary | MarketCapCarrySummary | StockLogoRefreshSummary | HolidayRefreshStats | SessionCandleSummary> {
+): Promise<QuotePollSummary | AllIndexMembershipSummary | MarketCapRefreshSummary | MarketCapCarrySummary | StockLogoRefreshSummary | HolidayRefreshStats | CorporateActionIngestStats | SessionCandleSummary> {
   // The index membership pass rides this queue because it is the same kind of work — a light,
   // schedule-driven refresh with no per-symbol fan-out — and page one of the dashboard depends on
   // it being current. It covers every published index now (not just the KSE-100), and its own job
@@ -77,6 +79,7 @@ export async function processQuotePollJob(
   if (job.name === MARKET_CAP_CARRY_JOB) return marketCapService.carryForward();
   if (job.name === LOGO_REFRESH_JOB) return stockLogoService.refresh();
   if (job.name === MARKET_HOLIDAYS_JOB) return refreshMarketHolidays();
+  if (job.name === CORPORATE_ACTIONS_JOB) return refreshCorporateActions();
   if (job.name === SESSION_CANDLE_JOB) return syncSessionCandles();
 
   const log = childLogger({ op: 'quote-poll', trigger: job.data.trigger });
