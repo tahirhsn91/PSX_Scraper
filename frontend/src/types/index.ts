@@ -519,7 +519,14 @@ export interface PeriodReturn {
   period: '1w' | '1m' | '3m' | '6m' | '1y';
   sessions: number;
   available: number | null;
+  /** Price return over the window, adjusted for any confirmed split or bonus inside it. */
   value: number | null;
+  /** Price return plus the dividends that went ex- inside the window (not reinvested). */
+  totalReturn: number | null;
+  /** Dividends inside the window, per share in today's terms — zero when none. */
+  dividends: number;
+  /** True when a split or bonus moved the prices, so the unadjusted series would mislead. */
+  adjusted: boolean;
 }
 
 /** One symbol's returns and its rebased comparison with an index. */

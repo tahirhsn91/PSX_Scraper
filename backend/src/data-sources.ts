@@ -125,6 +125,16 @@ export const DATA_SOURCES: DataSource[] = [
     licence: { status: 'unconfirmed', notes: UNCONFIRMED },
   },
   {
+    id: 'psx-corporate-actions',
+    name: 'PSX financial announcements',
+    category: 'corporate-actions',
+    provides: ['cash dividends', 'bonus issues', 'right issues', 'book-closure dates', 'ex-dates'],
+    hosts: ['www.psx.com.pk'],
+    files: ['psxCorporateActions.scraper.ts'],
+    licence: { status: 'unconfirmed', notes: UNCONFIRMED },
+    rateLimit: 'One server-rendered table on www.psx.com.pk, read once a day; dps.psx.com.pk is refused at the edge (#27).',
+  },
+  {
     id: 'sarmaaya-index-members',
     name: 'Sarmaaya index membership',
     category: 'indices',

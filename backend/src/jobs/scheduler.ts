@@ -17,6 +17,7 @@ import {
   universeQueue,
   companyProfileQueue,
   COMPANY_PROFILE_SYNC_JOB,
+  CORPORATE_ACTIONS_JOB,
 } from "./queues";
 import { indexRepository } from "../repositories/index.repository";
 
@@ -346,6 +347,38 @@ async function registerCompanyProfileSchedule(): Promise<void> {
   logger.info('scheduler.company_profile_registered', { cron: env.COMPANY_PROFILE_SYNC_CRON });
 }
 
+/**
+ * Register the corporate-action ingest.
+ *
+ * Daily before the open, because a scrip that goes ex- today must already carry its action when the
+ * first quote is written — otherwise the chart prints a cliff on a day nothing happened, and the
+ * performance card reports the fall as a loss. The page is one HTML table on `www.psx.com.pk`, so
+ * the cost is a single request; the same reconciliation as every other schedule keeps a changed
+ * cron from leaving the old pattern ticking beside the new one.
+ */
+async function registerCorporateActionSchedule(): Promise<void> {
+  if (!env.CORPORATE_ACTIONS_REFRESH_ENABLED) {
+    logger.info('scheduler.corporate_actions_disabled');
+    return;
+  }
+
+  for (const job of await quoteQueue.getRepeatableJobs()) {
+    if (job.name !== CORPORATE_ACTIONS_JOB || job.pattern === env.CORPORATE_ACTIONS_REFRESH_CRON) continue;
+    await quoteQueue.removeRepeatableByKey(job.key);
+    logger.info('scheduler.corporate_actions_pattern_replaced', {
+      was: job.pattern,
+      now: env.CORPORATE_ACTIONS_REFRESH_CRON,
+    });
+  }
+
+  await quoteQueue.add(
+    CORPORATE_ACTIONS_JOB,
+    { trigger: 'cron' },
+    { repeat: { pattern: env.CORPORATE_ACTIONS_REFRESH_CRON }, jobId: 'scheduled-corporate-actions' },
+  );
+  logger.info('scheduler.corporate_actions_registered', { cron: env.CORPORATE_ACTIONS_REFRESH_CRON });
+}
+
 export async function registerScheduler(): Promise<void> {
   await registerQuotePollSchedule();
   await registerKse100MembershipSchedule();
@@ -353,6 +386,7 @@ export async function registerScheduler(): Promise<void> {
   await registerMarketCapCarrySchedule();
   await registerLogoRefreshSchedule();
   await registerSessionCandleSchedule();
+  await registerCorporateActionSchedule();
   await registerUniversePassSchedule();
   await registerIndexBoardSchedule();
   await registerIndexContributionSchedule();

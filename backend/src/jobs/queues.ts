@@ -82,6 +82,7 @@ export const LOGO_REFRESH_JOB = 'stock-logo-refresh';
  */
 export const SESSION_CANDLE_JOB = 'session-candle';
 export const MARKET_HOLIDAYS_JOB = 'market-holidays-refresh';
+export const CORPORATE_ACTIONS_JOB = 'corporate-actions-refresh';
 
 export interface SyncJobData { symbol: string; trigger: 'manual' | 'cron' | 'add' }
 export interface SyncAllJobData { trigger: 'manual' | 'cron' }
